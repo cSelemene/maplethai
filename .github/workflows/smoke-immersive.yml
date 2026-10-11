@@ -1,0 +1,22 @@
+name: Immersive preview browser test
+on:
+  push:
+    branches: [feature/supabase-auth, main]
+    paths:
+      - 'bandit-immersive-preview.html'
+      - 'scripts/smoke-immersive.mjs'
+      - '.github/workflows/smoke-immersive.yml'
+  workflow_dispatch:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: npm install --no-save puppeteer-core@24
+      - name: Verify all five tabs in Chrome
+        run: CHROME_BIN=/usr/bin/google-chrome node scripts/smoke-immersive.mjs
