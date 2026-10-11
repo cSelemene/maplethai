@@ -21,5 +21,21 @@ const bankToken=structuredClone(fixture);delete bankToken.data.rawSlip.receiver.
 const invalidQR={...payment,recipient:{...payment.recipient,qr_payload:source.replace('BF03','FFFF')}};assert.equal(evaluateReceipt(fixture,invalidQR,now).verified,false);
 console.log('PASS: registered PromptPay identity, .44 satang, SCB abbreviated receiver name, token receiver, wrong full ID/name, masked-only identity, wrong proxy type, currency/time/CRC checks');
 
+const bank=structuredClone(fixture);
+bank.data.amountInSlip=99.28;
+bank.data.rawSlip.amount.amount=99.28;
+bank.data.matchedAccount={bank:{code:'004'},bankNumber:'0248522232',nameTh:'กวินทร์นิธิ'};
+bank.data.rawSlip.receiver={bank:{id:'004'},account:{bank:{account:'xxx-x-x2223-x'},name:{th:'ด.ช. กวินทร์นิธิ พ'}}};
+const bankResult=evaluateReceipt(bank,payment,now);
+assert.equal(bankResult.verified,true);assert.equal(bankResult.amount_cents,9928);assert.equal(bankResult.bank_code,'004');
+for(const name of ['ด.ช. กวินทร์นิธิ ค','ด.ช. คนอื่น พ','ด.ช. กวินทร์นิธิ พงษ์ทอง','กวินทร์นิธิ']){
+ const x=structuredClone(bank);x.data.rawSlip.receiver.account.name.th=name;assert.equal(evaluateReceipt(x,payment,now).code,'RECIPIENT_NAME_UNCERTAIN');
+}
+for(const change of [x=>x.data.matchedAccount.bankNumber='1111122232',x=>x.data.rawSlip.receiver.bank.id='014',x=>x.data.matchedAccount=null]){
+ const x=structuredClone(bank);change(x);assert.equal(evaluateReceipt(x,payment,now).verified,false);
+}
+const shortMask=structuredClone(bank);shortMask.data.rawSlip.receiver.account.bank.account='xxx-x-xx223-x';assert.equal(evaluateReceipt(shortMask,payment,now).code,'RECIPIENT_ACCOUNT_UNCERTAIN');
+console.log('PASS: KBank .28 receipt with exact registered account and abbreviated surname; wrong name/account/bank and insufficient visible digits rejected');
+
 const cached=structuredClone(fixture);cached.data.matchedAccount=null;const calls=[];const result=await verifyBankSlip({apiKey:'test-only',blob:new Blob(['mock'],{type:'image/png'}),payment,now,fetcher:async(url,opts)=>{calls.push(opts.body.get('checkDuplicate'));return {ok:true,json:async()=>calls.length===1?cached:fixture}}});assert.equal(result.verified,true);assert.deepEqual(calls,['true','false']);
 const freshCalls=[];const fresh=structuredClone(cached);fresh.data.isDuplicate=false;await verifyBankSlip({apiKey:'test-only',blob:new Blob(['mock']),payment,now,fetcher:async(url,opts)=>{freshCalls.push(opts.body.get('checkDuplicate'));return {ok:true,json:async()=>fresh}}});assert.deepEqual(freshCalls,['true']);console.log('PASS: stale cached account mismatch refreshed once; fresh mismatch not retried');

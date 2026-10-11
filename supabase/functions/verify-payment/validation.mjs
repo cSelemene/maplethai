@@ -10,7 +10,9 @@ function identity(data,payment){
  const raw=data.rawSlip,matched=data.matchedAccount,expected=digits(payment.recipient?.account_number),name=normalizedName(payment.recipient?.recipient_name);
  if(expected&&matched?.bank?.code==='004'&&digits(matched.bankNumber)===expected&&raw.receiver?.bank?.id==='004'){
   if(!maskedAccountMatches(raw.receiver.account?.bank?.account,expected))return {code:'RECIPIENT_ACCOUNT_UNCERTAIN'};
-  if(!name||normalizedName(raw.receiver.account?.name?.th)!==name)return {code:'RECIPIENT_NAME_UNCERTAIN'};
+  // Banks can shorten the surname to one initial. Only accept that format after
+  // the provider confirms the full registered account and its bank/mask agree.
+  if(!name||!abbreviatedNameMatches(raw.receiver.account?.name?.th,payment.recipient.recipient_name))return {code:'RECIPIENT_NAME_UNCERTAIN'};
   return {bank_code:'004',recipient_account:expected};
  }
  const pp=promptPayReceiver(payment.recipient?.qr_payload);
