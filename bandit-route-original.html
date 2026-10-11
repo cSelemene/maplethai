@@ -824,4 +824,4 @@ $('premiumLock').addEventListener('click',e=>{if(e.target.id==='premiumLock')clo
 document.addEventListener('keydown',e=>{if(e.key==='Escape'){$('lightbox').classList.remove('open');if(!$('premiumLock').hidden)closeLock();closeAll()}if(e.target.matches('input,textarea'))return;if(e.key==='ArrowRight')go(state.i+1);if(e.key==='ArrowLeft')go(state.i-1)});
 [1,10,20,30,40,50].forEach(v=>{const tick=document.createElement('span');tick.className='track-tick';tick.style.left=((v-1)/49*100)+'%';tick.textContent='Lv.'+v;$('track').append(tick)});
 keepTable();render();
-</script></body></html>
+</script><script type="module" src="./navigation-entry.js?v=20261011-navigation"></script></body></html>

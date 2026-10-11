@@ -27,6 +27,7 @@ else{
  doc=doc.replace('</body>','<script src="'+new URL('./guide-layout.js?v=20261011-profile',location.href).href+'"></script></body>');
  doc=doc.replace('</head>','<link rel="stylesheet" href="'+new URL('./equipment-guide.css?v=20261011-gear',location.href).href+'"></head>');
  doc=doc.replace('</body>','<script type="module" data-equipment-guide="'+id+'" src="'+new URL('./equipment-guide.js?v=20261011-gear',location.href).href+'"></script></body>');
+ doc=doc.replace('</body>','<script type="module" data-navigation-guide="'+id+'" src="'+new URL('./navigation-entry.js?v=20261011-navigation',location.href).href+'"></script></body>');
  const attached=attachProgress(doc,{userId:user.id,guide:id,initial,token});doc=attached.html;
  $('progress-bar').hidden=false;
  if(attached.supported&&available&&!conflict)saver=createProgressSaver({userId:user.id,guide:id,version,onStatus:status});

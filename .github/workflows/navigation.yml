@@ -1,0 +1,14 @@
+name: Navigation access
+on:
+  push:
+    paths: ['navigation/**','navigation-entry.js','supabase-client.js','scripts/test-navigation.mjs','.github/workflows/navigation.yml']
+  pull_request:
+jobs:
+  navigation:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: node --experimental-vm-modules scripts/test-navigation.mjs
