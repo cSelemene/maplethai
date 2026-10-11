@@ -40,3 +40,6 @@ jobs:
 
       - name: Test credit balance, remainder QR, cancellation and market redemption
         run: CHROME_BIN=/usr/bin/google-chrome node scripts/test-credit-browser.mjs
+
+      - name: Test equipment progression and route isolation
+        run: CHROME_BIN=/usr/bin/google-chrome node scripts/test-equipment.mjs
