@@ -37,7 +37,16 @@ try{
  await Promise.all([page.waitForNavigation({waitUntil:'load'}),page.click('[data-tab="route"]')]);
  await page.waitForSelector('#side .tab[data-i]');
  assert.equal(await page.$('.mt-read-fade'),null,'Route must not use blur');
- const steps=await page.$$eval('#side .tab[data-i]',els=>els.length);
+ await page.waitForFunction(()=>parseFloat(document.documentElement.style.getPropertyValue('--guide-header-height'))>0);
+ const header=await page.$eval('.bar',e=>({height:e.getBoundingClientRect().height,bg:getComputedStyle(e).backgroundColor}));
+ assert.equal(header.bg,'rgb(255, 248, 233)','Guide header must use a light reading surface');
+ assert(await page.$eval('#side .tab',e=>parseFloat(getComputedStyle(e).fontSize)>=14),'Step navigation text is too small');
+ await page.click('#side .tab[data-i="4"]');
+ await page.waitForSelector('.mm, .npcmap');
+ assert(await page.$eval('.mm, .npcmap',e=>getComputedStyle(e).backgroundColor==='rgb(191, 216, 238)'),'Map canvas must retain its original blue background');
+ assert(await page.$eval('#side .tab[aria-current="step"]',e=>getComputedStyle(e).color==='rgb(60, 43, 32)'),'Selected step must retain dark readable text');
+ console.log('PASS light header, readable step navigation and original map canvas');
+ const steps=await page.$eval('#side .tab[data-i]',els=>els.length);
  for(let i=0;i<steps;i++)await page.click('#next');
  assert(await page.$eval('#premiumLock',e=>!e.hidden),'Route must lock after the free steps');
  await page.click('#premiumClose');
