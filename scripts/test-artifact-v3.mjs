@@ -38,6 +38,10 @@ try{
  await Promise.all([page.waitForNavigation({waitUntil:'networkidle2'}),page.click('.tabs button[data-tab="route"]')]);
  assert(page.url().endsWith('bandit-route-original.html'),'Route must use original illustrated renderer');
  assert((await page.$eval('#side',e=>e.querySelectorAll('[data-i]').length))===12,'Route lost 12-step boundary');
+ await Promise.all([page.waitForNavigation({waitUntil:'networkidle2'}),page.click('.tabs button[data-tab="builds"]')]);
+ assert(page.url().includes('bandit-artifact-preview-v3.html#builds'),'Route Builds tab should return to new artifact-styled page');
+ assert(await page.$eval('.mt-panel[data-panel="builds"]',e=>!e.hidden),'Builds not selected on return');
+ console.log('PASS navigate back from original Route to artifact-style Builds');
  assert(!errors.length,'Browser JS errors: '+errors.join(' | '));
  console.log('PASS route original and strictly 12 free steps');
 }finally{await browser.close()}
