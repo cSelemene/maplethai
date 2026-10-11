@@ -1,4 +1,4 @@
-import {QUESTIONS,rankClasses} from './class-quiz-data.js?v=20261011-quiz-v2';
+import {QUESTIONS,rankClasses} from './class-quiz-data.js?v=20261012-withdraw-warrior';
 const root=document.getElementById('class-quiz');
 if(root){
  const intro=root.querySelector('[data-quiz-intro]'),stage=root.querySelector('[data-quiz-stage]'),results=root.querySelector('[data-quiz-results]');

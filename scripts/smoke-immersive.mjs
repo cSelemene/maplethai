@@ -148,9 +148,7 @@ try{
   assert.equal(errors.length,0,errors.join(', '));await warrior.close();
  }
  const artPage=await browser.newPage();await artPage.goto(base+'/home.html',{waitUntil:'load'});
- await artPage.$eval('#guides .fighter',x=>x.scrollIntoView());
- await artPage.waitForFunction(()=>[...document.querySelectorAll('#guides .warrior img')].length===3&&[...document.querySelectorAll('#guides .warrior img')].every(x=>x.complete&&x.naturalWidth>0));
- assert.equal(await artPage.$('.warrior-symbol'),null,'Character artwork must replace emoji placeholders');
+ assert.equal(await artPage.$$('#guides .warrior').then(xs=>xs.length),0,'Withdrawn Warrior guides must not appear on homepage');
  await artPage.close();
  console.log('PASS all three Warrior previews: original five-tab shell, map route, free boundary, locks, saved checklist, mobile text and official character artwork');
 
