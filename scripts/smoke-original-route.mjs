@@ -23,8 +23,30 @@ try{
  await page.click('#next');await page.click('#prev');assert(await page.$eval('#main .act input[type=checkbox]',e=>e.checked),'Checklist did not persist');
  await page.reload({waitUntil:'networkidle2'});assert(await page.$eval('#main .act input[type=checkbox]',e=>e.checked),'Checklist lost after reload');
  console.log('PASS checklist, keep-modal, persistence');
- const map=await page.$('#main .tile.map');if(map){await map.click();assert(await page.$eval('#lightbox',e=>e.classList.contains('open')),'Map tile did not open lightbox');await page.keyboard.press('Escape')}
- console.log('PASS map lightbox');
+ // The very first tutorial step has no .tile.map; check a step with an actual map card.
+ await page.evaluate(()=>go(2));
+ assert(await page.$('#main .tile.map'),'Step 3 must render a map card');
+ await page.click('#main .tile.map');
+ assert(await page.$eval('#lightbox',e=>e.classList.contains('open')&&getComputedStyle(e).display==='flex'),'Map card did not open the lightbox');
+ assert(await page.$eval('#lbBody',e=>!!e.querySelector('img')&&!!e.querySelector('figcaption')),'Enlarged map image or caption missing');
+ await page.keyboard.press('Escape');
+ assert(await page.$eval('#lightbox',e=>!e.classList.contains('open')),'Escape did not close map');
+ assert(await page.$('#main .npcmap'),'Step 3 NPC map must be interactive');
+ await page.click('#main .npcmap');
+ assert(await page.$eval('#lightbox',e=>e.classList.contains('open')),'NPC map did not open');
+ await page.keyboard.press('Escape');
+ await page.click('#main details.navbox summary');
+ const before=await page.$eval('#main .mm',e=>e.getBoundingClientRect().width);
+ await page.click('#main .mm');
+ const after=await page.$eval('#main .mm',e=>e.getBoundingClientRect().width);
+ assert(after>before+30,'Route travel map did not expand on click');
+ await page.click('#side .tab[data-i="1"]');
+ assert(await page.$eval('#main .stepno',e=>e.innerText.includes('2')),'Clicking sidebar step did not navigate');
+ await page.click('#side .mt-locked-step');
+ assert(await page.$eval('#premiumLock',e=>!e.hidden),'Sidebar premium step did not show lock');
+ await page.click('#premiumClose');
+ console.log('PASS map card lightbox, NPC location, travel map zoom, sidebar nav, and premium step');
+ await page.evaluate(()=>go(0));
  for(let i=0;i<11;i++)await page.click('#next');
  assert(await page.$eval('#main .stepno',e=>e.innerText.includes('12')),'Did not reach final Lv.10 route');
  await page.click('#next');assert(await page.$eval('#premiumLock',e=>!e.hidden),'Clicking past Lv.10 did not lock');
