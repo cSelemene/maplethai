@@ -23,7 +23,7 @@ else{
  const initial=available?(pending&&!conflict?pending.state:cloud?.state||{i:0,done:{},tab:'intro',w15:true}):null;
  let doc=data.replace(/<head([^>]*)>/i,'<head$1><base href="'+new URL('./',location.href).href+'">');
  doc=doc.replace(/<body([^>]*)>/i,(_match,attrs)=>'<body'+(attrs.includes('class=')?attrs.replace(/class=(["'])(.*?)\1/i,(_m,q,v)=>'class='+q+v+' maple-guide'+q):attrs+' class="maple-guide"')+'>');
- doc=doc.replace('</head>','<link rel="stylesheet" href="'+new URL('./guide-reading.css?v=20261011-profile',location.href).href+'"></head>');
+ doc=doc.replace('</head>','<link rel="stylesheet" href="'+new URL('./guide-reading.css?v=20261011-wide',location.href).href+'"></head>');
  doc=doc.replace('</body>','<script src="'+new URL('./guide-layout.js?v=20261011-profile',location.href).href+'"></script></body>');
  doc=doc.replace('</head>','<link rel="stylesheet" href="'+new URL('./equipment-guide.css?v=20261011-gear',location.href).href+'"></head>');
  doc=doc.replace('</body>','<script type="module" data-equipment-guide="'+id+'" src="'+new URL('./equipment-guide.js?v=20261011-gear',location.href).href+'"></script></body>');
