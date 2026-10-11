@@ -1,0 +1,9 @@
+Marketplace item catalogue
+
+Canonical item IDs, names and types: existing MapleThai Supabase items catalogue, imported from NiaMeowDB. Database links use those IDs, not the original game's item IDs.
+
+Icons: reuse the original guide's locally stored NiaMeowDB/game images where available. Other icons are matched by exact item name (and level/type for ambiguous matches) to the public MapleStory.io GMS v62 catalogue. No similar-name substitution is used. The current catalogue has 1,586 known icon matches out of 2,211 records. Unmatched/new Classic items use a text placeholder rather than an incorrect image.
+
+Meso icon: original guide asset i/81.png. Game artwork © Nexon.
+
+Stat fields are chosen by equipment subtype. Historical v62 values are not copied into Classic stat defaults. Pan Lid's 44 DEF hint and 7 upgrade slots were verified against https://meowdb.com/msclassic/item-db/917 on 2026-10-11. Sellers enter their actual item stats.
