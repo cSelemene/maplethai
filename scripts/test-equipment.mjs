@@ -26,17 +26,18 @@ try{for(const guide of Object.keys(PLANS)){
   document.head.innerHTML='<link rel="stylesheet" href="equipment-guide.css">';
   document.body.innerHTML='<div id="main"></div><button id="next">Next</button>';
   window.originalState={i:0,done:{}};window.renderTest=()=>{document.getElementById('main').innerHTML='<article class="card"><div class="card-head"><span class="lv">Lv.'+(window.originalState.i?40:25)+'</span><h2>Route</h2></div><input id="check" type="checkbox"><div id="map">Original NPC markers</div></article>';document.getElementById('check').onchange=e=>{window.originalState.done.a=e.target.checked}};
+  if(guide==='bandit'){const gear=document.createElement('div');gear.id='bgear';gear.innerHTML='<button data-bbr="0" aria-selected="true">Lv.10–20</button>';document.body.append(gear)}
   window.renderTest();document.getElementById('next').onclick=()=>{window.originalState.i++;window.renderTest()};
   const script=document.createElement('script');script.type='module';script.dataset.equipmentGuide=guide;script.src='equipment-guide.js';document.body.append(script);
  },guide);
  await page.waitForSelector('.equipment-guide');
  assert.equal(await page.$eval('.equipment-level',x=>x.value),'25');
- await page.click('#check');await page.select('.equipment-gender','female');
+ await page.click('#check');await page.select('#main .equipment-gender','female');
  assert.equal(await page.evaluate(()=>window.originalState.done.a),true);
  assert.equal(await page.$eval('#map',x=>x.textContent),'Original NPC markers');
- assert.equal(await page.$$eval('.equipment-guide',x=>x.length),1);
+ assert.equal(await page.$$eval('.equipment-guide',x=>x.length),guide==='bandit'?2:1);
  assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=window.innerWidth));
- await page.click('#next');await page.waitForFunction(()=>document.querySelector('.equipment-level')?.value==='40');
- assert.equal(await page.evaluate(()=>window.originalState.i),1);assert.equal(await page.$$eval('.equipment-guide',x=>x.length),1);
+ await page.click('#next');await page.waitForFunction(()=>document.querySelector('#main .equipment-level')?.value==='40');
+ assert.equal(await page.evaluate(()=>window.originalState.i),1);assert.equal(await page.$$eval('.equipment-guide',x=>x.length),guide==='bandit'?2:1);
  assert.deepEqual(errors,[]);await page.close();
 }console.log('All three guide mounts, route rerender, gender, checklist, map and mobile passed')}finally{await browser.close()}
