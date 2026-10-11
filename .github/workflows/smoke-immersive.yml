@@ -3,6 +3,11 @@ on:
   push:
     branches: [feature/supabase-auth, main]
     paths:
+      - 'index.html'
+      - 'home.html'
+      - 'class-quiz*.js'
+      - 'class-quiz.css'
+      - 'scripts/test-class-quiz*.mjs'
       - 'bandit-immersive-preview.html'
       - 'scripts/smoke-immersive.mjs'
       - '.github/workflows/smoke-immersive.yml'
@@ -22,3 +27,8 @@ jobs:
       - run: npm install --no-save puppeteer-core@24
       - name: Verify all five tabs in Chrome
         run: CHROME_BIN=/usr/bin/google-chrome node scripts/smoke-immersive.mjs
+
+      - name: Verify class matching and coverage
+        run: node scripts/test-class-quiz-model.mjs
+      - name: Verify class questionnaire in Chrome
+        run: CHROME_BIN=/usr/bin/google-chrome node scripts/test-class-quiz-browser.mjs
