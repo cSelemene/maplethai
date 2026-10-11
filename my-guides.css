@@ -19,10 +19,12 @@ body.reader-focus{overflow:hidden}
 body.reader-focus>header{display:none!important}
 body.reader-focus .reader-main{position:fixed;inset:0;width:100%;max-width:none!important;padding:0!important;margin:0;z-index:40}
 body.reader-focus .reader-main>.panel{height:100svh;box-sizing:border-box;display:flex;flex-direction:column;padding:0!important;border:0;border-radius:0}
-body.reader-focus #heading,body.reader-focus #status,body.reader-focus #progress-bar{display:none!important}
+body.reader-focus #heading,body.reader-focus #status{display:none!important}
 body.reader-focus .reader-toolbar{flex:none;margin:0;padding:6px 12px;background:#fff8e9;border-bottom:1px solid #dfceb0}
 body.reader-focus #viewer{flex:1;min-height:0!important;height:0!important;margin:0;border:0;border-radius:0}
 @media(max-width:700px){.reader-main #viewer{min-height:0;height:calc(100svh - 250px)}}
 
 .reader-toolbar[hidden]{display:none}
 .reader-toolbar button{font-family:inherit;font-size:14px;font-weight:600;line-height:1.5}
+
+body.reader-focus #progress-bar{flex:none;margin:0;padding:4px 12px;font-size:12px}

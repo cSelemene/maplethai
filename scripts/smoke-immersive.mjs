@@ -67,8 +67,10 @@ try{
  await page.setViewport({width:375,height:800});
  assert(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+2),'Route horizontal overflow on mobile');
  await page.click('#openDrawer');
+ await page.waitForFunction(()=>document.querySelector('#drawer').getBoundingClientRect().left>=-1);
  await page.click('#drawer .tab[data-i="4"]');
  await page.click('#openDrawer');
+ await page.waitForFunction(()=>document.querySelector('#drawer').getBoundingClientRect().left>=-1);
  assert(await page.$eval('#drawer',e=>e.classList.contains('open')),'Mobile step drawer failed');
  await page.click('#drawer .tab[data-i="3"]');
  assert(await page.$eval('#drawer',e=>!e.classList.contains('open')),'Mobile drawer selection failed');
@@ -76,6 +78,7 @@ try{
  assert(await page.$eval('#keepModal',e=>e.classList.contains('open')),'Mobile keep items missing');
  await page.click('#closeKeep');
  await page.click('#openDrawer');
+ await page.waitForFunction(()=>document.querySelector('#drawer').getBoundingClientRect().left>=-1);
  await page.click('#drawer .tab[data-i="4"]');
  await page.click('.npcmap');
  assert(await page.$('#lightbox.open .mmdot.np.big'),'Mobile NPC markers missing');
