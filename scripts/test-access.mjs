@@ -10,6 +10,7 @@ export const createClient=()=>({auth:{
  signOut:async()=>{window.testState.user=null;window.testState.listeners.forEach(fn=>fn('SIGNED_OUT',null));return {error:null}}
 },rpc:async(method,args)=>{
  window.testState.calls.push({method,args});
+ if(method==='marketplace_contact_quota')return {data:{free_remaining:7,remaining:27,bonus_remaining:20,unlimited:false},error:null};
  if(method==='sync_account')return {data:window.testState.account,error:null};
  if(method==='redeem_code'){
   if(args.p_code!=='VALID')return {error:{message:'โค้ดไม่ถูกต้อง'}};
@@ -30,6 +31,8 @@ async function page(state={}){
 try {
  const account=await page({account:{is_admin:false,entitlements:[{product:'guide_bandit',expires_at:null},{product:'guide_assassin',expires_at:'2000-01-01'}]}});
  await account.goto(base+'/auth.html',{waitUntil:'networkidle0'});
+ assert((await account.$eval('#account-market-quota',e=>e.textContent)).includes('7 / 10'));
+ assert((await account.$eval('#account-market-quota',e=>e.textContent)).includes('โบนัสสะสม 20 ครั้ง'));
  assert.equal(await account.$('#my-guides a'),null,'Account must not contain guide discovery links');
  assert(await account.$('#my-guides [data-guide="bandit"]'));
  assert.equal(await account.$('#my-guides [data-guide="assassin"]'),null,'Expired rights must not appear active');
