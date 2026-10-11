@@ -7,6 +7,7 @@ const $=x=>document.getElementById(x);let objectURL=null;
 if(!Object.hasOwn(PRODUCTS,id)){$('heading').textContent='ไม่พบไกด์';$('status').textContent='กรุณากลับไปเลือกอาชีพที่หน้าแรก';$('actions').hidden=false;}
 else{
  $('heading').textContent=PRODUCTS[id]+' — ไกด์ฉบับเต็ม';$('preview').href='./guide-preview.html?guide='+encodeURIComponent(id);
+ $('login').href='./auth.html?next='+encodeURIComponent('premium-guide.html?guide='+id);
  const s=createClient(SUPABASE_URL,SUPABASE_PUBLISHABLE_KEY,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});
  try{
    const {data:{user},error:authError}=await s.auth.getUser();
