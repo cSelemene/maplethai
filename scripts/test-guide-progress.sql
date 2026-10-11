@@ -1,0 +1,22 @@
+BEGIN;
+INSERT INTO auth.users(id,email) VALUES('10000000-0000-4000-8000-000000000051','progress-test-a@example.invalid'),('10000000-0000-4000-8000-000000000052','progress-test-b@example.invalid');
+INSERT INTO public.entitlements(user_id,product,source) VALUES('10000000-0000-4000-8000-000000000051','guide_bandit','progress_test');
+SELECT set_config('request.jwt.claim.sub','10000000-0000-4000-8000-000000000051',true);
+SET LOCAL ROLE authenticated;
+DO $$ DECLARE r jsonb; BEGIN
+ r:=public.save_guide_progress('bandit','{"i":2,"done":{"0-0":true},"tab":"route","w15":true}','Lv.3',1,3,0);
+ IF r->>'version'<>'1' THEN RAISE EXCEPTION 'initial save failed'; END IF;
+ r:=public.save_guide_progress('bandit','{"i":1,"done":{},"tab":"route"}','Lv.2',0,3,1);
+ IF r->>'version'<>'2' THEN RAISE EXCEPTION 'update failed'; END IF;
+ r:=public.save_guide_progress('bandit','{"i":0,"done":{},"tab":"route"}','stale',0,3,1);
+ IF r->>'conflict'<>'true' THEN RAISE EXCEPTION 'stale write allowed'; END IF;
+ IF (SELECT count(*) FROM public.my_guide_progress())<>1 THEN RAISE EXCEPTION 'read failed'; END IF;
+ BEGIN PERFORM public.save_guide_progress('mage','{"i":0,"done":{},"tab":"route"}','',0,3,0);RAISE EXCEPTION 'unowned write allowed';EXCEPTION WHEN raise_exception THEN IF SQLERRM='unowned write allowed' THEN RAISE; END IF;END;
+ BEGIN PERFORM public.save_guide_progress('bandit','{"i":999,"done":{},"tab":"route"}','',0,3,2);RAISE EXCEPTION 'invalid state allowed';EXCEPTION WHEN raise_exception THEN IF SQLERRM='invalid state allowed' THEN RAISE; END IF;END;
+ BEGIN DELETE FROM public.guide_progress;RAISE EXCEPTION 'direct delete allowed';EXCEPTION WHEN insufficient_privilege THEN NULL;END;
+END $$;
+SELECT set_config('request.jwt.claim.sub','10000000-0000-4000-8000-000000000052',true);
+DO $$ BEGIN IF (SELECT count(*) FROM public.my_guide_progress())<>0 THEN RAISE EXCEPTION 'other user progress leaked'; END IF;END $$;
+RESET ROLE;
+SELECT 'PASS: owner save/read, optimistic concurrency, unowned/invalid denial, direct-write denial and user isolation' AS result;
+ROLLBACK;
