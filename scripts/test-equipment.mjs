@@ -21,16 +21,17 @@ const browser=await puppeteer.launch({headless:true,executablePath:process.env.C
 try{for(const guide of Object.keys(PLANS)){
  const page=await browser.newPage();const errors=[];page.on('pageerror',e=>errors.push(e.message));
  await page.setViewport({width:390,height:844});
- await page.goto('http://127.0.0.1:8765/');
+ await page.setRequestInterception(true);page.on('request',r=>r.url().endsWith('/__equipment-fixture')?r.respond({status:200,contentType:'text/html',body:'<!doctype html><html><head><meta name="viewport" content="width=device-width,initial-scale=1"></head><body></body></html>'}):r.continue());
+ await page.goto('http://127.0.0.1:8765/__equipment-fixture');
  await page.evaluate(guide=>{
-  document.head.innerHTML='<link rel="stylesheet" href="equipment-guide.css">';
+  document.head.insertAdjacentHTML('beforeend','<link rel="stylesheet" href="equipment-guide.css">');
   document.body.innerHTML='<div id="main"></div><button id="next">Next</button>';
   window.originalState={i:0,done:{}};window.renderTest=()=>{document.getElementById('main').innerHTML='<article class="card"><div class="card-head"><span class="lv">Lv.'+(window.originalState.i?40:25)+'</span><h2>Route</h2></div><input id="check" type="checkbox"><div id="map">Original NPC markers</div></article>';document.getElementById('check').onchange=e=>{window.originalState.done.a=e.target.checked}};
   if(guide==='bandit'){const gear=document.createElement('div');gear.id='bgear';gear.innerHTML='<button data-bbr="0" aria-selected="true">Lv.10–20</button>';document.body.append(gear)}
   window.renderTest();document.getElementById('next').onclick=()=>{window.originalState.i++;window.renderTest()};
   const script=document.createElement('script');script.type='module';script.dataset.equipmentGuide=guide;script.src='equipment-guide.js';document.body.append(script);
  },guide);
- await page.waitForSelector('.equipment-guide');
+ try{await page.waitForSelector('.equipment-guide')}catch(e){throw new Error(guide+': '+errors.join(' / ')+' / '+e.message)}
  assert.equal(await page.$eval('.equipment-level',x=>x.value),'25');
  await page.click('#check');await page.select('#main .equipment-gender','female');
  assert.equal(await page.evaluate(()=>window.originalState.done.a),true);
