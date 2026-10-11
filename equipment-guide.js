@@ -18,4 +18,9 @@ function mount(){const card=main?.querySelector('article.card');if(!card)return;
  if(nextKey!==key){key=nextKey;level=Math.max(1,Math.min(50,Number(label.match(/\d+/)?.[0])||10))}
  root=document.createElement('section');root.className='equipment-guide';root.setAttribute('aria-label','อุปกรณ์ตามช่วงเลเวล');card.append(root);draw(root);
 }
-if(main&&PLANS[guide]){new MutationObserver(mount).observe(main,{childList:true,subtree:true});mount()}
+function mountBuilds(){if(guide!=='bandit')return;const host=document.getElementById('bgear');if(!host||!host.children.length||host.querySelector('.equipment-guide'))return;
+ const label=host.querySelector('[data-bbr][aria-selected="true"]')?.textContent||'';
+ level=Math.max(1,Math.min(50,Number(label.match(/\d+/)?.[0])||10));
+ const root=document.createElement('section');root.className='equipment-guide';root.setAttribute('aria-label','อุปกรณ์ตามช่วงเลเวล');host.append(root);draw(root);
+}
+if(main&&PLANS[guide]){new MutationObserver(()=>{mount();mountBuilds()}).observe(document.body,{childList:true,subtree:true});mount();mountBuilds()}
