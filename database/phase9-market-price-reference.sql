@@ -8,7 +8,7 @@ WITH candidates AS (
  SELECT l.user_id,l.price FROM public.listings l JOIN public.items i ON i.id=l.item_id
  WHERE l.item_id=p_item_id AND l.kind='sell' AND l.status='open' AND l.price_unit='meso' AND l.price_reference_eligible
  AND l.expires_at>now() AND l.user_id IS DISTINCT FROM (SELECT auth.uid())
- AND (i.type<>'Equip' OR (l.item_stats=coalesce(p_stats,'{}'::jsonb) AND l.slots IS NOT DISTINCT FROM p_slots))
+ AND (i.type<>'Equip' OR ((coalesce(p_stats,'{}'::jsonb)='{}'::jsonb OR l.item_stats=p_stats) AND (p_slots IS NULL OR l.slots=p_slots)))
  ORDER BY l.created_at DESC,l.id DESC LIMIT 500
 ), sellers AS (
  SELECT percentile_cont(0.5) WITHIN GROUP(ORDER BY price) AS price FROM candidates GROUP BY user_id

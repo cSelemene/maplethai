@@ -13,7 +13,7 @@ r:=public.marketplace_price_reference(917,'{"def":45}',7);
 IF r->>'low' IS NOT NULL THEN RAISE EXCEPTION 'Different stats included'; END IF;
 r:=public.marketplace_price_reference(917,'{"def":44}',6);
 IF r->>'low' IS NOT NULL THEN RAISE EXCEPTION 'Different slots included'; END IF;
-r:=public.marketplace_price_reference(917,'{}',7);
+r:=public.marketplace_price_reference(999999,'{}',7);
 IF r->>'low' IS NOT NULL THEN RAISE EXCEPTION 'Insufficient historical data yielded range'; END IF;
 END $$;
 RESET ROLE;
