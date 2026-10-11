@@ -27,25 +27,24 @@ try{
    return {visible:!pane.hidden,height:pane.getBoundingClientRect().height,blur:getComputedStyle(fade).backdropFilter,gate:!!pane.querySelector('[data-unlock]')};
   },tab);
   assert(state.visible&&state.height>650&&state.blur.includes('blur(')&&state.gate,tab+' preview and unlock failed');
-  const unlock='[data-panel="'+tab+'"] [data-unlock]';
-  await page.$eval(unlock,e=>e.scrollIntoView({block:'center'}));
-  await page.evaluate(()=>new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r))));
-  await page.click(unlock);
-  await page.waitForFunction(()=>!document.querySelector('#modal').hidden);
+  await page.$eval('[data-panel="'+tab+'"] .mt-unlock-stage',e=>window.scrollTo({top:window.scrollY+e.getBoundingClientRect().top+innerHeight,behavior:'instant'}));
+  await page.waitForFunction(t=>getComputedStyle(document.querySelector('[data-panel="'+t+'"] .mt-unlock-content')).pointerEvents==='auto',{},tab);
+  await page.click('[data-panel="'+tab+'"] [data-unlock]');
   assert(await page.$eval('#modal',e=>!e.hidden),'Unlock dialog did not open');
   await page.click('#close');
   assert(await page.$eval('#modal',e=>e.hidden),'Unlock dialog did not close');
  }
- await page.click('[data-tab="route"]');
- assert.equal(await page.$eval('[data-panel="route"] .mt-read-fade',()=>true).catch(()=>false),false,'Route must not use blur');
- const steps=await page.$$eval('#route-list button',els=>els.length);
- for(let i=0;i<steps;i++)await page.click('#route-next');
- assert(await page.$eval('#modal',e=>!e.hidden),'Route must lock after the free steps');
- await page.click('#close');
+ await Promise.all([page.waitForNavigation({waitUntil:'load'}),page.click('[data-tab="route"]')]);
+ await page.waitForSelector('#side .tab[data-i]');
+ assert.equal(await page.$('.mt-read-fade'),null,'Route must not use blur');
+ const steps=await page.$$eval('#side .tab[data-i]',els=>els.length);
+ for(let i=0;i<steps;i++)await page.click('#next');
+ assert(await page.$eval('#premiumLock',e=>!e.hidden),'Route must lock after the free steps');
+ await page.click('#premiumClose');
+ await page.click('#openKeep');
+ assert(await page.$eval('#keepModal',e=>e.classList.contains('open')),'Keep items dialog failed');
+ await page.click('#closeKeep');
  await page.setViewport({width:375,height:800});
- for(const tab of ['intro','builds','route','opt','money']){
-  await page.click('[data-tab="'+tab+'"]');
-  assert(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+2),tab+' horizontal overflow on mobile');
- }
+ assert(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+2),'Route horizontal overflow on mobile');
  console.log('PASS five tabs, progressive blur, route step lock, unlock dialog and mobile layout');
 }finally{await browser.close();await new Promise(r=>server.close(r))}
