@@ -803,7 +803,7 @@ function keepTable(){$('keepTable').innerHTML='<thead><tr><th>ของ</th><th>
 document.addEventListener('click',e=>{
 const mapb=e.target.closest('.mm');if(mapb){mapb.classList.toggle('big');return}
 const npc=e.target.closest('.npcmap');if(npc){openNpcMap(npc.dataset.npc);return}
-const tab=e.target.closest('button[data-tab]');if(tab){if(tab.dataset.tab!=='route')location.href='./bandit-immersive-v2.html#'+tab.dataset.tab;return}
+const tab=e.target.closest('button[data-tab]');if(tab){if(tab.dataset.tab!=='route')location.href='./bandit-artifact-preview-v3.html#'+tab.dataset.tab;return}
 const step=e.target.closest('[data-go]');if(step){go(+step.dataset.go);return}
 const bigmap=e.target.closest('.tile.map');if(bigmap){openMap(bigmap.dataset.map);return}
 if(e.target.closest('[data-premium]')){showLock();return}
