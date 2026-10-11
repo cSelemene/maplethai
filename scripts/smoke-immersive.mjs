@@ -27,7 +27,11 @@ try{
    return {visible:!pane.hidden,height:pane.getBoundingClientRect().height,blur:getComputedStyle(fade).backdropFilter,gate:!!pane.querySelector('[data-unlock]')};
   },tab);
   assert(state.visible&&state.height>650&&state.blur.includes('blur(')&&state.gate,tab+' preview and unlock failed');
-  await page.click('[data-panel="'+tab+'"] [data-unlock]');
+  const unlock='[data-panel="'+tab+'"] [data-unlock]';
+  await page.$eval(unlock,e=>e.scrollIntoView({block:'center'}));
+  await page.evaluate(()=>new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r))));
+  await page.click(unlock);
+  await page.waitForFunction(()=>!document.querySelector('#modal').hidden);
   assert(await page.$eval('#modal',e=>!e.hidden),'Unlock dialog did not open');
   await page.click('#close');
   assert(await page.$eval('#modal',e=>e.hidden),'Unlock dialog did not close');
