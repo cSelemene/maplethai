@@ -6,6 +6,8 @@ on:
       - 'bandit-immersive-v2.html'
       - 'scripts/smoke-immersive-v2.mjs'
       - '.github/workflows/smoke-immersive-v2.yml'
+  pull_request:
+    branches: [main]
   workflow_dispatch:
 jobs:
   chrome:
