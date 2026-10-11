@@ -16,8 +16,7 @@ BEGIN
  PERFORM public.marketplace_save(post_id,jsonb_set(d,'{price}','"16000"'));
  IF (SELECT price FROM public.listings WHERE id=post_id)<>16000 THEN RAISE EXCEPTION 'Edit failed'; END IF;
  PERFORM set_config('request.jwt.claim.sub',v::text,true);
- failed:=false; BEGIN PERFORM public.listing_contact(post_id); EXCEPTION WHEN OTHERS THEN IF SQLERRM<>'LOCKED' THEN RAISE; END IF;failed:=true; END;
- IF NOT failed THEN RAISE EXCEPTION 'Unpaid viewer accessed contacts'; END IF;
+ IF public.listing_contact(post_id)->>'discord'<>'private-test-seller' OR (public.marketplace_contact_quota()->>'remaining')::int<>9 THEN RAISE EXCEPTION 'Free quota failed'; END IF;
  failed:=false; BEGIN PERFORM public.marketplace_save(post_id,d); EXCEPTION WHEN OTHERS THEN failed:=true; END;
  IF NOT failed THEN RAISE EXCEPTION 'Other user edited seller post'; END IF;
  failed:=false; BEGIN PERFORM public.marketplace_close(post_id); EXCEPTION WHEN OTHERS THEN failed:=true; END;
@@ -25,8 +24,7 @@ BEGIN
  PERFORM private.grant_product(v,'market','test');
  IF public.listing_contact(post_id)->>'line'<>'private-line' THEN RAISE EXCEPTION 'Paid contact failed'; END IF;
  UPDATE public.entitlements SET expires_at=now()-interval '1 second' WHERE user_id=v AND product='market';
- failed:=false; BEGIN PERFORM public.listing_contact(post_id); EXCEPTION WHEN OTHERS THEN failed:=true; END;
- IF NOT failed THEN RAISE EXCEPTION 'Expired subscription accessed contacts'; END IF;
+ IF public.listing_contact(post_id)->>'discord'<>'private-test-seller' THEN RAISE EXCEPTION 'Previously opened free listing unavailable after membership expiry'; END IF;
  UPDATE private.payment_settings SET enabled=true;
  ord:=public.create_payment_order('market');
  IF ord->>'product'<>'market' OR (ord->>'amount')::integer<>50 THEN RAISE EXCEPTION 'Market checkout price failed'; END IF;
