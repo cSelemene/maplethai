@@ -18,5 +18,18 @@ const lock=document.createElement("button");lock.className="step locked";lock.te
 }
 function openModal(){$("modal").hidden=false;$("close").focus()}
 function closeModal(){$("modal").hidden=true;$("next").focus()}
-$("next").onclick=()=>{if(i+1>=g.steps.length){openModal();return}i++;render()};$("prev").onclick=()=>{if(i>0){i--;render()}};$("close").onclick=closeModal;$("modal").onclick=e=>{if(e.target===$("modal"))closeModal()};document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("modal").hidden)closeModal()});render();
+let unlocked=false;
+async function checkAccess(){
+ try{
+  const {createClient}=await import('https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm');
+  const {SUPABASE_URL,SUPABASE_PUBLISHABLE_KEY}=await import('./auth-config.js');
+  const sb=createClient(SUPABASE_URL,SUPABASE_PUBLISHABLE_KEY);
+  const {data:{user}}=await sb.auth.getUser();
+  if(!user)return;
+  const {data,error}=await sb.from('entitlements').select('product,expires_at').eq('user_id',user.id).eq('product','guide_'+kind);
+  unlocked=!error&&Array.isArray(data)&&data.some(e=>!e.expires_at||new Date(e.expires_at)>new Date());
+  if(unlocked){const b=$("next");b.textContent="อ่านไกด์ฉบับเต็ม →"}
+ }catch(err){console.warn('Unable to verify preview entitlement; server-side RPC will verify on premium page.')}
+}
+$("next").onclick=()=>{if(i+1>=g.steps.length){if(unlocked)location.href="./premium-guide.html?guide="+encodeURIComponent(kind);else openModal();return}i++;render()};$("prev").onclick=()=>{if(i>0){i--;render()}};$("close").onclick=closeModal;$("modal").onclick=e=>{if(e.target===$("modal"))closeModal()};document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("modal").hidden)closeModal()});render();checkAccess();
 </script></body></html>
