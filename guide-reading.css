@@ -62,3 +62,14 @@ html:has(body.maple-guide){scroll-behavior:auto;scroll-padding-top:calc(var(--gu
 .maple-guide .mmdot.st{display:inline-block}
 .maple-guide .lightbox figcaption{color:#fff8e7}.maple-guide .lightbox figcaption b{color:inherit}
 @media(max-width:700px){.maple-guide .guide-home-logo img{width:125px}.maple-guide .bar-inner h1{flex-basis:100%;order:3;margin:0}.maple-guide .bar-inner .guide-home-logo{margin-right:auto}}
+
+/* Comfortable reading width inside the reader, with larger build copy. */
+.maple-guide .bar-inner,.maple-guide .tabs,.maple-guide .ribbon-inner,.maple-guide .nav-inner,.maple-guide .wrap,.maple-guide #opt,.maple-guide #money,.maple-guide #builds{max-width:1500px}
+.maple-guide #intro{max-width:1280px}
+.maple-guide #builds p,.maple-guide #builds li,.maple-guide .hero-grid>div,.maple-guide .apstep,.maple-guide .lgrid p,.maple-guide .jpath p{font-size:16px;line-height:1.8}
+.maple-guide #builds h2{font-size:26px;line-height:1.5}
+.maple-guide #builds h3{font-size:21px;line-height:1.5}
+.maple-guide .gr-tx{font-size:16px;line-height:1.7}
+.maple-guide .gr-m,.maple-guide .gr-note,.maple-guide .gtot b,.maple-guide .bp,.maple-guide .btbl td{font-size:15px;line-height:1.7}
+.maple-guide .gtot span{font-size:14px;line-height:1.6}
+@media(max-width:700px){.maple-guide .wrap,.maple-guide #intro,.maple-guide #opt,.maple-guide #money,.maple-guide #builds{padding-left:12px;padding-right:12px}.maple-guide #builds h2{font-size:23px}}
