@@ -91,4 +91,45 @@ try{
  }
  console.log('PASS mobile drawer, keep items, NPC map, all tabs and navigation controls');
  console.log('PASS five tabs, progressive blur, route step lock, unlock dialog and mobile layout');
+
+ const base='http://127.0.0.1:'+server.address().port;
+ for(const guide of ['fighter','page','spearman']){
+  const warrior=await browser.newPage(),errors=[];warrior.on('pageerror',e=>errors.push(e.message));
+  await warrior.setViewport({width:1250,height:850});
+  await warrior.goto(base+'/guide-preview.html?guide='+guide,{waitUntil:'load'});await warrior.waitForSelector('.mt-nav');
+  assert(warrior.url().endsWith(guide+'-preview.html'),'Generic Warrior URL must open the same preview shell as Bandit');
+  assert.equal(await warrior.$eval('.mt-nav button[data-tab]',xs=>xs.length),5);
+  for(const tab of ['intro','builds','opt','money']){
+   await warrior.click('.mt-nav [data-tab="'+tab+'"]');
+   assert(await warrior.$eval('[data-panel="'+tab+'"]',x=>!x.hidden));
+   assert(await warrior.$eval('[data-panel="'+tab+'"] .mt-read-fade',x=>getComputedStyle(x).backdropFilter.includes('blur(')));
+  }
+  await Promise.all([warrior.waitForNavigation({waitUntil:'load'}),warrior.click('.mt-nav [data-tab="route"]')]);
+  await warrior.waitForSelector('#side .tab[data-i]');
+  assert.equal(await warrior.$eval('#side .tab[data-i]',xs=>xs.length),12,'Only first-job preview steps may be public');
+  assert(await warrior.$eval('.bar',x=>getComputedStyle(x).backgroundColor==='rgb(255, 248, 233)'),'Match the original reading header');
+  await warrior.click('#main input[type=checkbox]');
+  await warrior.reload({waitUntil:'load'});assert(await warrior.$eval('#main input[type=checkbox]',x=>x.checked),'Free checklist persistence');
+  await warrior.click('#side .tab[data-i="11"]');
+  assert.equal(await warrior.$eval('#main h2',x=>x.textContent),'เปลี่ยนอาชีพเป็น Warrior');
+  await warrior.click('#next');assert(await warrior.$eval('#premiumLock',x=>!x.hidden));
+  assert(await warrior.$eval('#premiumLock .mt-purchase',(x,g)=>x.getAttribute('href')==='./checkout.html?product=guide_'+g,guide));
+  await warrior.click('#premiumClose');
+  await warrior.setViewport({width:390,height:844});
+  await warrior.click('#openDrawer');await warrior.waitForFunction(()=>document.querySelector('#drawer').getBoundingClientRect().left>=-1);
+  await warrior.click('#drawer .tab[data-i="4"]');await warrior.waitForFunction(()=>!document.querySelector('#drawer').classList.contains('open'));
+  assert(await warrior.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+2),'Warrior route overflows mobile');
+  await Promise.all([warrior.waitForNavigation({waitUntil:'load'}),warrior.click('.tabs [data-tab="intro"]')]);await warrior.waitForSelector('.mt-nav');
+  assert(await warrior.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+2),'Warrior preview overflows mobile');
+  assert.equal(await warrior.$eval('.mt-card p',x=>getComputedStyle(x).fontSize),'18px');
+  assert.equal(errors.length,0,errors.join(', '));await warrior.close();
+ }
+ const artPage=await browser.newPage();await artPage.goto(base+'/home.html',{waitUntil:'load'});
+ await artPage.$eval('#guides .fighter',x=>x.scrollIntoView());
+ await artPage.waitForFunction(()=>[...document.querySelectorAll('#guides .warrior img')].length===3&&[...document.querySelectorAll('#guides .warrior img')].every(x=>x.complete&&x.naturalWidth>0));
+ assert.equal(await artPage.$('.warrior-symbol'),null,'Character artwork must replace emoji placeholders');
+ await artPage.close();
+ console.log('PASS all three Warrior previews: original five-tab shell, map route, free boundary, locks, saved checklist, mobile text and official character artwork');
+
 }finally{await browser.close();await new Promise(r=>server.close(r))}
+

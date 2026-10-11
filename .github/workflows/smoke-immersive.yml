@@ -9,6 +9,10 @@ on:
       - 'class-quiz.css'
       - 'scripts/test-class-quiz*.mjs'
       - 'bandit-immersive-preview.html'
+      - '*-preview.html'
+      - 'guide-preview.html'
+      - 'warrior-cards.css'
+      - 'assets/classes/*.png'
       - 'scripts/smoke-immersive.mjs'
       - '.github/workflows/smoke-immersive.yml'
   pull_request:
@@ -32,3 +36,4 @@ jobs:
         run: node scripts/test-class-quiz-model.mjs
       - name: Verify class questionnaire in Chrome
         run: CHROME_BIN=/usr/bin/google-chrome node scripts/test-class-quiz-browser.mjs
+
