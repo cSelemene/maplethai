@@ -110,7 +110,8 @@ try{
   await warrior.click('.mt-nav [data-tab="builds"]');
   await warrior.click('[data-wc-family="1"]');
   await warrior.waitForFunction(()=>document.querySelector('[data-wc-family="1"]').getAttribute('aria-pressed')==='true');
-  assert(await warrior.$eval('[data-wc-weapon-plan] h3',x=>!x.textContent.startsWith('Sword')),'Second weapon plan failed');
+  const selectedWeapon=await warrior.$eval('[data-wc-family="1"]',x=>x.textContent);
+  assert.equal(await warrior.$eval('[data-wc-weapon-plan] h3',x=>x.textContent),selectedWeapon+' เป็นสายหลัก','Second weapon plan failed');
   await warrior.select('[data-wc-gear-level]','late');
   assert.equal(await warrior.$$eval('[data-wc-gear-table] tbody tr',xs=>xs.length),1,'Equipment filter failed');
   await warrior.click('.mt-nav [data-tab="money"]');
