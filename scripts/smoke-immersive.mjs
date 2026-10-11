@@ -98,7 +98,7 @@ try{
   await warrior.setViewport({width:1250,height:850});
   await warrior.goto(base+'/guide-preview.html?guide='+guide,{waitUntil:'load'});await warrior.waitForSelector('.mt-nav');
   assert(warrior.url().endsWith(guide+'-preview.html'),'Generic Warrior URL must open the same preview shell as Bandit');
-  assert.equal(await warrior.$eval('.mt-nav button[data-tab]',xs=>xs.length),5);
+  assert.equal(await warrior.$$eval('.mt-nav button[data-tab]',xs=>xs.length),5);
   for(const tab of ['intro','builds','opt','money']){
    await warrior.click('.mt-nav [data-tab="'+tab+'"]');
    assert(await warrior.$eval('[data-panel="'+tab+'"]',x=>!x.hidden));
@@ -106,7 +106,7 @@ try{
   }
   await Promise.all([warrior.waitForNavigation({waitUntil:'load'}),warrior.click('.mt-nav [data-tab="route"]')]);
   await warrior.waitForSelector('#side .tab[data-i]');
-  assert.equal(await warrior.$eval('#side .tab[data-i]',xs=>xs.length),12,'Only first-job preview steps may be public');
+  assert.equal(await warrior.$$eval('#side .tab[data-i]',xs=>xs.length),12,'Only first-job preview steps may be public');
   assert(await warrior.$eval('.bar',x=>getComputedStyle(x).backgroundColor==='rgb(255, 248, 233)'),'Match the original reading header');
   await warrior.click('#main input[type=checkbox]');
   await warrior.reload({waitUntil:'load'});assert(await warrior.$eval('#main input[type=checkbox]',x=>x.checked),'Free checklist persistence');
