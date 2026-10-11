@@ -1,0 +1,22 @@
+name: MapleThai email and Google auth UI
+on:
+  push:
+    branches: [feature/supabase-auth, main]
+    paths: ['auth.html','auth.js','scripts/test-auth-ui.mjs','.github/workflows/test-auth-ui.yml']
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+jobs:
+  browser-auth:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: npm install --no-save puppeteer-core@24
+      - run: python3 -m http.server 8765 --bind 127.0.0.1 >/tmp/maplethai-web.log 2>&1 &
+      - name: Test email, Google OAuth initiation, account recovery, safe redirects and mobile
+        run: CHROME_BIN=/usr/bin/google-chrome node scripts/test-auth-ui.mjs
