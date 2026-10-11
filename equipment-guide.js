@@ -15,7 +15,7 @@ function draw(root){const level=Number(root.dataset.level)||10,gender=root.datas
 function mount(){const card=main?.querySelector('article.card');if(!card)return;
  const label=card.querySelector('.card-head .lv')?.textContent||'';const nextKey=label+'|'+(card.querySelector('.card-head h2')?.textContent||'');
  let root=card.querySelector('.equipment-guide');if(root)return;
- key=nextKey;const const level=Math.max(1,Math.min(50,Number(label.match(/\d+/)?.[0])||10));
+ key=nextKey;const level=Math.max(1,Math.min(50,Number(label.match(/\d+/)?.[0])||10));
  root=document.createElement('section');root.className='equipment-guide';root.dataset.level=level;root.setAttribute('aria-label','อุปกรณ์ตามช่วงเลเวล');card.append(root);draw(root);
 }
 function mountBuilds(){if(guide!=='bandit')return;const host=document.getElementById('bgear');if(!host||!host.children.length||host.querySelector('.equipment-guide'))return;
