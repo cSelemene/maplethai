@@ -24,7 +24,8 @@ try{
  await page.waitForSelector('.quiz-result-card');
  assert.equal(await page.$eval('.quiz-result-card',e=>e.dataset.class),'page');
  assert.equal(await page.$$eval('.quiz-result-card',els=>els.length),3);
- assert.equal(await page.$('.quiz-result-card[data-class="page"] .quiz-guide-link'),null,'Do not invent an unavailable guide');
+ assert(await page.$eval('.quiz-result-card[data-class="page"] .quiz-guide-link',e=>e.href.endsWith('guide-preview.html?guide=page')),'Page now has a published guide');
+ for(const guide of ['fighter','page','spearman']){assert(await page.$('#guides a[href="./guide-preview.html?guide='+guide+'"]'),'Warrior preview missing');assert(await page.$('#guides a[href="./checkout.html?product=guide_'+guide+'"]'),'Warrior purchase missing');}
  assert(await page.$eval('.quiz-result-card[data-class="page"] .quiz-source-link',e=>e.href==='https://meowdb.com/msclassic/classes/page'));
  await page.setViewport({width:375,height:800});assert(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+2),'Results overflow on mobile');
  await page.click('[data-quiz-results] .quiz-secondary');assert.equal(await page.$('.quiz-option input:checked'),null);
@@ -32,5 +33,5 @@ try{
  for(const answer of assassinAnswers){assert(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+2),'Question overflows mobile');await page.click('.quiz-option:has(input[value="'+answer+'"])');await page.click('.quiz-form button[type="submit"]');}
  assert.equal(await page.$eval('.quiz-result-card',e=>e.dataset.class),'assassin');assert(await page.$eval('.quiz-result-card .quiz-guide-link',e=>e.href.endsWith('guide-preview.html?guide=assassin')));
  await page.goto('http://127.0.0.1:'+server.address().port+'/home.html',{waitUntil:'networkidle2'});assert(await page.$('[data-quiz-start]'));assert(!errors.length,errors.join(', '));
- console.log('PASS: 9-question flow, keyboard, back/restart, unlisted class result, guide links and mobile layouts');
+ console.log('PASS: 9-question flow, keyboard, back/restart, Warrior class result, guide links and mobile layouts');
 }finally{await browser.close();await new Promise(r=>server.close(r));}
