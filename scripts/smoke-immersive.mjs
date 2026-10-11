@@ -46,7 +46,7 @@ try{
  assert(await page.$eval('.mm, .npcmap',e=>getComputedStyle(e).backgroundColor==='rgb(191, 216, 238)'),'Map canvas must retain its original blue background');
  assert(await page.$eval('#side .tab[aria-current="step"]',e=>getComputedStyle(e).color==='rgb(60, 43, 32)'),'Selected step must retain dark readable text');
  console.log('PASS light header, readable step navigation and original map canvas');
- const steps=await page.$eval('#side .tab[data-i]',els=>els.length);
+ const steps=await page.$$eval('#side .tab[data-i]',els=>els.length);
  await page.click('#side .tab[data-i="'+(steps-1)+'"]');
  await page.click('#next');
  assert(await page.$eval('#premiumLock',e=>!e.hidden),'Route must lock after the free steps');
