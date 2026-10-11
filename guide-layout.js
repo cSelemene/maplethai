@@ -1,6 +1,6 @@
 const header=document.querySelector('body.maple-guide > header');
 if(header){
- if(!header.querySelector('.guide-home-logo')){const home=document.createElement('a');home.className='guide-home-logo';home.href=new URL('./index.html',document.baseURI).href;home.target='_top';home.setAttribute('aria-label','MapleThai หน้าแรก');const img=document.createElement('img');img.src=new URL('./assets/maplethai-logo.svg',document.baseURI).href;img.alt='MapleThai';img.width=433;img.height=118;home.append(img);(header.querySelector('.bar-inner')||header).prepend(home);}
+ if(!header.querySelector('.guide-home-logo')){const home=document.createElement('a');home.className='guide-home-logo';home.href=new URL('./index.html',document.baseURI).href;home.target='_top';home.setAttribute('aria-label','MapleThai หน้าแรก');const img=document.createElement('img');img.src=new URL('./assets/maplethai-logo.svg?v=20261011-logo-b',document.baseURI).href;img.alt='MapleThai';img.width=419;img.height=120;home.append(img);(header.querySelector('.bar-inner')||header).prepend(home);}
  const update=()=>document.documentElement.style.setProperty('--guide-header-height',Math.ceil(header.getBoundingClientRect().height)+'px');
  update();if(typeof ResizeObserver!=='undefined')new ResizeObserver(update).observe(header);window.addEventListener('resize',update,{passive:true});
 }
