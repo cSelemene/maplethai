@@ -73,3 +73,24 @@ html:has(body.maple-guide){scroll-behavior:auto;scroll-padding-top:calc(var(--gu
 .maple-guide .gr-m,.maple-guide .gr-note,.maple-guide .gtot b,.maple-guide .bp,.maple-guide .btbl td{font-size:15px;line-height:1.7}
 .maple-guide .gtot span{font-size:14px;line-height:1.6}
 @media(max-width:700px){.maple-guide .wrap,.maple-guide #intro,.maple-guide #opt,.maple-guide #money,.maple-guide #builds{padding-left:12px;padding-right:12px}.maple-guide #builds h2{font-size:23px}}
+
+/* Preserve the original mobile controls while accommodating the wordmark. */
+@media(max-width:860px){
+ .maple-guide .bar-inner{display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:8px;padding:10px 12px}
+ .maple-guide .bar-inner .guide-home-logo{margin:0;order:0}
+ .maple-guide .guide-home-logo img{width:110px}
+ .maple-guide .bar-inner h1{grid-column:1/-1;order:1;min-width:0;font-size:16px!important;margin:0}
+ .maple-guide .bar-inner .bar-btn{padding:8px;font-size:13px;min-height:40px}
+ .maple-guide .tabs{display:flex;flex-wrap:wrap;gap:6px;padding:0 12px 10px;max-width:100%;box-sizing:border-box}
+ .maple-guide .tabs button{flex:0 0 auto;min-height:40px;padding:7px 10px;font-size:13px!important}
+ .maple-guide .nav{padding:8px 12px calc(8px + env(safe-area-inset-bottom,0px))}
+ .maple-guide .nav-inner{display:grid;grid-template-columns:1fr 1fr;gap:5px 10px}
+ .maple-guide .nav-inner #prev{grid-column:1;grid-row:1}
+ .maple-guide .nav-inner #next{grid-column:2;grid-row:1}
+ .maple-guide .nav-inner #count{grid-column:1/-1;grid-row:2;min-width:0;font-size:13px;line-height:1.5;overflow-wrap:anywhere}
+ .maple-guide .wrap{padding-bottom:140px}
+ .maple-guide .drawer{max-width:calc(100vw - 28px);box-sizing:border-box}
+ .maple-guide .lightbox figure{max-width:calc(100vw - 24px)}
+ .maple-guide .modal{max-width:calc(100vw - 24px);max-height:calc(100svh - 32px);overflow:auto}
+ .maple-guide .hero-grid,.maple-guide .two,.maple-guide .extra{grid-template-columns:1fr}
+}

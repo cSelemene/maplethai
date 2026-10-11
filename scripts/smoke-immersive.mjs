@@ -66,5 +66,29 @@ try{
  await page.click('#closeKeep');
  await page.setViewport({width:375,height:800});
  assert(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+2),'Route horizontal overflow on mobile');
+ await page.click('#openDrawer');
+ await page.waitForFunction(()=>document.querySelector('#drawer').getBoundingClientRect().left>=-1);
+ await page.click('#drawer .tab[data-i="4"]');
+ await page.waitForFunction(()=>{const r=document.querySelector('#drawer').getBoundingClientRect();return r.right<=0});
+ await page.click('#openDrawer');
+ await page.waitForFunction(()=>document.querySelector('#drawer').getBoundingClientRect().left>=-1);
+ assert(await page.$eval('#drawer',e=>e.classList.contains('open')),'Mobile step drawer failed');
+ await page.click('#drawer .tab[data-i="3"]');
+ await page.waitForFunction(()=>{const r=document.querySelector('#drawer').getBoundingClientRect();return r.right<=0});
+ assert(await page.$eval('#drawer',e=>!e.classList.contains('open')),'Mobile drawer selection failed');
+ await page.click('#openKeep');
+ assert(await page.$eval('#keepModal',e=>e.classList.contains('open')),'Mobile keep items missing');
+ await page.click('#closeKeep');
+ await page.click('#openDrawer');
+ await page.waitForFunction(()=>document.querySelector('#drawer').getBoundingClientRect().left>=-1);
+ await page.click('#drawer .tab[data-i="4"]');
+ await page.waitForFunction(()=>{const r=document.querySelector('#drawer').getBoundingClientRect();return r.right<=0});
+ await page.click('.npcmap');
+ assert(await page.$('#lightbox.open .mmdot.np.big'),'Mobile NPC markers missing');
+ await page.click('#lightbox');
+ for(const selector of ['#openDrawer','#openKeep','#prev','#next','.tabs button[data-tab="money"]']){
+  assert(await page.$eval(selector,e=>{const r=e.getBoundingClientRect();return r.width>0&&r.left>=0&&r.right<=innerWidth+1&&r.top>=0&&r.bottom<=innerHeight+1}),selector+' must be reachable on mobile');
+ }
+ console.log('PASS mobile drawer, keep items, NPC map, all tabs and navigation controls');
  console.log('PASS five tabs, progressive blur, route step lock, unlock dialog and mobile layout');
 }finally{await browser.close();await new Promise(r=>server.close(r))}
