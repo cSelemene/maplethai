@@ -1,0 +1,823 @@
+<!doctype html><html lang="th"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>Pure Bandit Route | MapleThai</title><link href="https://fonts.googleapis.com/css2?family=Mitr:wght@400;500;600&family=IBM+Plex+Sans+Thai:wght@400;500;600&display=swap" rel="stylesheet"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}
+
+:root{
+  --sky:#D7EAF8; --panel:#FFFFFF; --panel2:#F2F7FC; --ink:#1B2A44; --muted:#56678A;
+  --frame:#22406F; --frameInk:#FFFFFF; --maple:#E2711D; --line:#C7D7EA;
+  --t-travel:#2F6FD0; --t-talk:#B98500; --t-kill:#D1453B; --t-collect:#2E8B4E;
+  --t-turnin:#7A4CC2; --t-craft:#13879A; --t-stop:#6B7280; --t-gear:#A35C1C; --t-note:#56678A;
+  --tagInk:#FFFFFF; --radius-lg:14px; --radius-sm:8px;
+  --display:"Mitr", "IBM Plex Sans Thai", system-ui, sans-serif;
+  --body:"IBM Plex Sans Thai", "Mitr", system-ui, -apple-system, "Segoe UI", sans-serif;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --sky:#0E1930; --panel:#16233C; --panel2:#1B2B48; --ink:#E6EDF8; --muted:#9CACC6;
+    --frame:#2C4E86; --frameInk:#FFFFFF; --maple:#F39439; --line:#2B3D5E;
+    --t-travel:#6FA4F2; --t-talk:#E7B93A; --t-kill:#F07A70; --t-collect:#5CC583;
+    --t-turnin:#B191EA; --t-craft:#4CC3D4; --t-stop:#9CA3AF; --t-gear:#E39A57; --t-note:#9CACC6; --tagInk:#0E1930;
+  }
+}
+:root[data-theme="dark"]{
+  --sky:#0E1930; --panel:#16233C; --panel2:#1B2B48; --ink:#E6EDF8; --muted:#9CACC6;
+  --frame:#2C4E86; --frameInk:#FFFFFF; --maple:#F39439; --line:#2B3D5E;
+  --t-travel:#6FA4F2; --t-talk:#E7B93A; --t-kill:#F07A70; --t-collect:#5CC583;
+  --t-turnin:#B191EA; --t-craft:#4CC3D4; --t-stop:#9CA3AF; --t-gear:#E39A57; --t-note:#9CACC6; --tagInk:#0E1930;
+}
+*,*::before,*::after{box-sizing:inherit}
+html{height:100%;scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;min-height:100%;background:var(--sky);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.6}
+button{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--maple);outline-offset:2px;border-radius:6px}
+
+/* Title bar */
+.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--frame);color:var(--frameInk)}
+.bar-inner{max-width:1180px;margin:0 auto;padding:10px 16px;display:flex;align-items:center;gap:12px}
+.bar h1{font-family:var(--display);font-weight:500;font-size:1.05rem;margin:0;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.bar h1 svg{width:20px;height:20px;vertical-align:-4px;margin-right:6px}
+.bar-btn{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.25);border-radius:999px;padding:5px 12px;font-size:.88rem;cursor:pointer;white-space:nowrap}
+.bar-btn:hover{background:rgba(255,255,255,.22)}
+.only-mobile{display:none}
+
+/* Level ribbon — the one bold element */
+.ribbon{background:var(--frame);padding:0 16px 14px}
+.ribbon-inner{max-width:1180px;margin:0 auto}
+.track{position:relative;height:30px}
+.track-line{position:absolute;left:0;right:0;top:14px;height:4px;border-radius:4px;background:rgba(255,255,255,.18)}
+.track-fill{position:absolute;left:0;top:14px;height:4px;border-radius:4px;background:var(--maple);transition:width .35s ease}
+.track-tick{position:absolute;top:22px;font-size:.7rem;color:rgba(255,255,255,.65);transform:translateX(-50%)}
+.track-leaf{position:absolute;top:2px;width:26px;height:26px;transform:translateX(-50%);transition:left .35s ease;filter:drop-shadow(0 1px 1px rgba(0,0,0,.35))}
+.track-meta{display:flex;justify-content:space-between;color:rgba(255,255,255,.85);font-size:.82rem;margin-top:12px}
+
+/* Layout */
+.wrap{max-width:1180px;margin:0 auto;padding:18px 16px 110px;display:grid;grid-template-columns:290px 1fr;gap:20px;align-items:start}
+.side{position:sticky;top:120px;max-height:calc(100vh - 140px);overflow:auto;background:var(--panel);border:1px solid var(--line);border-radius:var(--radius-lg);padding:10px}
+.chap{font-family:var(--display);font-weight:500;font-size:.85rem;color:var(--muted);padding:12px 8px 4px}
+.tab{display:flex;gap:8px;width:100%;text-align:left;background:none;border:0;border-radius:var(--radius-sm);padding:6px 8px;cursor:pointer;align-items:flex-start;font-size:.9rem;line-height:1.35}
+.tab:hover{background:var(--panel2)}
+.tab[aria-current="step"]{background:var(--frame);color:var(--frameInk)}
+.tab .n{flex:0 0 26px;font-variant-numeric:tabular-nums;color:var(--muted);font-size:.8rem;padding-top:1px}
+.tab[aria-current="step"] .n{color:rgba(255,255,255,.75)}
+.tab .tt{flex:1}
+.tab .ok{flex:0 0 auto;color:var(--t-collect);font-weight:600}
+.tab[aria-current="step"] .ok{color:#BFF0CF}
+
+/* Step card */
+.card{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius-lg);overflow:hidden}
+.card-head{padding:20px 22px 16px;border-bottom:1px solid var(--line)}
+.lvrow{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap}
+.lv{font-family:var(--display);font-weight:600;font-size:2.4rem;line-height:1;color:var(--maple);font-variant-numeric:tabular-nums}
+.stepno{color:var(--muted);font-size:.9rem}
+.card-head h2{font-family:var(--display);font-weight:500;font-size:1.55rem;line-height:1.3;margin:8px 0 10px}
+.where{display:inline-flex;align-items:center;gap:6px;background:var(--panel2);border:1px solid var(--line);border-radius:999px;padding:4px 12px;font-size:.92rem}
+.where svg{width:16px;height:16px;color:var(--t-travel)}
+.intro{margin:12px 0 0;color:var(--muted);max-width:68ch}
+
+.acts{list-style:none;margin:0;padding:8px 14px 6px}
+.act{display:grid;grid-template-columns:30px 1fr;gap:10px;padding:12px 8px;border-bottom:1px dashed var(--line)}
+.act:last-child{border-bottom:0}
+.act input{width:22px;height:22px;margin:3px 0 0;accent-color:var(--t-collect);cursor:pointer}
+.act.done .main{color:var(--muted);text-decoration:line-through;text-decoration-color:var(--muted)}
+.tag{display:inline-block;font-size:.78rem;font-weight:600;border-radius:6px;padding:1px 8px;margin-right:8px;color:var(--tagInk);vertical-align:1px}
+.tag.travel{background:var(--t-travel)} .tag.talk{background:var(--t-talk)} .tag.kill{background:var(--t-kill)}
+.tag.collect{background:var(--t-collect)} .tag.turnin{background:var(--t-turnin)} .tag.craft{background:var(--t-craft)}
+.tag.stop{background:var(--t-stop)} .tag.gear{background:var(--t-gear)} .tag.note{background:var(--t-note)}
+.main{font-weight:500}
+.main b{font-weight:600}
+.facts{margin:6px 0 0;display:grid;grid-template-columns:auto 1fr;gap:2px 10px;font-size:.9rem}
+.facts dt{color:var(--muted)}
+.facts dd{margin:0}
+.sub{margin:6px 0 0;padding-left:18px;font-size:.92rem}
+.sub li{margin:2px 0}
+.tip{margin:6px 0 0;font-size:.9rem;color:var(--muted)}
+
+.extra{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1px;background:var(--line);border-top:1px solid var(--line)}
+.box{background:var(--panel2);padding:14px 18px}
+.box h3{font-family:var(--display);font-weight:500;font-size:.92rem;margin:0 0 4px;color:var(--muted)}
+.box p{margin:0;font-size:.93rem}
+.box.leave p{font-weight:500}
+
+.prow.r9{grid-template-columns:1.4fr 1.6fr .8fr .7fr 1.2fr 1.3fr}
+.tier{display:inline-block;font-size:.75rem;border:1px solid var(--maple);color:var(--maple);border-radius:6px;padding:0 6px}
+@media (max-width:860px){.prow.r9{grid-template-columns:1fr 1fr}.prow.phead.r9{display:none}}
+.mlv{display:inline-block;font-size:.7rem;font-weight:600;line-height:1.3;border-radius:5px;padding:0 5px;margin-left:3px;background:var(--t-kill);color:var(--tagInk);vertical-align:1px;white-space:nowrap}
+.sellnote{margin:0 0 12px;padding:10px 14px;border-radius:10px;border:1px solid var(--maple);background:color-mix(in srgb, var(--maple) 10%, var(--panel));font-size:.92rem}
+/* Bottom nav */
+.nav{position:fixed;left:0;right:0;bottom:0;z-index:20;background:var(--panel);border-top:1px solid var(--line);padding:10px 16px calc(10px + env(safe-area-inset-bottom,0px))}
+.nav-inner{max-width:1180px;margin:0 auto;display:flex;gap:10px;align-items:center}
+.nav .count{flex:1;text-align:center;color:var(--muted);font-size:.9rem}
+.btn{border:0;border-radius:12px;padding:12px 20px;font-family:var(--display);font-weight:500;font-size:1rem;cursor:pointer;min-width:120px}
+.btn.prev{background:var(--panel2);border:1px solid var(--line)}
+.btn.next{background:var(--maple);color:#fff;min-width:160px}
+.btn:disabled{opacity:.4;cursor:default}
+
+/* Drawer / modal */
+.overlay{position:fixed;inset:0;background:rgba(5,12,25,.55);z-index:40;display:none}
+.overlay.open{display:block}
+.drawer{position:fixed;z-index:41;top:0;bottom:0;left:0;width:min(340px,88vw);background:var(--panel);padding:calc(14px + env(safe-area-inset-top,0px)) 10px 20px;overflow:auto;transform:translateX(-102%);transition:transform .25s ease}
+.drawer.open{transform:none}
+.modal{position:fixed;z-index:41;left:50%;top:50%;transform:translate(-50%,-50%);width:min(860px,94vw);max-height:84vh;overflow:auto;background:var(--panel);border-radius:var(--radius-lg);border:1px solid var(--line);padding:18px 20px;display:none}
+.modal.open{display:block}
+.modal h2{font-family:var(--display);font-weight:500;margin:0 0 4px;font-size:1.3rem}
+.modal .close{float:right}
+.tbl{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:.88rem;min-width:620px}
+th,td{text-align:left;padding:7px 8px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-family:var(--display);font-weight:500;color:var(--muted)}
+
+@media (max-width:860px){
+  .wrap{grid-template-columns:1fr;padding-top:12px}
+  .side{display:none}
+  .only-mobile{display:inline-block}
+  .lv{font-size:2rem}
+  .card-head h2{font-size:1.3rem}
+  .btn{min-width:0;padding:12px 14px}
+  .btn.next{min-width:0;flex:0 0 auto}
+  .track-tick:nth-child(even){display:none}
+}
+@media (prefers-reduced-motion: reduce){
+  *{transition:none !important}
+}
+.it{white-space:nowrap}
+.it img{width:24px;height:24px;object-fit:contain;vertical-align:-6px;margin-right:3px}
+#keepTable td:first-child .it img{width:28px;height:28px;vertical-align:-8px;margin-right:6px}
+.credit{margin:10px 0 0;font-size:.78rem;color:var(--muted)}
+.it.npc img{width:22px;height:26px;object-fit:contain;object-position:bottom}
+.it.mob img{width:28px;height:24px}
+.info{padding:14px 22px 16px;border-bottom:1px solid var(--line);background:var(--panel2);display:grid;gap:12px}
+.info > div,.wrap > *,#main{min-width:0}
+.info h3{font-family:var(--display);font-weight:500;font-size:.82rem;color:var(--muted);margin:0 0 6px;letter-spacing:.02em}
+.tiles{display:flex;gap:10px;overflow-x:auto;padding-bottom:4px;scrollbar-width:thin}
+.tile{flex:0 0 auto;background:var(--panel);border:1px solid var(--line);border-radius:var(--radius-sm);padding:8px;display:flex;flex-direction:column;align-items:center;gap:4px;text-align:center;font-size:.8rem;line-height:1.3;text-decoration:none;color:var(--ink);font-family:var(--body)}
+.tile:hover{border-color:var(--maple)}
+.tile .nm{font-weight:500}
+.tile .mt{color:var(--muted);font-size:.72rem}
+.tile.map{width:168px;cursor:zoom-in}
+.tile.map .pic{width:150px;height:112px;display:flex;align-items:center;justify-content:center;background:var(--sky);border-radius:6px;overflow:hidden}
+.tile.map img{max-width:100%;max-height:100%;object-fit:contain}
+.tile.map .nopic{color:var(--muted);font-size:.72rem;padding:6px}
+.tile.npc{width:96px}
+.tile.npc .pic{height:72px;display:flex;align-items:flex-end;justify-content:center}
+.tile.npc img{max-height:72px;max-width:84px;object-fit:contain}
+.tile.mob{width:116px}
+.tile.mob .pic{height:64px;display:flex;align-items:flex-end;justify-content:center}
+.tile.mob img{max-height:64px;max-width:104px;object-fit:contain}
+.lvchip{display:inline-block;background:var(--t-kill);color:var(--tagInk);border-radius:999px;padding:0 7px;font-size:.7rem;font-weight:600}
+.lightbox{position:fixed;inset:0;z-index:60;display:none;align-items:center;justify-content:center;background:rgba(10,18,34,.78);padding:24px;cursor:zoom-out}
+.lightbox.open{display:flex}
+.lightbox figure{margin:0;max-width:min(92vw,720px);text-align:center;color:#fff}
+.lightbox img{width:min(86vw,720px);height:min(75vh,520px);object-fit:contain;background:#BFD8EE;border-radius:10px;padding:8px;image-rendering:auto}
+.lightbox figcaption{margin-top:10px;font-family:var(--display)}
+.lightbox a{color:#FFD7A8}
+@media (max-width:600px){.info{padding:12px 14px}.tile.map{width:140px}.tile.map .pic{width:122px;height:92px}}
+.tabs{max-width:1180px;margin:0 auto;padding:0 16px 8px;display:flex;gap:6px}
+.tabs button{background:transparent;border:1px solid rgba(255,255,255,.25);color:rgba(255,255,255,.85);border-radius:999px;padding:5px 14px;font-size:.9rem;cursor:pointer;font-family:var(--display)}
+.tabs button[aria-selected="true"]{background:var(--maple);border-color:var(--maple);color:#fff}
+#opt{display:none;max-width:1180px;margin:0 auto;padding:18px 16px 60px}
+body[data-tab="opt"] #opt{display:block}
+body[data-tab="opt"] .ribbon, body[data-tab="opt"] .wrap, body[data-tab="opt"] .nav, body[data-tab="opt"] #openDrawer{display:none !important}
+.side{top:162px !important;max-height:calc(100vh - 182px) !important}
+html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 110px)}
+.optbox{margin:4px 14px 14px;border:1.5px dashed var(--line);border-radius:var(--radius-sm);padding:10px 12px;background:var(--panel2)}
+.optbox-h{display:flex;justify-content:space-between;align-items:center;gap:8px;font-family:var(--display);font-weight:500;font-size:.9rem;color:var(--muted);margin-bottom:4px}
+.optbox ul{list-style:none;margin:0;padding:0}
+.optbox li{display:flex;gap:8px;align-items:flex-start;padding:6px 0;font-size:.92rem;border-bottom:1px dotted var(--line)}
+.optbox li:last-child{border-bottom:0}
+.linkbtn{background:none;border:0;color:var(--t-travel);cursor:pointer;font-size:.85rem;padding:2px 4px}
+.ok-tag{flex:0 0 auto;display:inline-block;font-size:.72rem;font-weight:600;border-radius:6px;padding:1px 7px;margin-top:2px;border:1px solid currentColor;white-space:nowrap}
+.ok-tag.rare{color:var(--maple)} .ok-tag.drop{color:var(--t-kill)} .ok-tag.quest{color:var(--t-turnin)} .ok-tag.craft{color:var(--t-craft)} .ok-tag.buy{color:var(--t-gear)} .ok-tag.sell{color:var(--t-stop)}
+.cf{display:inline-block;font-size:.72rem;font-weight:600;background:var(--t-collect);color:var(--tagInk);border-radius:999px;padding:0 6px;margin-left:2px;vertical-align:1px;white-space:nowrap}
+.opt-intro{padding:18px 22px}
+.opt-intro h2,.osec h2{font-family:var(--display);font-weight:500;margin:0 0 8px}
+.osec{margin-top:26px;scroll-margin-top:120px}
+.osec h2{font-size:1.35rem}
+.legend{font-size:.88rem;color:var(--muted)}
+.toc{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.toc a{background:var(--panel2);border:1px solid var(--line);border-radius:999px;padding:4px 12px;font-size:.88rem;color:var(--ink);text-decoration:none}
+.toc a:hover{border-color:var(--maple)}
+.band{margin-bottom:14px}
+.band.pad{padding:14px 18px}
+.band h3,.sub-h{font-family:var(--display);font-weight:500;font-size:1rem;margin:0 0 8px}
+.pad-h{padding:14px 18px 0}
+.band h4{font-family:var(--display);font-weight:500;font-size:.92rem;margin:10px 0 4px;color:var(--muted)}
+.band-h{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;padding:14px 18px 6px}
+.band.pad .band-h{padding:0 0 6px}
+.band-h .lv{font-size:1.5rem}
+.prow{display:grid;grid-template-columns:110px 1.2fr 1fr;gap:10px;padding:9px 18px;border-top:1px solid var(--line);font-size:.92rem;align-items:start}
+.prow.phead{font-family:var(--display);color:var(--muted);font-size:.82rem;border-top:0;padding-top:4px;padding-bottom:4px}
+.prow.w{grid-template-columns:60px 1fr 1.1fr 1.3fr 1fr}
+.prow.c5{grid-template-columns:1fr 1fr .8fr 1.6fr .9fr}
+.prow.c4{grid-template-columns:1fr .8fr 1.5fr 1.6fr}
+.prow.c3{grid-template-columns:1.3fr 1.4fr .8fr}
+.prow.w.buy .pc4{font-weight:600;color:var(--t-gear)}
+.pc0{font-weight:500}
+.onote{font-size:.9rem;color:var(--muted);margin:8px 2px}
+.olist{margin:0;padding-left:18px}
+.olist li{margin:5px 0;font-size:.93rem}
+.mgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:12px}
+.mcard{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius-sm);padding:12px;display:flex;flex-direction:column;gap:6px}
+.mhead{display:flex;gap:10px;align-items:center}
+.mhead img{width:64px;height:56px;object-fit:contain;flex:0 0 auto}
+.mcard .nm{font-weight:600}
+.mrow{display:flex;gap:8px;font-size:.88rem;align-items:flex-start}
+.stepchip{border:1px solid var(--line);background:var(--panel2);border-radius:6px;font-size:.75rem;padding:0 6px;margin:2px 2px 0 0;cursor:pointer;color:var(--ink)}
+.stepchip:hover{border-color:var(--maple)}
+.expgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(105px,1fr));gap:8px}
+.expc{background:var(--panel2);border:1px solid var(--line);border-radius:8px;padding:6px 8px;display:flex;flex-direction:column;font-size:.85rem}
+.timeline{list-style:none;margin:0 0 14px;padding:0 0 0 14px;border-left:3px solid var(--maple)}
+.timeline li{position:relative;margin:0 0 14px;padding-left:12px}
+.timeline li::before{content:"";position:absolute;left:-23px;top:6px;width:13px;height:13px;border-radius:50%;background:var(--maple);border:2px solid var(--panel)}
+.tl-h{display:flex;gap:10px;align-items:baseline;flex-wrap:wrap}
+.tl-h .lv{font-size:1.15rem}
+@media (max-width:760px){
+  .prow,.prow.w,.prow.c5,.prow.c4,.prow.c3{grid-template-columns:1fr;gap:2px;padding:10px 14px}
+  .prow.phead{display:none}
+  .prow .pc0{font-family:var(--display);color:var(--maple)}
+  .prow.w .pc0{color:var(--maple)}
+  .optbox{margin:4px 8px 12px}
+}
+
+.mrow .it,.olist .it,.pc .it{white-space:normal}
+a.dbl{color:inherit;text-decoration:underline dotted;text-decoration-color:var(--muted);text-underline-offset:3px}
+a.dbl:hover{color:var(--maple);text-decoration-color:var(--maple)}
+a.dbl.q{color:var(--t-turnin)}
+.prow.g4{grid-template-columns:90px 1.15fr 1fr 1.15fr}
+.prow.w{grid-template-columns:52px .9fr 1fr 1.1fr 1.2fr .9fr !important}
+.rs{font-size:.8rem;line-height:1.45;border-left:3px solid var(--line);padding:1px 0 1px 7px;margin:0 0 4px}
+.rs.must{border-color:var(--t-collect)} .rs.near{border-color:var(--t-talk)} .rs.no{border-color:var(--t-kill);color:var(--muted)} .rs.na{color:var(--muted)}
+.rs.inl{display:inline-block;border:0;border-radius:6px;padding:0 6px;margin:0;font-weight:600;color:var(--tagInk)}
+.rs.inl.must{background:var(--t-collect)} .rs.inl.near{background:var(--t-talk)} .rs.inl.no{background:var(--t-stop)}
+@media (max-width:760px){.prow.g4,.prow.w{grid-template-columns:1fr !important}}
+#intro{display:none;max-width:1000px;margin:0 auto;padding:18px 16px 60px}
+body[data-tab="intro"] #intro{display:block}
+body[data-tab="intro"] .ribbon, body[data-tab="intro"] .wrap, body[data-tab="intro"] .nav, body[data-tab="intro"] #openDrawer{display:none !important}
+.intro-hero{padding:20px 22px}
+.intro-hero h2{font-family:var(--display);font-weight:500;font-size:1.6rem;margin:2px 0 8px}
+.intro-hero .mt{margin:0}
+.hero-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:14px 0 4px}
+.hero-grid > div{background:var(--panel2);border:1px solid var(--line);border-radius:var(--radius-sm);padding:10px 12px}
+.hero-grid h3{font-family:var(--display);font-weight:500;font-size:.95rem;margin:0 0 4px;color:var(--maple)}
+.hero-grid p{margin:0;font-size:.9rem}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.two .band{margin:0}
+.pro h3{color:var(--t-collect)} .con h3{color:var(--t-kill)}
+.steps{margin:0;padding-left:22px}
+.steps li{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius-sm);padding:10px 12px;margin:0 0 8px;font-size:.93rem}
+.rule{background:var(--panel2);border-left:4px solid var(--maple);padding:8px 12px;border-radius:6px;font-size:.95rem}
+#intro .band.pad .prow{padding-left:0;padding-right:0}
+.legend-tags{display:flex;flex-wrap:wrap;gap:6px;margin:4px 0 8px}
+.legend-tags .tag{margin:0}
+.wgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:8px}
+.wcard{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius-sm);padding:9px 12px;display:flex;flex-direction:column;gap:2px;font-size:.88rem}
+.wcard b{font-family:var(--display);font-weight:500;color:var(--maple)}
+.cta{text-align:center;margin:18px 0 6px}
+.lvl{display:inline-block;font-size:.75rem;font-weight:600;border-radius:6px;padding:0 7px;color:var(--tagInk)}
+.lvl.hi{background:var(--t-kill)} .lvl.mid{background:var(--t-talk)} .lvl.lo{background:var(--t-stop)}
+.bar-btn.big{background:var(--maple);border-color:var(--maple);color:#fff;font-size:1rem;padding:10px 22px}
+@media (max-width:760px){.hero-grid,.two{grid-template-columns:1fr}}
+.navbox{margin:0;border-bottom:1px solid var(--line);padding:12px 22px 14px}
+.navbox summary{cursor:pointer;font-family:var(--display);font-weight:500;font-size:1rem}
+.navbox summary .mt{font-family:var(--body);font-weight:400;font-size:.8rem;color:var(--muted)}
+.navlegend{font-size:.78rem;color:var(--muted);margin:6px 0 4px;display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+.navlist{list-style:none;counter-reset:nv;margin:6px 0 0;padding:0}
+.nv{counter-increment:nv;display:grid;grid-template-columns:1fr auto;gap:10px;align-items:start;padding:8px 0 8px 30px;border-top:1px dotted var(--line);position:relative;font-size:.92rem}
+.nv:first-child{border-top:0}
+.nv::before{content:counter(nv);position:absolute;left:0;top:9px;width:22px;height:22px;border-radius:50%;background:var(--panel2);border:1px solid var(--line);font-size:.75rem;display:flex;align-items:center;justify-content:center;color:var(--muted)}
+.nvk{display:inline-block;font-size:.72rem;font-weight:600;border-radius:6px;padding:0 7px;margin-right:4px;color:var(--tagInk);vertical-align:1px}
+.nvk.cab{background:var(--t-travel)} .nvk.walk{background:var(--t-collect)} .nvk.npc{background:var(--t-talk)} .nvk.txt{background:var(--t-note)}
+.mm{position:relative;display:block;width:min(170px, calc(84px * var(--ar)));height:auto;padding:0;border:1px solid var(--line);border-radius:6px;background:#BFD8EE;cursor:zoom-in;overflow:hidden}
+.mm img{width:100%;height:100%;object-fit:fill;display:block;image-rendering:pixelated}
+.mm.big{width:min(460px,80vw, calc(70vh * var(--ar)));cursor:zoom-out;grid-column:1 / -1;justify-self:start}
+.nv:has(.mm.big){grid-template-columns:1fr}
+.mmdot{position:absolute;width:12px;height:12px;margin:-6px 0 0 -6px;border-radius:50%;border:2px solid #fff;box-shadow:0 0 0 1px rgba(0,0,0,.45)}
+.mm.big .mmdot{width:16px;height:16px;margin:-8px 0 0 -8px}
+.mmdot.st{position:static;display:inline-block;margin:0;width:10px;height:10px}
+.mmdot.in{background:#2F6FD0} .mmdot.out{background:#E2711D} .mmdot.np{background:#D1453B}
+.mm .mmdot.out,.mm .mmdot.np{animation:mmp 1.4s ease-in-out infinite}
+@keyframes mmp{50%{transform:scale(1.35)}}
+@media (prefers-reduced-motion: reduce){.mm .mmdot{animation:none}}
+@media (max-width:600px){.navbox{padding:10px 14px}.mm{width:min(120px, calc(64px * var(--ar)))}}
+.tile.npc{width:132px !important}
+.npclink{display:flex;flex-direction:column;align-items:center;gap:2px;color:inherit;text-decoration:none}
+.npcmap{position:relative;display:block;width:min(134px, calc(80px * var(--ar)));aspect-ratio:var(--ar);padding:0;border:1px solid var(--line);border-radius:6px;background:#BFD8EE;cursor:zoom-in;overflow:hidden}
+.npcmap img{width:100%;height:100%;object-fit:fill;display:block}
+.mmdot.np{background:#22C55E;border-radius:3px;border:2px solid #fff}
+.lbmap{position:relative;width:min(86vw,720px, calc(72vh * var(--ar)));aspect-ratio:var(--ar);margin:0 auto;background:#BFD8EE;border-radius:10px;overflow:hidden}
+.lightbox .lbmap img{width:100%;height:100%;object-fit:fill;display:block;padding:0;background:none;border-radius:0;image-rendering:pixelated;max-height:none}
+.mmdot.big{width:20px;height:20px;margin:-10px 0 0 -10px;animation:mmp 1.4s ease-in-out infinite}
+.scr{color:var(--muted);font-size:.85rem}
+.etcbox{margin:4px 14px 14px;border:1px solid var(--line);border-radius:var(--radius-sm);padding:10px 12px;background:var(--panel2)}
+.etcbox summary{cursor:pointer;font-family:var(--display);font-weight:500;font-size:.95rem}
+.etcbox summary .mt{font-family:var(--body);font-weight:400;font-size:.8rem;color:var(--muted)}
+.enote{font-size:.8rem;color:var(--muted);margin:8px 0 4px;line-height:1.5}
+.elist{list-style:none;margin:0;padding:0}
+.eitem{padding:8px 0;border-bottom:1px dotted var(--line);font-size:.88rem}
+.eitem:last-child{border-bottom:0}
+.eh{display:flex;flex-wrap:wrap;align-items:center;gap:4px 8px;font-weight:600}
+.efrom{font-weight:400;font-size:.78rem;color:var(--muted)}
+.ep{font-weight:400;font-size:.78rem;background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:0 6px;white-space:nowrap}
+.erec{margin:5px 0 0 10px;padding-left:8px;border-left:3px solid var(--t-craft);line-height:1.9}
+.edisc{display:inline-block;font-size:.72rem;font-weight:600;color:var(--t-craft);border:1px solid currentColor;border-radius:6px;padding:0 6px;white-space:nowrap}
+.edisc.sm{margin-left:3px;font-weight:500}
+.x{font-size:.78rem;color:var(--muted);margin-left:1px}
+.ecat{font-size:.72rem;color:var(--muted);margin-left:2px}
+.ejob{font-size:.7rem;color:var(--muted);border:1px dashed var(--line);border-radius:5px;padding:0 4px;white-space:nowrap}
+.ejob.th{color:var(--maple);border-color:currentColor}
+.ev{font-size:.72rem;font-weight:600;border-radius:999px;padding:0 7px;white-space:nowrap}
+.ev.up{background:#DCFCE7;color:#166534}.ev.dn{background:#FEE2E2;color:#991B1B}
+.eu2{font-size:.8rem;color:var(--muted);margin-top:2px}
+.emore,.enone{margin:4px 0 0 10px;font-size:.8rem;color:var(--muted)}
+.etcbox .ev.up{} @media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .ev.up{background:#14532D;color:#BBF7D0}:root:not([data-theme="light"]) .ev.dn{background:#7F1D1D;color:#FECACA}}
+:root[data-theme="dark"] .ev.up{background:#14532D;color:#BBF7D0}:root[data-theme="dark"] .ev.dn{background:#7F1D1D;color:#FECACA}
+.ew{display:inline-block;font-size:.72rem;font-weight:600;border-radius:999px;padding:0 8px;margin-bottom:2px;white-space:nowrap;color:var(--tagInk)}
+.ew.own{background:var(--maple)} .ew.mat{background:var(--t-craft)} .ew.scr{background:var(--t-turnin)} .ew.arw{background:var(--t-collect)} .ew.eq{background:var(--t-gear)}
+.erec.own{border-left-color:var(--maple)} .erec.scr{border-left-color:var(--t-turnin)} .erec.arw{border-left-color:var(--t-collect)} .erec.eq{border-left-color:var(--t-gear)}
+.erec{line-height:1.75}
+.ewarn{margin-top:10px;padding:8px 12px;border-radius:8px;border:1px solid var(--maple);background:color-mix(in srgb, var(--maple) 9%, var(--panel));font-size:.82rem}
+.ewarn ul{margin:4px 0 0;padding-left:18px}.ewarn li{margin:2px 0}
+
+.acts-h{font-family:var(--display);font-weight:500;font-size:1rem;margin:14px 22px 0;color:var(--ink)}
+.acts-h .mt{font-family:var(--body);font-weight:400;font-size:.8rem;color:var(--muted)}
+.navbox{border-top:1px solid var(--line)}
+.navbox > summary{list-style:none;display:flex;align-items:center;gap:8px;padding:10px 14px;margin:2px 0;border:1px solid var(--line);border-radius:10px;background:var(--panel2);color:var(--t-travel);font-weight:500}
+.navbox > summary::-webkit-details-marker{display:none}
+.navbox > summary::after{content:"▾ คลิกเพื่อแสดง";margin-left:auto;font-family:var(--body);font-size:.8rem;color:var(--muted)}
+.navbox[open] > summary::after{content:"▴ ซ่อน"}
+.navbox > summary:hover{border-color:var(--t-travel)}
+
+/* เควสเสริม: แยกชั้นจาก route หลัก */
+.tab:not(.sq) .tt{font-weight:500}
+.tab.sq{padding:3px 8px 3px 30px;font-size:.8rem;color:var(--muted);line-height:1.3}
+.tab.sq .n{flex:0 0 14px;font-size:.75rem}
+.tab.sq[aria-current="step"]{background:var(--panel2);color:var(--ink);outline:1.5px dashed var(--t-turnin);outline-offset:-2px}
+.sqtag{display:inline-block;font-size:.66rem;font-weight:600;color:var(--t-turnin);border:1px dashed currentColor;border-radius:5px;padding:0 4px;margin-right:4px;vertical-align:1px}
+.sqbox{margin:6px 14px 14px;border:1.5px dashed var(--t-turnin);border-radius:var(--radius-sm);padding:8px 12px;background:color-mix(in srgb, var(--t-turnin) 5%, var(--panel))}
+.sqbox h3{font-family:var(--display);font-weight:500;font-size:.9rem;margin:0 0 4px;color:var(--t-turnin)}
+.sqbox h3 .mt{font-family:var(--body);font-weight:400;font-size:.78rem;color:var(--muted)}
+.sqrow{display:flex;align-items:center;gap:8px;width:100%;text-align:left;background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:7px 10px;margin:4px 0;cursor:pointer;font-size:.88rem;color:var(--ink)}
+.sqrow:hover{border-color:var(--t-turnin)}
+.sqrow .go{margin-left:auto;color:var(--t-turnin);font-size:.8rem;white-space:nowrap}
+.sqrow .ok{color:var(--t-collect);font-weight:600}
+.card.sqcard{border:1.5px dashed var(--t-turnin)}
+.sqhead{display:inline-block;font-size:.78rem;font-weight:600;color:#fff;background:var(--t-turnin);border-radius:6px;padding:1px 8px}
+.sqback{margin:0 22px 14px;background:none;border:1px solid var(--line);border-radius:8px;padding:6px 12px;cursor:pointer;color:var(--t-travel);font-size:.88rem}
+/* ป้าย EXP / meso */
+.cx{display:inline-flex;align-items:center;gap:4px;box-sizing:border-box;height:1.5em;padding:0 7px 0 2px;margin:0 2px;border:1px solid;border-radius:999px;font-size:.86em;line-height:1;white-space:nowrap;vertical-align:-.2em;transition:transform .15s ease, box-shadow .15s ease;cursor:default}
+.cx b{font-weight:700;font-variant-numeric:tabular-nums}
+.cx small{font-size:.8em;font-weight:600;opacity:.8;margin-left:-1px}
+.cx:hover{transform:translateY(-1px);box-shadow:0 2px 6px rgba(0,0,0,.15)}
+.cx .ci{flex:0 0 auto;width:1.15em;height:1.15em;border-radius:50%;position:relative;font-size:inherit}
+.cx.exp{background:#EEF9E3;color:#2D6A0E;border-color:#A6D97A}
+.cx.exp .ci{background:radial-gradient(circle at 35% 30%,#D8FFB0 0 15%,#7FD13B 45%,#3E9A12 85%);box-shadow:inset 0 0 0 1px rgba(45,106,14,.55)}
+.cx.exp .ci::after{content:"";position:absolute;inset:22%;background:#fff;clip-path:polygon(50% 0,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%)}
+.cx.meso{background:#FFF6D6;color:#7A5200;border-color:#F0C94A}
+.cx.meso .ci{background:radial-gradient(circle at 35% 30%,#FFF7C2 0 15%,#FFD23F 45%,#E09A00 80%,#A86A00);box-shadow:inset 0 0 0 1px rgba(122,82,0,.55)}
+.cx.meso .ci::after{content:"";position:absolute;inset:26%;border-radius:50%;border:1.5px solid rgba(122,82,0,.5)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .cx.exp{background:#1D3A12;color:#C6F2A2;border-color:#4C8A2A}:root:not([data-theme="light"]) .cx.meso{background:#3A2E08;color:#FFE08A;border-color:#9C7A1C}}
+:root[data-theme="dark"] .cx.exp{background:#1D3A12;color:#C6F2A2;border-color:#4C8A2A}
+:root[data-theme="dark"] .cx.meso{background:#3A2E08;color:#FFE08A;border-color:#9C7A1C}
+@media (prefers-reduced-motion: reduce){.cx{transition:none}.cx:hover{transform:none}}
+
+.hardwarn{margin:12px 0 14px;padding:12px 16px;border-radius:10px;border:1.5px solid var(--t-kill);background:color-mix(in srgb, var(--t-kill) 8%, var(--panel))}
+.hardwarn h3{font-family:var(--display);font-weight:500;font-size:1.05rem;margin:0 0 6px;color:var(--t-kill)}
+.hardwarn p{margin:0 0 6px}
+.hardwarn ul{margin:0;padding-left:20px}
+.hardwarn li{margin:4px 0}
+
+.missbox{margin:0 14px 12px;padding:9px 12px;border-radius:8px;border:1px solid var(--t-kill);border-left-width:4px;background:color-mix(in srgb, var(--t-kill) 6%, var(--panel));font-size:.9rem}
+.missbox b{color:var(--t-kill)}
+
+#money{display:none;max-width:1180px;margin:0 auto;padding:18px 16px 60px}
+body[data-tab="money"] #money{display:block}
+body[data-tab="money"] .ribbon, body[data-tab="money"] .wrap, body[data-tab="money"] .nav, body[data-tab="money"] #openDrawer{display:none !important}
+.prow.mk{grid-template-columns:1.6fr .9fr 1.1fr 1.2fr 1fr}
+.mkinfo{font-size:.82rem;color:var(--muted);line-height:1.5}
+.mkv{display:inline-block;font-size:.76rem;font-weight:600;border-radius:999px;padding:1px 9px;white-space:nowrap;color:var(--tagInk)}
+.mkv.fm{background:var(--t-collect)} .mkv.npc{background:var(--t-stop)} .mkv.few{background:var(--t-talk)} .mkv.keep{background:var(--t-kill)} .mkv.rare{background:var(--maple)} .mkv.nodata{background:var(--t-travel)}
+.mkbar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:16px 0 10px}
+.mkbar input{flex:1 1 240px;min-width:0;padding:8px 12px;border:1px solid var(--line);border-radius:10px;background:var(--panel);color:var(--ink);font:inherit}
+.mkchips{display:flex;flex-wrap:wrap;gap:6px}
+.mkchip{background:var(--panel);border:1px solid var(--line);border-radius:999px;padding:4px 12px;font-size:.85rem;cursor:pointer;color:var(--ink)}
+.mkchip[aria-pressed="true"]{background:var(--frame);border-color:var(--frame);color:#fff}
+@media (max-width:760px){.prow.mk{grid-template-columns:1fr;gap:2px;padding:10px 14px}}
+
+.mkfrom{font-size:.8rem;font-weight:400;color:var(--muted);font-family:var(--body);margin-top:2px}
+.mkl{display:none;color:var(--muted);font-size:.85rem}
+@media (max-width:760px){.mkl{display:inline}.prow.mk .pc0{color:inherit}}
+.prow.fm{grid-template-columns:1.5fr 1.1fr 1.5fr 1fr}
+.fmtags{display:flex;flex-wrap:wrap;gap:4px;margin-top:4px}
+.fmtag{display:inline-block;font-size:.74rem;font-weight:600;border-radius:999px;padding:1px 9px;color:var(--tagInk);white-space:nowrap}
+.fmtag.rare{background:var(--maple)} .fmtag.eq{background:var(--t-collect)}
+.fmwhere{margin-top:6px;font-size:.82rem;line-height:1.9}
+@media (max-width:760px){.prow.fm{grid-template-columns:1fr;gap:4px;padding:10px 14px}.prow.fm .pc0{color:inherit}}
+.tabs{overflow-x:auto;scrollbar-width:none}.tabs button{white-space:nowrap;flex:0 0 auto}
+
+/* MesoWatch guide */
+.mwhead{display:flex;flex-wrap:wrap;gap:12px 18px;align-items:center}
+.mwhead p{flex:1 1 420px;min-width:0;margin:0;max-width:72ch}
+.mwbtn{flex:0 0 auto;display:inline-block;background:var(--maple);color:#fff;text-decoration:none;font-family:var(--display);font-weight:500;border-radius:999px;padding:8px 18px}
+.mwbtn:hover{filter:brightness(1.08)}
+.mwcmp{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px}
+.mwcmp > div{min-width:0;background:var(--panel2);border:1px solid var(--line);border-radius:var(--radius-sm);padding:10px 14px}
+.mwcmp h3{font-family:var(--display);font-weight:500;font-size:.95rem;margin:0 0 4px;color:var(--maple)}
+.mwshot{margin:0 0 14px}
+.mwscroll{overflow-x:auto;border:1px solid var(--line);border-radius:var(--radius-sm);background:var(--panel)}
+.mwscroll img{display:block;width:100%;min-width:760px;height:auto}
+.mwshot figcaption{font-size:.82rem;color:var(--muted);margin-top:6px}
+.mwsteps{list-style:none;margin:0;padding:0;display:grid;gap:10px}
+.mwsteps li{display:grid;grid-template-columns:30px 1fr;gap:10px;align-items:start;font-size:.93rem}
+.mwsteps li > div{min-width:0}
+.mwn{width:28px;height:28px;border-radius:50%;background:#22406F;color:#fff;border:2px solid #fff;box-shadow:0 0 0 1px var(--line);display:flex;align-items:center;justify-content:center;font-weight:600;font-size:.85rem;font-variant-numeric:tabular-nums}
+@media (max-width:760px){.mwcmp{grid-template-columns:1fr}}
+
+/* ---------- Builds tab ---------- */
+:root{
+  --eq-frame:#F4F7FB; --eq-edge:#9AAAC2; --eq-cell:#D6E3F1; --eq-cellb:#BCCDE2; --eq-lbl:#8597B0; --eq-blank:#E6EDF5; --eq-title:#3A4E72;
+  --tt-bg:rgba(16,24,44,.95); --tt-edge:#7E97C4; --tt-ink:#FFFFFF; --tt-dim:#7D8BA8; --tt-no:#FF7A7A; --tt-on:#FFD36B; --tt-guide:#C9D7F0;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){ --eq-frame:#16233C; --eq-edge:#3A5584; --eq-cell:#22375C; --eq-cellb:#2E466F; --eq-lbl:#6F86AD; --eq-blank:#1B2B48; --eq-title:#C8D6EE; }
+}
+:root[data-theme="dark"]{ --eq-frame:#16233C; --eq-edge:#3A5584; --eq-cell:#22375C; --eq-cellb:#2E466F; --eq-lbl:#6F86AD; --eq-blank:#1B2B48; --eq-title:#C8D6EE; }
+#builds{display:none;max-width:1180px;margin:0 auto;padding:18px 16px 60px}
+body[data-tab="builds"] #builds{display:block}
+body[data-tab="builds"] .ribbon, body[data-tab="builds"] .wrap, body[data-tab="builds"] .nav, body[data-tab="builds"] #openDrawer{display:none !important}
+#builds .num{font-variant-numeric:tabular-nums;white-space:nowrap}
+.apflow{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:12px}
+.apstep{background:var(--panel2);border:1px solid var(--line);border-radius:var(--radius-sm);padding:10px 12px;min-width:0}
+.apstep .lv{font-size:1.2rem;display:block}
+.apstep p{margin:4px 0 0;font-size:.92rem}
+@media (max-width:760px){.apflow{grid-template-columns:1fr}}
+.btbl{overflow-x:auto}
+.btbl table{min-width:720px}
+.btbl td{font-size:.86rem}
+.bname{display:inline-flex;align-items:center;gap:6px;background:none;border:0;padding:0;cursor:help;font-weight:600;color:var(--ink);text-align:left;text-decoration:underline dotted var(--muted);text-underline-offset:3px}
+.bname img{width:28px;height:28px;object-fit:contain;flex:0 0 auto}
+.bnote{font-size:.78rem;color:var(--muted);margin-top:2px}
+.bno{color:var(--t-kill);font-weight:600}
+.bst{display:inline-block;font-size:.74rem;font-weight:600;border-radius:999px;padding:1px 9px;white-space:nowrap;color:var(--tagInk)}
+.bst.green{background:var(--t-collect)} .bst.amber{background:var(--t-talk)} .bst.red{background:var(--t-kill)} .bst.gray{background:var(--t-stop)}
+.bchips{display:flex;flex-wrap:wrap;gap:6px;margin:4px 0 10px}
+.gk{display:inline-block;font-size:.7rem;font-weight:600;border-radius:5px;padding:0 6px;border:1px solid currentColor;white-space:nowrap;vertical-align:1px}
+.gk.start{color:var(--t-travel)} .gk.buy{color:var(--t-gear)} .gk.drop{color:var(--t-kill)} .gk.quest{color:var(--t-turnin)} .gk.craft{color:var(--t-craft)} .gk.none{color:var(--t-stop)}
+/* SP timeline */
+.spwrap{overflow-x:auto}
+.spgrid{min-width:640px;display:grid;gap:6px}
+.spr{display:grid;grid-template-columns:190px 1fr;gap:10px;align-items:center}
+.spn{min-width:0;line-height:1.25}
+.spn b{display:block;font-size:.9rem}
+.spn small{color:var(--muted);font-size:.74rem}
+.spt{position:relative;height:26px;background:var(--panel2);border:1px solid var(--line);border-radius:6px}
+.spt.axis{background:none;border:0;height:30px}
+.tk{position:absolute;bottom:0;transform:translateX(-50%);font-size:.72rem;color:var(--muted);font-variant-numeric:tabular-nums}
+.spj{position:absolute;top:-4px;bottom:-4px;width:0;border-left:2px dashed var(--maple);opacity:.6}
+.spjl{position:absolute;top:0;transform:translateX(-50%);font-size:.72rem;font-weight:600;color:var(--maple);white-space:nowrap}
+.spb{position:absolute;top:3px;bottom:3px;border-radius:4px;background:var(--frame);display:flex;align-items:center;justify-content:center;min-width:6px}
+.spb em{font-style:normal;font-size:.7rem;font-weight:600;color:#fff;font-variant-numeric:tabular-nums}
+/* level bracket bar */
+.bbar{display:flex;gap:6px;overflow-x:auto;padding-bottom:6px;margin-bottom:12px;scrollbar-width:thin}
+.bbtn{flex:0 0 auto;display:flex;flex-direction:column;align-items:center;gap:0;background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:6px 12px;cursor:pointer;color:var(--ink);line-height:1.25}
+.bbtn b{font-family:var(--display);font-weight:500;font-size:.95rem;font-variant-numeric:tabular-nums}
+.bbtn small{font-size:.7rem;color:var(--muted)}
+.bbtn[aria-selected="true"]{background:var(--frame);border-color:var(--frame);color:#fff}
+.bbtn[aria-selected="true"] small{color:rgba(255,255,255,.75)}
+.gwrap{display:grid;grid-template-columns:auto 1fr;gap:18px;align-items:start}
+@media (max-width:860px){.gwrap{grid-template-columns:1fr;justify-items:center}.gside{justify-self:stretch}}
+/* equipment window */
+.eqwin{width:300px;max-width:100%;background:var(--eq-frame);border:2px solid var(--eq-edge);border-radius:10px;padding:8px 10px 10px;box-shadow:0 2px 0 var(--eq-edge)}
+.eqtitle{display:flex;justify-content:space-between;align-items:center;font-family:var(--display);font-weight:600;font-size:.82rem;letter-spacing:.06em;color:var(--eq-title);padding:0 2px 6px}
+.eqlv{font-size:.78rem;letter-spacing:0;background:var(--maple);color:#fff;border-radius:999px;padding:0 8px}
+.eqtabs{display:flex;gap:3px;border-bottom:3px solid #C8323C;margin-bottom:8px}
+.eqtabs span{font-size:.72rem;font-weight:600;padding:2px 10px;border-radius:6px 6px 0 0;background:var(--eq-cellb);color:var(--eq-lbl)}
+.eqtabs span.on{background:#E2627A;color:#fff}
+.eqgrid{display:grid;grid-template-columns:repeat(5,1fr);gap:3px}
+.eqc{aspect-ratio:1;max-width:100%;border-radius:3px;display:flex;align-items:center;justify-content:center;position:relative;padding:0;min-width:0}
+.eqc.blank{background:var(--eq-blank)}
+.eqc.empty{background:var(--eq-cell);border:1px solid var(--eq-cellb)}
+.eqc.empty span{font-size:.5rem;font-weight:700;letter-spacing:.02em;color:var(--eq-lbl);text-align:center;line-height:1.1}
+.eqc.it-slot{background:var(--eq-cell);border:1px solid var(--eq-cellb);cursor:help}
+.eqc.it-slot:hover,.eqc.it-slot:focus-visible{border-color:var(--maple);background:color-mix(in srgb, var(--maple) 14%, var(--eq-cell))}
+.eqc.it-slot img{width:78%;height:78%;object-fit:contain;image-rendering:pixelated}
+.eqc.opt{border-style:dashed;border-color:var(--eq-lbl)}
+.eqnew{position:absolute;top:2px;right:2px;width:8px;height:8px;border-radius:50%;background:var(--maple);box-shadow:0 0 0 1.5px #fff}
+.equp{position:absolute;bottom:1px;right:2px;font-style:normal;font-size:.55rem;color:var(--t-collect);line-height:1}
+.eqopt{display:inline-block;width:12px;height:12px;border:1.5px dashed var(--eq-lbl);border-radius:3px}
+.eqnew.st,.equp.st,.eqopt.st{position:static;display:inline-block;vertical-align:-1px;margin-right:4px}
+.eqleg{display:flex;flex-wrap:wrap;gap:4px 12px;margin-top:8px;font-size:.72rem;color:var(--eq-lbl)}
+/* bracket detail */
+.gside{min-width:0;background:var(--panel);border:1px solid var(--line);border-radius:var(--radius-lg);padding:14px 18px}
+.gs-h{display:flex;align-items:baseline;gap:10px}
+.gs-h .lv{font-size:1.6rem}
+.gs-job{font-family:var(--display);color:var(--muted)}
+.gs-head{font-family:var(--display);font-weight:500;font-size:1.08rem;margin:4px 0 0}
+.gtot{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:8px 0 6px}
+.gtot > div{background:var(--panel2);border:1px solid var(--line);border-radius:8px;padding:6px 10px;min-width:0}
+.gtot span{display:block;font-size:.74rem;color:var(--muted)}
+.gtot b{font-size:.86rem;font-variant-numeric:tabular-nums}
+@media (max-width:520px){.gtot{grid-template-columns:1fr}}
+.glist{list-style:none;margin:6px 0 0;padding:0}
+.gr{display:grid;grid-template-columns:44px 1fr;gap:10px;padding:8px 0;border-top:1px dotted var(--line)}
+.gr-ic{width:44px;height:44px;border:1px solid var(--line);border-radius:8px;background:var(--panel2);display:flex;align-items:center;justify-content:center;cursor:help;padding:0}
+.gr.new .gr-ic{border-color:var(--maple);box-shadow:0 0 0 1px var(--maple)}
+.gr-ic img{width:32px;height:32px;object-fit:contain;image-rendering:pixelated}
+.gr-tx{min-width:0;font-size:.88rem}
+.gr-h{display:flex;flex-wrap:wrap;align-items:center;gap:4px 8px}
+.gr-slot{font-size:.74rem;color:var(--muted);min-width:3.4em}
+.gr-m{font-size:.8rem;color:var(--muted);margin-top:2px}
+.gr-note{font-size:.8rem;margin-top:2px}
+.gr-alt{display:flex;flex-wrap:wrap;align-items:center;gap:4px 6px;font-size:.78rem;color:var(--muted);margin-top:4px}
+.galt{display:inline-flex;align-items:center;gap:4px;background:var(--panel2);border:1px solid var(--line);border-radius:999px;padding:1px 9px 1px 3px;font-size:.78rem;color:var(--ink);cursor:help}
+.galt img{width:20px;height:20px;object-fit:contain}
+.gchip{font-size:.7rem;font-weight:600;border-radius:999px;padding:0 8px;white-space:nowrap}
+.gchip.new{background:var(--maple);color:#fff} .gchip.keep{background:var(--panel2);color:var(--muted);border:1px solid var(--line)} .gchip.opt{border:1px dashed var(--muted);color:var(--muted)}
+/* in-game style tooltip */
+.gtip{position:fixed;z-index:80;width:272px;max-width:calc(100vw - 16px);background:var(--tt-bg);color:var(--tt-ink);border:1px solid var(--tt-edge);border-radius:6px;padding:10px 12px;font:12px/1.45 var(--body);box-shadow:0 6px 18px rgba(0,0,0,.35);pointer-events:none}
+.gtip .tt-name{font-weight:700;font-size:14px;text-align:center}
+.gtip .tt-sub{text-align:center;color:var(--tt-on);font-size:11px}
+.gtip .tt-top{display:grid;grid-template-columns:76px 1fr;gap:10px;margin-top:8px}
+.gtip .tt-ic{width:76px;height:76px;background:rgba(255,255,255,.92);border-radius:6px;display:flex;align-items:center;justify-content:center}
+.gtip .tt-ic img{width:48px;height:48px;object-fit:contain;image-rendering:pixelated}
+.gtip .tt-req{font-size:11px;letter-spacing:.02em}
+.gtip .tt-req .no{color:var(--tt-no)}
+.gtip .tt-jobs{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0 6px;font-size:10px;font-weight:700;color:var(--tt-dim)}
+.gtip .tt-jobs .on{color:var(--tt-on)}
+.gtip .tt-stats{border-top:1px dotted var(--tt-edge);padding-top:6px;font-size:11px;letter-spacing:.02em}
+.gtip .gold{color:var(--tt-on)}
+.gtip .tt-guide{border-top:1px dotted var(--tt-edge);margin-top:6px;padding-top:6px;color:var(--tt-guide);display:grid;gap:3px}
+.gtip .tt-guide b{color:var(--tt-ink)}
+.gtip .tt-use{color:var(--tt-on)}
+.gtip .tt-lv{font-size:10.5px;color:var(--tt-dim)}
+/* intro job path */
+.jpath{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;list-style:none;margin:0;padding:0;counter-reset:jp}
+.jpath li{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius-sm);padding:10px 12px;min-width:0;position:relative}
+.jpath li.here{border-color:var(--maple)}
+.jpath li.later{opacity:.75;border-style:dashed}
+.jpath .jl{font-family:var(--display);color:var(--maple);font-size:.85rem}
+.jpath h3{font-family:var(--display);font-weight:500;font-size:1.05rem;margin:0 0 4px}
+.jpath p{margin:0;font-size:.88rem}
+@media (max-width:760px){.jpath{grid-template-columns:1fr 1fr}}
+@media (max-width:460px){.jpath{grid-template-columns:1fr}}
+.btbl table.aptbl{min-width:900px}
+#btable .btbl table{min-width:980px}
+.bprice{min-width:150px}
+.bp{font-size:.8rem;line-height:1.45;margin-top:2px}
+.bpl{display:inline-block;font-size:.7rem;font-weight:600;color:var(--t-gear);margin-right:5px}
+.bpl.fm{color:var(--t-collect)}
+.bp small{color:var(--muted)}
+.gr-price{margin-top:2px}
+.gr.alt{margin-left:30px;grid-template-columns:36px 1fr;border-top:1px dashed var(--line);padding:6px 0}
+.gr.alt .gr-ic{width:36px;height:36px;border-style:dashed}
+.gr.alt .gr-ic img{width:26px;height:26px}
+.gchip.alt{border:1px solid var(--t-talk);color:var(--t-talk)}
+tr.altrow td{background:color-mix(in srgb, var(--t-talk) 6%, transparent)}
+.lgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:10px}
+.lgrid > div{background:var(--panel2);border:1px solid var(--line);border-radius:var(--radius-sm);padding:8px 12px;min-width:0}
+.lgrid p{margin:4px 0 0;font-size:.86rem}
+.gtip .tt-k .gk{border-color:currentColor}
+.gtip .tt-k .gk.start{color:#8FB8FF}.gtip .tt-k .gk.buy{color:#F2B27A}.gtip .tt-k .gk.drop{color:#FF9A92}.gtip .tt-k .gk.quest{color:#C9A8FF}.gtip .tt-k .gk.craft{color:#7FDCE8}.gtip .tt-k .gk.none{color:#B9C0CC}
+.gtip .bp small{color:var(--tt-guide)}
+.gtip .bpl{color:#F2B27A}.gtip .bpl.fm{color:#8FE3A8}
+@media (max-width:520px){.gr.alt{margin-left:12px}}
+.gtip .tt-guide .cx b{color:inherit}
+.bnr{display:flex;align-items:center;flex-wrap:wrap;gap:4px 8px}.bnr .bst{line-height:1.5}
+
+.mt-locked-step{color:var(--maple)!important}.mt-loot-mini .tile{width:auto;padding:12px}.mt-lock-overlay[hidden]{display:none!important}.mt-lock-overlay{position:fixed;inset:0;background:#071a32bb;z-index:9999;display:grid;place-items:center;padding:20px}.mt-lock-dialog{max-width:430px;width:100%;position:relative;padding:28px;text-align:center;background:var(--panel);border-radius:16px;color:var(--ink);box-shadow:0 20px 60px #0005}.mt-lock-dialog p{line-height:1.75}.mt-kicker{letter-spacing:.12em;font-size:11px;color:var(--muted)}.mt-lock-dialog h2{font-family:var(--display);font-size:23px;font-weight:500}.mt-price{font-size:29px;font-weight:700;color:var(--maple)}.mt-price small{font-size:13px;font-weight:400;color:var(--muted)}.mt-purchase{display:inline-block;margin:12px 0;background:var(--maple);color:#fff;border-radius:9px;padding:12px 22px;text-decoration:none}.mt-x{position:absolute;right:10px;top:8px;font-size:28px;border:0;background:none;color:var(--muted);cursor:pointer}.mt-small{font-size:12px}.mt-back{padding:8px;font:inherit;background:none;border:0;color:var(--muted);text-decoration:underline;cursor:pointer}</style></head><body data-tab="route"><header class="bar">
+  <div class="bar-inner">
+    <button class="bar-btn only-mobile" id="openDrawer" aria-label="เปิดรายการขั้นตอนทั้งหมด">ทุกขั้นตอน</button>
+    <h1><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="#F39439" d="M12 2l1.7 4.1 3.3-1.6-.7 4 4.2-.5-2.6 3.3 3.1 2.2-4.3.9.9 3.9-3.7-1.9L12 22l-1.9-5.6-3.7 1.9.9-3.9-4.3-.9 3.1-2.2-2.6-3.3 4.2.5-.7-4 3.3 1.6z"/></svg>Pure Bandit Route Lv.1–50</h1>
+    <button class="bar-btn" id="openKeep">ของห้ามขาย</button>
+  </div>
+  <div class="tabs" role="tablist" aria-label="เลือกหน้า">
+    <button type="button" role="tab" data-tab="intro" aria-selected="false">เริ่มต้น</button>
+    <button type="button" role="tab" data-tab="builds" aria-selected="false">Builds</button>
+    <button type="button" role="tab" data-tab="route" aria-selected="true">Route หลัก</button>
+    <button type="button" role="tab" data-tab="opt" aria-selected="false">ล่าของ & คราฟต์</button>
+    <button type="button" role="tab" data-tab="money" aria-selected="false">หาเงิน</button>
+  </div>
+</header>
+<div class="ribbon">
+  <div class="ribbon-inner">
+    <div class="track" id="track" aria-hidden="true">
+      <div class="track-line"></div>
+      <div class="track-fill" id="fill"></div>
+      <svg class="track-leaf" id="leaf" viewBox="0 0 24 24"><path fill="#F39439" stroke="#fff" stroke-width="1" d="M12 2l1.7 4.1 3.3-1.6-.7 4 4.2-.5-2.6 3.3 3.1 2.2-4.3.9.9 3.9-3.7-1.9L12 22l-1.9-5.6-3.7 1.9.9-3.9-4.3-.9 3.1-2.2-2.6-3.3 4.2.5-.7-4 3.3 1.6z"/></svg>
+    </div>
+    <div class="track-meta"><span id="chapName"></span><span id="doneCount"></span></div>
+  </div>
+</div>
+
+<div class="wrap">
+  <nav class="side" id="side" aria-label="ขั้นตอนทั้งหมด"></nav>
+  <main id="main" tabindex="-1"></main>
+</div>
+
+<div id="intro" aria-label="คู่มือเริ่มต้น"></div>
+<div id="builds" aria-label="Builds"></div>
+<div id="opt" aria-label="ล่าของและคราฟต์"></div>
+<div id="money" aria-label="หาเงิน"></div>
+
+<div class="nav">
+  <div class="nav-inner">
+    <button class="btn prev" id="prev">ย้อนกลับ</button>
+    <div class="count" id="count"></div>
+    <button class="btn next" id="next">ขั้นต่อไป</button>
+  </div>
+</div>
+
+<div class="overlay" id="overlay"></div>
+<aside class="drawer" id="drawer" aria-label="ขั้นตอนทั้งหมด"></aside>
+<section class="modal" id="keepModal" role="dialog" aria-modal="true" aria-labelledby="keepTitle">
+  <button class="bar-btn close" id="closeKeep" style="background:var(--panel2);border-color:var(--line);color:var(--ink)">ปิด</button>
+  <h2 id="keepTitle">ของห้ามขาย</h2>
+  <p style="margin:0 0 10px;color:var(--muted);font-size:.92rem">เช็กตารางนี้ก่อนขาย ETC ทุกครั้ง เรียงตามช่วงที่เริ่มเก็บ</p>
+  <div class="tbl"><table id="keepTable"></table></div>
+  <p class="credit">ไอคอนไอเทม รูป NPC มอนสเตอร์ และภาพแมพจาก <a href="https://meowdb.com/msclassic" target="_blank" rel="noopener">NiaMeowDB</a> · ภาพจากเกม © Nexon</p>
+</section>
+
+<div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="ภาพแมพ"><figure id="lbBody"></figure></div>
+
+<div id="premiumLock" class="mt-lock-overlay" hidden><div class="mt-lock-dialog" role="dialog" aria-modal="true" aria-labelledby="premiumTitle"><button id="premiumClose" class="mt-x" aria-label="ปิด">×</button><p class="mt-kicker">PURE BANDIT · LV.1–50</p><h2 id="premiumTitle">อ่านต่อในฉบับเต็ม</h2><p>Route ทุกขั้น พร้อม Builds ล่าของ และหาเงิน</p><div class="mt-price">฿99 <small>ชำระครั้งเดียว</small></div><a class="mt-purchase" href="./premium-guide.html?guide=bandit">ดูสิทธิ์ของฉัน</a><p class="mt-small">ยังไม่เปิดระบบชำระเงินจริง</p><a href="./auth.html">เข้าสู่ระบบหรือสมัครสมาชิก</a><p><button id="premiumBack" class="mt-back">กลับไปอ่านช่วงฟรี</button></p></div></div><script>const S=[{"ch":"Maple Island","lv":"1–8","title":"ทำเควสสอนเล่น (tutorial) บน Maple Island","where":"Maple Island (เริ่มเกม)","intro":"เกาะนี้มีเควสไม่กี่ตัว ให้ทำครบทุกตัวก่อนขึ้นเรือ เพราะ<b>ออกจากเกาะแล้วจะกลับมาอีกไม่ได้</b> ส่วนขั้น 2 และขั้น 3 (เควสของ Biggs และ Pio) ให้ทำไปพร้อมกับขั้นนี้เมื่อเลเวลถึง","act":[{"t":"talk","x":"ทำเควสแนะนำตัว (Lv.1) ตามลูกศรไปทีละตัว จนส่งจดหมายให้ Lucas","tip":"ได้ EXP น้อย แต่ทำเสร็จเร็วและช่วยสอนปุ่มพื้นฐาน เช่น การกินของ การใช้ potion และการเปิดกระเป๋า","sub":["Heena (ยืมกระจกจาก Sera)","Roger's Apple","Nina / Sen","Maria แล้วส่งจดหมายให้ Lucas"]},{"t":"kill","x":"ทำ Todd's How-to-Hunt ต่อด้วย Sam's Suggestion (ฆ่า Snail 10 ตัว)"},{"t":"kill","x":"เมื่อถึงเลเวล 3 ทำ Mai's Training แล้วต่อด้วย Mai's Final Training","tip":"ระหว่างนี้รับเควสของ Biggs (ขั้น 2) ไว้ด้วย เพราะ Blue Snail Shell และ Orange Mushroom Cap ดรอปจากมอนชุดเดียวกัน","sub":["Mai's Training: ฆ่า Blue Snail 10 ตัว, Shroom 10 ตัว และ Red Snail 5 ตัว","Mai's Final Training: ฆ่า Orange Mushroom 1 ตัว"]},{"t":"talk","x":"เมื่อถึงเลเวล 5 คุย <b>Rain</b> เพื่อทำ Rain's Maple Quiz 1–7 ซึ่งเป็นการตอบคำถามล้วน ไม่ต้องตีมอน ได้รวม 490 EXP และ Orange ×10","tip":"ช่วงเดียวกันนี้ทำเควสของ Pio (ขั้น 3) ที่ Amherst ไปด้วย"},{"t":"kill","x":"ตีมอนบนเกาะต่อจนถึงเลเวล 8 โดย Orange Mushroom และ Red Snail ให้ EXP ดีที่สุด"},{"t":"note","x":"ไม่ต้องฟาร์ม Bronze Ore บนเกาะนี้ เพราะคนเยอะและเสียเวลา ให้ไปเก็บจาก Stump ตอนเลเวล 8–11 แทน แต่ถ้าดรอปเองระหว่างทางก็เก็บไว้"}],"ap":"ลง LUK ทั้งหมด","sp":"ลง Three Snails, Recovery และ Nimble Feet สกิลละ 3 แต้ม จะลงสกิลไหนก่อนก็ได้","keep":"Bronze Ore ถ้าดรอป","leave":"ทำเควสบนเกาะครบแล้ว (รวมเควสของ Biggs และ Pio ถ้าต้องการเก้าอี้) และถึงเลเวล 8","next":"ขึ้นเรือที่ Southperry","miss":"เควสบนเกาะทำย้อนหลังไม่ได้ เพราะออกจากเกาะแล้วกลับมาไม่ได้ ถ้าข้ามจะเสีย EXP จากเควสแนะนำตัวและ Rain's Maple Quiz ซึ่งชดเชยได้ด้วยการตีมอนเพิ่มหลังขึ้นเรือ แต่เควสของ Biggs <button type='button' class='stepchip' data-go='1'>ขั้น 2</button> และ Pio <button type='button' class='stepchip' data-go='2'>ขั้น 3</button> จะหมดโอกาสทำไปด้วย"},{"ch":"Maple Island","lv":"3+","title":"เควส Biggs's Collection of Items","where":"Maple Island — NPC Biggs","intro":"เควสนี้ให้ dagger ฟรีหนึ่งเล่ม Fruit Knife แรงมากสำหรับช่วงบนเกาะ และเมื่อเลิกใช้แล้วยังขายให้ NPC ได้ราว 750 mesos","act":[{"t":"talk","x":"คุย <b>Biggs</b> แล้วรับเควส <b>Biggs's Collection of Items</b>"},{"t":"collect","x":"เก็บ Blue Snail Shell ×10","from":"Blue Snail","map":"Maple Island tutorial maps"},{"t":"collect","x":"เก็บ Orange Mushroom Cap ×1","from":"Orange Mushroom","map":"Maple Island tutorial maps"},{"t":"turnin","x":"กลับไปส่งเควสกับ <b>Biggs</b> จะได้ Fruit Knife หรือ Razor (โอกาส 50/50) พร้อม 70 EXP"},{"t":"gear","x":"ถ้าได้ Fruit Knife ให้ใส่ใช้งานทันที"}],"opt":[{"k":"quest","x":"จะได้ Razor หรือ Fruit Knife ก็ใช้ได้เหมือนกัน เพราะ ATK เท่ากันที่ 23 ไม่ต้องซื้ออาวุธจนกว่าจะเปลี่ยนอาชีพ"}],"ap":"ลง LUK","sp":"—","keep":"Blue Snail Shell และ Orange Mushroom Cap จนกว่าจะส่งเควส","leave":"ส่งเควสแล้ว","next":"ทำเควสสอนเล่นต่อ","miss":"ถ้าข้ามเควสนี้จะไม่มี dagger ใช้ช่วงบนเกาะ และไม่มี Fruit Knife หรือ Razor ไว้ขาย NPC แต่ไม่กระทบระยะยาว เพราะตอนเปลี่ยนอาชีพเป็น Thief ใน <button type='button' class='stepchip' data-go='11'>ขั้น 12</button> เกมจะให้ Beginner's Triangular Zamadar ที่แรงกว่ามาใช้แทน"},{"ch":"Maple Island","lv":"5+","title":"เควส Pio's Collecting Recycled Goods (ไม่บังคับ)","where":"Amherst — NPC Pio","intro":"เควสนี้ให้เก้าอี้ <b>The Green Relaxer</b> ซึ่งเมื่อนั่งจะฟื้น HP +30 ทุก 10 วินาที <b>เก้าอี้ตัวนี้ได้จากเควสนี้ที่เดียวและเทรดไม่ได้</b> ถ้าขึ้นเรือไปแล้วจะกลับมาเอาอีกไม่ได้","act":[{"t":"talk","x":"คุย <b>Pio</b> แล้วรับเควส Pio's Collecting Recycled Goods"},{"t":"collect","x":"เก็บ Rusty Screw ×2 และ Old Wooden Board ×2","from":"ตีกล่องไม้","map":"แถว Amherst"},{"t":"turnin","x":"ส่งเควสกับ <b>Pio</b> จะได้ The Green Relaxer พร้อม 100 EXP และ 150 mesos"},{"t":"note","x":"<b>สายสะสมห้ามพลาด</b> เพราะเก้าอี้ตัวนี้มีทางได้ทางเดียว ถ้าไม่ซีเรียสเรื่องสะสมก็ข้ามได้ เพราะเก้าอี้ที่ซื้อได้ใช้งานได้เหมือนกัน","tip":"เก้าอี้ทดแทนมีสองตัว ตัวแรกคือ Sky-blue Wooden Chair (ฟื้น HP +30 เท่ากัน) ขายที่ร้านของ <b>Mina</b> ใน Lith Harbor Department Store (ตึกร้านค้าในเมือง Lith Harbor) ราคา 1,000 meso ตัวที่สองคือ Kerning City Resident's Chair (HP +20, MP +5) ราคา 10,000 meso ซื้อจาก <b>Weston</b> ใน Kerning City Civic Center เมื่อ Citizenship ถึงขั้น Visitor"}],"ap":"ลง LUK","sp":"—","keep":"—","leave":"ทำเควสเสร็จ หรือตัดสินใจข้าม (ถ้าไม่สะสมเก้าอี้)","next":"ทำเควสสอนเล่นต่อจนถึง Lv.8","miss":"The Green Relaxer ได้จากเควสนี้ที่เดียวและเทรดไม่ได้ ถ้าขึ้นเรือไปก่อนจะไม่มีโอกาสได้อีก ชดเชยได้ด้วย Sky-blue Wooden Chair จากร้านของ Mina ที่ Lith Harbor ซึ่งฟื้น HP ได้เท่ากัน"},{"ch":"Maple Island","lv":"8","title":"ขึ้นเรือไป Victoria Island","where":"Southperry","act":[{"t":"stop","x":"ก่อนขึ้นเรือ เช็กรายการต่อไปนี้ให้ครบ","tip":"ออกจากเกาะแล้วจะกลับมาอีกไม่ได้","sub":["ส่งเควสของ Biggs แล้ว","ส่งเควสของ Pio แล้ว (ถ้าอยากได้เก้าอี้)","ตัวละครถึง Lv.8 แล้ว"]},{"t":"travel","x":"ขึ้นเรือที่ <b>Southperry</b> เพื่อเดินทางไป <b>Lith Harbor</b>"}],"ap":"ลง LUK","sp":"—","keep":"Bronze Ore ถ้ามี","leave":"ถึง Lith Harbor แล้ว","next":"Lith Harbor"},{"ch":"Lv.8–10 Victoria","lv":"8","title":"รับ 3 เควสที่ Lith Harbor","where":"Lith Harbor","intro":"รับเควสไว้ทั้งสามอันแล้วออกจากเมืองเลย ไม่ต้องอยู่แย่งมอนกับคนอื่นแถว Lith Harbor","act":[{"t":"talk","x":"คุย <b>Olaf</b> แล้วรับ <b>Olaf's First Training</b> (ฆ่า Stump ×8 และ Slime ×8)"},{"t":"talk","x":"คุย <b>Teo</b> แล้วรับ <b>Teo's Weird Hobby</b> (ฆ่า Slime ×10 และเก็บ Slime Bubble ×1)"},{"t":"talk","x":"คุย <b>Phil</b> แล้วรับ <b>Phil's Call</b> เควสนี้เก็บไว้ส่งตอน Lv.10"},{"t":"travel","x":"คุย <b>Phil</b> (ยืนอยู่แถวท่าเรือ Lith Harbor) แล้วซื้อตั๋วเดินทางไป <b>Ellinia</b> ราคา 150 meso"}],"ap":"ลง LUK","sp":"—","keep":"—","leave":"รับครบทั้ง 3 เควส","next":"Ellinia → The Tree That Grew"},{"ch":"Lv.8–10 Victoria","lv":"8–10","title":"ตี Slime และ Stump พร้อมเก็บของสำรองไว้ล่วงหน้า","where":"Ellinia → The Tree That Grew II / I","intro":"ของทั้งหมดในขั้นนี้ใช้กับเควสไปจนถึงเลเวล 11 ให้เก็บให้ครบตอนนี้ จะได้ไม่ต้องย้อนกลับมาฟาร์มอีก","act":[{"t":"travel","x":"เดินจาก Ellinia ไป <b>The Tree That Grew II</b> ซึ่งมี Slime และ Stump เยอะ หรือ <b>The Tree That Grew I</b> ซึ่งมี Slime และ Dark Stump","tip":"ทางไปคือ Ellinia → <b>The Field Up North of Ellinia</b> → <b>The Tree That Grew I</b> แล้วเข้า portal ด้านบนของแมพเพื่อไป <b>The Tree That Grew II</b> ถ้าคนเยอะ ใช้แมพสำรองแทนได้ คือ Slime Tree หรือ Field South of Ellinia"},{"t":"kill","x":"Stump ×8 และ Slime ×18 คือจำนวนที่ต้องฆ่า (ของ Olaf 8 ตัว และของ Teo 10 ตัว)","map":"The Tree That Grew II"},{"t":"collect","x":"เก็บ Slime Bubble ×4","from":"Slime","map":"The Tree That Grew II / I"},{"t":"collect","x":"เก็บ Squishy Liquid ×22","from":"Slime","map":"The Tree That Grew II / I","tip":"ใช้ส่งเควสของ Icarus 12 ชิ้น"},{"t":"collect","x":"เก็บ Tree Branch ×42","from":"Stump","map":"The Tree That Grew II","tip":"ใช้ส่ง Vicious 20 ชิ้น, Blackbull 10 ชิ้น และ Icarus 12 ชิ้น"},{"t":"collect","x":"เก็บ Leaf ×30","from":"Dark Stump","map":"The Tree That Grew I","tip":"ใช้ส่ง Francois 20 ชิ้น และ Blackbull 10 ชิ้น"},{"t":"collect","x":"เก็บ Bronze Ore ×5","from":"Stump (สำรอง: Snail, Orange Mushroom, Horny Mushroom)","map":"The Tree That Grew II","tip":"Stump ดรอปแร่ไม่บ่อย จึงไม่ต้องฟาร์มให้ครบตรงนี้ ได้เท่าไหร่ก็เก็บไว้ ที่เหลือค่อยเก็บตอนตีเห็ดให้ Bruce ที่ Henesys Hunting Ground <button type='button' class='stepchip' data-go='12'>ขั้น 13</button> ซึ่ง Orange Mushroom และ Stump ดรอปแร่ หรือเก็บที่ Perion Street Corner <button type='button' class='stepchip' data-go='14'>ขั้น 15</button>"},{"t":"note","x":"ยังไม่ต้องนับจำนวนที่ฆ่าให้เควส Life Skill หรือเควสของ Blackbull เพราะยังรับเควสไม่ได้ ช่วงนี้เก็บแค่ของอย่างเดียว"}],"opt":[{"k":"drop","x":"Slime ดรอป Sandblasted Jeans (กางเกง Lv.17, HP+17) <span class=\"cf\" title=\"ผู้เล่นยืนยันดรอปใน Classic 3 คน\">ยืนยัน 3 คน</span> และ White Bandana (Lv.10) <span class=\"cf\" title=\"ผู้เล่นยืนยันดรอปใน Classic 3 คน\">ยืนยัน 3 คน</span> เก็บไว้ใส่เมื่อเลเวลถึง"},{"k":"drop","x":"Dark Stump ดรอป Blue Qi Pao / Blue Pao (เสื้อ Thief Lv.20, DEX+2) <span class=\"cf\" title=\"ผู้เล่นยืนยันดรอปใน Classic 2 คน\">ยืนยัน 2 คน</span> ถ้าดรอปให้เก็บไว้ใส่ตอนเลเวล 20"},{"k":"craft","x":"เก็บ Iron Ore (ดรอปจาก Dark Stump <span class=\"cf\" title=\"ผู้เล่นยืนยันดรอปใน Classic 8 คน\">ยืนยัน 8 คน</span>) และ Bronze Ore (ดรอปจาก Stump <span class=\"cf\" title=\"ผู้เล่นยืนยันดรอปใน Classic 5 คน\">ยืนยัน 5 คน</span>) ไว้ เพราะเป็นวัตถุดิบหลักของ dagger ที่คราฟต์เองตอนเลเวล 35–40"}],"ap":"ลง LUK เป็นหลัก และลง DEX ให้ถึง 10 ภายในเลเวล 15","sp":"—","keep":"Slime Bubble, Squishy Liquid, Tree Branch, Leaf, Bronze Ore","leave":"ถึงเลเวล 10 และทำเควสของ Olaf กับ Teo ครบ","next":"นั่ง Taxi ไป Lith Harbor","miss":"ของในขั้นนี้ใช้ส่งเควสต่อเนื่องหลายตัว ได้แก่ Vicious <button type='button' class='stepchip' data-go='7'>ขั้น 8</button>, Francois <button type='button' class='stepchip' data-go='9'>ขั้น 10</button>, Blackbull <button type='button' class='stepchip' data-go='13'>ขั้น 14</button> และ Icarus <button type='button' class='stepchip' data-go='15'>ขั้น 16</button> ถ้าเก็บไม่ครบจะต้องย้อนกลับมาฟาร์มที่ The Tree That Grew ภายหลัง ซึ่งเสียเวลาเดินทางมากกว่าเก็บตอนนี้"},{"ch":"Lv.10 Taxi tour","lv":"10","title":"ส่งเควสที่ Lith Harbor","where":"Lith Harbor","intro":"ยังไม่ต้องเปลี่ยนอาชีพ เพราะ Beginner ได้ส่วนลดค่า Taxi 90% ใช้โอกาสนี้นั่งรถไปเปิด Life Skill ให้ครบก่อน","act":[{"t":"travel","x":"นั่ง Taxi จาก Ellinia ไป <b>Lith Harbor</b>"},{"t":"turnin","x":"ส่งเควส <b>Olaf's First Training</b>, <b>Teo's Weird Hobby</b> และ <b>Phil's Call</b>"},{"t":"stop","x":"ไม่ต้องรับเควสต่อเนื่อง Olaf's Second Training และ Teo's Even Weirder Hobby"}],"ap":"ลง LUK","sp":"—","keep":"Tree Branch, Leaf, Squishy Liquid","leave":"ส่งครบทั้ง 3 เควส","next":"นั่ง Taxi ไป Henesys"},{"ch":"Lv.10 Taxi tour","lv":"10","title":"Henesys — รับเควส Woodcrafting","where":"Henesys Market — NPC Vicious","intro":"เควสเปิด Life Skill เป็นบททดสอบที่ต้องฆ่ามอนและส่งของ ตอนนี้ให้รับเควสไว้ก่อนเท่านั้น","act":[{"t":"travel","x":"นั่ง Taxi จาก Lith Harbor ไป <b>Henesys</b>"},{"t":"talk","x":"คุย <b>Maple Administrator</b> (ฝั่งซ้ายสุดของ Henesys) เพื่อรับของอีเวนต์","tip":"ตั้งแต่เลเวล 10 มีเควสอีเวนต์เพิ่มอีก 2 ตัว ไม่บังคับทำ ตัวแรกคือ <b>[Event] Gathering Leaves</b> เป็นเควสรายวัน ให้เก็บตัวอักษร L-E-A-F-P-O-I-N-T-S จากมอนตั้งแต่ Lv.10 ขึ้นไป เช่น Dark Stump, Ribbon Pig, Octopus, Green Mushroom แล้วนำมาแลกของขวัญ ตัวที่สองคือ <b>[Event] Growing Leaf</b> ให้ถือ Pale Maple Leaf ไว้ ออนไลน์ครบ 60 นาที แล้วกลับมาส่ง","sub":["<b>สำหรับคนซื้อ Founder's Pack</b> รับของ Founder ได้ที่นี่","ทุกคนรับ <b>[Event] Gift for the New Journey</b> ได้ฟรี ตั้งแต่เลเวล 8 ขึ้นไป"]},{"t":"talk","x":"คุย <b>Vicious</b> แล้วรับ <b>Vicious in Need of an Apprentice</b>","sub":["ฆ่า Stump ×30 แต่<b>ยังไม่ต้องไปตีตอนนี้</b> ให้ตีรวมทีเดียวที่ Perion Street Corner <button type='button' class='stepchip' data-go='14'>ขั้น 15</button> ซึ่งนับพร้อมเควสของ Silas และ Blackbull","ส่ง Tree Branch ×20 (มีแล้วจากขั้นก่อน)","กลับมาส่งเควสกับ Vicious ที่ Henesys ตอน <button type='button' class='stepchip' data-go='17'>ขั้น 18</button>"]}],"ap":"ลง LUK","sp":"—","keep":"Tree Branch","leave":"รับเควสแล้ว","next":"นั่ง Taxi ไป Perion","miss":"ถ้าไม่รับเควสนี้ จะไม่ได้เปิด Woodcrafting ตอนส่ง Vicious ใน <button type='button' class='stepchip' data-go='17'>ขั้น 18</button> และจะทำ Processed Wood ใน <button type='button' class='stepchip' data-go='34'>ขั้น 35</button> ไม่ได้ ซึ่งเป็นของที่ต้องส่งให้ Icarus ก่อนจะได้ Icarus Cape ถ้าพลาดไปแล้วต้องย้อนกลับมารับเควสที่ Henesys และตี Stump ให้ครบเอง"},{"ch":"Lv.10 Taxi tour","lv":"10","title":"Perion — รับเควส Smithing","where":"Perion — NPC Silas Irons","act":[{"t":"travel","x":"นั่ง Taxi จาก Henesys ไป <b>Perion</b>"},{"t":"talk","x":"คุย <b>Silas Irons</b> แล้วรับ <b>Silas Irons in Need of an Apprentice</b>","sub":["ฆ่า Stump ×20 และ Dark Stump ×20 แต่<b>ยังไม่ต้องไปตีตอนนี้</b> ให้ตีรวมที่ Perion Street Corner <button type='button' class='stepchip' data-go='14'>ขั้น 15</button>","ส่ง Bronze Ore ×5 (เก็บจาก Stump ที่ The Tree That Grew)","ส่งเควสกับ Silas ได้ทันทีหลังตีเสร็จใน <button type='button' class='stepchip' data-go='14'>ขั้น 15</button> เพราะ Perion Street Corner อยู่ติดกับ Perion"]},{"t":"note","x":"ยังไม่ต้องคุยกับ <b>Mr. Thunder</b> ที่ยืนข้าง Silas เพราะเควสของเขารับได้หลังส่งเควสของ Silas แล้วเท่านั้น","tip":"ที่ต้องพูดถึง Mr. Thunder เพราะเขาสอน Weaponcrafting ซึ่งใช้คราฟต์ dagger ระดับ Lv.35–40 เอง (Halfmoon Zamadar และ Gephart) ถ้าจะคราฟต์อาวุธ ให้ไปรับเควสตอนขั้น Perion Street Corner แต่ถ้าจะซื้อหรือรอดรอปอาวุธแทน ไม่ต้องสนใจเควสนี้เลย"}],"ap":"ลง LUK","sp":"—","keep":"Bronze Ore","leave":"รับเควสแล้ว","next":"นั่ง Taxi ไป Ellinia","miss":"ถ้าข้าม จะไม่ได้เปิด Smithing จึงหลอม Ingot ส่ง Mr. Thunder เพื่อปลดล็อก Weaponcrafting ใน <button type='button' class='stepchip' data-go='14'>ขั้น 15</button> ไม่ได้ ผลคือคราฟต์ Halfmoon Zamadar หรือ Gephart เองไม่ได้ แต่ถ้าวางแผนจะซื้อหรือรอดรอปอาวุธอยู่แล้ว ข้ามได้โดยไม่เสียอะไร"},{"ch":"Lv.10 Taxi tour","lv":"10","title":"Ellinia — รับเควส Tailoring","where":"Ellinia — NPC Francois","act":[{"t":"travel","x":"นั่ง Taxi จาก Perion ไป <b>Ellinia</b>"},{"t":"talk","x":"คุย <b>Francois</b> แล้วรับ <b>Francois in Need of an Apprentice</b>","sub":["ฆ่า Dark Stump ×30 แต่<b>ยังไม่ต้องไปตีตอนนี้</b> ให้ตีรวมที่ Perion Street Corner <button type='button' class='stepchip' data-go='14'>ขั้น 15</button>","ส่ง Leaf ×20 (มีแล้วจากขั้นก่อน)","กลับมาส่งเควสกับ Francois ที่ Ellinia ตอน <button type='button' class='stepchip' data-go='19'>ขั้น 20</button>"]}],"ap":"ลง LUK","sp":"—","keep":"Leaf","leave":"รับเควสแล้ว","next":"นั่ง Taxi ไป Kerning City"},{"ch":"Lv.10 Taxi tour","lv":"10","title":"Kerning City — รับเควส Leatherworking","where":"Kerning City — NPC JM From tha Streetz","act":[{"t":"travel","x":"Taxi Ellinia พาไปส่งที่ <b>Kerning City</b> ซึ่งเป็นจุดจบของ Taxi tour"},{"t":"talk","x":"คุย <b>JM From tha Streetz</b> แล้วรับ <b>JM From tha Streetz Looking for a Partner</b>","sub":["ฆ่า Pig ×30 แต่<b>ยังไม่ต้องไปตีตอนนี้</b> ให้เปลี่ยนอาชีพก่อน แล้วค่อยไปตีที่ The Rain-Forest East of Henesys <button type='button' class='stepchip' data-go='12'>ขั้น 13</button>","ส่ง Leather ×5 (ดรอปจาก Pig ระหว่างตีเควสนี้)","กลับมาส่งเควสกับ JM ที่ Kerning ตอน <button type='button' class='stepchip' data-go='15'>ขั้น 16</button>"]},{"t":"stop","x":"ยังไม่ต้องไป Sleepywood หา Chrishrama เพื่อรับเควส Arc Forge เควสนี้จะไปรับตอน Lv.21"}],"ap":"ลง LUK","sp":"—","keep":"—","leave":"รับเควสแล้ว","next":"Thief Hideout"},{"ch":"Lv.10 Taxi tour","lv":"10","title":"เปลี่ยนอาชีพเป็น Thief","where":"Kerning City → Thief Hideout — NPC Dark Lord","act":[{"t":"travel","x":"เข้า <b>Thief Hideout</b>"},{"t":"talk","x":"คุย <b>Dark Lord</b> เพื่อเปลี่ยนอาชีพเป็น <b>Thief</b>"},{"t":"gear","x":"ใส่ <b>Beginner's Triangular Zamadar</b> ที่ได้ตอนเปลี่ยนอาชีพได้เลย <b>ไม่ต้องซื้ออาวุธ</b>","tip":"เปิดกระเป๋าช่อง Equip แล้วดับเบิลคลิกเพื่อใส่ ส่วน Fruit Knife หรือ Razor จากเควสของ Biggs (ATK 23) เก็บไว้ขาย NPC ได้ อาวุธที่จะอัปเกรดครั้งแรกคือ Coconut Knife (Lv.20, ต้องมี DEX 15) ไม่ใช่ Triple-Tipped Zamadar ที่ต้องใช้ STR","sub":["ตอนเปลี่ยนเป็น Thief เกมจะให้ Beginner's Triangular Zamadar (ATK 27, เทรดไม่ได้) มาในกระเป๋า","ใช้ dagger ตั้งแต่ตอนนี้ไปตลอด ไม่ใช้ claw และไม่ใช้ Lucky Seven"]},{"t":"talk","x":"(ไม่บังคับ) ก่อนออกจาก Kerning ให้คุย <b>Nella</b> แล้วรับ <b>Don Hwang's Request</b> ไว้ก่อน","tip":"<b>รับไว้ก่อนไม่เสียหายอะไร</b> และจะไม่ทำก็ได้ ถ้ารับไว้ Orange Mushroom ที่ตีให้ Bruce และ Ribbon Pig ในแมพหมูจะนับให้เควสนี้ไปพร้อมกันใน <button type='button' class='stepchip' data-go='12'>ขั้น 13</button> ไม่ต้องไปตีแยกทีหลัง","sub":["ฆ่า Orange Mushroom ×20 และ Ribbon Pig ×20 แล้วส่ง Orange Mushroom Cap ×10 และ Pig's Ribbon ×10","ได้ 188 EXP, Lemon ×15 และ Return Scroll to Kerning City ×2 (เก็บไว้ใช้แทน Taxi ตอนกลับ Kerning)"]}],"opt":[{"k":"sell","x":"Triangular Zamadar ที่ขายในร้าน (ATK 28) แรงกว่าตัวที่เกมให้แค่ 1 จึงไม่ต้องซื้อ"}],"ap":"ลง LUK เป็นหลัก ยังไม่ต้องลง DEX เกิน 10 ก่อนเลเวล 15","sp":"ลง Double Stab 1 แต้ม","keep":"—","leave":"เปลี่ยนเป็น Thief แล้ว","next":"Henesys เพื่อฟาร์ม Pig"}];
+const NAV={"0":[{"k":"txt","t":"เกาะนี้มีลูกศรบอกทางเควสอยู่แล้ว เดินตามได้เลย · เมืองหลักของเกาะคือ <b>Amherst</b> ส่วนท่าเรือคือ <b>Southperry</b>"},{"k":"walk","t":"<b>Southperry</b>: ไปทาง <b>ซ้ายสุดล่าง</b> ของแมพ (เดินไปทางซ้าย จากจุดที่เข้ามา) → เข้าวงวาร์ป กด ↑ → <b>A Split Road</b>","m":"000000060","b":[2.2,80.6],"a":[13,75.7]},{"k":"npc","t":"<b>Mai</b> อยู่ใน <b>A Split Road</b> ขวาบน","m":"000000050","b":[65.3,32.4]},{"k":"walk","t":"<b>A Split Road</b>: ไปทาง <b>ขวาสุดกลาง</b> ของแมพ (เดินไปทางขวา จากจุดที่เข้ามา) → เข้าวงวาร์ป กด ↑ → <b>The Field West of Amherst</b>","m":"000000050","b":[95.2,49.7],"a":[11.2,60.1]},{"k":"walk","t":"<b>The Field West of Amherst</b>: ไปทาง <b>ขวาสุดล่างสุด</b> ของแมพ (เดินไปทางขวา จากจุดที่เข้ามา) → เข้าวงวาร์ป กด ↑ → <b>Amherst</b>","m":"000001000","b":[97.2,90.8],"a":[2.2,82]},{"k":"npc","t":"<b>Rain</b> อยู่ใน <b>Amherst</b> ซ้ายล่าง","m":"000001010","b":[13.4,81.9]},{"k":"npc","t":"<b>Lucas</b> อยู่ใน <b>Amherst</b> กลางด้านล่าง","m":"000001010","b":[59.6,70.5]}],"1":[{"k":"npc","t":"<b>Biggs</b> อยู่ใน <b>Southperry</b> ซ้ายกลาง","m":"000000060","b":[33.9,59]},{"k":"txt","t":"Blue Snail / Orange Mushroom มีตามแมพระหว่าง Amherst กับ Southperry (เช่น A Split Road, The Field West of Amherst)"}],"2":[{"k":"walk","t":"<b>Southperry</b>: ไปทาง <b>ซ้ายสุดล่าง</b> ของแมพ (เดินไปทางซ้าย จากจุดที่เข้ามา) → เข้าวงวาร์ป กด ↑ → <b>A Split Road</b>","m":"000000060","b":[2.2,80.6],"a":[13,75.7]},{"k":"walk","t":"<b>A Split Road</b>: ไปทาง <b>ขวาสุดกลาง</b> ของแมพ (ปีนเชือก/บันไดขึ้นไป จากจุดที่เข้ามา) → เข้าวงวาร์ป กด ↑ → <b>The Field West of Amherst</b>","m":"000000050","b":[95.2,49.7],"a":[95.4,82.2]},{"k":"walk","t":"<b>The Field West of Amherst</b>: ไปทาง <b>ขวาสุดล่างสุด</b> ของแมพ (เดินไปทางขวา จากจุดที่เข้ามา) → เข้าวงวาร์ป กด ↑ → <b>Amherst</b>","m":"000001000","b":[97.2,90.8],"a":[2.2,82]},{"k":"npc","t":"<b>Pio</b> อยู่ใน <b>Amherst</b> ซ้ายล่าง","m":"000001010","b":[25.6,81.9]},{"k":"txt","t":"กล่องไม้อยู่ในแมพ Amherst และแมพข้างเคียง ตีกล่องแล้วเก็บของที่หล่น"}],"3":[{"k":"walk","t":"<b>Amherst</b>: ไปทาง <b>ซ้ายสุดล่าง</b> ของแมพ (เดินไปทางซ้าย จากจุดที่เข้ามา) → เข้าวงวาร์ป กด ↑ → <b>The Field West of Amherst</b>","m":"000001010","b":[2.7,82.1],"a":[18.3,67.6]},{"k":"walk","t":"<b>The Field West of Amherst</b>: ไปทาง <b>ซ้ายสุดล่าง</b> ของแมพ (เดินไปทางซ้าย จากจุดที่เข้ามา) → เข้าวงวาร์ป กด ↑ → <b>A Split Road</b>","m":"000001000","b":[2.2,82],"a":[97.2,90.8]},{"k":"walk","t":"<b>A Split Road</b>: ไปทาง <b>ขวาสุดล่าง</b> ของแมพ (ลงไปชั้นล่าง จากจุดที่เข้ามา) → เข้าวงวาร์ป กด ↑ → <b>Southperry</b>","m":"000000050","b":[95.4,82.2],"a":[95.2,49.7]},{"k":"npc","t":"<b>Shanks</b> อยู่ใน <b>Southperry</b> ขวาล่าง","m":"000000060","b":[82,67.1]},{"k":"txt","t":"คุย <b>Shanks</b> → ตกลงขึ้นเรือ → ถึง <b>Lith Harbor</b> ทันที"}],"4":[{"k":"npc","t":"<b>Olaf</b> อยู่ใน <b>Lith Harbor</b> ขวาล่าง","m":"010000000","b":[78.9,79.8]},{"k":"npc","t":"<b>Teo</b> อยู่ใน <b>Lith Harbor</b> ขวาล่าง","m":"010000000","b":[65.1,84.1]},{"k":"npc","t":"<b>Phil</b> อยู่ใน <b>Lith Harbor</b> ซ้ายล่าง","m":"010000000","b":[24,75.4]},{"k":"txt","t":"ซื้อตั๋วไป Ellinia กับ <b>Phil</b> ตัวเดียวกับที่ให้เควส"}],"5":[{"k":"walk","t":"<b>Ellinia</b>: ไปทาง <b>ซ้ายสุดบน</b> ของแมพ (เดินไปทางซ้าย แล้วปีนเชือก/บันไดขึ้นไป จากจุดที่เข้ามา) → เข้าวงวาร์ป กด ↑ → <b>The Field Up North of Ellinia</b> · ทางลัด: จุดวาร์ปลับกลางด้านล่างสุด กด ↑ แล้ววาร์ปไปใกล้ทางออกนี้","m":"010002000","b":[4.5,34.1],"a":[14.7,91.1]},{"k":"walk","t":"<b>The Field Up North of Ellinia</b>: ไปทาง <b>ซ้ายสุดล่าง</b> ของแมพ (เดินไปทางซ้าย แล้วปีนเชือก/บันไดขึ้นไป จากจุดที่เข้ามา) → เข้าวงวาร์ป กด ↑ → <b>The Tree That Grew I</b>","m":"010002050","b":[9,62.5],"a":[91.2,84.3]},{"k":"walk","t":"<b>The Tree That Grew I</b>: ไปทาง <b>ซ้ายบน</b> ของแมพ (เดินไปทางซ้าย แล้วปีนเชือก/บันไดขึ้นไป จากจุดที่เข้ามา) → เข้าประตู (ไม่มีวงแสง) กด ↑ → <b>The Tree That Grew II</b>","m":"010002060","b":[23.5,23.7],"a":[93,86.7]},{"k":"txt","t":"The Tree That Grew I คือแมพที่ผ่านก่อนเข้า II — ถ้า II คนเยอะ ตีใน I ได้เลย"}],"6":[{"k":"cab","t":"<b>Ellinia</b>: คุย <b>Regular Cab</b> (กลางด้านล่างสุด ของเมือง) → เลือก <b>Lith Harbor</b>","m":"010002000","b":[48.5,88.4]},{"k":"npc","t":"<b>Olaf</b> อยู่ใน <b>Lith Harbor</b> ขวาล่าง","m":"010000000","b":[78.9,79.8]},{"k":"npc","t":"<b>Teo</b> อยู่ใน <b>Lith Harbor</b> ขวาล่าง","m":"010000000","b":[65.1,84.1]},{"k":"npc","t":"<b>Phil</b> อยู่ใน <b>Lith Harbor</b> ซ้ายล่าง","m":"010000000","b":[24,75.4]}],"7":[{"k":"cab","t":"<b>Lith Harbor</b>: คุย <b>Phil</b> (ซ้ายล่าง ของเมือง) → เลือก <b>Henesys</b>","m":"010000000","b":[24,75.4]},{"k":"npc","t":"<b>Maple Administrator</b> อยู่ใน <b>Henesys</b> ซ้ายสุดกลาง","m":"010001000","b":[7.5,53]},{"k":"walk","t":"<b>Henesys</b>: ไปทาง <b>กลางด้านล่าง</b> ของแมพ (เดินไปทางขวา จากจุดที่เข้ามา) → เข้าวงวาร์ป กด ↑ → <b>Henesys Market</b>","m":"010001000","b":[52.1,74],"a":[9.9,62.4]},{"k":"npc","t":"<b>Vicious</b> อยู่ใน <b>Henesys Market</b> ซ้ายกลาง","m":"010001040","b":[34.5,50.9]}],"8":[{"k":"cab","t":"<b>Henesys</b>: คุย <b>Regular Cab</b> (ซ้ายสุดล่าง ของเมือง) → เลือก <b>Perion</b>","m":"010001000","b":[10.1,68.8]},{"k":"npc","t":"<b>Silas Irons</b> อยู่ใน <b>Perion</b> ซ้ายกลาง","m":"010004000","b":[31.5,47.9]}],"9":[{"k":"cab","t":"<b>Perion</b>: คุย <b>Regular Cab</b> (ซ้ายล่างสุด ของเมือง) → เลือก <b>Ellinia</b>","m":"010004000","b":[31,89.9]},{"k":"npc","t":"<b>Francois</b> อยู่ใน <b>Ellinia</b> กลางแมพ","m":"010002000","b":[54,48]}],"10":[{"k":"cab","t":"<b>Ellinia</b>: คุย <b>Regular Cab</b> (กลางด้านล่างสุด ของเมือง) → เลือก <b>Kerning City</b>","m":"010002000","b":[48.5,88.4]},{"k":"npc","t":"<b>JM From tha Streetz</b> อยู่ใน <b>Kerning City</b> ซ้ายล่าง","m":"010003000","b":[37,67.2]}],"11":[{"k":"walk","t":"<b>Kerning City</b>: ไปทาง <b>ขวาล่าง</b> ของแมพ (เดินไปทางขวา แล้วลงไปชั้นล่าง จากจุดที่เข้ามา) → เข้าประตู (ไม่มีวงแสง) กด ↑ → <b>Thieves' Hideout</b>","m":"010003000","b":[75.4,75.5],"a":[11.8,65.3]},{"k":"npc","t":"<b>Dark Lord</b> อยู่ใน <b>Thieves' Hideout</b>  (ห้องเล็ก เห็นทันทีที่เข้า)","m":"010003003","b":null},{"k":"npc","t":"<b>Nella</b> อยู่ใน <b>Kerning City</b> กลางด้านล่าง — (ไม่บังคับ) เควส Don Hwang","m":"010003000","b":[49.6,65.5]}]};
+const ICON={"Alligator Skin Pouch":"i/401.png","Animal Fur Bundle":"i/166.png","Arcon's Blood":"i/10.png","Armor Crafting Catalyst":"i/126.png","Blue Mushroom Cap":"i/456.png","Blue Potion":"i/160.png","Blue Sauna Robe":"i/271.png","Blue Snail Shell":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABoAAAAbCAYAAABiFp9rAAACAElEQVR4nKWWjZHCIBCFX25sgBa4EnIl2AKWoCV4JcQSLiVoCynBlCAlHCXkhg3gsoHEOd8MowLZb/8gNnhN08Z6gzc3EEB3E6wD4Ow8q8Kq85MA+q9Ne80WwMvaAEAwLL9HB26nqt0SaLr/TrgMwGgjxOURkCJczgMYvhe2P16GZLJ1iE+r6cgWn95JE1VIMmjLAF67gnM8oslcp/9DksKaOWdRLSKqQmTHLWSfj6nlpp2Mplx4ptK88xDLnNALWErdM2VbqalAvLQBdIsklr4EogNZUzS0JkOdBqgQjXBWtnfYXC3E0gFnAfMD2DHUqexUAt3PgNlraApdLdOyChzZdzdHVWgGOqSH3js1iMh0ALknvJAW+N8058L+UCcGpK5LEO5ZMsxhbJ5LgJVu4SiVyEHUbR6SLbq5iySs1t4q7imr3AzR4Nizg+rToLZrZjq4wp4KiMnDeHE3PAdlZ/2ue1/asIbIj0l8Z0w4PgB7Y3US9TDXYCB47Fhd/NDs2vHr7R64HBJjJaIXDy1XdMwDxVGJoAb9J6Da/K7iuh2KBxF05ei5NhFWqNFu3cP8LMzyhm3+biOYuBPniD5DalyskQrjIayeWA47qmOskxVOxF1Dz5/17tADDYNo9skf5cU6YluXAIgjA0VIHBJQU+X/VwaiIVMnE8FFud6AVeF/f6AZ4D/Am/AAAAAASUVORK5CYII=","Broken Mirror Glass":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABoAAAAcCAYAAAB/E6/TAAABwUlEQVR4nM2WYXHDMAyF7V0IhEICIRRKoYUwCqWwUiiEGkJDoRBqCoaQ3fNFmayTHGf7s3fna6q4+vws2Vfv9rW4dvnDLwjyeDzcNE35yzAMLsaYR0opx/q+z3FoHEcz78feEgFBoj1IjNEty+Le73de4BFHC35EAOj1ehULIBGMy3tf5K+CsEJAOIC7sCBQCMFdLpeN0bmKOAQAnngQAMzlsXn+WVytRsvz+SwgVCcJiWvdSsicP9FIVC/TEQre4gLiDUGx02kqXJmgWi0omQXhi6yB8rZZ26QBIA7RpDpqgUT2XUJ46+8eWG1LWiExRne73d31+mk6ymdHOuCytmpaXSAewpybgdepsw6bZl9zMa3zcBSoy+BE3nvdbyDcBQfABWIrpLh1utpNbW0VzUEdpDSIDOT6wNH5fN6Sy1pRM4Qw5y0C7H6/WTnN4Aaj7uEA7uLr65rdWQ6kZI28936DaZcjXS3pAEQDFTCItpEagC7M8QBkb+LefwXv/qN847zyKm5TqoF6JbEWa4UkGp4l0Qa9cxVYqsAwcEZix5IO7JMn/fO2OdbePJmcZK1YvpPPxZBbR9JcIKZBawvbnr8BIMc5zTMafOoAAAAASUVORK5CYII=","Bronze Ore":"i/155.png","Brown Bamboo Hat":"i/61.png","Charm of the Undead":"i/290.png","Coconut Knife":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABwAAAAeCAYAAAA/xX6fAAAB+ElEQVR4AbXBL3oqSRTG4d9J2iB75JWNRNYs4SBHzl0Ca4gcydgrsXcL41Jb6CX0ZyOPjaupeggPhPyBEHhf47YKe0Zl3E55fHxkGAYksVwuqeye2yjrVWIxC574QbNYLMg5/9NxfWW9SnhK5HGEcYThb3aM6yrrVcJTIo8jjRQ0mywqM66nrFcJT4k8jjRS0GyyqIzKuI6yXiU8JfI40khBs8miMl4Ylyu8WK8SnhJ5HGmkoNlkURkH7rlMmaaJ2WzGX4tnPCXyONJIQbPJojKO3PEN7k70Th5HGiloNllUxjvuuNAwDDTuTvSOFDSbLCrjA/d8XZmmiYggpYQkhmHg6XnGr9//URmf6DhfoZqmiR1JuDsPDw+cyzitUE3TxHvm8zkHjBOMjxWqUgqNJI7N53Mq4wuMtwpVKYVGEock0SyXSyrjizq2Ci9KKTSSOCYJd+c7OqBU7EjiljoqSZwiCXfnu+44gyTcnR0zozIucMcJknB3rqXjA5Jo3J1DZkZlXKjjgCR23J1b6Kgk0bg7nzEzKuMbOip35xQzo/oD6DlfcKTjDGZG9SeQOF+wFUAAQdXxCTPjxQPgbPW8FbwvgAAECIiOI2bGgX/ZGvi64B0GFF77CfRs9ZwW7AV7AQQQQABBZez1QM9ez1s9ELwVvBbsBQf+B9abyU504tETAAAAAElFTkSuQmCC","Curse Eye Tail":"i/420.png","Cursed Doll":"i/257.png","Diamond":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABoAAAAaCAYAAACpSkzOAAAB+UlEQVR4nKWVi3HDIAyGRS8LwAh4BHuEdIXO1BW6QlfICvEIZgQzAr1foER2ISaJ7jA2D316GQwdS+pYY95ZwIDfy5UiEVki7r21t/cY8ST6+pwO9X20ICklWtdERRdLDQK5XBdseOj9qTKWlnVlgLXSLDcMhhvAMlK8hMAw50yqefZRg/Du/KDzODIkhEBzuHsRyzwgo88gCO+veGbqkGywWMqKY1FeEmZVziBzCOS950GsG5zb6N+GrkAkXFp4TAhF8IpQIl8hRLIUc5j1olaOBAIPoIQLwN7tgMJi9qYasQjr8a0jUQXlpOcwSdIRBliI/CBPIrH0nB8UjoQ3BpCOQLlsYTQvVZECRDzQoesVXXXGGMOhEaX/1Kl/yu7GZMp7S9MwsL4WiCenaeAYz3PIUP3HVphRDbQg1YEi6bosNM+oIqJx9PyuTwOSKijhPY+e3K6ke0AFtvL/wRUmxVF6W04LeAFDnDEvnXW8aRocnb3P5V0KRcLnAfA2e3IAOQLx5mFwNHqf/w0VLghOAhRQzzVxBNrA5LRAj2/n+iC9oA0McQQI372QVyR9/1xS5637PuyVTb2uP3PaiMRHIFFYO9KegUXVcxOQbbQWtGn5bpxvFrSTUupV/6on1ILLNaGV7Re1LN7P7d83bR86kZoXt8v0wJAq/A+NQOTa72mKkgAAAABJRU5ErkJggg==","Diamond Ore":"i/395.png","Field Dagger":"i/80.png","Firewood":"i/139.png","Flying Medicine":"i/390.png","Forked Dagger":"i/267.png","Fruit Knife":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB0AAAAYCAYAAAAGXva8AAABkElEQVR4AbXBDXXyMBSA4fdyMJBISCVcLExCK2GfhE4CWJgEamESwMIkJBLul5yW0zBg/O55hL9jHBMmwt+wvnXUNkMiE7IFr2d96yi+9gnVgGqgtuC1rG8dhWrgQEOgtuR1rG8dhWqg2K5bzhFew/rWUagGCg2BoukGJsJEeJ71raNQDRQaAk03MBF+WPIc61tH8bVPqIKGQNMNZMIFCx5nfesoVAOFhkDTDWTCL4TH2HatbD739O+KhkDRdAOZcMWC+9l2rRT9u7L53FM03UAm3EC4jzHZrpWi+9gzEW4k3M64TLiDcBujsotGsfJCJtxJuM6o7KJRrLyQCQ8QfmdUdtEoVl7IhAcJlxmVXTSKlRcy4QnCeUZlF41i5YVMeJJwyqjsolGsvJAJ4LhfoiIcMyYxRg6892QN4Bg5bpcYJSABSZgZWYyRmvee7B8jx8xxKnFeAhLwDXwvGVmMkQPvPZUPIDBy3C/xgwDGqTfAAY6R47rELDFLQAISkIAknHKAY+Y45YDEqcSxxCwx+Q9UQ3HZDKoaEQAAAABJRU5ErkJggg==","Garnet":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABoAAAAaCAYAAACpSkzOAAAB/0lEQVR4nKWVC3HDMAxAlV0JaBA8CCmEjkIpjMKorBBCoYEwUzCECkJ2kj9RXNnJdbpTndqOnmV9ArAjy7IgDx09JMPOuhhaHg8AIiBW70UhBNlwnudDtnqLiwAAgEIAmueoDCKK82kjIsI1zjXtDV0Iv8wnT14ISEEIAKJfUb47NoeeJ0UYxleUPQthA8ow7MDeniD3+/oPMeo4AlwuAM5FVYJJs/zEYdkDxetiZYAWBiACptESjhWrJRq0PKYpXlOKQ2WlAGpTG68QTa+2HnH6MsiCqfmcEOU15ZFzzvTqVINK4Pk5xyPPcxKk+slC9dXxO8ZBNyDJJiLAEEAQXJh6Pac5rOktgDS6FKNDHkn1pxPpF0h5oyFQQXQsu6A4EHjvn4KeIfqZlb2X2HAZVOlvJcPwMc9yKl2I2TA1FBPEMYQVET5j/xvaHqlaCEQCqguy7IOoo3MwcjGz8iHXJrvfgn7HEWbvN30MteIadHe5lCvjRHn/+jLtNpvq5ByEEApMgp1jgSq7UqcI3sP5dmva7H4mpnSFEidEuSaukwyRwuXDeP/yZ6LA+Ce1lNjrcupS7InXg7b2QBvgf2wMB0F2S+4L9UBoGLbm9uSp/AYre6vysaBajG9KmS+1f1JGnRpf9QRa8NwZtLF6U+vE9ZrVBptXl6XVdSxo72Dl+Q/k1Bqq19VVbgAAAABJRU5ErkJggg==","Garnet Ore":"i/338.png","Green Mushroom Cap":"i/389.png","Horny Mushroom Cap":"i/244.png","Jr. Necki Skin":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAfCAYAAACGVs+MAAAB3klEQVR4nLWWDZGDMBCFFyYGYgELnISrhFqohVZCT8JhoRJ6EoqEQ8KthNwkEHj5LTDhzaS0IeF72d2kVHSMVKK/8jvqA8BK3pu54+9OpF5Ev5flPk4QJeHyuyFiIr4NBiwnH0MHoy6SqGNloyGOgvMwNmOAvdFgQhQyEMAReno4YGeaKLl6rb5PgLU6HlPzSVR9jHMFFZQuvtNtijuCEd64NSGKgBtJrGPORPLaEPMSZikl8ddgdoGB/7jpqUsYcN2MUNs0/Hl24SY1U3TqEsyzjTREHNW2YWGWSoG6vlrq+siTQUFhLruhqrYC8YepfpT1AX5MPeDWuyyp2WrArPahaw1j6S/eh3tC+PyxOdT4XI8Rg1qwuQ/wtQZU82yXVafCHIE5xkZwwBQrDMBTlmsKqkEc5CUE7zPgwSGfCN1U2GLNIKfoEsW0V/Wm0Zj3AvBtBjhf5UcZUPhXm6vyvRII8286J13ZhQcGVPaUOyj8WpVz0CSO1dj/e4kC1DIRcOCZ1ZaGzwZmsXNkBpoOGw3fU4WcN8DRvR171WgjfWvhDA0MDMEEmWg+OGYiVakWPExtDiduQRte3Rq4ar158coa4JQBAWAUQjKvHFm4/91vUTAaeBdq3Zda7RpTRv9U4wWngxfpSgAAAABJRU5ErkJggg==","Leaf":"i/157.png","Leather":"i/406.png","Leatherworking Kit":"i/287.png","Ligator Skin":"i/184.png","Lupin's Banana":"i/72.png","Medicine With Weird Vibes":"i/367.png","Octopus Leg":"i/304.png","Old Raggedy Cape":"i/146.png","Old Wooden Board":"i/381.png","Orange Mushroom Cap":"i/314.png","Pig's Head":"i/354.png","Processed Wood":"i/44.png","Razor":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABwAAAAaCAYAAACkVDyJAAABp0lEQVR4Aa3BC3XjMBRF0XOzQkCF4IEgQ4ggdCiEQiCYgotFEEzBhWBBeGNJnuV82/z2Fu9lnBJnxPuY2UDVEiOEQCaObHgPMxvY71tSaoiRmza8zswG7iVeY2YDVUsWI0UIZOKMeJ6ZDVQtWYwUIZCJK8RzzGygaslipAiBTNwgHmdmA1VLFiNFCGTiB+IxZjZQtWQxUoRAJn6x4X42TRP7fQu0ZDFShEAm7iDuYyymaeJw+ODzkyIEMnEn8TvjzDRNHA4ffH2RiQeInxmnRGVU4kEbbjMWfTdyRoB4wobrjEXfjWTDYMyMF4lLxqLvRjK/a/ivbcVMPEmcMhZ9N5L5XYP3FJKYiReIlbHou5HM7xq8p5DETLxIVMai70Yyv2vwnkISM/EGAoxF341kftfgPYUkZuJNtiz6biTzuwbvKSQxEyvH4xJHxMqGwfCeQhKzP6wcleN+iSoBCUhbjnhPIYlZADzgqBwrx6XEdQlIwDfwveWMJGZ/AU/lqByPS5wRKwdMQAAc4Kgcv0usEqsEJCABCUjilAMcK8clByQuJU4lVonFPyzqgwTCkMzoAAAAAElFTkSuQmCC","Red Chair":"i/153.png","Red Sauna Robe":"i/15.png","Reef Claw":"i/4.png","Rusty Screw":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABsAAAAbCAYAAACN1PRVAAACFElEQVR4nLWVgZWDIAyGY98tQEfQEewI3gg6go5QR9AR2hHsCGWEOoKMICNwL9B4iFBp393/XioE7EdCwAT8UlY7cfq2/y0lPpBSM2TZUXeEQMe8DLaV8fe394EHH0iOGTwGBjkDmB9M90Fy4P0Rihy0nUsz/1PYAiJdLkw/WXoBfq0WPx+fL8zDW8BDCEQKgbrBpFZNZTTw8CmI5ouRRwPdPYOmkdEgkogEbmAEjAXZwD0dfFHVptK8oFNl5thqewmZ8SdvRTZKgOa6BuFZq05HL4iUphCfRpZPq4gIiCBcAJoXkhfQnc0RiRFWo7p3sNi5BJWmxj8/mDbsUxtNzYOaBqbnqqnU7ajI6AqSwJbUTdNvMbjpw0oVvFn6VXXTEe7pCze1v9GKpLfq8Oryga43qdMcW4129WBKzM0gwy/aEa38QoLA4uo3/+uFaSAeztAqMVW+MfEE4RbgJR0CuqWfJJnJP6YIbfWnI9/sDR8N6MoBuppBygBKM2VTLKFDqCNsW/PRQtUl20SIoHE0x6IuQIMIimOvUroB7lldgEqZeeKRyXPQRwDbZbHM+zOtgJMFova/Ae9/GB17YYqAlzOsorNhvs2jSmA7Pld3/MFCQeW5KZjvVnfxipI2LLTqENiWtNqdM4YfRrxnBMHoj1PrGRsRODDbR6ZheDf6Vuy+HP6Qrcfc9sp8afTBbV8oit0F/AAY/X9h9a+MJQAAAABJRU5ErkJggg==","Scroll Crafting Catalyst":"i/133.png","Slime Bubble":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABsAAAAdCAYAAABbjRdIAAABi0lEQVR4nM1WgZHCIBBcfr6Bs4SzBCyBFtKClmALtqAlaAlJCUkJTwlSwv1ARDFPojHquzMkcDluOW5DojAMydgUngzpIbr1bDTuDTSZUF7sP2niqDlf+AfIO+fJJxN9flZvlfsX3gx5ke8ffOO5kKFDWyVOt07zIR/xF95fDIY1dovmiucZZOJJmAAiwHmLa++GDZgIq9khcEWBqCn1MJqw1GtsdIk1b8HEwV7ZBi6wj0duMVLUJLXsJeJHSillE+y6hCxrLZtjEb6Bk6Xvt46hz2PfJzBA7dg6BzoNxpD1brVFFIJDg8OlaOcF8EP/E12RiKm9OCiIwWdkXYPGNbDWhXr5+m1NiZmaj37PVIdQVQtfN4fKVpdMnTslRjC6CETe99E/pavt5H1bu4C4fUQo2AR1KjUbTRbD5XD0F1MyiFo5aNJYzXfZlzoXlG7Ycig748Up19BSMuppfcQpXA95JLK+RYHEwJzcx2SEexaQqjEN2HUcOnTSZ93+VcttY448teWIhxZ37v8C52mY7d3Sfl8AAAAASUVORK5CYII=","Sparkling Rock":"i/177.png","Spool of Thread":"i/215.png","Squishy Liquid":"i/340.png","Steel Shield":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABoAAAAeCAYAAAAy2w7YAAABaUlEQVR4Ab3BYZGrMBSG4ZcMBrAQC10JsYAFLAQJxcJaQMKNhWPhWPgk9G6gnXZp+6PMDs/T8NuFv9PwoOHucrnwIwE9q5lV4R0zFmYsJLACc6FquGrZmOeBGCOVFKmkAXenynlkms5U7o4kKjOjkkQ6ia3AC+7OHpJ4J7Dh7qSU2CvnzCuBjWEY2CulhJnxSstGKYUYI3uYGZJIJ54EDhI4SOAggYMEPpDzSJXzyKdaNvr+G+hZzawKWzmPVGYszFhIYIUnLRvzPBBjpJIilTTg7uQ8cjNNZ9wdSVRmRiWJdBJbgQ9M05lqms58KnCQwEECBwkcJHCQwEECBwkcJPCCu7OHJN4JbLg7KSX2yjnzSmBjGAb2SilhZjyIQMePllXHVSmFGCN7mBmSSCduToAD3gId0HHV999Az2pmVXiU88iNGQszFhJY4UkDdEAEOuAff+cLECBADasO6LjreNYB4pn4TdyJq/8bPJJWY4ilUAAAAABJRU5ErkJggg==","Stiff Feather":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB8AAAAdCAYAAABSZrcyAAABx0lEQVR4nL2WjZGCMBCFE8YGvBKgBFrAVuyFEqAEbYFWoAQpYW9ejs0tS1YQlTcTg0vw2+xP0LljRfJLdjB85kB2JLSqKofBDhwFpzzPF8bsCPC026j8zxH6Npyu1+vMMAwDw7+6c3o8Hib4W3AUExHNuipI5/30aXAKqsFd12Hy78JB8lZhPXMAOr27S++9dCBqHMcZVPS4a9t2P3QqJmJNjqCyow338V2u47Vu587D8/f73Z3PZ3MRdo28Nk0Tbd7H4Pg91W4WE+wAIqwM1kLbTa1HCy+eQad1Ea77FZLQFBzPcJW7jaK+72NOpWBn3W63MGS+MWBD3quqmuV6ixYFlYJj1kWlZYFPW7zo+35hQ8Gh8DjPsrWkiqJ4KdSsZIg5nLxja9ewvxpqE87QtRB/AgxFEOCyoCyggG4Ce8MOWLgoyzK2FdpFq65rfWRuzq/X0PBBFEAoFhwM+jTTBba3qLwMER8i6iiMfwqkE2IN9LPCSbaClyeXgjIJ87LXnLusADV4FCMovosVNDUgGf/UmyXd7P/QYRqjPGTYCQblYpYg+1Vmy3LIpU44CdAPmj+k7ulrPYJSFSrDrJ2RtpQjz5xdrP8F5R4cj07TgYQAAAAASUVORK5CYII=","Stirge Wing":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB8AAAAeCAYAAADU8sWcAAAB6ElEQVR4nMWVgXGDMAxFZY4F0hHoCGQEGCEdgY6QjpCOkIxARggjNCPUI9QjuGeDUkVIYOhd8nsO1BievizbAM+RDz/ZM8BNdYjX7EngKAMPTDOCT91HZJtHQikYACB/FNRaC5093Q0y//m48L4IdeDgas8jplkD9d6DEWbs0LQRhtCgAG6rHvzaGzc4fknaPUK7rosd7eHrBkEg/R/BRVmCeb+OzJolji+XC9R1HTuqopl84Vj1NjXwIufBZV1vI9QNf+K4IcUBOqc8gesDOKQawVxN0QOrIg2KSt7hsGolnewugiVpKU+B31xrblFv3S62JTIpYO46gLlTDv7a21nn+VRkfOmgKBjnuIXzXSDbz36QP8YAvBSAUbgeNwxtrnH9ikFfo1u6sYisPBUcUh0Ka05DmkVDPIBMA1PhHOMaDpKKi8yv1u7HAwHjgeCc6xtxrRVYSmFpyjQwdx0U5hgbZgELa40yDcyLjBcXD8AfS3rUJsNVMLrWqhoDCGf1mgyYEO2u3I/A5PCf1XczvaSm4EGeHhoDWPvIRuj7IfcvwnPxUDDk3rP+jQCT+ubkyBUbaO42SsNndByXfOz9Qe3QnLTDIagg17WO5wICaXulAP6i+iH2jN/zFjWVdikY2icFMhXsaPwvn3QfIDgcfg4AAAAASUVORK5CYII=","Tablecloth":"i/385.png","Tailoring Kit":"i/411.png","The Green Relaxer":"i/97.png","Topaz":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABoAAAAZCAYAAAAv3j5gAAABuklEQVR4nLWWgXHDIAxFP70uQEYgIzgjpCO4I3SGrNAVMkI8QjtCPUIYwRpBPYFwsGtjkl50pwODT48vGbBBnXFhztQEMDUA5i8ADgAB8ADOOu1gzLkq1ksJwtxmkA6gA0DvI0SMBwcePkIXD4CY+QjA6qMo6WLXynijczS2W7CSIl211TYqiMGhYALIA/SdjdeDmPkCoM1AYhawTsd99jqBSCA9eGhXVS0VkJmvGeAW8Nb2EUZnUE/wHsGtBd5Oy3Ffl4VqPUItmhjQn0KWRrOR2XWZYKzbSo366crhw4pHgNVGI0srfmzcXSBjjBZ6bikwYuBQGi2dMPbvfnU/bXx1pO6mabHRQ13Sd1lQUwKZuOMlhERzf9IE+bJJnx2wO6yruUNRljZtSUD63Gyo2QIZYz6162FdM0KEkNLWHC3MvqymQpHAZGOEkFM1FCG7A1Wf4DUmpwXz1cle5usl+tZB+jhsaJl/EGB4EiSDuadDkj0EMZXvlY6xNaMSKLsTimNblh/1wRPIrniaQwFGBVj6yfByTYzHVdbmQf+dNmT3UR5s/lLpjs7n5v2Jz1OXbElF+hvZWv0i/BdYPLMqhxL9BwAAAABJRU5ErkJggg==","Tree Branch":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB0AAAAeCAYAAADQBxWhAAABfklEQVR4nMWWi3GDMAyGBdcFtII7gldgBTqCV0hGICOUFRihjFBW8AoawT0ZQ8C1A5hHdBHkjK2PX5J9ZHCtGb7k8AbLL2SZW4GXQg0DNdFFOLBAU0pbz6Sajgu3WtPZW5b81hvAJjQ/f0cd87OBTSCtH0fD+PIKeDR03IevgElQAoqq42d1O45ncICFOtGOsasiuJ1MaJulNpINVN3kTL0qoqAsJb22Xhxc9mWDUkmgTvspnVoWC5bUSKUSoLuOJUKdcNLkayeik1hIBM0KE4Frof1WcE3L6WTgnrM0XzMJpQDSPXUvcGmh7b5KCSBidfsVDhZbbG4lAgq0Co8EhgL0p8uJQD9I3zD8OxE4DfQEIh5ew9DhYH5/KiCtodPtTGHA3Hm0ySgEdeEESFkCoYa2beyQU/kJAGICxAQgTfyZ3u9KgRAcD6F+3AfgVwQWAse+L8m5dk6zRvIm3z3AksIQlJagHHRI4+BrYD7Q/+/7v66cwmJAHoupWvMi8AdHEeJ+rAkaXwAAAABJRU5ErkJggg==","Triangular Zamadar":"i/359.png","Witchgrass Leaf":"i/379.png","Wooden Buckler":"i/313.png","Adamantium Ore":"i/386.png","Bazlud":"i/216.png","Black Crystal":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABoAAAAfCAYAAAD5h919AAABqklEQVR4nK2Wjc2DIBCGqfkWuBVYwRXqCK7gDI5QR2hHqCs4go6gI+gIfHmJ1yDl/KG8CYGg3MP9gCp1XSZijcquQh6PRzTsrEzf9wC4LblHZp5n1XWdIqLNvEoIgicWEACdhmVnIFprtSyLbT4oz/NTsOwIAsF427afBwCzhmE4Bcv2qgsANuqCAuFTVVXtwkSPsEtAYHSaJhs2V7TCuHe9DOlPeoDEA8aGns+n7TlXwzCopmnsHMarR5dlqqoy7/cbZW3KsvTPj/Eb3t8LnegRe+Xnh0VEm3Aehe7wHPm5OWv417tut/KiQaEDCqFIJE+jQCmVxSzis5UEJOVgvW4u5+sQ5BtBtcEbdx7jI9il0O0ZpF9BbnUhbHzvkWc4uUexyoT5W13XdudcXQzBBepfP/ikFEVh18VuxNzvd/EiLcvSXrqp/opMnueGiL5A4zgmg3xgWmvps0BC28iPKb/gvsjjns8Qqg+5UkrZxAS0OL1tDNrblQu1v6mrGs9oCIaGappujlHt9JJ3EL7Zr8DuQ5AvEEMkTyS5EH+8aX7oWCEI5qTdH8L/Ab/R4ZHIW1ZQAAAAAElFTkSuQmCC","Black Duo":"i/45.png","Black Green-Lined Shoes":"i/405.png","Black Knucklevest":"i/341.png","Black Knucklevest Pants":"i/439.png","Black Lappy Boots":"i/312.png","Black Napoleon":"i/414.png","Black Pao":"i/8.png","Black Sneak Pants":"i/293.png","Blue Bandana":"i/59.png","Blue Duo":"i/240.png","Blue Guise":"i/203.png","Blue Knucklevest Pants":"i/151.png","Blue Lappy Boots":"i/134.png","Blue Pao":"i/278.png","Blue Qi Pao":"i/180.png","Blue Viola":"i/109.png","Bronze Chain Boots":"i/159.png","Bronze Ingot":"i/21.png","Bronze Wolfskin":"i/251.png","Brown Winter Hat":"i/393.png","Cat's Eye":"i/22.png","Claw Attack Scroll: Intermediate":"i/202.png","Dark Avenger":"i/445.png","Dark Brown Stealer Pants":"i/75.png","Dark Cleave":"i/214.png","Dark Guise":"i/256.png","Dark Mischief":"i/195.png","Dark Pilfer":"i/329.png","Dark Wolfskin":"i/328.png","Drake Skull":"i/376.png","Emerald":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABoAAAAbCAYAAABiFp9rAAAB7klEQVR4nKWWjXHDIAyFn3NZQBmBjpAVkhGSEdoR2hG6QjJCMoI9QjyCGSGMoJ4E2Nhn45/qjjPBoI8nZJECy4wnxouF6xdN5BczLACXDDoAP0WxCpaFiF2YGUk7MbOR/uvBGbU92+UgDXNPhdhF1DgHa0UjgKbUuVtBCqkBDVlwiVPo13AwxnSzF8DGQPxmv0ZcUQpxDrW1MGS037N3HrYfG6xCiKIdVQVgiXAk0r4ahW3I4ymrpm0UJI5kv5/h93cSPh864B4hVQ3oebn1IFkmbu5B2ZeGyUEeVhw6meWA6imZ0Ve3BhTctM/KtsHyjkmcSpO+UraDUljPiEBE4V3e+Wx6+0CNm2ScvhsyZhTtloQuetW0bkcIa2wydNFN3D2hg/TkiJLYNpagDgQ5k0ESiKXOt4CkxEyfk880kyoxGxU5V7cw/VBVSJLOFIIn9S7AjpTUvoVnVOBwZtuUcGRQtw4E61Pbj8TyY1CaE84zd1Pu0mI0D9+LdUx82y6gt9+HQucgU4q6TXxcOVRlr0hFdWdBCyFzIO/gcGaUN184Bwd+XXGVL73vp+6ZQ2aNy4HilmlmbM7SwqItgmiixXfIwFwGFr8Qu0+cxpvb/EMJpuAxGVJnw0m5q3P4Vy/t99owdNHGVCRFLruRUfgf9vLFZTF1PCMAAAAASUVORK5CYII=","Emerald Ore":"i/402.png","Evil Eye Tail":"i/16.png","Fish Spear":"i/99.png","Fragment of Magic":"i/200.png","Garnier":"i/352.png","Gephart":"i/294.png","Gloves Attack Scroll: Intermediate":"i/202.png","Gloves Crit. Rate Scroll: Greater":"i/454.png","Gold Arbion":"i/370.png","Gold Ingot":"i/1.png","Gold Ore":"i/98.png","Green Diros":"i/233.png","Green Ghetto Beanie":"i/377.png","Green Hunter Boots":"i/264.png","Green Icarus Cape":"i/398.png","Green Lappy Boots":"i/87.png","Green Loosecap":"i/339.png","Green Pilfer":"i/422.png","Green Skullcap":"i/394.png","Green White-Lined Boots":"i/0.png","Green Winter Hat":"i/208.png","Halfmoon Zamadar":"i/52.png","Hat Accuracy Scroll: Greater":"i/309.png","Iron Dagger":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABoAAAAdCAYAAAC0T3x2AAACE0lEQVR4AbXBL2IaQRTA4d/bcIG3EjmRkZsjYCvHVsIREpk4OEI5QtbWFVuXOULG1vUdYTrDhu7yN5DS7+M/SEBih3Bd6e2Vtdt7CuFdxZW55gXXvPD2SpF4d8N1PT0/t3z90lKMFVY/eQKehetJ3nuKtm2ZP7DmPdzeQ8V1JO89RQgB5xyPC/Cev4R/l7z3FCEENmKMDIhwvkRPgETmvacIIbARYyQTBoTzpAwQFo/wuADvPRshBDZijGTCjooLeQ/zB2jbliKEwEaMkUw4YMQneM/a46LFOUcRYyQTjqj4WMqIQShcw5r3MH+AGCPnuOG0lFHo+IkYntEx6BjsF9zdwVih/W5kwgkVx6WMoUX4QQzsmT9QJE6oOCxlDM2WK6aTBtPfxMBa27LmPR+q2JcyhmbLFdNJQ9E4RZtE27LmPWcRtqWModlyxXTSUDROMXq1CAPCCUIvZQzNliumk4aicYrRq0XIhDNVHDFbrphOGorGKUavFiETLlBxwGy5YjppKBqnGL1ahEy4UEUnZexqnGL0ahEy4RNG7JgtV3ybTiiMXi1CJnzSiAED5tMJxrZahEz4ByPeGdtqEQZqQLmMMSB0Evtu6Sgd5XxGxwADTOgooIACCiigdJSess84zAADIhBHgAIKOEABR0fpKJczdozoKD1jm3Gc0TN6BhhggAEmdBRQeso+BYx9xjajZ7z7AzFZunkiHtCzAAAAAElFTkSuQmCC","Iron Ingot":"i/213.png","Iron Ore":"i/7.png","Korean Fan":"i/449.png","Mithril Ingot":"i/280.png","Mithril Ore":"i/42.png","Old Gold Watch":"i/9.png","Old Wisconsin":"i/452.png","Orihalcon Ore":"i/170.png","Pan Lid":"i/18.png","Pansy Earrings":"i/375.png","Pig's Ribbon":"i/6.png","Pink Viola":"i/236.png","Plunger":"i/459.png","Processed Cloth":"i/181.png","Processed Leather":"i/318.png","Pure Water":"i/118.png","Red China":"i/407.png","Red Dye":"i/74.png","Red Moon Pants":"i/28.png","Red Ninja Sandals":"i/356.png","Red Skullcap":"i/152.png","Red Snail Shell":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABoAAAAbCAYAAABiFp9rAAAB+klEQVR4nKWWi3HDIBBEVxk3QAu4BFKCUoJcQlKCU4Jcgl1C3IJKsEowJYQSlOFz0omPkCc7wygIcY89DpMG+zRVxhv88wMHmOQZ0AYaBoCYB03ov+NWjddUAQC01iHwIsP+9gsAvjAU4+ZA0/T4BS53YNQOYjaCx++tvj1wFfttLwQ7IVY92mRfD4hVgPj9sBDeF8l0P5aKO5qm7voCJC8aOUeuEkc1SEmazRIZp4fYjamsOvdeg0rfS2ZgS+pCyrYgJSc6fN9BQTlMmr4FpMvBa2mz6tG5p3ReRLLYuLyLOd5yc0WLETpJYR706CG7FkraNVGgfW7G1bkyzlWuGPwhPV0w6HE1KAPITiaXubSY8MYER2qeL6KqCxC+MgrsYUvwXFpN1FdCYjQ6TZ2tNgvh7Y4xW66l8rYq7U+xGCgVN7fFa5jeUX3amH0gLgvjuaZ9K8m6yrmugl5RBzUXRLyfdGdMT3S4w++VVbyuH7ThnFB1wTmls0MHlea2UDj5m7fZdLT30HLxyhxYMXFQc8QdCsK1nE4YsgdRQszOCJbbo/TiY+LnykuwYjArWFzeg//qGG5HQyDbOX5geEaRv9g12scL0dFCLNBWKZur6JesCYHEfFT8k+D8afWJui7BLrUViCDUYkBJpf/AOMg1Km8OKEFcriuwIvwPjp4PbfFMdogAAAAASUVORK5CYII=","Red Starry Bandana":"i/237.png","Red Thief Hood":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAbCAYAAAAdx42aAAACBUlEQVR4Ab3BzVXjVhgA0CuiDcsvJUglkBKGEoYSTAnDNjvSgkuYlEALpAS9EvhKeGPzIPKPbDDnJPf6H1ULev+96ozeZaoLvaDgD8t6n1NtTI4lwizsKyhO651WvZkcS00iNWGWmuK8zrI62ReadCxRUBAIs8S9V50FV47Vyb4wC4R9gQGBRMEd0seu7KvPSCQC4bREQUHBgEHzA/dI5/1mVp+RuEbg2mnXmjBLTeIaN/jTq84JV3YkAoFAIHwsMCDsCx/rNPUZgXBealITSE1qClITuPeqs6C3IzVhQQSZ3qVliXuzn87rUZ+QCIQTMm2FZtAkEolE4tHsznm9N4MmHUvHUhMIBAoSafZTc0dFh2pHbyPMHlzmG8IskJpEweBfdXqptsbfOxtdbyPwoFlNk0usx9GhG01o/tFML9VWyeJdb+MBq2myNcTgEqtpcmg9jnZ9MytZ3I6jjc5Gj+5v6gpDDB7+enCJxx+PDq2mya71ONoqWdyOo12dWbXxNE0Orddr74bhxmetvn9Xsti6HUdbT9Nk63YcbXSdY9WBp2nyFbfjaEenqWZd53Oqr+mcVtF1viZcLi3onBeaMAtN+LzUJBLpTWdZIBAIBEITZuFYWpZIFBSkjd6xQGBAYNCEJlwundBbFmZpXzotzdIskUgk0pvOskCYhWOBdCztS7N04Bc6UqJ7cZQtTAAAAABJRU5ErkJggg==","Red Tiberian":"i/450.png","Sandblasted Jeans":"i/33.png","Sapphire Ore":"i/103.png","Screw":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABoAAAAcCAYAAAB/E6/TAAABjElEQVR4nL2VgXHDIAxFwdcF6Ais4BVYwSt4hazQjFCvEo8QRqhGqEZwTwT5sA0yuL3+O50JJnqSDEKrvBZ1Ll2xRly8PJ5f2cUAqO7T9BrPUxNM5yDk8ABBVN7PGyg0wLqrEFLMfGkBNUM+P25q9qDceKuCdVchEMfW2ipYWrpmCKsG1v0WksIkdX8BqVH3H5AN6CrEGLlkGxA5aoVADIysBhZA3FZaIawaGLePxbpxnWyBpJqne7ElpZMBxie+pBLEex+yKvW/Q1Olg1fKxhgyk4WQuHw52P4caUrf2qMzEiIZZiEk5/rw3/gZlrPOUA3zCaTvewUAoRrDMBxaknSXnHZk07vX09gQGEEoKwYigkI/a7GpxiBEw7itySE5fsFgBVKWHHDTvV/K3LoxwHgzcNnTW1jKqFaanHFmLM5qXVTpLL8ztvrOfTc+xLrg0JzMSXrsfr/TZtWJk5zxOyXAsADEaFRPeEuc2uR5JRMlwQm0d7ZfJN146bv9eGP70rFyWdBcDioFto5/AK27RjkKEI7PAAAAAElFTkSuQmCC","Seclusion Wristguard":"i/266.png","Shield DEF Scroll: Intermediate":"i/202.png","Silver Ore":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABoAAAAaCAYAAACpSkzOAAAB4UlEQVR4nJ1UC7HCMBBM32CglVAkgAQsYAELIAEkUAtIAAlUApFAJPTN5nU7l+s15HEzmabJ3e59U7kyGQp0qq8vSXC9Xp333rVt6+q6ThRCCK7ve9d1XRbvJ0fyfr/d8/mMYCAAGUDx5RmJ9/v95FhpRFEZJAC73W7xq2W32yWkjO7xeJi4+mAYhiEaWCTwHunDQqq0A7SDAxp7pUkoVk3wz7tgREndzWYDMoJVmigxwKKHkpy1WhLa0n4krFZWNPQKQlCdwhKReknX6QhARmV+qdOOadSCOytiM3Ukk+27dBdG4lzNSDRLG5UkANp2qQn8WDtpi4WuZTMkqZMRSBI9L1aEOgqdiZg6OfkagHNBHQ3a9/0MnHMmZwlEVdM0w+v1muWahbW6rB5Ta4nVKGyGar1eD/f7fWbMzhunPXEiiMaQDnA0sk/Q+Xw2CyvesSjeaGFEcjgc3Ha7nWH/lMwBPccLjcfUEtbFIjEPENXxeJyMZWRy3/0Ve9K7XC5LeItEkQwp0AMr3zHv/ZRKOS//JYpk3JBURnY6nUpxyhQ0qZDmg03IETFP9YczV0gSuCoBYi3euQxZyJBhoYX9SoC24vttJG6JnC+DBNNKSx7rO71Plk4dxYoCZxZpzrFp/ws90k/vs+5siQAAAABJRU5ErkJggg==","Snail Shell":"i/76.png","Squishy Shoes":"i/281.png","Star Earrings":"i/344.png","Steel Pipe":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABwAAAAdCAYAAAC5UQwxAAACBUlEQVR4AbXBsVXjQBSG0e95aUAteEPCRwnbgl3LH0KmGtSCWlAJmtTZU0rGpM5mR8fsETbLYoP2Xv6DAhQ+8IN1lYjg+fmZw+HwCDxxYcN6SkSw3++Zpom2bakKF4x1lIhAErNpmkgpURkXNnxfiQgkMXN3UkpUxl8Y31MiAknM3B1JVMYHjK8rEYEkZu6OJCrjH4yvKRGBJGbujiQq4xPG7UpEIImZuyOJyriCcZsSEUhi5u5IojKuZFyvRASSmLk7kqiMGxjXKRGBJGbujiQq40bG50pEIImZuyOJyvgC499KRCCJmbsjicr4IuNc4Y2IQBIzd0cSlfENGy5EBLOIQBIzd0cSlfFNxrlCNY4jDw8P7HY73B1JVMYKjEUZx5FhGJDEbrej73teGSvZcFLGcWQYBlJKuDt939O2LWszoIzjyDAMpJSYpok/Ukq8MlZyxwdSSlTGyjZ8wN2pClBY0Q/gqeu6x7ZtOR6PHI9Hcs6klNjtdtzf33M4HB6BJ1ZgLErbtqSU6Psed2e73dL3PZVx0nC7zBvGuULVti1935NSovrJScNJw/UyJxnIQL7jwsvLC13XkVKi2gO/OGlYNLyX+bsMZGACpjsWDVXXdUiiErAFGk4abpe5YCwaYAuMwB5oOGn4XGaRWWQgAxnIQDbONUDDouG9Bsi8lzmXWWRe/QZru+0uD9zw6AAAAABJRU5ErkJggg==","Steel Sylvia":"i/436.png","Stinger":"i/116.png","Topaz Ore":"i/299.png","Triple-Tipped Zamadar":"i/114.png","Weighted Earrings":"i/27.png","White Bandana":"i/197.png","White Potion":"i/206.png","White Viola":"i/192.png","Work Gloves":"i/112.png","Yellow Square":"i/62.png","AP Reset Scroll":"i/409.png","Dagger Attack Scroll: Intermediate":"i/202.png","Hand Axe":"i/119.png","Heckler":"i/453.png","Hwabi Throwing Stars":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABoAAAAcCAYAAAB/E6/TAAABfUlEQVR4nMVVgW3EIAyE1y/wGSErpCt0BLJCR6AjfFZJRmhWyAjNCGQEKlNoDW+M86pUSxYWdny+GIxSdfGM73T8hXOeAPOtABbIOSdJ4ud5FtbDJHHOAVDSzKe+QSjfg1wlaJGZ6rrO4711XcUVayGrYJSJx3EU57kWtKkPNDCBPmzbdqZYT8VwvQh+ay32ey621bsAhgAznzFGAuShIMkBCUAo8JQaY6og1VNnjPmxl2Wh+uFTDPjB7vueI/HICqoifhUZqwRsJCPoz+TyX0A+XU5CqBGUCdyzOPeaI+npE6cafbowbDRSTnRSOH2gHKvmZGBUNBm0YNaFj/G9ShLvl2jWiaa3tTYYwzBkjd/3vQX2iyQBSQDoWVDpVQXAaZpEYGdO4dMvLCc4yY1RX4nLpKR7Q+tntF8KHyUfcX2N64HWoAmIqhSa8FYAUGBHXO9KqfdiH3QH1Shxj9aSHSdHZS8DSu8RTlZ+SCWifKWdafnrklAsYK9WfRP8C8lRJCGAkGIrAAAAAElFTkSuQmCC","Ilbi Throwing Stars":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABsAAAAeCAYAAADdGWXmAAABdUlEQVR4nL1UjXGFIAwOngu4Qh3BFdoRsosjsAsjdAZGsCs4Ar1QeS8gAaS+993lxBDykR8C0AfXc2iAN2LoOOO2bfPfd5B1Y8joXC0qYwxorau2kGDMGClmSOurcNJZVYpgnufoAkc0EdZ1jS7IzjWTPQgJdJiIrLUno2VZPCG3lfzm0nhCIKJaSftG2LsCSp1DREqRKIjo7XofezPRfwldhehkC3lCV3pn3oAKHYqdQVr4bCNsTx8R6chblnBHoc3hg3WoC2SKKxDx0dK9sMcTOd4gBA7e+l5hjKmNIJ66k62Nn4h6WTfi0/a17wwbiIaWccVrmYL0VF+Sw0YkLI4ryn2oQW4I89motfbrUjffPvW11lzXRibsR4SCUyf5Hhva+yrUTX7+nPRO+PGC7dSo49j5jyo4mAq6bwD4aiTag/DIJkEk4k8pAoZA9EMSIguOP9g36PlXwi7oIrI0MumwdPN0L11HwmvG0yZFQzopiuoFfgGcLgy5ahG74gAAAABJRU5ErkJggg==","Kumbi Throwing Stars":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABwAAAAeCAYAAAA/xX6fAAABRElEQVR4nL1WgY3DMAiE6BfICp2lP0IyZDJCV+gK7QoZgZej+EUxYONEPclybcMdYOEUoA/U6QdDr+M3BWlZln3+luApYNCepmn6X6zrGuYYLGLLIQkeQm5gYAAbnNAhs87wzB2SE7l3FhZEQUaP50uz2c8MvwItFy7JautL28IraRMGgzQT0RF1LfJsQwpHYfgR7fGKwDzPNQG3dRJY+2DhmIWSUaXPiiA1TOUDsfsWzkp0l2cITvPmO+T7GrgNeg9AtC1qwKvbAk8+/lATjPYZ1QxaHm9upxFqZ3impNhY0nB5W0qTPsDEZ8sOghm60fKm7vHv+RPlZefiB2IYK2sNW0vqo0LI9x4A8BsQ2/KQGY7GkOIJdy8Thiz2ToNnmMlvbM77fLagCW5SUMvQIrAykGfy98eQd8hLKAPge1Y21SD+AAXkeVr5tNA+AAAAAElFTkSuQmCC","Mokbi Throwing Stars":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABwAAAAeCAYAAAA/xX6fAAABIUlEQVR4nO2V7Q3CIBCGaeMCrNBZcIRbgRVYoa7gKnYEHcGOoCOcoSnmJBwfxRJ/+CYX6AH3AOkdQpQJRaX6DWuwKVApVQXtSxcMw1ANLZGFoNYalVJLX+wsbA1FH1oK7DYAq+L0orH6XwbixrGsu8eWJ8RxHF1yc7qtlpQxRgAAe0ALo/kVsiuZf4/MQ2MMAgCbOjmwbKBJwB6ZMGf3GAwAWFi3c2nqko6IUhvrvp2HsYD/0ra9lmqtRVPgPM/V0FIt+WofXynl7i++XO0NXYEyYlm/s5soI76LLfDTNNn+kYnzJO1iPjC2yxDcrO2JBPflYLO1AxlwwQfSOj9tqc72x2XGRGgT9IQUxp2MEw3s9z+Mu1L67cv6Qtfn+4KbeAGsDaW2lmqT2AAAAABJRU5ErkJggg==","Monkey Wrench":"i/182.png","One-Handed Weapon Crafting Catalyst":"i/57.png","Overall Armor LUK Scroll: Lesser":"i/268.png","Red Viper":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACEAAAAiCAYAAADRcLDBAAACHklEQVR4Ab3BDVUbSxgA0PvtwcBEwlZCn4RgYSxgAQmphGhJJDASGgk7Er4XzqYnAQLlZ8u9FpJInzRYSG62jhJplkgk0hvCcjI3W/v7O7eYyuiP1g9uPRFmiQjLydxs9V+/POoPO601j9Z39/5o/eDWbIdbhGXlVEb9Yae1ptbquamMVv1gKqNHq34QlpNTGfWHndaaWquj8FJ6KgYLa62ptToK14VZIBwNvl8iXBh8r0R4ZvB9EuGKwcJqrY7CU4nwisG/lwhvGCwjpzLabzeeSYS/GHxdrtdrq37wTCK8Q/ia9FIgEd4pfF6u12v7/d5JmCXCBww+J6cy2u/3TsIsET5oQCK9TyKnMuoPOydhlgifcOMoN1txf5dmgXTFVEaP9tsNrbmQCJ8UZpmbrf39nVvs8LOMnttvNx7VWp0EEuELblz4WUa7fjD+/m3fmudqrU7CLBG+KJzlVEb9Yae1ptbqinCWCAsIs5zKqD/stNbUWh2F1yXCQgYXWmtqrY7C6xJhQYOPSYSFDS6s7+69IRH+gcEsVv3gDYnwjwz+LhG+UU5lTKRZuq6goKCgoKCgoKCgoKB4w43XJVYoKM6KWfF+3ayjo7sQnkpnP1BQUFDMirPipe66jo4DDuhObpylo6mMVv3gaETBaFbMio/r3nDjwlRGq35w9B+KWfdU97rurDvr6Ojo6C6EszQLFBRnxUsF3UvdU91Zd8X/3RnFmSspX3IAAAAASUVORK5CYII=","SP Reset Scroll":"i/396.png","Shinkita":"i/446.png","Steely Throwing Knives":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABsAAAAdCAYAAABbjRdIAAABlElEQVR4nLWVgZWDIAyGo88FvBF0hK7ADDeCjnAdAUeoK7iCI7QjwAjnCNyLJTZSVLDc/14egprPhBgySCvjzLPNyacgYwxorZeFuq5TMxaQUUphZLPhNZunh8Ha8RssT021mgHDMABXnsqx1hqUUvP8LkQCtx7QXQjT2H2SUhpao71LCkKTAAsQ7bYBKkIduwuUqnEc4VXs+wreMyw23BMyF9Q/h+xTmK3qta5YFBGg6Gqsqmp93TRe0GWjGvMzUYXoZt8PhWEH8N7ouu7UB+QxD+OP27btnEIynx7j6E1lHpI+hBBIMCfXK5ZJuA7/M4KgMBKc970ti8jjoziKitJGsqAs2VGBwuNBYCuScul5gb3OYAvballvMA460VANwVwgTyNyVoVgCyD5sY6aoxFpjgfjSyVFhpC5sVr9SzQFXVjQHqSMdd4+h4zDjAMpPc59a6GqAGBCKxio3LAtMNe0A7vY00i7oIqNMRFNnrUfO34TjJc+d+i+vPfl/J7vuQel0d2ro3Thms+h7+N+AeCL3/sD0lD+GI8cvSMAAAAASUVORK5CYII=","Tobi Throwing Stars":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABwAAAAeCAYAAAA/xX6fAAABXElEQVR4nM2Wi23DIBCGweoCrOBZ6AiswAqs4K7QVeoR2hHiEdoRrsKC6ELuAbFT9ZdOOHDcx+OAGDMmMAc1PdAH/hTovT8EnUY7zPN8GDqiDIEYI3jv9+8zA1OCASiYQYEErFDBj5Q1sqDx4wK17fbhpEEJIi3R3l58RWkzNDjQuq7SoGq7PeVYcDCtrRU3mqedsYmCLctiYoxSv69iqlJKJoTATjDDcLpT9on8L4IfpJQghMAmXA+sG5gU2HcnrNpFgoUQWJh98iVsqaSxil3PmSTkY3FfCtglCdozoF7hF0G1nifrX13eQO2FciFYLREnBXanbds06OnZv+9VPrPOuVP/ZlByxa7QAnSC3Yjb3OrohLqPfBzK0/TKxPlB5W4tUBolBU+lfEPBW1XYlu0FNdTgMyprPS6x3nPiMm2GGgSeIYZxM+OEA7ffN8YtKf7dKtdRy9fWkYP4BXwl1QqvbfYXAAAAAElFTkSuQmCC","Weaponcrafting Kit":"i/355.png","Wild Boar Tooth":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABoAAAAaCAYAAACpSkzOAAABY0lEQVR4nL2Uga2DIBCGf00XuBVYwV06Qh3hOULfCHaEOoIrlBFkhN4IvHBWg4QifcH+Cak56P9xBxywlcVBqiMx+y0QvgKantMhWdVhgJkxjmNxWB0GtNYgRRgf5WGhbH/v7fSc7PgYbSlY/W7ClVAphf7eC/xQkFPTND7s38AqUT7JyA2jDQwbmWjP7d5/ozphR1LCRoGYwIaX7NCeW/sJMLVozQogKEUSNMasv8yMru2y/JKga38FEa0wJ6LtGZoX2INGPffSDmBIArXWuP3eor57va5yu3Rn44xk92LMApgZL2KBplp1XSe7debu9s1ASUfGcl5JE+RLbtnl5yJlpKV2r/IJzDCGYYj6fvQWQqCvFORtMFO2sF8ZVZnr8q7WVpwCUcQ4FsuFzG8B4MoziY1lDgkYJ2BuuNZhTp7p0me2LaBA2eB1b98sXJR6if5c+L0ZYekWxbJwsRg0tbH1+w/yFrquhdNFDAAAAABJRU5ErkJggg==","Wooden Club":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABwAAAAeCAYAAAA/xX6fAAAByklEQVR4Ab3BC3lbMQyA0V/5QuBS8CCYgjCMwiB44ERBFExBELzIyc1tm7TNo9k5/CeDkx2vN5qSBgfCa42mTB5gDsLrjKZMHmBOEuE1RlMmDzAnCQfCzxtNmTzAnCScCD9rNGXyAHOS8IbwMwYHTZk8wJwkfCA8bzTlzAPMScIVwnNGU848wJwkfGLH40ZT0Fq4h/CY0RS0Fsw7yQPMScIXdtxvNAWtBfNO8uBmwn1GU9BaMO8kDyZzkvAN4TaDg6agtWDeSR5M5iThBnu+N5qC1oJ5Z+XBZE4SbiR8bTQFrYWVeSd5gDlJuMOOz42moLVg3knmneTBw4TrRlPQWjDvaC2Yd5IHkzlJuJNwaTQFrYWVeWflAeYk4QF73htNQWvBvPORB0/bsRlNQWthpbWw8mAyJwkPEo5GU9BaSOadtzyYzEnCE3bAaApaC8m8o7Ww8mAyJwlP2nOFeSd5MJmTBFi4X/DGnjfMOysPJnPSL6BytHC74CiAAGLPiXkneXBmTvoDKLCwWbgUXBdAAB3owtHQypk5q7/AwtHC14JLAQQQQAe6sBlsfgMLRwvfCzbBJoAAAggghPcWYGGzcGkBgkvBe8EmOPkHCbXGYP9vMrQAAAAASUVORK5CYII=","Beginner's Triangular Zamadar":"i/359.png","Mushroom Spore":"i/310.png","Ayan's Toy Sword":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB0AAAAdCAYAAABWk2cPAAAB4UlEQVR4nLWWgZGCMBBFf5hrIJYAJUgJWoKWoCV4JUgJWoKWICVICVACKSE3G4msMSEK3J/JKFH37f8uUYGHNMISmFkJAe+1htb+FWlolAQVpeLnUmGZSu+b8kzM6lhYaNUAVaO8b6Jm5gQLH9R1bPf368Us4IRfNF1x13Eo9lmgMfDp1s4yWAnFJYTAtWyiYBJN+lSwYM/NrcPhaRcrj5camTpYCW+ACm1W6aBjAtL1FMeJc23AXP8BFoF9U4gGx0JDUY+5lZKBZgQVs7CQ4zFKIq8bsFUI7LmVNFteR5/IfPhwqgejtg3qm+0SEPt3Tswpb04U+yzq+LihrmS3gPuhb/pb6BMeA8tdi+JXRR2M0TNuN2pqYodHzFUJUE/b8ytr6i+G5mCSAaYS10KZhPPinfNtvG+SZWaipuUCy/5EfdEUp9pMaSrNd3jY4QkkUazNFVgB2DqsadD69XDwAUlLABnjTYq3OqsgkO6UTQesANRsAH++5HBri7xAe1E9uJtSGt3WurS/WQTWJ3NYaBEpLiN7JHv+kNZ8/9I5NeBammRoml2oDKxQA1y+E+FI7rDqgeafigeYsschh59AFYHZNUWv3O+UF3aLDJ1t/DX3ed492hWM19cE3wu5+qQR/AFhdxSVCOgJEgAAAABJRU5ErkJggg==","Ayan's Letter":"i/190.png","Return Scroll to Henesys":"i/306.png","Return Scroll to Perion":"i/245.png","Meat":"i/435.png","Dark Nightshift":"i/397.png","Dark Nightshift Pants":"i/296.png","Black Thief Hood":"i/347.png","White Ninja Sandals":"i/337.png"};
+const MOB={"Orange Mushroom":{"i":"i/51.gif","a":"i/246.webp","lv":"8","hp":"142","exp":"15","u":"https://meowdb.com/msclassic/monsters/9"},"Zombie Mushroom":{"i":"i/129.gif","a":"i/212.webp","lv":"24","hp":"436","exp":"45","u":"https://meowdb.com/msclassic/monsters/21"},"Green Mushroom":{"i":"i/223.gif","a":"i/38.webp","lv":"14","hp":"233","exp":"26","u":"https://meowdb.com/msclassic/monsters/13"},"Horny Mushroom":{"i":"i/321.gif","a":"i/425.webp","lv":"22","hp":"403","exp":"41","u":"https://meowdb.com/msclassic/monsters/19"},"Dark Axe Stump":{"i":"i/360.gif","a":"i/178.webp","lv":"23","hp":"547","exp":"43","u":"https://meowdb.com/msclassic/monsters/20"},"Blue Mushroom":{"i":"i/230.gif","a":"i/391.webp","lv":"19","hp":"342","exp":"35","u":"https://meowdb.com/msclassic/monsters/16"},"Zombie Lupin":{"i":"i/65.gif","a":"i/40.webp","lv":"41","hp":"1,774","exp":"99","u":"https://meowdb.com/msclassic/monsters/38"},"Blue Snail":{"i":"i/171.gif","a":"i/221.webp","lv":"2","hp":"51","exp":"4","u":"https://meowdb.com/msclassic/monsters/3"},"Dark Stump":{"i":"i/204.gif","a":"i/164.webp","lv":"11","hp":"236","exp":"21","u":"https://meowdb.com/msclassic/monsters/11"},"Jr. Wraith":{"i":"i/2.gif","a":"i/56.webp","lv":"34","hp":"982","exp":"70","u":"https://meowdb.com/msclassic/monsters/32"},"Axe Stump":{"i":"i/276.gif","a":"i/20.webp","lv":"17","hp":"371","exp":"32","u":"https://meowdb.com/msclassic/monsters/15"},"Jr. Necki":{"i":"i/334.gif","a":"i/128.webp","lv":"21","hp":"272","exp":"39","u":"https://meowdb.com/msclassic/monsters/18"},"Wild Boar":{"i":"i/363.gif","a":"i/371.webp","lv":"25","hp":"510","exp":"46","u":"https://meowdb.com/msclassic/monsters/22"},"Curse Eye":{"i":"i/194.png","a":"i/30.webp","lv":"33","hp":"1,001","exp":"66","u":"https://meowdb.com/msclassic/monsters/31"},"Bubbling":{"i":"i/210.gif","a":"i/277.webp","lv":"15","hp":"259","exp":"28","u":"https://meowdb.com/msclassic/monsters/14"},"Octopus":{"i":"i/263.gif","a":"i/188.webp","lv":"12","hp":"191","exp":"23","u":"https://meowdb.com/msclassic/monsters/12"},"Ligator":{"i":"i/138.gif","a":"i/228.webp","lv":"31","hp":"853","exp":"59","u":"https://meowdb.com/msclassic/monsters/29"},"Stirge":{"i":"i/336.png","a":"i/364.webp","lv":"20","hp":"296","exp":"37","u":"https://meowdb.com/msclassic/monsters/17"},"Wraith":{"i":"i/70.gif","a":"i/440.webp","lv":"48","hp":"2,350","exp":"132","u":"https://meowdb.com/msclassic/monsters/43"},"Snail":{"i":"i/93.gif","a":"i/421.webp","lv":"1","hp":"45","exp":"2","u":"https://meowdb.com/msclassic/monsters/2"},"Stump":{"i":"i/174.gif","a":"i/238.webp","lv":"5","hp":"133","exp":"10","u":"https://meowdb.com/msclassic/monsters/6"},"Slime":{"i":"i/457.gif","a":"i/455.webp","lv":"6","hp":"115","exp":"12","u":"https://meowdb.com/msclassic/monsters/7"},"Lupin":{"i":"i/282.png","a":"i/225.webp","lv":"37","hp":"1,336","exp":"82","u":"https://meowdb.com/msclassic/monsters/35"},"Pig":{"i":"i/34.gif","a":"i/141.webp","lv":"7","hp":"128","exp":"13","u":"https://meowdb.com/msclassic/monsters/8"},"Duskmander":{"i":"i/320.png","a":null,"lv":"50","hp":"2,682","exp":"142","u":"https://meowdb.com/msclassic/monsters/60"},"Evil Eye":{"i":"i/94.png","a":"i/209.webp","lv":"27","hp":"606","exp":"50","u":"https://meowdb.com/msclassic/monsters/23"},"Glowshroom":{"i":"i/48.png","a":"i/211.webp","lv":"39","hp":"1,377","exp":"90","u":"https://meowdb.com/msclassic/monsters/54"},"King Slime":{"i":"i/66.png","a":"i/392.webp","lv":"32","hp":"16,820","exp":"248","u":"https://meowdb.com/msclassic/monsters/800003"},"Lorang":{"i":"i/35.png","a":"i/458.webp","lv":"38","hp":"1,714","exp":"86","u":"https://meowdb.com/msclassic/monsters/36"},"Mushmom":{"i":"i/275.png","a":null,"lv":"40","hp":"34,440","exp":"376","u":"https://meowdb.com/msclassic/monsters/700000"},"Ribbon Pig":{"i":"i/400.png","a":"i/351.webp","lv":"10","hp":"172","exp":"19","u":"https://meowdb.com/msclassic/monsters/10"},"Rotten Mushroom":{"i":"i/252.png","a":"i/73.webp","lv":"56","hp":"3,520","exp":"190","u":"https://meowdb.com/msclassic/monsters/62"},"Dark Stone Golem":{"i":"i/374.png","a":"i/226.webp","lv":"58","hp":"5,428","exp":"197","u":"https://meowdb.com/msclassic/monsters/49"},"Fire Boar":{"i":"i/291.png","a":"i/305.webp","lv":"32","hp":"842","exp":"62","u":"https://meowdb.com/msclassic/monsters/30"},"Iron Hog":{"i":"i/378.png","a":"i/428.webp","lv":"28","hp":"572","exp":"52","u":"https://meowdb.com/msclassic/monsters/24"},"Red Drake":{"i":"i/330.png","a":"i/13.webp","lv":"60","hp":"5,184","exp":"213","u":"https://meowdb.com/msclassic/monsters/50"},"Shroom":{"i":"i/255.png","a":"i/365.webp","lv":"3","hp":"62","exp":"6","u":"https://meowdb.com/msclassic/monsters/4"},"Stone Golem":{"i":"i/163.png","a":"i/88.webp","lv":"56","hp":"5,134","exp":"183","u":"https://meowdb.com/msclassic/monsters/48"},"Zombie Mushmom":{"i":"i/418.png","a":"i/416.webp","lv":"50","hp":"53,640","exp":"568","u":"https://meowdb.com/msclassic/monsters/700002"}};
+const NPC={"Biggs":{"i":"i/399.webp","s":"Maple Road","u":"https://meowdb.com/msclassic/npcs/12"},"Pio":{"i":"i/241.png","s":"Rainbow Street","u":"https://meowdb.com/msclassic/npcs/18"},"Olaf":{"i":"i/43.png","s":"Victoria Road","u":"https://meowdb.com/msclassic/npcs/107"},"Teo":{"i":"i/227.webp","s":"Victoria Road","u":"https://meowdb.com/msclassic/npcs/102"},"Phil":{"i":"i/451.png","s":"Victoria Road","u":"https://meowdb.com/msclassic/npcs/101"},"Vicious":{"i":"i/106.webp","s":"Victoria Road","u":"https://meowdb.com/msclassic/npcs/208"},"Silas Irons":{"i":"i/326.webp","s":"Victoria Road","u":"https://meowdb.com/msclassic/npcs/504"},"Mr. Thunder":{"i":"i/25.webp","s":"Victoria Road","u":"https://meowdb.com/msclassic/npcs/503"},"Francois":{"i":"i/424.png","s":"Victoria Road","u":"https://meowdb.com/msclassic/npcs/303"},"JM From tha Streetz":{"i":"i/437.webp","s":"Victoria Road","u":"https://meowdb.com/msclassic/npcs/401"},"Dark Lord":{"i":"i/161.webp","s":"Victoria Road","u":"https://meowdb.com/msclassic/npcs/411"},"Bruce":{"i":"i/419.webp","s":"Victoria Road","u":"https://meowdb.com/msclassic/npcs/206"},"Ayan":{"i":"i/140.webp","s":"Victoria Road","u":"https://meowdb.com/msclassic/npcs/506"},"Blackbull":{"i":"i/372.webp","s":"Victoria Road","u":"https://meowdb.com/msclassic/npcs/501"},"Icarus":{"i":"i/423.png","s":"Victoria Road","u":"https://meowdb.com/msclassic/npcs/407"},"Lewis":{"i":"i/410.webp","s":"Hidden Street","u":"https://meowdb.com/msclassic/npcs/800018"},"Chief Stan":{"i":"i/404.webp","s":"Victoria Road","u":"https://meowdb.com/msclassic/npcs/202"},"Arthur":{"i":"i/107.webp","s":"Victoria Road","u":"https://meowdb.com/msclassic/npcs/229"},"Roxy":{"i":"i/193.webp","s":"Victoria Road","u":"https://meowdb.com/msclassic/npcs/425"},"Dances with Balrog":{"i":"i/274.webp","s":"Victoria Road","u":"https://meowdb.com/msclassic/npcs/511"},"Alex":{"i":"i/53.webp","s":"Victoria Road","u":"https://meowdb.com/msclassic/npcs/402"},"Jane":{"i":"i/132.png","s":"Victoria Road","u":"https://meowdb.com/msclassic/npcs/103"},"Maya":{"i":"i/91.webp","s":"Victoria Road","u":"https://meowdb.com/msclassic/npcs/207"},"Sophia":{"i":"i/316.webp","s":"Victoria Road","u":"https://meowdb.com/msclassic/npcs/510"},"Manji":{"i":"i/273.png","s":"Victoria Road","u":"https://meowdb.com/msclassic/npcs/502"},"Chrishrama":{"i":"i/335.webp","s":"Dungeon","u":"https://meowdb.com/msclassic/npcs/602"},"Jane Doe":{"i":"i/427.webp","s":"Victoria Road","u":"https://meowdb.com/msclassic/npcs/412"},"Thief Job Instructor":{"i":"i/325.webp","s":"Victoria Road","u":"https://meowdb.com/msclassic/npcs/424"},"Mr. Wetbottom":{"i":"i/137.webp","s":"Dungeon","u":"https://meowdb.com/msclassic/npcs/608"},"Ronnie":{"i":"i/417.webp","s":"Victoria Road","u":"https://meowdb.com/msclassic/npcs/320"},"Rowen the Fairy":{"i":"i/17.webp","s":"Victoria Road","u":"https://meowdb.com/msclassic/npcs/305"},"Wing the Fairy":{"i":"i/144.webp","s":"Victoria Road","u":"https://meowdb.com/msclassic/npcs/309"},"Cutthroat Manny":{"i":"i/86.webp","s":"Victoria Road","u":"https://meowdb.com/msclassic/npcs/408"},"Nella":{"i":"i/104.webp","s":"Victoria Road","u":"https://meowdb.com/msclassic/npcs/406"},"John":{"i":"i/311.webp","s":"Victoria Road","u":"https://meowdb.com/msclassic/npcs/100"},"Silver":{"i":"i/323.webp","s":"Victoria Road","u":"https://meowdb.com/msclassic/npcs/110"},"River":{"i":"i/285.webp","s":"Victoria Road","u":"https://meowdb.com/msclassic/npcs/507"},"Maple Administrator":{"i":"i/176.png","s":"Victoria Road","u":"https://meowdb.com/msclassic/npcs/900002"}};
+const MAP={"Amherst":{"i":"i/199.png","s":"Rainbow Street · Town · 3 NPCs","r":"Maple Island","u":"https://meowdb.com/msclassic/maps/000001010"},"Ant Tunnel III":{"i":"i/217.png","s":"Dungeon · 99 mobs","r":"Victoria Island","u":"https://meowdb.com/msclassic/maps/010005062"},"Damp Forest":{"i":"i/301.png","s":"Dungeon · 28 mobs","r":"Victoria Island","u":"https://meowdb.com/msclassic/maps/010005031"},"Damp Tree-Forest":{"i":"i/447.png","s":"Dungeon · 46 mobs","r":"Victoria Island","u":"https://meowdb.com/msclassic/maps/010005030"},"Dangerous Steam":{"i":"i/444.png","s":"Dungeon · 49 mobs","r":"Victoria Island","u":"https://meowdb.com/msclassic/maps/010005065"},"Dungeon, Southern Forest III":{"i":"i/165.png","s":"Victoria Road · 26 mobs","r":"Victoria Island","u":"https://meowdb.com/msclassic/maps/010002033"},"East Rocky Mountain V":{"i":"i/349.png","s":"Victoria Road · 51 mobs","r":"Victoria Island","u":"https://meowdb.com/msclassic/maps/010004054"},"Ellinia":{"i":"i/350.png","s":"Victoria Road · Town · 12 NPCs","r":"Victoria Island","u":"https://meowdb.com/msclassic/maps/010002000"},"Henesys":{"i":"i/218.png","s":"Victoria Road · Town · 10 NPCs","r":"Victoria Island","u":"https://meowdb.com/msclassic/maps/010001000"},"Henesys Hunting Ground I":{"i":"i/346.png","s":"Victoria Road · 39 mobs","r":"Victoria Island","u":"https://meowdb.com/msclassic/maps/010001010"},"Henesys Market":{"i":"i/95.png","s":"Victoria Road · Town · 4 NPCs","r":"Victoria Island","u":"https://meowdb.com/msclassic/maps/010001040"},"Hunting Ground in the Deep Forest II":{"i":"i/269.png","s":"Dungeon · 54 mobs","r":"Victoria Island","u":"https://meowdb.com/msclassic/maps/010005012"},"Kerning City":{"i":"i/242.png","s":"Victoria Road · Town · 14 NPCs","r":"Victoria Island","u":"https://meowdb.com/msclassic/maps/010003000"},"Land of Wild Boar":{"i":"i/292.png","s":"Hidden Street · 35 mobs","r":"Victoria Island","u":"https://meowdb.com/msclassic/maps/010004041"},"Line 1 <Area 2>":{"i":"i/154.png","s":"Kerning City Subway · 90 mobs","r":"Victoria Island","u":"https://meowdb.com/msclassic/maps/010003063"},"Line 1 <Area 4>":{"i":"i/96.png","s":"Kerning City Subway · 59 mobs","r":"Victoria Island","u":"https://meowdb.com/msclassic/maps/010003065"},"Line 2 <Area 1>":{"i":"i/49.png","s":"Kerning City Subway · 97 mobs","r":"Victoria Island","u":"https://meowdb.com/msclassic/maps/010003066"},"Line 2 <Area 3>":{"i":"i/82.png","s":"Kerning City Subway · 68 mobs","r":"Victoria Island","u":"https://meowdb.com/msclassic/maps/010003068"},"Lith Harbor":{"i":"i/361.png","s":"Victoria Road · Town · 12 NPCs","r":"Victoria Island","u":"https://meowdb.com/msclassic/maps/010000000"},"Monkey Forest II":{"i":"i/83.png","s":"Victoria Road · 35 mobs","r":"Victoria Island","u":"https://meowdb.com/msclassic/maps/010002023"},"Northern Top of Construction Site":{"i":"i/122.png","s":"Hidden Street · 21 mobs","r":"Victoria Island","u":"https://meowdb.com/msclassic/maps/010003081"},"Perion":{"i":"i/443.png","s":"Victoria Road · Town · 9 NPCs","r":"Victoria Island","u":"https://meowdb.com/msclassic/maps/010004000"},"Perion Street Corner":{"i":"i/5.png","s":"Victoria Road · 40 mobs","r":"Victoria Island","u":"https://meowdb.com/msclassic/maps/010004040"},"Sleepywood":{"i":"i/101.png","s":"Dungeon · Town · 7 NPCs","r":"Victoria Island","u":"https://meowdb.com/msclassic/maps/010005000"},"Southperry":{"i":"i/415.png","s":"Maple Road · Town · 4 NPCs","r":"Maple Island","u":"https://meowdb.com/msclassic/maps/000000060"},"The Blue Mushroom Forest":{"i":"i/71.png","s":"Hidden Street · 32 mobs","r":"Victoria Island","u":"https://meowdb.com/msclassic/maps/010001081"},"The Burnt Land I":{"i":"i/333.png","s":"Warning Street · 25 mobs","r":"Victoria Island","u":"https://meowdb.com/msclassic/maps/010004111"},"The Forest of Evil I":{"i":"i/317.png","s":"Hidden Street · 26 mobs","r":"Victoria Island","u":"https://meowdb.com/msclassic/maps/010002025"},"The Forest of Wisdom":{"i":"i/270.png","s":"Victoria Road · 58 mobs","r":"Victoria Island","u":"https://meowdb.com/msclassic/maps/010002020"},"The Land of Wild Boar II":{"i":"i/150.png","s":"Hidden Street · 33 mobs","r":"Victoria Island","u":"https://meowdb.com/msclassic/maps/010004091"},"The Pig Beach":{"i":"i/79.png","s":"Hidden Street · 23 mobs","r":"Victoria Island","u":"https://meowdb.com/msclassic/maps/010000021"},"The Rain-Forest East of Henesys":{"i":"i/120.png","s":"Victoria Road · 9 mobs","r":"Victoria Island","u":"https://meowdb.com/msclassic/maps/010001070"},"The Swamp of Despair I":{"i":"i/127.png","s":"Warning Street · 63 mobs","r":"Victoria Island","u":"https://meowdb.com/msclassic/maps/010003090"},"The Tree That Grew I":{"i":"i/58.png","s":"Victoria Road · 40 mobs","r":"Victoria Island","u":"https://meowdb.com/msclassic/maps/010002060"},"The Tree That Grew II":{"i":"i/297.png","s":"Victoria Road · 70 mobs","r":"Victoria Island","u":"https://meowdb.com/msclassic/maps/010002061"},"Thief's Construction Site":{"i":"i/41.png","s":"Hidden Street · 26 mobs · 1 NPCs","r":"Hidden Street","u":"https://meowdb.com/msclassic/maps/080001200"},"Transfer Area":{"i":"i/283.png","s":"Kerning City Subway · 38 mobs","r":"Victoria Island","u":"https://meowdb.com/msclassic/maps/010003062"},"Tree Dungeon, Forest Up North III":{"i":"i/234.png","s":"Victoria Road · 44 mobs","r":"Victoria Island","u":"https://meowdb.com/msclassic/maps/010002074"},"Tree Dungeon, Forest Up North IV":{"i":"i/412.png","s":"Victoria Road · 44 mobs","r":"Victoria Island","u":"https://meowdb.com/msclassic/maps/010002075"},"Niora Hospital":{"i":null,"s":"","r":"Victoria Island","u":"https://meowdb.com/msclassic/maps/010003004"},"Thieves' Hideout":{"i":null,"s":"","r":"Victoria Island","u":"https://meowdb.com/msclassic/maps/010003003"},"VIP Sauna":{"i":null,"s":"","r":"Victoria Island","u":"https://meowdb.com/msclassic/maps/010005003"}};
+const MAP_ALIAS={"Line 2 (Area 1)":"Line 2 <Area 1>","Line 1 (Area 2)":"Line 1 <Area 2>","Line 2 (Area 3)":"Line 2 <Area 3>","Line 1 (Area 4)":"Line 1 <Area 4>","Northern Top Construction Site":"Northern Top of Construction Site","Thief Hideout":"Thieves' Hideout","Pig Beach":"The Pig Beach","Land of Wild Boar II":"The Land of Wild Boar II","Forest of Wisdom":"The Forest of Wisdom","Henesys Hunting Ground":"Henesys Hunting Ground I","Thief job test map":"Thief's Construction Site"};
+const ALIAS={"Refined Diamond":"Diamond"};
+const ITEM_URL={"Alligator Skin Pouch":"https://meowdb.com/msclassic/item-db/516","Animal Fur Bundle":"https://meowdb.com/msclassic/item-db/409","Arcon's Blood":"https://meowdb.com/msclassic/item-db/448","Armor Crafting Catalyst":"https://meowdb.com/msclassic/item-db/2722","Blue Mushroom Cap":"https://meowdb.com/msclassic/item-db/363","Blue Potion":"https://meowdb.com/msclassic/item-db/273","Blue Sauna Robe":"https://meowdb.com/msclassic/item-db/1105","Blue Snail Shell":"https://meowdb.com/msclassic/item-db/349","Broken Mirror Glass":"https://meowdb.com/msclassic/item-db/445","Bronze Ore":"https://meowdb.com/msclassic/item-db/413","Brown Bamboo Hat":"https://meowdb.com/msclassic/item-db/789","Charm of the Undead":"https://meowdb.com/msclassic/item-db/367","Coconut Knife":"https://meowdb.com/msclassic/item-db/564","Curse Eye Tail":"https://meowdb.com/msclassic/item-db/374","Cursed Doll":"https://meowdb.com/msclassic/item-db/380","Diamond":"https://meowdb.com/msclassic/item-db/336","Diamond Ore":"https://meowdb.com/msclassic/item-db/327","Field Dagger":"https://meowdb.com/msclassic/item-db/562","Firewood":"https://meowdb.com/msclassic/item-db/362","Flying Medicine":"https://meowdb.com/msclassic/item-db/517","Forked Dagger":"https://meowdb.com/msclassic/item-db/567","Fruit Knife":"https://meowdb.com/msclassic/item-db/559","Garnet":"https://meowdb.com/msclassic/item-db/329","Garnet Ore":"https://meowdb.com/msclassic/item-db/320","Green Mushroom Cap":"https://meowdb.com/msclassic/item-db/360","Horny Mushroom Cap":"https://meowdb.com/msclassic/item-db/366","Jr. Necki Skin":"https://meowdb.com/msclassic/item-db/365","Leaf":"https://meowdb.com/msclassic/item-db/358","Leather":"https://meowdb.com/msclassic/item-db/396","Leatherworking Kit":"https://meowdb.com/msclassic/item-db/230","Ligator Skin":"https://meowdb.com/msclassic/item-db/372","Lupin's Banana":"https://meowdb.com/msclassic/item-db/378","Medicine With Weird Vibes":"https://meowdb.com/msclassic/item-db/386","Octopus Leg":"https://meowdb.com/msclassic/item-db/359","Old Raggedy Cape":"https://meowdb.com/msclassic/item-db/889","Old Wooden Board":"https://meowdb.com/msclassic/item-db/442","Orange Mushroom Cap":"https://meowdb.com/msclassic/item-db/356","Pig's Head":"https://meowdb.com/msclassic/item-db/355","Processed Wood":"https://meowdb.com/msclassic/item-db/306","Razor":"https://meowdb.com/msclassic/item-db/558","Red Chair":"https://meowdb.com/msclassic/item-db/527","Red Sauna Robe":"https://meowdb.com/msclassic/item-db/1111","Reef Claw":"https://meowdb.com/msclassic/item-db/569","Rusty Screw":"https://meowdb.com/msclassic/item-db/441","Scroll Crafting Catalyst":"https://meowdb.com/msclassic/item-db/2723","Slime Bubble":"https://meowdb.com/msclassic/item-db/354","Sparkling Rock":"https://meowdb.com/msclassic/item-db/449","Spool of Thread":"https://meowdb.com/msclassic/item-db/312","Squishy Liquid":"https://meowdb.com/msclassic/item-db/353","Steel Shield":"https://meowdb.com/msclassic/item-db/918","Stiff Feather":"https://meowdb.com/msclassic/item-db/307","Stirge Wing":"https://meowdb.com/msclassic/item-db/364","Tablecloth":"https://meowdb.com/msclassic/item-db/375","Tailoring Kit":"https://meowdb.com/msclassic/item-db/231","The Green Relaxer":"https://meowdb.com/msclassic/item-db/522","Topaz":"https://meowdb.com/msclassic/item-db/335","Tree Branch":"https://meowdb.com/msclassic/item-db/352","Triangular Zamadar":"https://meowdb.com/msclassic/item-db/560","Witchgrass Leaf":"https://meowdb.com/msclassic/item-db/450","Wooden Buckler":"https://meowdb.com/msclassic/item-db/916","Adamantium Ore":"https://meowdb.com/msclassic/item-db/416","Bazlud":"https://meowdb.com/msclassic/item-db/573","Black Crystal":"https://meowdb.com/msclassic/item-db/337","Black Duo":"https://meowdb.com/msclassic/item-db/1442","Black Green-Lined Shoes":"https://meowdb.com/msclassic/item-db/1417","Black Knucklevest":"https://meowdb.com/msclassic/item-db/1048","Black Knucklevest Pants":"https://meowdb.com/msclassic/item-db/1264","Black Lappy Boots":"https://meowdb.com/msclassic/item-db/1363","Black Napoleon":"https://meowdb.com/msclassic/item-db/897","Black Pao":"https://meowdb.com/msclassic/item-db/987","Black Sneak Pants":"https://meowdb.com/msclassic/item-db/1224","Blue Bandana":"https://meowdb.com/msclassic/item-db/721","Blue Duo":"https://meowdb.com/msclassic/item-db/1441","Blue Guise":"https://meowdb.com/msclassic/item-db/825","Blue Knucklevest Pants":"https://meowdb.com/msclassic/item-db/1263","Blue Lappy Boots":"https://meowdb.com/msclassic/item-db/1360","Blue Pao":"https://meowdb.com/msclassic/item-db/986","Blue Qi Pao":"https://meowdb.com/msclassic/item-db/999","Blue Viola":"https://meowdb.com/msclassic/item-db/481","Bronze Chain Boots":"https://meowdb.com/msclassic/item-db/1382","Bronze Ingot":"https://meowdb.com/msclassic/item-db/420","Bronze Wolfskin":"https://meowdb.com/msclassic/item-db/1460","Brown Winter Hat":"https://meowdb.com/msclassic/item-db/730","Cat's Eye":"https://meowdb.com/msclassic/item-db/910","Claw Attack Scroll: Intermediate":"https://meowdb.com/msclassic/item-db/71","Dark Avenger":"https://meowdb.com/msclassic/item-db/1130","Dark Brown Stealer Pants":"https://meowdb.com/msclassic/item-db/1242","Dark Cleave":"https://meowdb.com/msclassic/item-db/1498","Dark Guise":"https://meowdb.com/msclassic/item-db/824","Dark Mischief":"https://meowdb.com/msclassic/item-db/1452","Dark Pilfer":"https://meowdb.com/msclassic/item-db/864","Dark Wolfskin":"https://meowdb.com/msclassic/item-db/1462","Drake Skull":"https://meowdb.com/msclassic/item-db/383","Emerald":"https://meowdb.com/msclassic/item-db/332","Emerald Ore":"https://meowdb.com/msclassic/item-db/323","Evil Eye Tail":"https://meowdb.com/msclassic/item-db/369","Fish Spear":"https://meowdb.com/msclassic/item-db/635","Fragment of Magic":"https://meowdb.com/msclassic/item-db/410","Garnier":"https://meowdb.com/msclassic/item-db/680","Gephart":"https://meowdb.com/msclassic/item-db/571","Gloves Attack Scroll: Intermediate":"https://meowdb.com/msclassic/item-db/114","Gloves Crit. Rate Scroll: Greater":"https://meowdb.com/msclassic/item-db/111","Gold Arbion":"https://meowdb.com/msclassic/item-db/1484","Gold Ingot":"https://meowdb.com/msclassic/item-db/426","Gold Ore":"https://meowdb.com/msclassic/item-db/419","Green Diros":"https://meowdb.com/msclassic/item-db/1449","Green Ghetto Beanie":"https://meowdb.com/msclassic/item-db/736","Green Hunter Boots":"https://meowdb.com/msclassic/item-db/1379","Green Icarus Cape":"https://meowdb.com/msclassic/item-db/890","Green Lappy Boots":"https://meowdb.com/msclassic/item-db/1362","Green Loosecap":"https://meowdb.com/msclassic/item-db/780","Green Pilfer":"https://meowdb.com/msclassic/item-db/862","Green Skullcap":"https://meowdb.com/msclassic/item-db/709","Green White-Lined Boots":"https://meowdb.com/msclassic/item-db/1403","Green Winter Hat":"https://meowdb.com/msclassic/item-db/731","Halfmoon Zamadar":"https://meowdb.com/msclassic/item-db/570","Hat Accuracy Scroll: Greater":"https://meowdb.com/msclassic/item-db/124","Iron Dagger":"https://meowdb.com/msclassic/item-db/566","Iron Ingot":"https://meowdb.com/msclassic/item-db/421","Iron Ore":"https://meowdb.com/msclassic/item-db/414","Korean Fan":"https://meowdb.com/msclassic/item-db/572","Mithril Ingot":"https://meowdb.com/msclassic/item-db/422","Mithril Ore":"https://meowdb.com/msclassic/item-db/415","Old Gold Watch":"https://meowdb.com/msclassic/item-db/433","Old Wisconsin":"https://meowdb.com/msclassic/item-db/761","Orihalcon Ore":"https://meowdb.com/msclassic/item-db/418","Pan Lid":"https://meowdb.com/msclassic/item-db/917","Pansy Earrings":"https://meowdb.com/msclassic/item-db/912","Pig's Ribbon":"https://meowdb.com/msclassic/item-db/357","Pink Viola":"https://meowdb.com/msclassic/item-db/480","Plunger":"https://meowdb.com/msclassic/item-db/597","Processed Cloth":"https://meowdb.com/msclassic/item-db/313","Processed Leather":"https://meowdb.com/msclassic/item-db/311","Pure Water":"https://meowdb.com/msclassic/item-db/261","Red China":"https://meowdb.com/msclassic/item-db/1080","Red Dye":"https://meowdb.com/msclassic/item-db/317","Red Moon Pants":"https://meowdb.com/msclassic/item-db/1301","Red Ninja Sandals":"https://meowdb.com/msclassic/item-db/1327","Red Skullcap":"https://meowdb.com/msclassic/item-db/710","Red Snail Shell":"https://meowdb.com/msclassic/item-db/351","Red Starry Bandana":"https://meowdb.com/msclassic/item-db/792","Red Thief Hood":"https://meowdb.com/msclassic/item-db/756","Red Tiberian":"https://meowdb.com/msclassic/item-db/803","Sandblasted Jeans":"https://meowdb.com/msclassic/item-db/1196","Sapphire Ore":"https://meowdb.com/msclassic/item-db/325","Screw":"https://meowdb.com/msclassic/item-db/305","Seclusion Wristguard":"https://meowdb.com/msclassic/item-db/921","Shield DEF Scroll: Intermediate":"https://meowdb.com/msclassic/item-db/170","Silver Ore":"https://meowdb.com/msclassic/item-db/417","Snail Shell":"https://meowdb.com/msclassic/item-db/348","Squishy Shoes":"https://meowdb.com/msclassic/item-db/1368","Star Earrings":"https://meowdb.com/msclassic/item-db/908","Steel Pipe":"https://meowdb.com/msclassic/item-db/588","Steel Sylvia":"https://meowdb.com/msclassic/item-db/1472","Stinger":"https://meowdb.com/msclassic/item-db/565","Topaz Ore":"https://meowdb.com/msclassic/item-db/326","Triple-Tipped Zamadar":"https://meowdb.com/msclassic/item-db/563","Weighted Earrings":"https://meowdb.com/msclassic/item-db/901","White Bandana":"https://meowdb.com/msclassic/item-db/719","White Potion":"https://meowdb.com/msclassic/item-db/272","White Viola":"https://meowdb.com/msclassic/item-db/482","Work Gloves":"https://meowdb.com/msclassic/item-db/1435","Yellow Square":"https://meowdb.com/msclassic/item-db/902","Refined Diamond":"https://meowdb.com/msclassic/item-db/336","AP Reset Scroll":"https://meowdb.com/msclassic/item-db/1533","Dagger Attack Scroll: Intermediate":"https://meowdb.com/msclassic/item-db/79","Hand Axe":"https://meowdb.com/msclassic/item-db/576","Heckler":"https://meowdb.com/msclassic/item-db/677","Hwabi Throwing Stars":"https://meowdb.com/msclassic/item-db/301","Ilbi Throwing Stars":"https://meowdb.com/msclassic/item-db/300","Kumbi Throwing Stars":"https://meowdb.com/msclassic/item-db/297","Mokbi Throwing Stars":"https://meowdb.com/msclassic/item-db/296","Monkey Wrench":"https://meowdb.com/msclassic/item-db/628","One-Handed Weapon Crafting Catalyst":"https://meowdb.com/msclassic/item-db/520","Overall Armor LUK Scroll: Lesser":"https://meowdb.com/msclassic/item-db/151","Red Viper":"https://meowdb.com/msclassic/item-db/669","SP Reset Scroll":"https://meowdb.com/msclassic/item-db/1534","Shinkita":"https://meowdb.com/msclassic/item-db/574","Steely Throwing Knives":"https://meowdb.com/msclassic/item-db/299","Tobi Throwing Stars":"https://meowdb.com/msclassic/item-db/298","Weaponcrafting Kit":"https://meowdb.com/msclassic/item-db/227","Wild Boar Tooth":"https://meowdb.com/msclassic/item-db/368","Wooden Club":"https://meowdb.com/msclassic/item-db/585","Beginner's Triangular Zamadar":"https://meowdb.com/msclassic/item-db/561","Mushroom Spore":"https://meowdb.com/msclassic/item-db/350","Ayan's Toy Sword":"https://meowdb.com/msclassic/item-db/514","Ayan's Letter":"https://meowdb.com/msclassic/item-db/515","Return Scroll to Henesys":"https://meowdb.com/msclassic/item-db/283","Return Scroll to Perion":"https://meowdb.com/msclassic/item-db/282","Meat":"https://meowdb.com/msclassic/item-db/238","Dark Nightshift":"https://meowdb.com/msclassic/item-db/969","Dark Nightshift Pants":"https://meowdb.com/msclassic/item-db/1185","Black Thief Hood":"https://meowdb.com/msclassic/item-db/760","White Ninja Sandals":"https://meowdb.com/msclassic/item-db/1330"};
+const QUEST_URL={"Biggs's Collection of Items":"https://meowdb.com/msclassic/quest-tracker/1011","Pio's Collecting Recycled Goods":"https://meowdb.com/msclassic/quest-tracker/1012","Olaf's First Training":"https://meowdb.com/msclassic/quest-tracker/10000","Phil's Call":"https://meowdb.com/msclassic/quest-tracker/10001","Jane and the Mushroom":"https://meowdb.com/msclassic/quest-tracker/10002","Olaf's Second Training":"https://meowdb.com/msclassic/quest-tracker/10009","Teo's Weird Hobby":"https://meowdb.com/msclassic/quest-tracker/10010","Teo's Even Weirder Hobby":"https://meowdb.com/msclassic/quest-tracker/10011","Maya of Henesys":"https://meowdb.com/msclassic/quest-tracker/10106","Finding Sophia":"https://meowdb.com/msclassic/quest-tracker/10107","Making a Sparkling Rock":"https://meowdb.com/msclassic/quest-tracker/10108","Arcon's Blood?":"https://meowdb.com/msclassic/quest-tracker/10109","Getting Arcon's Blood":"https://meowdb.com/msclassic/quest-tracker/10110","Making Sparkling Rock":"https://meowdb.com/msclassic/quest-tracker/10111","Delivering the Weird Medicine":"https://meowdb.com/msclassic/quest-tracker/10112","I Need to Find My Daughter 1":"https://meowdb.com/msclassic/quest-tracker/10124","I Need to Find My Daughter 2":"https://meowdb.com/msclassic/quest-tracker/10125","Collecting 50 Cursed Dolls":"https://meowdb.com/msclassic/quest-tracker/10201","Collecting 200 Cursed Dolls":"https://meowdb.com/msclassic/quest-tracker/10205","Alex's Request":"https://meowdb.com/msclassic/quest-tracker/10300","Talking to Stan":"https://meowdb.com/msclassic/quest-tracker/10301","Mother's Gold Watch":"https://meowdb.com/msclassic/quest-tracker/10302","Don Hwang's Request":"https://meowdb.com/msclassic/quest-tracker/10303","Shumi's Request":"https://meowdb.com/msclassic/quest-tracker/10304","Andre's Request":"https://meowdb.com/msclassic/quest-tracker/10305","Dr. Faymus's Request":"https://meowdb.com/msclassic/quest-tracker/10306","Chris's Request":"https://meowdb.com/msclassic/quest-tracker/10307","Cutthroat Manny's Request":"https://meowdb.com/msclassic/quest-tracker/10308","Stranger's Request":"https://meowdb.com/msclassic/quest-tracker/10309","Stranger's Identity":"https://meowdb.com/msclassic/quest-tracker/10310","I'm Bored 1":"https://meowdb.com/msclassic/quest-tracker/10315","I'm Bored 2":"https://meowdb.com/msclassic/quest-tracker/10316","Icarus's Hang Glider":"https://meowdb.com/msclassic/quest-tracker/10317","Icarus and the Balloon":"https://meowdb.com/msclassic/quest-tracker/10318","The Ingredients for the Flying Medicine":"https://meowdb.com/msclassic/quest-tracker/10320","Delivering the Flying Medicine":"https://meowdb.com/msclassic/quest-tracker/10321","Fixing Blackbull's House":"https://meowdb.com/msclassic/quest-tracker/10400","A Clue to the Secret Book":"https://meowdb.com/msclassic/quest-tracker/10500","Hungry Ronnie":"https://meowdb.com/msclassic/quest-tracker/10501","Still Hungry Ronnie":"https://meowdb.com/msclassic/quest-tracker/10502","Thirsty Ronnie":"https://meowdb.com/msclassic/quest-tracker/10505","Cold Milk":"https://meowdb.com/msclassic/quest-tracker/10506","Satisfied Ronnie":"https://meowdb.com/msclassic/quest-tracker/10507","Returned Secret Book":"https://meowdb.com/msclassic/quest-tracker/10508","The Thief's Next Journey":"https://meowdb.com/msclassic/quest-tracker/20300","Finding the Instructor (Thief)":"https://meowdb.com/msclassic/quest-tracker/20301","Test of Qualification (Thief)":"https://meowdb.com/msclassic/quest-tracker/20302","Proof of Qualification (Thief)":"https://meowdb.com/msclassic/quest-tracker/20303","Silas Irons in Need of an Apprentice":"https://meowdb.com/msclassic/quest-tracker/80008","Mr. Thunder in Need of an Apprentice":"https://meowdb.com/msclassic/quest-tracker/80011","A Weaponcrafter in My Own Right!":"https://meowdb.com/msclassic/quest-tracker/80012","Mr. Thunder in Need of Help":"https://meowdb.com/msclassic/quest-tracker/80013","Francois in Need of an Apprentice":"https://meowdb.com/msclassic/quest-tracker/80014","Francois in Need of Help":"https://meowdb.com/msclassic/quest-tracker/80016","Vicious in Need of an Apprentice":"https://meowdb.com/msclassic/quest-tracker/80017","JM From tha Streetz Looking for a Partner":"https://meowdb.com/msclassic/quest-tracker/80020","A Leatherworker in My Own Right!":"https://meowdb.com/msclassic/quest-tracker/80021","JM From tha Streetz in Need of Help":"https://meowdb.com/msclassic/quest-tracker/80022","Chrishrama in Need of an Apprentice":"https://meowdb.com/msclassic/quest-tracker/80023","An Arcforger in My Own Right!":"https://meowdb.com/msclassic/quest-tracker/80024","Welcome to the Free Market!":"https://meowdb.com/msclassic/quest-tracker/80026","Chief Stan's Reply":"https://meowdb.com/msclassic/quest-tracker/80027","Asking Perion for Help":"https://meowdb.com/msclassic/quest-tracker/80028","To Henesys, the Prairie Town":"https://meowdb.com/msclassic/quest-tracker/506000","To the Gray City, Kerning City":"https://meowdb.com/msclassic/quest-tracker/506100","John's Pink Flower Basket":"https://meowdb.com/msclassic/quest-tracker/10006","John's Present":"https://meowdb.com/msclassic/quest-tracker/10007","John's Last Present":"https://meowdb.com/msclassic/quest-tracker/10008","The Reason Behind the Mushroom Studies":"https://meowdb.com/msclassic/quest-tracker/10123","The Stump Horror Story":"https://meowdb.com/msclassic/quest-tracker/10411","[Event] Gift for the New Journey":"https://meowdb.com/msclassic/quest-tracker/500006","[Event] Gathering Leaves":"https://meowdb.com/msclassic/quest-tracker/500005","[Event] Growing Leaf":"https://meowdb.com/msclassic/quest-tracker/500009","How to Enjoy Mushrooms":"https://meowdb.com/msclassic/quest-tracker/10211","How to Enjoy Mushrooms Even More":"https://meowdb.com/msclassic/quest-tracker/10212"};
+const MINI={"010002010":{"u":"i/442.webp","w":103,"h":151},"010003070":{"u":"i/115.webp","w":171,"h":137},"010004110":{"u":"i/327.webp","w":147,"h":105},"010003093":{"u":"i/135.webp","w":222,"h":121},"010002000":{"u":"i/123.webp","w":171,"h":318},"010004051":{"u":"i/362.webp","w":125,"h":113},"010005011":{"u":"i/315.webp","w":104,"h":130},"000001010":{"u":"i/319.webp","w":228,"h":65},"000000050":{"u":"i/342.webp","w":239,"h":68},"010002030":{"u":"i/136.webp","w":207,"h":177},"010004080":{"u":"i/353.webp","w":131,"h":115},"010005060":{"u":"i/31.webp","w":202,"h":153},"010003007":{"u":"i/205.webp","w":85,"h":68},"010004052":{"u":"i/54.webp","w":125,"h":112},"010003066":{"u":"i/250.webp","w":266,"h":66},"010001100":{"u":"i/272.webp","w":234,"h":98},"010001000":{"u":"i/289.webp","w":431,"h":74},"010003094":{"u":"i/343.webp","w":203,"h":117},"010005020":{"u":"i/189.webp","w":132,"h":206},"010004000":{"u":"i/426.webp","w":204,"h":192},"010001040":{"u":"i/162.webp","w":357,"h":58},"010001070":{"u":"i/125.webp","w":144,"h":51},"010002071":{"u":"i/324.webp","w":67,"h":281},"010003092":{"u":"i/434.webp","w":199,"h":108},"010005000":{"u":"i/382.webp","w":154,"h":81},"010002020":{"u":"i/11.webp","w":126,"h":200},"010002061":{"u":"i/110.webp","w":99,"h":167},"010004053":{"u":"i/384.webp","w":125,"h":128},"010004070":{"u":"i/288.webp","w":131,"h":117},"010001007":{"u":"i/168.webp","w":84,"h":56},"010002074":{"u":"i/24.webp","w":67,"h":179},"010004040":{"u":"i/175.webp","w":243,"h":85},"010002023":{"u":"i/67.webp","w":109,"h":143},"010005010":{"u":"i/64.webp","w":109,"h":217},"010004050":{"u":"i/265.webp","w":125,"h":128},"010005031":{"u":"i/105.webp","w":92,"h":158},"010004100":{"u":"i/121.webp","w":181,"h":136},"010003061":{"u":"i/308.webp","w":266,"h":66},"010003090":{"u":"i/78.webp","w":192,"h":105},"010003080":{"u":"i/12.webp","w":194,"h":131},"010003000":{"u":"i/307.webp","w":323,"h":132},"010000000":{"u":"i/219.webp","w":390,"h":126},"010003091":{"u":"i/14.webp","w":223,"h":97},"010001001":{"u":"i/433.webp","w":87,"h":59},"000001000":{"u":"i/383.webp","w":245,"h":128},"010001060":{"u":"i/156.webp","w":166,"h":100},"010004060":{"u":"i/69.webp","w":131,"h":114},"010003062":{"u":"i/46.webp","w":137,"h":115},"010003067":{"u":"i/253.webp","w":255,"h":66},"010001090":{"u":"i/36.webp","w":211,"h":113},"010004090":{"u":"i/47.webp","w":142,"h":238},"010002070":{"u":"i/224.webp","w":130,"h":428},"010005061":{"u":"i/29.webp","w":180,"h":150},"010002021":{"u":"i/430.webp","w":109,"h":151},"010001080":{"u":"i/173.webp","w":290,"h":143},"010002060":{"u":"i/191.webp","w":113,"h":119},"010002050":{"u":"i/432.webp","w":117,"h":131},"010005030":{"u":"i/303.webp","w":137,"h":158},"000000060":{"u":"i/429.webp","w":295,"h":138},"080002000":{"u":"i/158.webp","w":132,"h":68},"010001010":{"u":"i/261.webp","w":138,"h":116},"010000010":{"u":"i/63.webp","w":206,"h":63},"010000011":{"u":"i/89.webp","w":172,"h":128},"010000012":{"u":"i/366.webp","w":121,"h":134},"010000013":{"u":"i/145.webp","w":99,"h":88},"010000020":{"u":"i/358.webp","w":318,"h":156}};
+const NPCLOC={"Biggs":{"m":"000000060","p":[33.9,59],"t":"Southperry · ซ้ายกลาง"},"Pio":{"m":"000001010","p":[25.6,81.9],"t":"Amherst · ซ้ายล่าง"},"Olaf":{"m":"010000000","p":[78.9,79.8],"t":"Lith Harbor · ขวาล่าง"},"Teo":{"m":"010000000","p":[65.1,84.1],"t":"Lith Harbor · ขวาล่าง"},"Phil":{"m":"010000000","p":[24,75.4],"t":"Lith Harbor · ซ้ายล่าง"},"Vicious":{"m":"010001040","p":[34.5,50.9],"t":"Henesys Market · ซ้ายกลาง"},"Silas Irons":{"m":"010004000","p":[31.5,47.9],"t":"Perion · ซ้ายกลาง"},"Mr. Thunder":{"m":"010004000","p":[48.2,47.8],"t":"Perion · กลางแมพ"},"Francois":{"m":"010002000","p":[54,48],"t":"Ellinia · กลางแมพ"},"JM From tha Streetz":{"m":"010003000","p":[37,67.2],"t":"Kerning City · ซ้ายล่าง"},"Dark Lord":{"m":"010003000","p":[75.4,75.5],"t":"อยู่ในห้อง Thieves' Hideout — ประตูทางเข้าอยู่ขวาล่างของ Kerning City"},"Bruce":{"m":"010001000","p":[69.2,83.3],"t":"Henesys · ขวาล่าง"},"Ayan":{"m":"010004000","p":[72.6,69],"t":"Perion · ขวาล่าง"},"Blackbull":{"m":"010004000","p":[59.9,91.7],"t":"Perion · กลางด้านล่างสุด"},"Icarus":{"m":"010003000","p":[58.3,17.1],"t":"Kerning City · กลางด้านบน"},"Lewis":{"m":"080002000","p":[17.9,80.8],"t":"Free Market Entrance · ซ้ายล่าง"},"Chief Stan":{"m":"010001000","p":[58.8,56.2],"t":"Henesys · กลางแมพ"},"Arthur":{"m":"010001007","p":[63.7,78.1],"t":"Henesys Town Hall · ขวาล่าง"},"Roxy":{"m":"010003007","p":[90.1,60.1],"t":"Kerning City Civic Center · ขวาสุดล่าง"},"Dances with Balrog":{"m":"010004000","p":[68,25.6],"t":"อยู่ในห้อง Warriors' Sanctuary — ประตูทางเข้าอยู่ขวาบนของ Perion"},"Alex":{"m":"010003000","p":[67.7,44],"t":"Kerning City · ขวากลาง"},"Jane":{"m":"010000000","p":[28.6,75.7],"t":"Lith Harbor · ซ้ายล่าง"},"Maya":{"m":"010001001","p":[39.2,54.9],"t":"Henesys Townstreet · กลางแมพ"},"Sophia":{"m":"010004000","p":[38.4,60.5],"t":"อยู่ในห้อง Perion Department Store — ประตูทางเข้าอยู่กลางด้านล่างของ Perion"},"Manji":{"m":"010004000","p":[30.1,37.1],"t":"Perion · ซ้ายบน"},"Chrishrama":{"m":"010005000","p":[39.3,27.5],"t":"Sleepywood · กลางด้านบน"},"Jane Doe":{"m":"010003000","p":[34.2,67.5],"t":"อยู่ในห้อง Niora Hospital — ประตูทางเข้าอยู่ซ้ายล่างของ Kerning City"},"Thief Job Instructor":{"m":"010003080","p":[72.7,18.5],"t":"Construction Site North of Kerning City · ขวาบน"},"Mr. Wetbottom":{"m":"010005000","p":[43.8,27.7],"t":"อยู่ใน VIP Sauna — เข้าประตู Sleepywood Hotel (กลางด้านบนของ Sleepywood) แล้วคุย Hotel Receptionist"},"Ronnie":{"m":"010002071","p":[47.2,26.1],"t":"The Tree Tunnel At the Forest Up North · กลางด้านบน"},"Rowen the Fairy":{"m":"010002000","p":[73.7,56.6],"t":"Ellinia · ขวากลาง"},"Wing the Fairy":{"m":"010002000","p":[84.8,83.2],"t":"Ellinia · ขวาล่าง"},"Cutthroat Manny":{"m":"010003000","p":[21.1,68.4],"t":"อยู่ในห้อง Kerning City Self-Defence Item Store — ประตูทางเข้าอยู่ซ้ายล่างของ Kerning City"},"Nella":{"m":"010003000","p":[49.6,65.5],"t":"Kerning City · กลางด้านล่าง"},"John":{"m":"010000000","p":[48.7,83],"t":"Lith Harbor · กลางด้านล่าง"},"Silver":{"m":"010000000","p":[61.5,47.6],"t":"อยู่ในห้อง Lith Harbor Weapon Shop — ประตูทางเข้าอยู่กลางแมพของ Lith Harbor"},"River":{"m":"010004000","p":[76.3,50.2],"t":"อยู่ในห้อง Perion Weapon Store — ประตูทางเข้าอยู่ขวากลางของ Perion"},"Maple Administrator":{"m":"010001000","p":[7.5,53],"t":"Henesys · ซ้ายสุดกลาง"},"Shane":{"m":"010002000","p":[50.4,32.6],"t":"Ellinia · กลางด้านบน"}};
+const KEEP=[["Bronze Ore","5","Stump (สำรอง: Snail, Orange Mushroom, Horny Mushroom)","The Tree That Grew II, Perion Street Corner","Lv.8–11","Silas Irons"],["Blue Snail Shell","10","Blue Snail","Maple Island","Lv.3–8","Biggs"],["Orange Mushroom Cap","1","Orange Mushroom","Maple Island","Lv.3–8","Biggs"],["Slime Bubble","4","Slime","The Tree That Grew II / I","Lv.8–10","Teo + สำรอง"],["Tree Branch","42 (100+ ถ้าทำ Processed Wood ทาง A)","Stump","The Tree That Grew II","Lv.8–11","Vicious 20, Blackbull 10, I'm Bored 2 12"],["Leather","5+","Pig","The Rain-Forest East of Henesys","Lv.10–11","JM + Leatherworking"],["Pig's Head","10","Pig","The Rain-Forest East of Henesys","Lv.10–11","Sauna Robe"],["Stiff Feather","15","Stirge / Pig / Wild Boar","Transfer Area, Land of Wild Boar","Lv.10–31","Icarus's Hang Glider"]];
+const reEsc = n => n.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+const mkRe = names => new RegExp("(?<![A-Za-z])(" + names.sort((a,b)=>b.length-a.length).map(reEsc).join("|") + ")(?![A-Za-z])", "g");
+
+const WORD_RE = mkRe(Object.keys(ICON).concat(Object.keys(ALIAS), Object.keys(MOB), Object.keys(QUEST_URL)));
+const MAP_RE = mkRe(Object.keys(MAP).concat(Object.keys(MAP_ALIAS)));
+const NPC_B_RE = new RegExp("<b>(" + Object.keys(NPC).sort((a,b)=>b.length-a.length).map(reEsc).join("|") + ")</b>", "g");
+const attr = s => String(s).replace(/&/g,"&amp;").replace(/"/g, "&quot;").replace(/</g,"&lt;");
+const lk = (u, inner, cls) => u ? `<a class="dbl ${cls||""}" href="${u}" target="_blank" rel="noopener">${inner}</a>` : inner;
+const ico = h => h == null ? h : String(h)
+  .replace(NPC_B_RE, (m, n) => lk(NPC[n].u, `<b class="it npc"><img src="${NPC[n].i}" alt="" title="NPC: ${attr(n)}">${n}</b>`))
+  .split(/(<[^>]*>|The Pig Beach|Pale Maple Leaf|Reddened Maple Leaf)/).map(p => (p.startsWith("<") || /^(The Pig Beach|Pale Maple Leaf|Reddened Maple Leaf)$/.test(p)) ? p : p.replace(WORD_RE, n => {
+    if (MOB[n]) return lk(MOB[n].u, `<span class="it mob"><img src="${MOB[n].i}" alt="" title="${attr(n)} · Lv ${MOB[n].lv}">${n}</span>`) + (MOB[n].lv ? `<span class="mlv" title="เลเวลมอน">Lv ${MOB[n].lv}</span>` : "");
+    if (ICON[ALIAS[n]||n]) return lk(ITEM_URL[n], `<span class="it"><img src="${ICON[ALIAS[n]||n]}" alt="" title="${attr(n)}">${n}</span>`);
+    return lk(QUEST_URL[n], n, "q");
+  })).join("");
+const itemIco = n => { const k = ALIAS[n] || n; return ICON[k] ? lk(ITEM_URL[n], `<span class="it"><img src="${ICON[k]}" alt="" title="${attr(n)}">${esc(n)}</span>`) : lk(ITEM_URL[n], esc(n)); };
+const plain = h => String(h||"").replace(/<[^>]*>/g, " ");
+
+function stepInfo(s){
+  const npcs = new Set(), mobs = new Set(), maps = new Set();
+  const texts = [s.intro, s.keep, ...s.act.flatMap(a => [a.x, a.tip, a.from, ...(a.sub||[])])];
+  texts.forEach(t => {
+    if (!t) return;
+    for (const m of String(t).matchAll(NPC_B_RE)) npcs.add(m[1]);
+    for (const m of plain(t).matchAll(WORD_RE)) if (MOB[m[1]]) mobs.add(m[1]);
+  });
+  const w = String(s.where).match(/NPC (.+)$/); if (w && NPC[w[1].trim()]) npcs.add(w[1].trim());
+  [s.where, ...s.act.map(a => a.map)].forEach(t => { if (t) for (const m of String(t).matchAll(MAP_RE)) maps.add(MAP_ALIAS[m[1]] || m[1]); });
+  return {npcs:[...npcs], mobs:[...mobs], maps:[...maps]};
+}
+function infoHTML(s){
+  const {npcs, mobs, maps} = stepInfo(s);
+  if (!npcs.length && !mobs.length && !maps.length) return "";
+  const grp = (title, tiles) => tiles.length ? `<div><h3>${title}</h3><div class="tiles">${tiles.join("")}</div></div>` : "";
+  return `<section class="info" aria-label="ภาพประกอบขั้นนี้">
+    ${grp("แมพ (แตะเพื่อขยาย)", maps.map(n => { const m = MAP[n]; return `<button type="button" class="tile map" data-map="${attr(n)}"><span class="pic">${m.i?`<img src="${m.i}" alt="ภาพแมพ ${attr(n)}">`:`<span class="nopic">ไม่มีภาพแมพ</span>`}</span><span class="nm">${esc(n)}</span><span class="mt">${esc(m.s || m.r)}</span></button>`; }))}
+    ${grp("NPC (แตะแผนที่เพื่อดูตำแหน่ง)", npcs.map(n => `<div class="tile npc"><a class="npclink" href="${NPC[n].u}" target="_blank" rel="noopener"><span class="pic"><img src="${NPC[n].i}" alt=""></span><span class="nm">${esc(n)}</span></a>${npcMapThumb(n)}<span class="mt">${esc((NPCLOC[n]||{}).t||NPC[n].s)}</span></div>`))}
+    ${grp("มอนสเตอร์", mobs.map(n => { const m = MOB[n]; return `<a class="tile mob" href="${m.u}" target="_blank" rel="noopener"><span class="pic"><img src="${m.a||m.i}" alt=""></span><span class="nm">${esc(n)} <span class="lvchip">Lv ${m.lv}</span></span><span class="mt">HP ${m.hp} · EXP ${m.exp}</span></a>`; }))}
+  </section>`;
+}
+function openMap(n){
+  const m = MAP[n]; if (!m) return;
+  $("lbBody").innerHTML = `${m.i?`<img src="${m.i}" alt="ภาพแมพ ${attr(n)}">`:""}<figcaption>${esc(n)}${m.s?` · ${esc(m.s)}`:""}<br><a href="${m.u}" target="_blank" rel="noopener">ดูข้อมูลแมพบน NiaMeowDB ↗</a></figcaption>`;
+  $("lightbox").classList.add("open");
+}
+
+
+const NAVK = {cab:"Taxi", walk:"เดิน", npc:"หา NPC", txt:"หมายเหตุ"};
+function mmHTML(o){
+  const m = MINI[o.m]; if (!m || !o.b) return "";
+  const dot = (p,c,l) => p ? `<span class="mmdot ${c}" style="left:${p[0]}%;top:${p[1]}%" title="${l}"></span>` : "";
+  return `<button type="button" class="mm" aria-label="ขยายแผนที่" style="--ar:${(m.w/m.h).toFixed(3)};aspect-ratio:${m.w}/${m.h}"><img src="${m.u}" alt="" loading="lazy">${dot(o.a,"in","จุดที่เข้ามา")}${dot(o.b,o.k==="npc"?"np":"out",o.k==="npc"?"NPC":"ทางออก")}</button>`;
+}
+function navHTML(i){
+  const L = NAV[i]; if (!L || !L.length) return "";
+  return `<details class="navbox"><summary>🧭 เส้นทางเดินของขั้นนี้ <span class="mt">(${L.length} จุด แตะแผนที่เพื่อขยาย)</span></summary>
+    <p class="navlegend"><span class="mmdot in st"></span> จุดที่เข้ามา <span class="mmdot out st"></span> ทางออกที่ต้องไป <span class="mmdot np st"></span> ตำแหน่ง NPC</p>
+    <ol class="navlist">${L.map(o=>`<li class="nv ${o.k}"><div class="nvt"><span class="nvk ${o.k}">${NAVK[o.k]}</span> ${ico(o.t)}</div>${mmHTML(o)}</li>`).join("")}</ol></details>`;
+}
+
+
+function npcMapThumb(n){
+  const L = NPCLOC[n], m = L && L.m && MINI[L.m]; if (!m) return "";
+  return `<button type="button" class="npcmap" data-npc="${attr(n)}" style="--ar:${(m.w/m.h).toFixed(3)}" aria-label="ดูตำแหน่ง ${attr(n)} บนแผนที่"><img src="${m.u}" alt=""><span class="mmdot np" style="left:${L.p[0]}%;top:${L.p[1]}%"></span></button>`;
+}
+function openNpcMap(n){
+  const L = NPCLOC[n], m = L && MINI[L.m]; if (!m) return;
+  $("lbBody").innerHTML = `<div class="lbmap" style="--ar:${(m.w/m.h).toFixed(3)}"><img src="${m.u}" alt="แผนที่"><span class="mmdot np big" style="left:${L.p[0]}%;top:${L.p[1]}%"></span></div><figcaption><b>${esc(n)}</b> — ${esc(L.t)}${NPC[n]?`<br><a href="${NPC[n].u}" target="_blank" rel="noopener">ดูบน NiaMeowDB ↗</a>`:""}</figcaption>`;
+  $("lightbox").classList.add("open");
+}
+
+
+const OPTK = {rare:"ของมีราคา", drop:"เล็งดรอป", quest:"รางวัลเควส", craft:"คราฟต์", buy:"ซื้อ (อาวุธ)", sell:"ขายได้"};
+function optHTML(s){
+  if (!s.opt || !s.opt.length) return "";
+  return `<section class="optbox" aria-label="ทางเลือก: ของและคราฟต์">
+    <div class="optbox-h"><span>ทางเลือก: ของน่าเก็บ & คราฟต์ <span class="mt">(ไม่ทำก็เดิน route ต่อได้)</span></span><button type="button" class="linkbtn" data-tab="opt">ดูแผนเต็ม →</button></div>
+    <ul>${s.opt.map(o=>`<li><span class="ok-tag ${o.k}">${OPTK[o.k]}</span><span>${ico(o.x)}</span></li>`).join("")}</ul>
+  </section>`;
+}
+
+
+/* แยกบรรทัดหลักที่มีรายการคั่นด้วย " · " ให้เป็นหัวข้อ + bullet */
+function splitX(x){
+  const s = String(x), segs = []; let depth = 0, tag = false, last = 0;
+  for (let i = 0; i < s.length; i++){
+    const c = s[i];
+    if (c === "<") tag = true; else if (c === ">") tag = false;
+    else if (!tag && c === "(") depth++; else if (!tag && c === ")") depth = Math.max(0, depth-1);
+    else if (!tag && depth === 0 && c === "·"){ segs.push(s.slice(last, i).trim()); last = i+1; }
+  }
+  if (!segs.length) return {head: s, items: []};
+  segs.push(s.slice(last).trim());
+  const pre = segs[0], rest = segs.slice(1);
+  const topIdx = (str, needle, fromEnd) => { let d = 0, t = false, found = -1;
+    for (let i = 0; i < str.length; i++){ const c = str[i];
+      if (c === "<") t = true; else if (c === ">") t = false;
+      else if (!t && c === "(") d++; else if (!t && c === ")") d = Math.max(0, d-1);
+      if (!t && d === 0 && str.startsWith(needle, i)){ found = i; if (!fromEnd) break; } }
+    return found; };
+  const colonLike = seg => { const p = seg.replace(/<[^>]+>/g, ""); const c = p.indexOf(": "); return c > 0 && c < 22; };
+  let cut = -1, len = 0;
+  const d = topIdx(pre, " — ", true);
+  if (d > 0){ cut = d; len = 3; }
+  else if (!rest.some(colonLike)){ const c = topIdx(pre, ": ", false); if (c > 0 && pre.slice(0, c).replace(/<[^>]+>/g, "").trim().length >= 9){ cut = c; len = 2; } }
+  if (cut > 0) return {head: pre.slice(0, cut + (len === 2 ? 1 : 0)).trim(), items: [pre.slice(cut + len).trim(), ...rest]};
+  return {head: pre, items: rest};
+}
+
+function actHTML(a, i, j){
+  const k = i+"-"+j, done = !!state.done[k];
+  const L = splitX(a.x), subs = [...L.items, ...(a.sub||[])];
+  let facts = "";
+  if (a.from) facts += `<dt>ดรอปจาก</dt><dd>${ico(a.from)}</dd>`;
+  if (a.map) facts += `<dt>แมพ</dt><dd>${a.map}</dd>`;
+  return `<li class="act ${done?"done":""}">
+    <input type="checkbox" id="c${k}" data-k="${k}" ${done?"checked":""} aria-label="ทำเสร็จแล้ว">
+    <div>
+      <label for="c${k}" class="main"><span class="tag ${a.t}">${TAG[a.t]}</span>${ico(L.head)}</label>
+      ${facts?`<dl class="facts">${facts}</dl>`:""}
+      ${subs.length?`<ul class="sub">${subs.map(x=>`<li>${ico(x)}</li>`).join("")}</ul>`:""}
+      ${a.tip?`<p class="tip">${ico(a.tip)}</p>`:""}
+    </div>
+  </li>`;
+}
+
+
+const TAG={travel:"เดินทาง",talk:"คุย / รับเควส",kill:"ตีมอน",collect:"หาของ",turnin:"ส่งเควส",craft:"คราฟต์",stop:"หยุด",gear:"อุปกรณ์",note:"หมายเหตุ"};
+const KEY="mt-bandit-classic-free-route-v1";const $=id=>document.getElementById(id);
+const esc=v=>String(v??'').replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
+const lvNum=v=>parseInt(String(v).match(/\d+/)?.[0]||'1',10);
+let state={i:0,done:{},sq:null};try{const v=JSON.parse(localStorage.getItem(KEY)||'null');if(v){state.i=Math.max(0,Math.min(S.length-1,Number(v.i)||0));state.done=v.done||{}}}catch{}
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify({i:state.i,done:state.done}))}catch{}};
+const stepDone=i=>S[i].act.every((_,j)=>state.done[i+'-'+j]);
+const sqOf=()=>[],sqById=()=>null,sqDone=()=>false,sqBoxHTML=()=>'',sqCardHTML=()=>'',openSq=()=>{};
+function showLock(){$('premiumLock').hidden=false;$('premiumClose').focus()}
+function closeLock(){$('premiumLock').hidden=true;$('next').focus()}
+function sideHTML(){let h='',last='';S.forEach((v,i)=>{if(v.ch!==last){h+='<div class="chap">'+esc(v.ch)+'</div>';last=v.ch}h+='<button class="tab" data-i="'+i+'" '+(i===state.i?'aria-current="step"':'')+'><span class="n">'+(i+1)+'</span><span class="tt">Lv.'+esc(v.lv)+' '+esc(v.title)+'</span>'+(stepDone(i)?'<span class="ok">✓</span>':'')+'</button>'});return h+'<button class="tab mt-locked-step" data-premium><span class="n">🔒</span><span class="tt">ขั้นต่อไป</span></button>'}
+function etcHTML(s){const rows=(s.act||[]).filter(a=>a.from||a.map);if(!rows.length)return '';return '<section class="info mt-loot-mini"><h3>แหล่งดรอปที่กล่าวถึงในขั้นนี้</h3><div class="tiles">'+rows.map(a=>'<div class="tile"><span class="nm">'+ico(a.from||'')+'</span><span class="mt">'+esc(a.map||'')+'</span></div>').join('')+'</div></section>'}
+function render(){
+const i=state.i,s=S[i];$('side').innerHTML=sideHTML();$('drawer').innerHTML=sideHTML();
+$('main').innerHTML=`<article class="card"><div class="card-head"><div class="lvrow"><span class="lv">Lv.${esc(s.lv)}</span><span class="stepno">ขั้นที่ ${i+1} จาก ${S.length}</span></div><h2>${esc(s.title)}</h2><span class="where"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a7 7 0 0 0-7 7c0 5.2 7 13 7 13s7-7.8 7-13a7 7 0 0 1 0 5z"/></svg>${esc(s.where||'')}</span>${s.intro?'<p class="intro">'+ico(s.intro)+'</p>':''}</div><h3 class="acts-h">สิ่งที่ต้องทำในขั้นนี้ <span class="mt">(ทำตามลำดับจากบนลงล่าง)</span></h3><ol class="acts">${s.act.map((a,j)=>actHTML(a,i,j)).join('')}</ol>${s.miss?'<div class="missbox"><b>ถ้าข้ามหรือพลาดขั้นนี้:</b> '+ico(s.miss)+'</div>':''}${navHTML(i)}${infoHTML(s)}${optHTML(s)}<div class="extra"><div class="box"><h3>AP</h3><p>${s.ap||'—'}</p></div><div class="box"><h3>SP</h3><p>${s.sp||'—'}</p></div><div class="box"><h3>ห้ามขาย</h3><p>${ico(s.keep||'—')}</p></div><div class="box leave"><h3>ไปขั้นต่อไปเมื่อ</h3><p>${s.leave||'—'}</p></div></div>${etcHTML(s)}</article>`;
+$('prev').disabled=i===0;$('next').disabled=false;$('next').textContent='ขั้นต่อไป';
+$('count').textContent=i===S.length-1?'ขั้นต่อไปต้องปลดล็อก':s.next?'ต่อไป: '+S[i+1].title:'';
+const pct=(lvNum(s.lv)-1)/49*100;$('fill').style.width=pct+'%';$('leaf').style.left=pct+'%';$('chapName').textContent=s.ch;$('doneCount').textContent='เสร็จแล้ว '+S.filter((_,k)=>stepDone(k)).length+' / '+S.length+' ขั้น';$('side').querySelector('[aria-current="step"]')?.scrollIntoView({block:'nearest'});
+}
+function go(n){if(n>=S.length){showLock();return}if(n<0)return;state.i=n;save();render();closeAll();window.scrollTo({top:0,behavior:'instant'})}
+function closeAll(){$('drawer').classList.remove('open');$('keepModal').classList.remove('open');$('overlay').classList.remove('open')}
+function keepTable(){$('keepTable').innerHTML='<thead><tr><th>ของ</th><th>จำนวน</th><th>ดรอปจาก</th><th>แมพ</th><th>เก็บช่วง</th><th>ใช้กับ</th></tr></thead><tbody>'+KEEP.map(r=>'<tr>'+r.map((v,i)=>'<td>'+(i===0||i===2?ico(esc(v)):esc(v))+'</td>').join('')+'</tr>').join('')+'</tbody>'}
+document.addEventListener('click',e=>{
+const mapb=e.target.closest('.mm');if(mapb){mapb.classList.toggle('big');return}
+const npc=e.target.closest('.npcmap');if(npc){openNpcMap(npc.dataset.npc);return}
+const tab=e.target.closest('[data-tab]');if(tab){if(tab.dataset.tab!=='route')location.href='./bandit-immersive-v2.html#'+tab.dataset.tab;return}
+const step=e.target.closest('[data-go]');if(step){go(+step.dataset.go);return}
+const bigmap=e.target.closest('.tile.map');if(bigmap){openMap(bigmap.dataset.map);return}
+if(e.target.closest('[data-premium]')){showLock();return}
+const nav=e.target.closest('.tab[data-i]');if(nav){go(+nav.dataset.i);return}
+if(e.target.closest('#lightbox')&&!e.target.closest('a')){$('lightbox').classList.remove('open');return}
+});
+document.addEventListener('change',e=>{const k=e.target?.dataset?.k;if(!k)return;if(e.target.checked)state.done[k]=true;else delete state.done[k];save();render()});
+$('prev').onclick=()=>go(state.i-1);$('next').onclick=()=>go(state.i+1);
+$('openDrawer').onclick=()=>{$('drawer').classList.add('open');$('overlay').classList.add('open')};
+$('openKeep').onclick=()=>{$('keepModal').classList.add('open');$('overlay').classList.add('open');$('closeKeep').focus()};
+$('closeKeep').onclick=closeAll;$('overlay').onclick=closeAll;
+$('premiumClose').onclick=closeLock;$('premiumBack').onclick=closeLock;
+$('premiumLock').addEventListener('click',e=>{if(e.target.id==='premiumLock')closeLock()});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){$('lightbox').classList.remove('open');if(!$('premiumLock').hidden)closeLock();closeAll()}if(e.target.matches('input,textarea'))return;if(e.key==='ArrowRight')go(state.i+1);if(e.key==='ArrowLeft')go(state.i-1)});
+[1,10,20,30,40,50].forEach(v=>{const tick=document.createElement('span');tick.className='track-tick';tick.style.left=((v-1)/49*100)+'%';tick.textContent='Lv.'+v;$('track').append(tick)});
+keepTable();render();
+</script></body></html>
