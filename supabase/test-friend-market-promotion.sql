@@ -1,0 +1,55 @@
+BEGIN;
+DO $test$
+DECLARE buyer uuid:=gen_random_uuid(); friend uuid:=gen_random_uuid(); later uuid:=gen_random_uuid(); seller uuid:=gen_random_uuid(); p jsonb; q jsonb; ids bigint[]:=ARRAY[]::bigint[]; lid bigint; i integer; failed boolean:=false; before_count integer;
+BEGIN
+ INSERT INTO auth.users(id,email,email_confirmed_at,aud,role) VALUES
+ (buyer,'promo-test-buyer@example.invalid',now(),'authenticated','authenticated'),(friend,'promo-test-friend@example.invalid',now(),'authenticated','authenticated'),(seller,'promo-test-seller@example.invalid',now(),'authenticated','authenticated');
+ INSERT INTO private.credit_accounts(user_id,balance_cents) VALUES(buyer,60000) ON CONFLICT(user_id) DO UPDATE SET balance_cents=60000;
+ PERFORM set_config('request.jwt.claim.sub',buyer::text,true);
+ p:=public.create_gift_payment_order('guide_bandit','promo-test-friend@example.invalid');
+ IF (SELECT sum(remaining) FROM private.market_contact_rewards WHERE claimed_by=buyer)<>10 OR (SELECT sum(remaining) FROM private.market_contact_rewards WHERE claimed_by=friend)<>10 THEN RAISE EXCEPTION 'Gift bonuses not both ten'; END IF;
+ UPDATE public.payments SET status='ok' WHERE id=(p->>'id')::bigint;
+ PERFORM public.sync_account();PERFORM public.sync_account();
+ IF (SELECT sum(remaining) FROM private.market_contact_rewards WHERE claimed_by=buyer)<>10 THEN RAISE EXCEPTION 'Duplicate gift bonus';END IF;
+ p:=public.create_gift_payment_order('guide_mage','promo-test-later@example.invalid');
+ INSERT INTO auth.users(id,email,aud,role) VALUES(later,'promo-test-later@example.invalid','authenticated','authenticated');
+ PERFORM set_config('request.jwt.claim.sub',later::text,true);PERFORM public.sync_account();
+ IF EXISTS(SELECT 1 FROM private.market_contact_rewards WHERE claimed_by=later) THEN RAISE EXCEPTION 'Unverified email claimed bonus';END IF;
+ UPDATE auth.users SET email_confirmed_at=now() WHERE id=later;
+ PERFORM public.sync_account();
+ IF (SELECT sum(remaining) FROM private.market_contact_rewards WHERE claimed_by=later)<>10 THEN RAISE EXCEPTION 'Deferred bonus failed';END IF;
+ PERFORM set_config('request.jwt.claim.sub',buyer::text,true);
+ p:=public.create_referred_payment_order('guide_assassin',' PROMO-TEST-FRIEND@EXAMPLE.INVALID ');
+ IF NOT private.has_product(buyer,'guide_assassin') OR private.has_product(friend,'guide_assassin') THEN RAISE EXCEPTION 'Referral incorrectly delivered guide';END IF;
+ IF (SELECT sum(remaining) FROM private.market_contact_rewards WHERE claimed_by=buyer)<>30 OR (SELECT sum(remaining) FROM private.market_contact_rewards WHERE claimed_by=friend)<>20 THEN RAISE EXCEPTION 'Referral bonuses failed';END IF;
+ p:=public.create_payment_order('guide_mage');
+ IF EXISTS(SELECT 1 FROM private.market_contact_rewards WHERE payment_id=(p->>'id')::bigint) THEN RAISE EXCEPTION 'Normal purchase received bonus';END IF;
+ BEGIN PERFORM public.create_referred_payment_order('guide_bandit','promo-test-buyer@example.invalid');EXCEPTION WHEN OTHERS THEN failed:=true;END;
+ IF NOT failed THEN RAISE EXCEPTION 'Self referral accepted';END IF;
+ UPDATE private.credit_accounts SET balance_cents=0 WHERE user_id=buyer;
+ p:=public.create_gift_payment_order('guide_assassin','promo-test-later@example.invalid');
+ IF EXISTS(SELECT 1 FROM private.market_contact_rewards WHERE payment_id=(p->>'id')::bigint) THEN RAISE EXCEPTION 'Pending order received bonus';END IF;
+ PERFORM public.cancel_payment_order((p->>'id')::bigint);
+ p:=public.create_gift_payment_order('guide_bandit','promo-underpaid@example.invalid');
+ UPDATE public.payments SET status='pending' WHERE id=(p->>'id')::bigint;
+ q:=private.settle_transfer((p->>'id')::bigint,100,'PROMO-UNDERPAID-'||gen_random_uuid(),'provider','');
+ IF q->>'status'<>'credited' OR EXISTS(SELECT 1 FROM private.market_contact_rewards WHERE payment_id=(p->>'id')::bigint) THEN RAISE EXCEPTION 'Underpaid purchase received bonus';END IF;
+ FOR i IN 1..12 LOOP
+ INSERT INTO public.listings(user_id,kind,item_name,category,price,price_unit) VALUES(seller,'sell','Promo test item','other',100,'meso') RETURNING id INTO lid;
+ INSERT INTO private.marketplace_contacts(listing_id,contacts) VALUES(lid,'{"discord":"promo-test-seller"}');ids:=array_append(ids,lid);
+ END LOOP;
+ FOR i IN 1..10 LOOP PERFORM public.listing_contact(ids[i]);END LOOP;
+ q:=public.marketplace_contact_quota();
+ IF (q->>'free_remaining')::int<>0 OR (q->>'bonus_remaining')::int<>30 THEN RAISE EXCEPTION 'Monthly free consumed bonus';END IF;
+ PERFORM public.listing_contact(ids[11]);PERFORM public.listing_contact(ids[11]);
+ q:=public.marketplace_contact_quota();
+ IF (q->>'bonus_remaining')::int<>29 OR (q->>'used')::int<>10 THEN RAISE EXCEPTION 'Bonus consumption or repeat opening failed';END IF;
+ UPDATE private.market_contact_unlocks SET month_key=(month_key-interval '1 month')::date WHERE user_id=buyer;
+ q:=public.marketplace_contact_quota();
+ IF (q->>'free_remaining')::int<>10 OR (q->>'bonus_remaining')::int<>29 THEN RAISE EXCEPTION 'Month rollover lost bonus';END IF;
+ PERFORM public.listing_contact(ids[12]);
+ q:=public.marketplace_contact_quota();
+ IF (q->>'free_remaining')::int<>9 OR (q->>'bonus_remaining')::int<>29 THEN RAISE EXCEPTION 'New month did not prioritize free quota';END IF;
+END $test$;
+ROLLBACK;
+SELECT 'PASS: gift and referral award both parties, deferred verified signup, idempotency, self-referral rejection, pending/underpaid exclusion, monthly-free priority, repeat opening and bonus rollover' result;
