@@ -2,7 +2,7 @@ import {supabase,readAccount,hasGuide} from './supabase-client.js';
 import {rpc,myOrders,showHistory,money,STATUS} from './payment-common.js?v=20261011-friend-promo';
 import {paymentImage} from './payment-qr.js?v=20261011-credit';
 let wallet={available_cents:0,reserved_cents:0},qrKey='',qrGeneration=0;
-const $=id=>document.getElementById(id);const allowed=['guide_bandit','guide_assassin','guide_mage','market'];let products=[],settings,user,account,orders=[],order,autoVerify=false,loading=false,working=false,previewUrl;
+const $=id=>document.getElementById(id);const allowed=['guide_bandit','guide_assassin','guide_mage','guide_fighter','guide_page','guide_spearman','market'];let products=[],settings,user,account,orders=[],order,autoVerify=false,loading=false,working=false,previewUrl;
 let selected=new URLSearchParams(location.search).get('product')||'guide_bandit';if(!allowed.includes(selected))selected='guide_bandit';
 const initialGift=new URLSearchParams(location.search).get('gift');if(initialGift){$('gift-toggle').checked=true;$('gift-email').value=initialGift;}
 const gifting=()=>selected!=='market'&&$('gift-toggle').checked;

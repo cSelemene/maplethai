@@ -4,7 +4,7 @@ const json=value=>JSON.stringify(value).replace(/</g,'\\u003c');
 // Runs inside the private guide document. Existing maps, checkboxes and route navigation stay intact.
 export function attachProgress(html,{userId,guide,initial,token}){
  const key='maplethai:guide:'+userId+':'+guide;
- const original=/const KEY\s*=\s*["'](?:pure-bandit|assassin|il-mage)-route-v1["'];/;
+ const original=/const KEY\s*=\s*["'](?:pure-bandit|assassin|il-mage|fighter|page|spearman)-route-v1["'];/;
  if(!original.test(html))return {html,supported:false};
  html=html.replace(original,()=> 'const KEY = '+json(key)+';');
  if(initial)html=html.replace(/localStorage\.getItem\(KEY\)/,()=>json(JSON.stringify(initial)));
