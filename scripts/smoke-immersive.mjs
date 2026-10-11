@@ -117,7 +117,7 @@ try{
   await warrior.click('#premiumClose');
   await warrior.setViewport({width:390,height:844});
   await warrior.click('#openDrawer');await warrior.waitForFunction(()=>document.querySelector('#drawer').getBoundingClientRect().left>=-1);
-  await warrior.click('#drawer .tab[data-i="4"]');await warrior.waitForFunction(()=>!document.querySelector('#drawer').classList.contains('open'));
+  await warrior.click('#drawer .tab[data-i="4"]');await warrior.waitForFunction(()=>document.querySelector('#drawer').getBoundingClientRect().right<=0);
   assert(await warrior.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+2),'Warrior route overflows mobile');
   await Promise.all([warrior.waitForNavigation({waitUntil:'load'}),warrior.click('.tabs [data-tab="intro"]')]);await warrior.waitForSelector('.mt-nav');
   assert(await warrior.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+2),'Warrior preview overflows mobile');
