@@ -2,7 +2,7 @@ name: MapleThai email and Google auth UI
 on:
   push:
     branches: ['feature/**', main]
-    paths: ['marketplace.html','marketplace.js','marketplace.css','market-items.js','assets/market/**','auth.html','auth.js','checkout.html','checkout.js','payment-common.js','payment-ui.css','admin-payments.html','admin-payments.js','account-payments.js','*-access.js','supabase-client.js','member-home.js','admin.html','premium-guide.html','premium-guide.js','guide-progress.js','my-guides.html','my-guides.js','my-guides.css','scripts/test-*.mjs','supabase/functions/**','.github/workflows/test-auth-ui.yml']
+    paths: ['marketplace.html','marketplace.js','marketplace.css','market-items.js','assets/market/**','auth.html','auth.js','checkout.html','checkout.js','payment-common.js','payment-ui.css','admin-payments.html','admin-payments.js','account-payments.js','account-credit.js','payment-qr.js','vendor/qrcode-generator.js','*-access.js','supabase-client.js','member-home.js','admin.html','premium-guide.html','premium-guide.js','guide-progress.js','my-guides.html','my-guides.js','my-guides.css','scripts/test-*.mjs','supabase/functions/**','.github/workflows/test-auth-ui.yml']
   pull_request:
     branches: [main]
   workflow_dispatch:
@@ -34,3 +34,9 @@ jobs:
 
       - name: Test free marketplace posts, contact gates, edit, search and mobile
         run: CHROME_BIN=/usr/bin/google-chrome node scripts/test-marketplace.mjs
+
+      - name: Test amount QR and receipt credit validation
+        run: node scripts/test-payment-qr.mjs
+
+      - name: Test credit balance, remainder QR, cancellation and market redemption
+        run: CHROME_BIN=/usr/bin/google-chrome node scripts/test-credit-browser.mjs

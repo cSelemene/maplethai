@@ -1,5 +1,5 @@
 import {createClient} from 'npm:@supabase/supabase-js@2.57.4';
-import {evaluateSlip} from './validation.mjs';
+import {evaluateReceipt} from './validation.mjs';
 const headers={'Access-Control-Allow-Origin':'https://cselemene.github.io','Access-Control-Allow-Headers':'authorization, apikey, content-type, x-client-info','Access-Control-Allow-Methods':'POST, OPTIONS','Content-Type':'application/json','Cache-Control':'no-store'};
 const reply=(data:unknown,status=200)=>new Response(JSON.stringify(data),{status,headers});
 const envKey=(name:string,legacy:string)=>{try{return JSON.parse(Deno.env.get(name)||'{}').default||Deno.env.get(legacy)||''}catch{return Deno.env.get(legacy)||''}};
@@ -23,9 +23,9 @@ Deno.serve(async(req:Request)=>{
   if(error||!blob)result={verified:false,code:'SLIP_NOT_AVAILABLE'};
   else if(blob.size>4194304||!['image/jpeg','image/png','image/webp'].includes(blob.type))result={verified:false,code:'MANUAL_IMAGE_REVIEW'};
   else{
-   const form=new FormData();form.append('image',blob,'slip');form.append('matchAccount','true');form.append('matchAmount',String(start.payment.amount));form.append('checkDuplicate','true');
+   const form=new FormData();form.append('image',blob,'slip');form.append('matchAccount','true');form.append('matchAmount',String((start.payment.amount_due_cents??start.payment.amount*100)/100));form.append('checkDuplicate','true');
    const response=await fetch('https://api.easyslip.com/v2/verify/bank',{method:'POST',headers:{Authorization:'Bearer '+start.api_key},body:form,signal:AbortSignal.timeout(20000)});
-   if(response.ok)result=evaluateSlip(await response.json(),start.payment);
+   if(response.ok)result=evaluateReceipt(await response.json(),start.payment);
   }
  }catch{/* Never log provider credentials, images or bank response data. */}
  const {data:done,error:doneError}=await admin.rpc('svc_finish_payment_verification',{p_payment:body.payment_id,p_lease:start.lease,p_result:result});

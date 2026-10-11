@@ -19,3 +19,20 @@ export function evaluateSlip(response,payment,now=Date.now()){
  if(typeof raw.transRef!=='string'||raw.transRef.length<6||raw.transRef.length>200)return fail('INVALID_REFERENCE');
  return {verified:true,code:'VERIFIED',amount:data.amountInSlip,bank_code:'004',recipient_account:expected,currency:'THB',transferred_at:raw.date,duplicate:false,trans_ref:raw.transRef};
 }
+
+// A previously inspected slip is not necessarily consumed. The database receipt ledger
+// atomically enforces one credit/fulfilment per bank reference across all products.
+export function evaluateReceipt(response,payment,now=Date.now()){
+ const fail=code=>({verified:false,code});
+ if(response?.success!==true||typeof response.data?.isDuplicate!=='boolean')return fail('PROVIDER_UNAVAILABLE');
+ const d=response.data,raw=d.rawSlip,amount=d.amountInSlip;
+ if(typeof amount!=='number'||!Number.isFinite(amount)||amount<=0||amount>1000000||Math.abs(amount*100-Math.round(amount*100))>0.000001||raw?.amount?.amount!==amount)return fail('INVALID_RECEIVED_AMOUNT');
+ // Empty local currency is used by domestic slips without a foreign-currency leg.
+ // A specified non-THB local currency must still be rejected.
+ const currency=raw?.amount?.local?.currency;
+ if(raw?.countryCode!=='TH'||!['THB','764',''].includes(currency))return fail('INVALID_CURRENCY');
+ if(currency===''&&![0,amount].includes(raw.amount.local.amount))return fail('INVALID_CURRENCY');
+ const normalized=structuredClone(response);normalized.data.isDuplicate=false;normalized.data.isAmountMatched=true;normalized.data.rawSlip.amount.local.currency='THB';
+ const receipt=evaluateSlip(normalized,{...payment,amount},now);
+ return receipt.verified?{...receipt,amount_cents:Math.round(amount*100)}:receipt;
+}
