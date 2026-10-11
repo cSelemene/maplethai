@@ -9,3 +9,8 @@
 - Manual review supports whole baht with the existing RPC and decimals through `admin_record_transfer`. Do not approve from the image alone: confirm the incoming bank transaction/reference.
 
 Validation: rolled-back SQL receipt/credit/reservation tests; Node receipt and QR checks; original-frame QR generation decoded independently at 49 and 99 THB; browser checkout/account/admin tests in CI. There are no withdrawals or automated refunds in this version; those remain admin support workflows.
+
+## Unique amount suffixes
+New bank-transfer orders reserve a random processing fee of 11–49 satang, disclosed on checkout before transfer. The fee is part of amount_due_cents and consumed only on a completed purchase. Excess above the total remains customer credit; underpayments retain the full actual transfer as credit. Full-credit purchases have no fee. Partial-credit purchases spend whole baht and retain fractional credit, keeping every QR suffix within .11–.49. Existing orders retain their original amount and zero fee. Allocation uses a transaction advisory lock across all products/users, considers the actual payable amount, excludes all open orders and all orders created in the last 24h, and fails safely when all 39 slots are reserved. Refresh reuses the existing order. No automatic amount reuse from old open orders. Admin search matches requested amount, received amount, email and transfer reference in the most recent 200 orders; choose all statuses when reconciling.
+
+Run scripts/test-satang.sql as a rollback-only integration test; scripts/test-credit-browser.mjs verifies the visible fee and partial-credit QR.
