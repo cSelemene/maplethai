@@ -83,3 +83,5 @@ header nav a[data-account-link]{display:inline-flex;align-items:center;gap:8px;m
 .maple-account .account-actions{border-top:1px solid #e2d6c1;padding-top:20px}
 .maple-account .footer{font-size:13px}
 @media(max-width:700px){.account-grid{grid-template-columns:1fr}.maple-account .panel{padding:24px 18px}.account-section{padding:18px}.profile-name{max-width:145px}}
+
+.maple-account .top>.logo-link{background:none!important;border:0!important;box-shadow:none!important;padding:0;text-shadow:none;filter:none}
