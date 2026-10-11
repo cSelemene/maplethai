@@ -104,6 +104,24 @@ try{
    assert(await warrior.$eval('[data-panel="'+tab+'"]',x=>!x.hidden));
    assert(await warrior.$eval('[data-panel="'+tab+'"] .mt-read-fade',x=>getComputedStyle(x).backdropFilter.includes('blur(')));
   }
+  await warrior.click('.mt-nav [data-tab="intro"]');
+  assert.equal(await warrior.$$eval('#wc-words tbody tr',xs=>xs.length),20,'Warrior glossary must be restored');
+  assert.equal(await warrior.$$eval('#wc-life tbody tr',xs=>xs.length),6,'All Life Skill trainers must be present');
+  await warrior.click('.mt-nav [data-tab="builds"]');
+  await warrior.click('[data-wc-family="1"]');
+  assert(await warrior.$eval('[data-wc-weapon-plan] h3',x=>!x.textContent.startsWith('Sword')),'Second weapon plan failed');
+  await warrior.select('[data-wc-gear-level]','late');
+  assert.equal(await warrior.$$eval('[data-wc-gear-table] tbody tr',xs=>xs.length),1,'Equipment filter failed');
+  await warrior.click('.mt-nav [data-tab="money"]');
+  assert.equal(await warrior.$$eval('[data-wc-market-table] tbody tr',xs=>xs.length),212,'Market rows lost');
+  assert.equal(await warrior.$$eval('[data-wc-farm-table] tbody tr',xs=>xs.length),39,'Farm rows lost');
+  await warrior.type('[data-wc-market-search]','Bronze Ore');
+  assert.equal(await warrior.$$eval('[data-wc-market-table] tbody tr',xs=>xs.length),1,'Market search failed');
+  await warrior.$eval('[data-wc-market-search]',x=>{x.value='';x.dispatchEvent(new Event('input',{bubbles:true}))});
+  await warrior.click('[data-wc-market-kind="keep"]');
+  assert(await warrior.$$eval('[data-wc-market-table] tbody tr',xs=>xs.length>0&&xs.length<212),'Quest item filter failed');
+  await warrior.click('[data-wc-farm-sort="eq"]');
+  assert(await warrior.$eval('[data-wc-farm-sort="eq"]',x=>x.getAttribute('aria-pressed')==='true'),'Farm sort failed');
   await Promise.all([warrior.waitForNavigation({waitUntil:'load'}),warrior.click('.mt-nav [data-tab="route"]')]);
   await warrior.waitForSelector('#side .tab[data-i]');
   assert.equal(await warrior.$$eval('#side .tab[data-i]',xs=>xs.length),12,'Only first-job preview steps may be public');
@@ -121,7 +139,7 @@ try{
   assert(await warrior.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+2),'Warrior route overflows mobile');
   await Promise.all([warrior.waitForNavigation({waitUntil:'load'}),warrior.click('.tabs [data-tab="intro"]')]);await warrior.waitForSelector('.mt-nav');
   assert(await warrior.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+2),'Warrior preview overflows mobile');
-  assert.equal(await warrior.$eval('.mt-card p',x=>getComputedStyle(x).fontSize),'18px');
+  assert.equal(await warrior.$eval('.wc-card p',x=>getComputedStyle(x).fontSize),'18px');
   assert.equal(errors.length,0,errors.join(', '));await warrior.close();
  }
  const artPage=await browser.newPage();await artPage.goto(base+'/home.html',{waitUntil:'load'});

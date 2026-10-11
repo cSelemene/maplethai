@@ -12,6 +12,8 @@ on:
       - '*-preview.html'
       - 'guide-preview.html'
       - 'warrior-cards.css'
+      - 'warrior-content.*'
+      - 'warrior-market-data.js'
       - 'assets/classes/*.png'
       - 'scripts/smoke-immersive.mjs'
       - '.github/workflows/smoke-immersive.yml'
