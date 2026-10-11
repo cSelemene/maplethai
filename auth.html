@@ -64,7 +64,7 @@ input::placeholder{color:#9ba9b9}
 .footer{text-align:center;font-size:.76rem;color:#7b8da4;margin:24px 0 0}
 @media(max-width:540px){.top{padding:0 18px;height:60px}.shell{min-height:calc(100svh - 60px);padding:22px 13px 38px}.panel{padding:25px 22px;border-radius:13px}h1{font-size:1.5rem}.account-actions{flex-direction:column;align-items:stretch}.account-actions a,.account-actions button{text-align:center;width:100%}.account-actions .outline{margin:0}}
 </style>
-</head>
+<style>.history-row{padding:14px 0;border-bottom:1px solid var(--line);font-size:.85rem}.history-row p{margin:6px 0}.tag{display:inline-block;border-radius:20px;background:#edf3f9;padding:3px 9px;font-size:.75rem}.tag.ok{background:#edf8f1;color:#276544}.tag.pending{background:#fff4d9;color:#906311}.tag.rejected{background:#fff0ee;color:#923d38}</style></head>
 <body>
 <header class="top"><span class="brand">🍁 MapleThai</span><a href="./index.html">กลับหน้าแรก</a></header>
 <div class="shell"><main class="panel">
@@ -97,7 +97,7 @@ input::placeholder{color:#9ba9b9}
 <div class="account-box"><small>อีเมลที่เข้าสู่ระบบ</small><b id="account-email"></b></div>
 <p class="hint">ไกด์แต่ละอาชีพและ Marketplace ใช้สิทธิ์แยกกันตามบัญชีนี้</p>
 <section aria-labelledby="my-guides-title"><h2 id="my-guides-title">ไกด์ของฉัน</h2><p id="rights-status" role="status">กำลังตรวจสอบสิทธิ์…</p><div id="my-guides"></div><button id="refresh-rights" type="button" class="outline">ตรวจสอบสิทธิ์อีกครั้ง</button></section>
-<form id="redeem-form"><h2>ใช้โค้ดปลดล็อก</h2><label for="redeem-code">โค้ดจากผู้ดูแล</label><input id="redeem-code" maxlength="40" autocomplete="off" required><button type="submit" class="submit" id="redeem-submit">ใช้โค้ด</button><p id="redeem-status" role="status"></p></form>
+<p><a class="outline" href="./checkout.html">ซื้อ / ปลดล็อกไกด์ →</a></p><section><h2>ประวัติการซื้อ</h2><button id="refresh-orders" class="outline" type="button">ตรวจสอบสถานะ</button><div id="account-orders"></div></section><form id="redeem-form"><h2>ใช้โค้ดปลดล็อก</h2><label for="redeem-code">โค้ดจากผู้ดูแล</label><input id="redeem-code" maxlength="40" autocomplete="off" required><button type="submit" class="submit" id="redeem-submit">ใช้โค้ด</button><p id="redeem-status" role="status"></p></form>
 <p><a id="admin-link" href="./admin.html" hidden>จัดการสิทธิ์ลูกค้า (แอดมิน)</a></p>
 <div class="account-actions"><a id="account-next" href="./index.html">ไปยังหน้าไกด์</a><button class="outline" id="logout" type="button">ออกจากระบบ</button></div>
 </section>
@@ -111,4 +111,4 @@ input::placeholder{color:#9ba9b9}
 <p class="footer">MapleThai · MapleStory Classic Guides</p>
 </main></div>
 <script type="module" src="./auth.js"></script>
-<script type="module" src="./account-access.js"></script></body></html>
+<script type="module" src="./account-access.js"></script><script type="module" src="./account-payments.js"></script></body></html>

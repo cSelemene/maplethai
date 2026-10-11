@@ -1,0 +1,34 @@
+import assert from 'node:assert/strict';
+import {writeFileSync,unlinkSync} from 'node:fs';
+import puppeteer from 'puppeteer-core';
+const browser=await puppeteer.launch({headless:true,executablePath:process.env.CHROME_BIN||'/usr/bin/google-chrome',args:['--no-sandbox']});
+const base='http://127.0.0.1:8765';
+const stub=`
+const state=window.paymentTest;
+const products=['bandit','assassin','mage'].map((id,i)=>({id:'guide_'+id,name:['Pure Bandit','Assassin','I/L Mage'][i],price:99}));
+const auth={getUser:async()=>({data:{user:state.user},error:null}),onAuthStateChange:fn=>{state.listeners.push(fn);return {data:{subscription:{unsubscribe(){}}}}}};
+const query=table=>{const q={select:()=>q,in:()=>q,eq:()=>q,order:()=>q,limit:()=>q,then:(resolve,reject)=>Promise.resolve({data:table==='products'?products:state.orders,error:null}).then(resolve,reject)};return q};
+export const createClient=()=>({auth,from:query,storage:{from:()=>({upload:async(path,file)=>{state.uploads.push({path,type:file.type});return {error:null}},createSignedUrl:async path=>({data:{signedUrl:'data:image/png;base64,iVBORw0KGgo='},error:null})})},rpc:async(method,args)=>{
+ state.calls.push({method,args});
+ if(method==='sync_account')return {data:state.account,error:null};
+ if(method==='payment_settings')return {data:state.settings,error:null};
+ if(method==='admin_payment_orders')return state.account.is_admin?{data:state.orders,error:null}:{error:{message:'Forbidden'}};
+ if(method==='create_payment_order'){const order={id:12,product:args.p_product,amount:99,status:'awaiting_slip',recipient:state.settings,created_at:new Date().toISOString()};state.orders.push(order);return {data:order,error:null}}
+ if(method==='submit_payment_slip'){state.orders.find(p=>p.id===args.p_payment).status='pending';return {error:null}}
+ if(method==='cancel_payment_order'){state.orders.find(p=>p.id===args.p_payment).status='cancelled';return {error:null}}
+ if(method==='admin_review_payment'){state.orders.find(p=>p.id===args.p_payment).status=args.p_approve?'ok':'rejected';return {error:null}}
+ if(method==='admin_payment_settings'){state.settings.enabled=args.p_enabled;return {error:null}}
+ return {error:{message:'Unknown RPC'}};
+}});
+`;
+async function page(extra={}){const p=await browser.newPage();await p.evaluateOnNewDocument(extra=>{window.paymentTest={user:{id:'buyer',email:'buyer@example.invalid'},account:{is_admin:false,entitlements:[]},settings:{enabled:true,bank:'Test Bank',account_number:'1234567890',recipient_name:'Test Receiver'},orders:[],calls:[],uploads:[],listeners:[],...extra}},extra);await p.setRequestInterception(true);p.on('request',r=>r.url().startsWith('https://cdn.jsdelivr.net/npm/@supabase/supabase-js@')?r.respond({status:200,contentType:'application/javascript',headers:{'access-control-allow-origin':'*'},body:stub}):r.continue());p.on('pageerror',e=>{throw e});return p}
+const file='/tmp/maplethai-test-slip.png';writeFileSync(file,Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+jRZkAAAAASUVORK5CYII=','base64'));
+try{
+ const guest=await page({user:null});await guest.goto(base+'/checkout.html?product=guide_assassin',{waitUntil:'networkidle0'});assert(await guest.$eval('#login-needed',e=>!e.hidden));assert((await guest.$eval('#checkout-login',e=>e.href)).includes('next=checkout.html%3Fproduct%3Dguide_assassin'));assert(!(await guest.evaluate(()=>window.paymentTest.calls)).some(c=>c.method==='create_payment_order'));console.log('PASS: guest login preserves selected product');
+ const disabled=await page({settings:{enabled:false}});await disabled.goto(base+'/checkout.html',{waitUntil:'networkidle0'});assert(await disabled.$eval('#create-order',e=>e.hidden));assert(await disabled.$eval('#recipient',e=>e.hidden));console.log('PASS: disabled checkout never offers transfer');
+ const buyer=await page();await buyer.goto(base+'/checkout.html?product=guide_assassin',{waitUntil:'networkidle0'});await buyer.click('#create-order');await buyer.waitForFunction(()=>!document.querySelector('#slip-form').hidden);assert((await buyer.$eval('#recipient-name',e=>e.textContent))==='Test Receiver');await (await buyer.$('#slip-file')).uploadFile(file);await buyer.click('#confirm-transfer');await buyer.click('#submit-slip');await buyer.waitForFunction(()=>!document.querySelector('#pending-message').hidden);assert(await buyer.$eval('#slip-form',e=>e.hidden));assert((await buyer.evaluate(()=>window.paymentTest.uploads))[0].path.startsWith('buyer/12/'));assert((await buyer.evaluate(()=>window.paymentTest.calls)).some(c=>c.method==='submit_payment_slip'));assert(!(await buyer.evaluate(()=>window.paymentTest.calls)).some(c=>c.method==='claim_payment'));assert((await buyer.$eval('#order-history',e=>e.textContent)).includes('รอตรวจสอบ'));await buyer.reload({waitUntil:'networkidle0'});console.log('PASS: create order, recipient snapshot, upload slip, pending status, no auto-unlock');
+ await buyer.setViewport({width:390,height:844});assert(await buyer.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+2));console.log('PASS: mobile checkout fits viewport');
+ const owned=await page({account:{is_admin:false,entitlements:[{product:'guide_mage',expires_at:null}]}});await owned.goto(base+'/checkout.html?product=guide_mage',{waitUntil:'networkidle0'});assert(await owned.$eval('#already-owned',e=>!e.hidden));assert(await owned.$eval('#checkout-flow',e=>e.hidden));console.log('PASS: owned guide opens without repeat purchase');
+ const nonadmin=await page();await nonadmin.goto(base+'/admin-payments.html',{waitUntil:'networkidle0'});assert(await nonadmin.$eval('#admin-content',e=>e.hidden));assert(!(await nonadmin.evaluate(()=>window.paymentTest.calls)).some(c=>c.method==='admin_payment_orders'));console.log('PASS: nonadmin cannot view admin orders');
+ const admin=await page({account:{is_admin:true,entitlements:[]},orders:[{id:15,email:'buyer@example.invalid',product:'guide_bandit',amount:99,status:'pending',created_at:new Date().toISOString(),slip_path:'buyer/15/test.png',recipient:{bank:'Test Bank',account_number:'1234567890',recipient_name:'Test Receiver'}}]});await admin.goto(base+'/admin-payments.html',{waitUntil:'networkidle0'});assert(await admin.$eval('#admin-content',e=>!e.hidden));const fields=await admin.$$('#payments-list form input');await fields[0].type('99');await fields[1].type('BANK-REF-001');await fields[3].click();await admin.click('#payments-list form button[type=submit]');await admin.waitForFunction(()=>window.paymentTest.calls.some(c=>c.method==='admin_review_payment'));const call=await admin.evaluate(()=>window.paymentTest.calls.find(c=>c.method==='admin_review_payment'));assert.deepEqual(call.args,{p_payment:15,p_approve:true,p_amount:99,p_bank_ref:'BANK-REF-001',p_note:''});console.log('PASS: admin approval sends actual amount and bank reference');
+}finally{await browser.close();unlinkSync(file)}

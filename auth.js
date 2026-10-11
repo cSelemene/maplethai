@@ -5,7 +5,7 @@ const siteRoot=new URL('./',location.href);
 const nextKey='maplethai.auth.next.v1';
 const knownFiles=new Set([
  'index.html','home.html','bandit-artifact-preview-v3.html','bandit-route-original.html',
- 'guide-preview.html','premium-guide.html','admin.html','auth.html'
+ 'guide-preview.html','premium-guide.html','admin.html','auth.html','checkout.html','admin-payments.html'
 ]);
 let mode='login',recovering=false,working=false,showing=false;
 
