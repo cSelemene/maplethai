@@ -1,17 +1,11 @@
-import {createClient} from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
-import {SUPABASE_URL,SUPABASE_PUBLISHABLE_KEY} from './auth-config.js';
-
-// Public key only; OAuth client secrets belong in Supabase's server-side provider configuration.
-const supabase=createClient(SUPABASE_URL,SUPABASE_PUBLISHABLE_KEY,{
-  auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}
-});
+import {supabase} from './supabase-client.js';
 const $=id=>document.getElementById(id);
 const callbackUrl=new URL('./auth.html',location.href).href;
 const siteRoot=new URL('./',location.href);
 const nextKey='maplethai.auth.next.v1';
 const knownFiles=new Set([
  'index.html','home.html','bandit-artifact-preview-v3.html','bandit-route-original.html',
- 'guide-preview.html','premium-guide.html','premium-guide.html','auth.html'
+ 'guide-preview.html','premium-guide.html','admin.html','auth.html'
 ]);
 let mode='login',recovering=false,working=false,showing=false;
 

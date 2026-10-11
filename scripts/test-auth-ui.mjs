@@ -6,22 +6,22 @@ const base='http://127.0.0.1:8765';
 const stub=`
 const auth={
  getUser:async()=>({data:{user:window.__TEST_AUTH.user},error:null}),
- onAuthStateChange:(fn)=>{window.__TEST_AUTH.listener=fn;setTimeout(()=>fn('INITIAL_SESSION',{user:window.__TEST_AUTH.user}),0);return {data:{subscription:{unsubscribe(){}}}}},
+ onAuthStateChange:(fn)=>{window.__TEST_AUTH.listeners.push(fn);setTimeout(()=>fn('INITIAL_SESSION',{user:window.__TEST_AUTH.user}),0);return {data:{subscription:{unsubscribe(){}}}}},
  signInWithOAuth:async options=>{window.__TEST_AUTH.calls.push({method:'google',options});return {data:{url:'https://accounts.google.com/mock'},error:null}},
  signUp:async options=>{window.__TEST_AUTH.calls.push({method:'signup',options});return {data:{user:{id:'test'},session:null},error:null}},
- signInWithPassword:async options=>{window.__TEST_AUTH.calls.push({method:'login',options});window.__TEST_AUTH.user={id:'test-user',email:options.email};window.__TEST_AUTH.listener?.('SIGNED_IN',{user:window.__TEST_AUTH.user});return {error:null}},
+ signInWithPassword:async options=>{window.__TEST_AUTH.calls.push({method:'login',options});window.__TEST_AUTH.user={id:'test-user',email:options.email};window.__TEST_AUTH.listeners.forEach(fn=>fn('SIGNED_IN',{user:window.__TEST_AUTH.user}));return {error:null}},
  resetPasswordForEmail:async(email,options)=>{window.__TEST_AUTH.calls.push({method:'forgot',email,options});return {error:null}},
- signOut:async()=>{window.__TEST_AUTH.user=null;window.__TEST_AUTH.listener?.('SIGNED_OUT',null);return {error:null}},
+ signOut:async()=>{window.__TEST_AUTH.user=null;window.__TEST_AUTH.listeners.forEach(fn=>fn('SIGNED_OUT',null));return {error:null}},
  updateUser:async()=>({error:null})
 };
 export const createClient=()=>({auth,rpc:async()=>({data:null,error:{message:'Mock: no entitlements'}})});
 `;
 async function createPage(startUser=null){
  const page=await browser.newPage();
- await page.evaluateOnNewDocument(user=>{window.__TEST_AUTH={user,calls:[],listener:null}},startUser);
+ await page.evaluateOnNewDocument(user=>{window.__TEST_AUTH={user,calls:[],listeners:[]}},startUser);
  await page.setRequestInterception(true);
  page.on('request',async req=>{
-   if(req.url().startsWith('https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm')){
+   if(req.url().startsWith('https://cdn.jsdelivr.net/npm/@supabase/supabase-js@')){
      return req.respond({status:200,contentType:'application/javascript',headers:{'access-control-allow-origin':'*','cache-control':'no-store'},body:stub})
    }
    return req.continue();

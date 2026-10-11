@@ -22,7 +22,7 @@ function closeModal(){$("modal").hidden=true;$("next").focus()}
 let unlocked=false;
 async function checkAccess(){
  try{
-  const {createClient}=await import('https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm');
+  const {createClient}=await import('https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.57.4/+esm');
   const {SUPABASE_URL,SUPABASE_PUBLISHABLE_KEY}=await import('./auth-config.js');
   const sb=createClient(SUPABASE_URL,SUPABASE_PUBLISHABLE_KEY);
   const {data:{user}}=await sb.auth.getUser();
