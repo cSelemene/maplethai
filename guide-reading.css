@@ -54,3 +54,11 @@ html:has(body.maple-guide){scroll-behavior:auto;scroll-padding-top:calc(var(--gu
 .maple-guide .mm:hover,.maple-guide .npcmap:hover{filter:none}
 
 .maple-guide .side,.maple-guide .drawer{scroll-behavior:auto}
+
+.maple-guide .guide-home-logo{display:inline-flex;flex:none;padding:0!important;border:0!important;background:none!important;box-shadow:none!important}
+.maple-guide .guide-home-logo img{display:block;width:150px;height:auto}
+.maple-guide .mt-header{display:flex;align-items:center;gap:16px;flex-wrap:wrap}.maple-guide .mt-nav{flex-basis:100%}
+.maple-guide .mmdot{display:block;z-index:2;pointer-events:none;opacity:1}
+.maple-guide .mmdot.st{display:inline-block}
+.maple-guide .lightbox figcaption{color:#fff8e7}.maple-guide .lightbox figcaption b{color:inherit}
+@media(max-width:700px){.maple-guide .guide-home-logo img{width:125px}.maple-guide .bar-inner h1{flex-basis:100%;order:3;margin:0}.maple-guide .bar-inner .guide-home-logo{margin-right:auto}}

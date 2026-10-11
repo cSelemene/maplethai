@@ -3,8 +3,8 @@ const $=id=>document.getElementById(id);let generation=0;
 async function refresh(){const ticket=++generation; $('my-guides').replaceChildren();$('admin-link').hidden=true;
  try{const {data:{user},error}=await supabase.auth.getUser();if(error||!user){$('rights-status').textContent='เข้าสู่ระบบเพื่อดูสิทธิ์ไกด์';return}
  const account=await readAccount();if(ticket!==generation)return;
- for(const [id,name] of Object.entries(GUIDES)){const row=document.createElement('p');const link=document.createElement('a');const owns=hasGuide(account,id);link.textContent=name+(owns?' — อ่านฉบับเต็ม':' — ทดลองอ่านฟรี');link.href=owns?'./premium-guide.html?guide='+id:(id==='bandit'?'./bandit-artifact-preview-v3.html':'./guide-preview.html?guide='+id);row.append(link);if(!owns){const buy=document.createElement('a');buy.href='./checkout.html?product=guide_'+id;buy.textContent='ซื้อ / ปลดล็อก';row.append(document.createElement('br'),buy)}$('my-guides').append(row)}
- $('rights-status').textContent='สิทธิ์แยกตามอาชีพ • หากเพิ่งได้รับสิทธิ์ ให้กดตรวจสอบอีกครั้ง';$('admin-link').hidden=!account.is_admin;
+ for(const [id,name] of Object.entries(GUIDES)){if(!hasGuide(account,id))continue;const row=document.createElement('p');row.dataset.guide=id;row.textContent=name+' · ใช้งานได้';$('my-guides').append(row)}
+ $('rights-status').textContent=$('my-guides').children.length?'สิทธิ์ที่เปิดใช้งานอยู่':'ยังไม่มีสิทธิ์ไกด์ฉบับเต็ม';$('admin-link').hidden=!account.is_admin;
  }catch{if(ticket===generation)$('rights-status').textContent='ตรวจสอบสิทธิ์ไม่สำเร็จ กรุณาลองอีกครั้ง'}
 }
 $('refresh-rights').onclick=refresh;

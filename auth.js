@@ -1,4 +1,5 @@
 import {supabase} from './supabase-client.js';
+import {renderProfile} from './profile-ui.js';
 const $=id=>document.getElementById(id);
 const callbackUrl=new URL('./auth.html',location.href).href;
 const siteRoot=new URL('./',location.href);
@@ -52,6 +53,7 @@ function busy(value){
  for(const id of ['submit','forgot','google-login','logout','recovery-submit'])$(id).disabled=value;
 }
 function setView(which){
+ document.querySelector('.panel').classList.toggle('account-panel',which==='account');document.title=(which==='account'?'บัญชีของฉัน':'เข้าสู่ระบบ')+' | MapleThai';
  for(const k of ['guest','account','recovery'])$(k).classList.toggle('hidden',k!==which);
 }
 function finishedLogin(){
@@ -71,7 +73,7 @@ async function display(){
    if(user){
      if(finishedLogin())return;
      $('account-email').textContent=user.email||'บัญชีที่เข้าสู่ระบบ';
-     $('account-next').href='./index.html';
+     renderProfile($('account-profile'),user);
      setView('account');
      say('');
    }else{

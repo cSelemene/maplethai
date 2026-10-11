@@ -56,3 +56,30 @@ header>strong:has(.maple-logo),header .brand:has(.maple-logo){display:flex;align
 .guide-actions{display:grid;gap:11px}.guide-actions .button{display:block;text-align:center;margin:0;padding:10px 8px;font-size:.9rem}
 #market .notice p{margin:6px 0 0}
 @media(max-width:700px){.maple-logo{width:210px}.maple-home .hero{padding:30px 22px!important}.hero-break{display:none}.hero-kicker{font-size:.7rem;letter-spacing:.08em}.maple-home .hero p{font-size:.96rem}.class-art{height:270px}#guides .class-description{min-height:0}.guide-card-content{padding:20px}.brand-context{font-size:.78rem}}
+
+/* Account and profile navigation */
+header nav a[data-account-link]{display:inline-flex;align-items:center;gap:8px;max-width:210px}
+.profile-avatar{display:inline-grid;place-items:center;position:relative;width:32px;height:32px;flex:none;overflow:hidden;border-radius:50%;background:#f6dfac;color:#684322;font-weight:800;border:1px solid #c5a16e}
+.profile-avatar img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.profile-name{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.maple-account{font-family:'IBM Plex Sans Thai','Nunito',sans-serif!important}
+.maple-account .shell{align-items:start;padding-top:28px}
+.maple-account .panel{background:#fffdf7!important;border:1px solid #b79871!important;border-top:4px solid #d49a40!important;padding:32px;box-shadow:0 4px 0 #78451f20!important}
+.maple-account .account-panel{width:min(100%,900px)}
+.maple-account h1,.maple-account h2{font-family:'IBM Plex Sans Thai','Nunito',sans-serif!important;font-weight:700}
+.maple-account h1{font-size:28px}.maple-account h2{font-size:20px}
+.maple-account p,.maple-account label,.maple-account input,.maple-account button{font-size:16px;line-height:1.7}
+.maple-account .lead,.maple-account .hint,.maple-account small{color:#6d5b49}
+.account-profile{display:flex;align-items:center;gap:12px;margin:22px 0 12px;font-size:20px;font-weight:600}
+.account-profile .profile-avatar{width:52px;height:52px}
+.maple-account .account-box{background:#faf7ef!important;margin:0 0 24px}
+.account-grid{display:grid;grid-template-columns:1.15fr 1fr;gap:24px}
+.account-section{padding:22px;border:1px solid #e2d6c1;border-radius:12px;background:#faf7ef}
+.account-access{margin-top:24px}.account-access #my-guides{display:flex;flex-wrap:wrap;gap:8px}
+.account-access #my-guides p{margin:0;padding:6px 12px;border-radius:8px;background:#eaf3e7;color:#315b39}
+.account-access #refresh-rights{margin-top:14px}
+.maple-account .outline{background:#fffdf7!important;border:1px solid #b79871!important;box-shadow:none;font-size:14px}
+.maple-account .history-row{font-size:15px}.maple-account .history-row p{font-size:15px}
+.maple-account .account-actions{border-top:1px solid #e2d6c1;padding-top:20px}
+.maple-account .footer{font-size:13px}
+@media(max-width:700px){.account-grid{grid-template-columns:1fr}.maple-account .panel{padding:24px 18px}.account-section{padding:18px}.profile-name{max-width:145px}}
