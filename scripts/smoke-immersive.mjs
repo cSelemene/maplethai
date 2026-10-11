@@ -93,6 +93,8 @@ try{
  console.log('PASS five tabs, progressive blur, route step lock, unlock dialog and mobile layout');
 
  const base='http://127.0.0.1:'+server.address().port;
+ const reference=await browser.newPage();await reference.setViewport({width:390,height:844});await reference.goto(base+'/bandit-immersive-v2.html',{waitUntil:'load'});
+ const referenceStyle=await reference.$eval('.mt-card',x=>{const s=getComputedStyle(x),h=getComputedStyle(x.querySelector('h2')),p=getComputedStyle(x.querySelector('p'));return{background:s.backgroundColor,border:s.borderColor,radius:s.borderRadius,padding:s.padding,font:p.fontSize,heading:h.fontSize}});await reference.close();
  for(const guide of ['fighter','page','spearman']){
   const warrior=await browser.newPage(),errors=[];warrior.on('pageerror',e=>errors.push(e.message));
   await warrior.setViewport({width:1250,height:850});
@@ -105,7 +107,7 @@ try{
    assert(await warrior.$eval('[data-panel="'+tab+'"] .mt-read-fade',x=>getComputedStyle(x).backdropFilter.includes('blur(')));
   }
   await warrior.click('.mt-nav [data-tab="intro"]');
-  assert.equal(await warrior.$$eval('#wc-words tbody tr',xs=>xs.length),20,'Warrior glossary must be restored');
+  assert.equal(await warrior.$$eval('#wc-words .mt-columns > .mt-card',xs=>xs.length),20,'Warrior glossary must be restored');
   assert.equal(await warrior.$$eval('#wc-life tbody tr',xs=>xs.length),6,'All Life Skill trainers must be present');
   await warrior.click('.mt-nav [data-tab="builds"]');
   await warrior.click('[data-wc-family="1"]');
@@ -141,7 +143,8 @@ try{
   assert(await warrior.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+2),'Warrior route overflows mobile');
   await Promise.all([warrior.waitForNavigation({waitUntil:'load'}),warrior.click('.tabs [data-tab="intro"]')]);await warrior.waitForSelector('.mt-nav');
   assert(await warrior.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+2),'Warrior preview overflows mobile');
-  assert.equal(await warrior.$eval('.wc-card p',x=>getComputedStyle(x).fontSize),'18px');
+  const warriorStyle=await warrior.$eval('#wc-start',x=>{const s=getComputedStyle(x),h=getComputedStyle(x.querySelector('h2')),p=getComputedStyle(x.querySelector('p'));return{background:s.backgroundColor,border:s.borderColor,radius:s.borderRadius,padding:s.padding,font:p.fontSize,heading:h.fontSize}});
+  assert.deepEqual(warriorStyle,referenceStyle,'Warrior must inherit Bandit card colors, border, spacing and typography');
   assert.equal(errors.length,0,errors.join(', '));await warrior.close();
  }
  const artPage=await browser.newPage();await artPage.goto(base+'/home.html',{waitUntil:'load'});
