@@ -727,7 +727,7 @@ const OPTK = {rare:"ของมีราคา", drop:"เล็งดรอป
 function optHTML(s){
   if (!s.opt || !s.opt.length) return "";
   return `<section class="optbox" aria-label="ทางเลือก: ของและคราฟต์">
-    <div class="optbox-h"><span>ทางเลือก: ของน่าเก็บ & คราฟต์ <span class="mt">(ไม่ทำก็เดิน route ต่อได้)</span></span><button type="button" class="linkbtn" data-tab="opt">ดูแผนเต็ม →</button></div>
+    <div class="optbox-h"><span>ทางเลือก: ของน่าเก็บ & คราฟต์ <span class="mt">(ไม่ทำก็เดิน route ต่อได้)</span></span><button type="button" class="linkbtn" data-tab="opt">ดูแผนเต็ม</button></div>
     <ul>${s.opt.map(o=>`<li><span class="ok-tag ${o.k}">${OPTK[o.k]}</span><span>${ico(o.x)}</span></li>`).join("")}</ul>
   </section>`;
 }

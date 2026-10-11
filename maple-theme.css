@@ -27,3 +27,32 @@ input:not([type="checkbox"]):not([type="radio"]),select,textarea{background:#fff
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}body::before,body::after{animation:none;left:4vw}body::after{left:80vw}*,*::before,*::after{transition:none!important}}
 
 .mt-dialog,.mt-route-page,.mt-route-side,.mt-job,.mt-tile{background:var(--panel)!important;border:2px solid var(--frame)!important;color:var(--ink);border-radius:13px;box-shadow:0 4px 0 #78451f30}.mt-route-side-head{background:linear-gradient(#ffac43,#e57a14)!important;color:white!important;border-bottom:2px solid var(--frame)}.mt-route-head{background:linear-gradient(#fff8e2,#ffedc5)!important;border-color:var(--line)!important}.mt-route-actions,.mt-extra,.mt-chips span,.mt-pills span{background:#fff0cf!important;color:var(--ink)!important;border-color:var(--line)!important}.mt-route-side button{background:#fff6dd!important;color:var(--ink)!important;box-shadow:none;border-color:var(--line)}.mt-route-side button[aria-current="step"]{background:#ffe1a3!important;border-color:var(--maple)!important}.mt-outline{background:#fff4d6!important;color:var(--ink)!important}.mt-note,.mt-callout{background:#fff1cf!important;color:#795631!important;border-color:#d5b679!important}
+
+/* MapleThai wordmark and illustrated guide selection */
+.maple-logo{display:block;width:230px;height:auto;flex-shrink:0;max-width:100%}
+.logo-link{display:inline-flex;text-decoration:none}
+header>strong:has(.maple-logo),header .brand:has(.maple-logo){display:flex;align-items:center;gap:14px;filter:none;text-shadow:none;color:var(--ink);flex-wrap:wrap}
+.brand-context{font-size:.85rem;font-weight:700}
+.maple-home>header{padding-top:14px!important;padding-bottom:14px!important}
+.maple-home .hero{padding:44px 38px!important}
+.maple-home .hero::after{content:none}
+.hero-kicker{display:block;font-size:.78rem;letter-spacing:.12em;font-weight:900;color:#a76225}
+.maple-home .hero h1{font-size:clamp(32px,4.5vw,56px);line-height:1.3;max-width:850px!important;margin:12px 0 18px;letter-spacing:-.035em}
+.maple-home .hero p{font-size:1.04rem;line-height:1.95;margin:0}
+.hero-actions{margin-top:16px}
+.section-intro{margin-bottom:22px}.section-intro h2{font-size:1.6rem}.section-intro p{margin:8px 0}
+#guides .guide-card{display:flex;flex-direction:column;padding:0;overflow:hidden}
+.class-art{position:relative;height:246px;background:#292a20;border-bottom:2px solid var(--frame);overflow:hidden}
+.assassin .class-art{background:#31252d}.mage .class-art{background:#e1f5ff}
+.class-art img{display:block;width:100%;height:100%;object-fit:contain;transition:transform .25s ease}
+.guide-card:hover .class-art img{transform:scale(1.035)}
+.class-level{position:absolute;left:16px;bottom:14px;padding:4px 11px;border-radius:999px;background:#fff8e7;border:1px solid #78451f;font-size:.78rem;font-weight:800;color:#684322;box-shadow:0 2px 0 #78451f33}
+.guide-card-content{padding:22px;display:flex;flex-direction:column;flex:1}
+.class-subtitle{font-size:.8rem;color:#967140}
+#guides .guide-card h3{font-size:1.4rem;line-height:1.25;margin:5px 0 12px}
+#guides .class-description{font-size:.94rem;line-height:1.8;margin:0 0 18px;min-height:85px}
+.guide-price{display:flex;align-items:baseline;gap:9px;margin-top:auto;margin-bottom:14px}
+.guide-price strong{font-size:1.55rem;font-weight:900;color:#684322}.guide-price span{font-size:.8rem;color:var(--muted)}
+.guide-actions{display:grid;gap:11px}.guide-actions .button{display:block;text-align:center;margin:0;padding:10px 8px;font-size:.9rem}
+#market .notice p{margin:6px 0 0}
+@media(max-width:700px){.maple-logo{width:210px}.maple-home .hero{padding:30px 22px!important}.hero-break{display:none}.hero-kicker{font-size:.7rem;letter-spacing:.08em}.maple-home .hero p{font-size:.96rem}.class-art{height:270px}#guides .class-description{min-height:0}.guide-card-content{padding:20px}.brand-context{font-size:.78rem}}
