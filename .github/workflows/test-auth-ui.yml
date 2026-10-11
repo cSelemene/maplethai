@@ -29,6 +29,9 @@ jobs:
       - name: Test automatic slip validation and fraud checks
         run: node scripts/test-auto-verification.mjs
 
+      - name: Test PromptPay receiver identity and abbreviated names
+        run: node scripts/test-promptpay-verification.mjs
+
       - name: Test guide library, resume, isolation and sync conflicts
         run: CHROME_BIN=/usr/bin/google-chrome node scripts/test-guide-progress.mjs
 
