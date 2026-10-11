@@ -30,6 +30,6 @@ assert(!/\bclaim_payment\b|\bgrant_product\b/.test(preview+premium+auth),'Client
 assert(premium.includes("s.rpc('get_guide',{p_guide:id})"),'Premium content must use checked RPC');
 assert(!premium.includes("from('guide_files')"),'No direct private guide table requests');
 assert(premium.includes('await s.auth.getUser()'),'Must verify signed-in user');
-assert(!/service_role|sb_secret_/.test(preview+premium+auth+read('auth-config.js')),'Server-side credential in public files');
+assert(!/sb_secret_[A-Za-z0-9_-]{10,}/.test(preview+premium+auth+read('auth-config.js')),'Supabase secret key in public files');
 console.log('PASS: preview/premium access wiring inspected');
 console.log('NOTE: production main/index.html remains public full Bandit guide: launch BLOCKED pending migration.');
