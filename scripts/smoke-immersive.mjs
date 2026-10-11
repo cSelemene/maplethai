@@ -69,10 +69,12 @@ try{
  await page.click('#openDrawer');
  await page.waitForFunction(()=>document.querySelector('#drawer').getBoundingClientRect().left>=-1);
  await page.click('#drawer .tab[data-i="4"]');
+ await page.waitForFunction(()=>{const r=document.querySelector('#drawer').getBoundingClientRect();return r.right<=0});
  await page.click('#openDrawer');
  await page.waitForFunction(()=>document.querySelector('#drawer').getBoundingClientRect().left>=-1);
  assert(await page.$eval('#drawer',e=>e.classList.contains('open')),'Mobile step drawer failed');
  await page.click('#drawer .tab[data-i="3"]');
+ await page.waitForFunction(()=>{const r=document.querySelector('#drawer').getBoundingClientRect();return r.right<=0});
  assert(await page.$eval('#drawer',e=>!e.classList.contains('open')),'Mobile drawer selection failed');
  await page.click('#openKeep');
  assert(await page.$eval('#keepModal',e=>e.classList.contains('open')),'Mobile keep items missing');
@@ -80,6 +82,7 @@ try{
  await page.click('#openDrawer');
  await page.waitForFunction(()=>document.querySelector('#drawer').getBoundingClientRect().left>=-1);
  await page.click('#drawer .tab[data-i="4"]');
+ await page.waitForFunction(()=>{const r=document.querySelector('#drawer').getBoundingClientRect();return r.right<=0});
  await page.click('.npcmap');
  assert(await page.$('#lightbox.open .mmdot.np.big'),'Mobile NPC markers missing');
  await page.click('#lightbox');
