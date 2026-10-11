@@ -1,0 +1,49 @@
+/* Reading surfaces: keep theme accents out of maps and dense navigation. */
+body.maple-guide{--panel:#fffdf7;--panel2:#f8f2e4;--ink:#3c2b20;--muted:#6d5b49;--line:#e2d6c1;font-size:16px;line-height:1.8}
+.maple-guide button{background:#fffdf7!important;color:#3c2b20!important;border:1px solid #d5c3a7;border-radius:8px;box-shadow:none!important;text-shadow:none;font-size:14px;font-weight:600}
+.maple-guide button:active{transform:none}
+.maple-guide .bar,.maple-guide .mt-header{background:#fff8e9!important;color:var(--ink)!important;border-bottom:2px solid #956335;box-shadow:0 2px 8px #57301512;position:sticky;top:0;z-index:30}
+.maple-guide .bar-inner{padding:13px 18px;min-height:58px}
+.maple-guide .bar h1,.maple-guide .mt-header>b{color:var(--ink)!important;text-shadow:none;font-size:18px!important;font-weight:800!important;line-height:1.5}
+.maple-guide .bar h1 svg{fill:var(--maple)}
+.maple-guide .tabs,.maple-guide .mt-nav{background:transparent!important;border:0!important;gap:8px;padding-top:3px;padding-bottom:12px;align-items:center}
+.maple-guide .tabs button,.maple-guide .mt-nav button{font-size:14px!important;line-height:1.5;padding:8px 13px;background:#fffdf7!important;color:var(--ink)!important;border:1px solid #d5c3a7!important;border-radius:9px}
+.maple-guide .tabs button[aria-selected="true"],.maple-guide .mt-nav button[aria-selected="true"]{background:#ffe8b5!important;color:#513014!important;border:2px solid #b6752c!important;padding:7px 12px;font-weight:800}
+.maple-guide .mt-header a{color:#62442b!important;font-size:14px!important;text-decoration:underline}
+.maple-guide .bar-btn{padding:7px 12px;font-size:14px}
+.maple-guide .ribbon{background:#fff8e9;border-bottom:1px solid var(--line);padding-top:6px}
+.maple-guide .track-tick,.maple-guide .track-meta{color:#654b34;font-size:13px}
+.maple-guide .side,.maple-guide .drawer,.maple-guide .mt-route-side{background:#fffdf7!important;border:1px solid #b79871!important;padding:12px;box-shadow:0 3px 0 #78451f15!important}
+.maple-guide .chap{font:700 15px/1.5 var(--body);color:#513a24;padding:19px 8px 8px;border-bottom:1px solid var(--line);margin-bottom:5px}
+.maple-guide .tab,.maple-guide .mt-route-side button{background:transparent!important;color:var(--ink)!important;border:0!important;border-radius:7px;box-shadow:none!important;padding:10px 9px;line-height:1.65;font-size:14px;font-weight:500;margin-bottom:3px}
+.maple-guide .tab:hover,.maple-guide .mt-route-side button:hover{background:#f5eedf!important;filter:none}
+.maple-guide .tab .tt{font-weight:500}.maple-guide .tab .n{color:#765c41;font-size:13px}
+.maple-guide .tab[aria-current="step"],.maple-guide .mt-route-side button[aria-current="step"]{background:#fff0ce!important;color:#3c2b20!important;box-shadow:inset 3px 0 #c17c29!important}
+.maple-guide .tab[aria-current="step"] .tt{font-weight:700}.maple-guide .tab[aria-current="step"] .n{color:#765c41}.maple-guide .tab[aria-current="step"] .ok{color:#276547}
+.maple-guide .tab.sq{padding-left:25px;font-size:13px;color:#6d5b49!important}
+.maple-guide .card,.maple-guide .mt-card,.maple-guide .mt-route-page,.maple-guide .mt-tile,.maple-guide .mt-job,.maple-guide .modal,.maple-guide .mt-unlock-content{background:#fffdf7!important;border:1px solid #b79871!important;box-shadow:0 3px 0 #78451f15!important}
+.maple-guide .card-head,.maple-guide .mt-route-head{background:#faf4e8!important;border-bottom:1px solid #dfceb0!important;padding:22px}
+.maple-guide .card-head h2,.maple-guide .mt-route-head h2{font-size:26px!important;font-weight:600!important;line-height:1.5;color:#3c2b20}
+.maple-guide .info,.maple-guide .box,.maple-guide .where,.maple-guide .optbox,.maple-guide .etcbox,.maple-guide .hero-grid>div,.maple-guide .lgrid>div,.maple-guide .apstep{background:#faf7ef!important}
+.maple-guide .info h3,.maple-guide .box h3,.maple-guide .acts-h,.maple-guide .band h3,.maple-guide .sub-h{color:#4b3421!important;font-size:16px;font-weight:700;line-height:1.6}
+.maple-guide .intro,.maple-guide .main,.maple-guide .sub,.maple-guide .nv,.maple-guide .olist li,.maple-guide .box p,.maple-guide .mt-readable p,.maple-guide .mt-readable li{font-size:16px;line-height:1.85;color:var(--ink)}
+.maple-guide .tip,.maple-guide .facts,.maple-guide .onote,.maple-guide .legend,.maple-guide .eitem,.maple-guide .prow,.maple-guide .mrow{font-size:14px;line-height:1.75}
+.maple-guide .mt-title,.maple-guide .osec h2,.maple-guide .opt-intro h2{font-size:24px;font-weight:600;line-height:1.5;color:var(--ink)}
+.maple-guide .mt-label,.maple-guide .mt-kicker{font-size:13px;font-weight:700;color:#745133}
+.maple-guide .mt-job b,.maple-guide .mt-tile b{font-size:18px;line-height:1.6;color:var(--ink)}
+.maple-guide .mt-route-side-head{background:#f5ead6!important;color:#4b3421!important;font-size:17px;font-weight:700}
+.maple-guide th,.maple-guide .prow.phead{background:#f4ecd9!important;color:#5c442e!important;font-size:14px;font-weight:700}
+.maple-guide td{background:#fffdf7;font-size:14px;line-height:1.65}.maple-guide tr:nth-child(even) td{background:#faf7ef}
+.maple-guide .mm,.maple-guide .npcmap{background:#BFD8EE!important;border:1px solid #a6bfd5!important;border-radius:6px;box-shadow:none!important;padding:0;font-weight:inherit;cursor:zoom-in}
+.maple-guide .tile.map .pic,.maple-guide .lbmap,.maple-guide .lightbox>figure>img{background:#BFD8EE!important}
+.maple-guide .lightbox .lbmap img{background:none!important}
+.maple-guide .bname,.maple-guide .gr-ic,.maple-guide .galt,.maple-guide .eqslot{box-shadow:none!important;text-shadow:none}
+.maple-guide .bname{background:none!important;border:0!important;padding:0;color:var(--ink)!important}
+.maple-guide .btn.next,.maple-guide .mt-cta,.maple-guide .mt-purchase{background:linear-gradient(#ffad43,#e78019)!important;color:#fff!important;border:2px solid #78451f!important;box-shadow:0 3px 0 #78451f!important;font-size:16px;font-weight:700}
+.maple-guide .mt-unlock-content{padding:30px 26px}
+.maple-guide .mt-unlock-content h2{font-size:clamp(26px,3.5vw,36px)!important;font-weight:600!important;line-height:1.5}
+.maple-guide .mt-unlock-content .mt-unlock-desc{font-size:16px!important;color:#654d38!important;line-height:1.8}
+.maple-guide .mt-unlock-content .mt-price{font-size:30px}.maple-guide .mt-price small,.maple-guide .mt-under{font-size:14px!important;color:#654d38!important}
+.maple-guide .mt-unlock-veil{background:#eaf4fa}
+.maple-guide .mt-x,.maple-guide .mt-back{background:none!important;border:0!important;box-shadow:none!important}
+@media(max-width:700px){.maple-guide .bar-inner{padding:10px 12px;gap:8px}.maple-guide .bar h1{font-size:16px!important}.maple-guide .tabs{padding-left:12px;padding-right:12px}.maple-guide .tabs button,.maple-guide .mt-nav button{font-size:13px!important}.maple-guide .card-head h2{font-size:23px!important}.maple-guide .mt-unlock-content{padding:25px 20px}}
