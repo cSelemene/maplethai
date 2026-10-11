@@ -47,7 +47,8 @@ try{
  assert(await page.$eval('#side .tab[aria-current="step"]',e=>getComputedStyle(e).color==='rgb(60, 43, 32)'),'Selected step must retain dark readable text');
  console.log('PASS light header, readable step navigation and original map canvas');
  const steps=await page.$eval('#side .tab[data-i]',els=>els.length);
- for(let i=0;i<steps;i++)await page.click('#next');
+ await page.click('#side .tab[data-i="'+(steps-1)+'"]');
+ await page.click('#next');
  assert(await page.$eval('#premiumLock',e=>!e.hidden),'Route must lock after the free steps');
  await page.click('#premiumClose');
  await page.click('#openKeep');
