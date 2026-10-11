@@ -45,6 +45,15 @@ try{
  await page.waitForSelector('.mm, .npcmap');
  assert(await page.$eval('.mm, .npcmap',e=>getComputedStyle(e).backgroundColor==='rgb(191, 216, 238)'),'Map canvas must retain its original blue background');
  assert(await page.$eval('#side .tab[aria-current="step"]',e=>getComputedStyle(e).color==='rgb(60, 43, 32)'),'Selected step must retain dark readable text');
+ assert(await page.$('.guide-home-logo[href$="index.html"]'),'Guide homepage logo missing');
+ await page.click('.npcmap');
+ assert(await page.$('#lightbox.open .mmdot.np.big'),'NPC map marker missing');
+ const marker=await page.$eval('#lightbox .mmdot',e=>({left:parseFloat(e.style.left),top:parseFloat(e.style.top),visible:getComputedStyle(e).display!=='none'}));
+ assert(marker.visible&&marker.left>0&&marker.left<100&&marker.top>0&&marker.top<100,'NPC coordinates not preserved');
+ await page.click('#lightbox');
+ await page.click('.tile.map');
+ assert(await page.$('#lightbox.open .mmdot.np'),'Expanded map must include the step NPC');
+ await page.click('#lightbox');
  console.log('PASS light header, readable step navigation and original map canvas');
  const steps=await page.$$eval('#side .tab[data-i]',els=>els.length);
  await page.click('#side .tab[data-i="'+(steps-1)+'"]');

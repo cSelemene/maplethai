@@ -30,14 +30,14 @@ async function page(state={}){
 try {
  const account=await page({account:{is_admin:false,entitlements:[{product:'guide_bandit',expires_at:null},{product:'guide_assassin',expires_at:'2000-01-01'}]}});
  await account.goto(base+'/auth.html',{waitUntil:'networkidle0'});
- let links=await account.$$eval('#my-guides a',els=>els.map(e=>e.getAttribute('href')));
- assert(links.includes('./premium-guide.html?guide=bandit'));
- assert(links.includes('./guide-preview.html?guide=assassin'));
+ assert.equal(await account.$('#my-guides a'),null,'Account must not contain guide discovery links');
+ assert(await account.$('#my-guides [data-guide="bandit"]'));
+ assert.equal(await account.$('#my-guides [data-guide="assassin"]'),null,'Expired rights must not appear active');
  assert(await account.$eval('#admin-link',e=>e.hidden));
  await account.type('#redeem-code','INVALID');await account.click('#redeem-submit');
  await account.waitForFunction(()=>document.querySelector('#redeem-status').textContent==='โค้ดไม่ถูกต้อง');
  await account.$eval('#redeem-code',e=>e.value='VALID');await account.click('#redeem-submit');
- await account.waitForFunction(()=>document.querySelector('#my-guides a[href="./premium-guide.html?guide=mage"]'));
+ await account.waitForFunction(()=>document.querySelector('#my-guides [data-guide="mage"]'));
  await account.setViewport({width:390,height:844});
  assert(await account.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+2));
  console.log('PASS: purchased/expired rights, code failure/success, mobile account');

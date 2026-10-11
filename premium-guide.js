@@ -22,6 +22,9 @@ else{
  const conflict=available&&pending&&pending.version!==version;
  const initial=available?(pending&&!conflict?pending.state:cloud?.state||{i:0,done:{},tab:'intro',w15:true}):null;
  let doc=data.replace(/<head([^>]*)>/i,'<head$1><base href="'+new URL('./',location.href).href+'">');
+ doc=doc.replace(/<body([^>]*)>/i,(_match,attrs)=>'<body'+(attrs.includes('class=')?attrs.replace(/class=(["'])(.*?)\1/i,(_m,q,v)=>'class='+q+v+' maple-guide'+q):attrs+' class="maple-guide"')+'>');
+ doc=doc.replace('</head>','<link rel="stylesheet" href="'+new URL('./guide-reading.css?v=20261011-profile',location.href).href+'"></head>');
+ doc=doc.replace('</body>','<script src="'+new URL('./guide-layout.js?v=20261011-profile',location.href).href+'"></script></body>');
  const attached=attachProgress(doc,{userId:user.id,guide:id,initial,token});doc=attached.html;
  $('progress-bar').hidden=false;
  if(attached.supported&&available&&!conflict)saver=createProgressSaver({userId:user.id,guide:id,version,onStatus:status});

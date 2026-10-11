@@ -94,5 +94,14 @@ try{
  await existing.goto(base+'/auth.html',{waitUntil:'networkidle2'});
  await existing.waitForFunction(()=>!document.querySelector('#account').classList.contains('hidden'));
  assert((await existing.$eval('#account-email',e=>e.textContent))==='existing@example.com','Existing OAuth session not detected');
- console.log('PASS: already signed-in OAuth/email session');
+ assert.equal(await existing.$('#account a[href="./checkout.html"]'),null,'Purchase CTA does not belong in account');
+ const home=await createPage({id:'existing',email:'existing@example.com',user_metadata:{full_name:'Winnie'}});
+ await home.goto(base+'/index.html',{waitUntil:'networkidle2'});
+ await home.waitForFunction(()=>document.querySelector('[data-account-link] .profile-name')?.textContent==='Winnie');
+ assert.equal(await home.$$eval('header a[href="./auth.html"]',els=>els.length),1,'Duplicate account navigation');
+ assert(await home.$eval('#member-section',e=>e.hidden),'Signed-in page must hide signup section');
+ const anonymousHome=await createPage();
+ await anonymousHome.goto(base+'/index.html',{waitUntil:'networkidle2'});
+ assert.equal(await anonymousHome.$eval('[data-account-link]',e=>e.textContent),'เข้าสู่ระบบ');
+ console.log('PASS: already signed-in session, profile navigation and account scope');
 }finally{await browser.close()}
