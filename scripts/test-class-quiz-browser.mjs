@@ -19,7 +19,7 @@ try{
  // Keyboard selection and back navigation preserve a previously chosen answer.
  await page.focus('.quiz-option input');await page.keyboard.press('Space');await page.click('.quiz-form button[type="submit"]');
  await page.click('.quiz-form .quiz-secondary');assert(await page.$eval('.quiz-option input[value="0"]',e=>e.checked));
- const pageAnswers=[0,3,3,2,4,1];
+ const pageAnswers=[0,3,3,2,4,1,3,4,4];
  for(const answer of pageAnswers){await page.click('.quiz-option:has(input[value="'+answer+'"])');await page.click('.quiz-form button[type="submit"]');}
  await page.waitForSelector('.quiz-result-card');
  assert.equal(await page.$eval('.quiz-result-card',e=>e.dataset.class),'page');
@@ -28,9 +28,9 @@ try{
  assert(await page.$eval('.quiz-result-card[data-class="page"] .quiz-source-link',e=>e.href==='https://meowdb.com/msclassic/classes/page'));
  await page.setViewport({width:375,height:800});assert(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+2),'Results overflow on mobile');
  await page.click('[data-quiz-results] .quiz-secondary');assert.equal(await page.$('.quiz-option input:checked'),null);
- const assassinAnswers=[1,1,1,1,2,5];
+ const assassinAnswers=[1,1,1,1,2,5,3,4,4];
  for(const answer of assassinAnswers){assert(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+2),'Question overflows mobile');await page.click('.quiz-option:has(input[value="'+answer+'"])');await page.click('.quiz-form button[type="submit"]');}
  assert.equal(await page.$eval('.quiz-result-card',e=>e.dataset.class),'assassin');assert(await page.$eval('.quiz-result-card .quiz-guide-link',e=>e.href.endsWith('guide-preview.html?guide=assassin')));
  await page.goto('http://127.0.0.1:'+server.address().port+'/home.html',{waitUntil:'networkidle2'});assert(await page.$('[data-quiz-start]'));assert(!errors.length,errors.join(', '));
- console.log('PASS: 6-question flow, keyboard, back/restart, unlisted class result, guide links and mobile layouts');
+ console.log('PASS: 9-question flow, keyboard, back/restart, unlisted class result, guide links and mobile layouts');
 }finally{await browser.close();await new Promise(r=>server.close(r));}

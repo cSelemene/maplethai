@@ -1,4 +1,4 @@
-import {QUESTIONS,rankClasses} from './class-quiz-data.js?v=20261011-quiz';
+import {QUESTIONS,rankClasses} from './class-quiz-data.js?v=20261011-quiz-v2';
 const root=document.getElementById('class-quiz');
 if(root){
  const intro=root.querySelector('[data-quiz-intro]'),stage=root.querySelector('[data-quiz-stage]'),results=root.querySelector('[data-quiz-results]');
@@ -23,6 +23,7 @@ if(root){
   card.append(head,make('h3','',job.name),make('p','quiz-job-name',job.thai),make('p','quiz-summary',job.summary));
   const reasons=make('ul','quiz-reasons');job.reasons.forEach(reason=>reasons.append(make('li','',reason)));card.append(reasons);
   const strong=make('div','quiz-detail');strong.append(make('h4','','จุดเด่น'),make('p','',job.strength));const weak=make('div','quiz-detail');weak.append(make('h4','','ข้อที่ต้องยอมรับ'),make('p','',job.tradeoff));card.append(strong,weak);
+  if(job.cautions?.length){const caution=make('div','quiz-detail');caution.append(make('h4','','ข้อควรคิดจากคำตอบของคุณ'),make('p','',job.cautions.join(' ')));card.append(caution); }
   const links=make('div','quiz-result-links');const source=make('a','quiz-source-link','ดูสกิลและข้อมูลอาชีพ');source.href='https://meowdb.com/msclassic/classes/'+job.source;source.target='_blank';source.rel='noopener noreferrer';links.append(source);
   if(job.guide){const guide=make('a','quiz-guide-link',job.id==='bandit'?'ดูไกด์ Pure Bandit':'ดูไกด์ '+job.name);guide.href='./guide-preview.html?guide='+job.guide;links.append(guide);}else links.append(make('span','quiz-unavailable','อาชีพนี้ยังไม่มีไกด์บน MapleThai'));
   card.append(links);return card;
