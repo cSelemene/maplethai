@@ -48,7 +48,9 @@ body.maple-guide{--body:'IBM Plex Sans Thai','Nunito',sans-serif;--display:'IBM 
 .maple-guide .mt-x,.maple-guide .mt-back{background:none!important;border:0!important;box-shadow:none!important}
 @media(max-width:700px){.maple-guide .bar-inner{padding:10px 12px;gap:8px}.maple-guide .bar h1{font-size:16px!important}.maple-guide .tabs{padding-left:12px;padding-right:12px}.maple-guide .tabs button,.maple-guide .mt-nav button{font-size:13px!important}.maple-guide .card-head h2{font-size:23px!important}.maple-guide .mt-unlock-content{padding:25px 20px}}
 
-html:has(body.maple-guide){scroll-padding-top:calc(var(--guide-header-height,112px) + 18px)}
+html:has(body.maple-guide){scroll-behavior:auto;scroll-padding-top:calc(var(--guide-header-height,112px) + 18px)}
 .maple-guide .side{top:calc(var(--guide-header-height,112px) + 18px)!important;max-height:calc(100svh - var(--guide-header-height,112px) - 38px)!important}
 .maple-guide .mt-unlock-sticky{top:var(--guide-header-height,112px);height:calc(100svh - var(--guide-header-height,112px))}
 .maple-guide .mm:hover,.maple-guide .npcmap:hover{filter:none}
+
+.maple-guide .side,.maple-guide .drawer{scroll-behavior:auto}

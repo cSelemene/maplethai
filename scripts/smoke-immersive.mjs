@@ -48,7 +48,7 @@ try{
  console.log('PASS light header, readable step navigation and original map canvas');
  const steps=await page.$$eval('#side .tab[data-i]',els=>els.length);
  await page.click('#side .tab[data-i="'+(steps-1)+'"]');
- console.log('BOUNDARY',await page.evaluate(()=>{const b=document.querySelector('#next'),r=b.getBoundingClientRect(),hit=document.elementFromPoint(r.x+r.width/2,r.y+r.height/2);return {selected:document.querySelector('#side [aria-current="step"]')?.dataset.i,count:document.querySelector('#count').textContent,rect:{x:r.x,y:r.y,w:r.width,h:r.height},hit:hit?.outerHTML.slice(0,220)}}));
+ await page.waitForFunction(last=>document.querySelector('#side [aria-current="step"]').dataset.i===String(last),{},steps-1);
  await page.click('#next');
  assert(await page.$eval('#premiumLock',e=>!e.hidden),'Route must lock after the free steps');
  await page.click('#premiumClose');
