@@ -1,5 +1,5 @@
 /* Reading surfaces: keep theme accents out of maps and dense navigation. */
-body.maple-guide{--panel:#fffdf7;--panel2:#f8f2e4;--ink:#3c2b20;--muted:#6d5b49;--line:#e2d6c1;font-size:16px;line-height:1.8}
+body.maple-guide{--body:'IBM Plex Sans Thai','Nunito',sans-serif;--display:'IBM Plex Sans Thai','Nunito',sans-serif;--panel:#fffdf7;--panel2:#f8f2e4;--ink:#3c2b20;--muted:#6d5b49;--line:#e2d6c1;font-size:16px;line-height:1.8}
 .maple-guide button{background:#fffdf7!important;color:#3c2b20!important;border:1px solid #d5c3a7;border-radius:8px;box-shadow:none!important;text-shadow:none;font-size:14px;font-weight:600}
 .maple-guide button:active{transform:none}
 .maple-guide .bar,.maple-guide .mt-header{background:#fff8e9!important;color:var(--ink)!important;border-bottom:2px solid #956335;box-shadow:0 2px 8px #57301512;position:sticky;top:0;z-index:30}
@@ -47,3 +47,8 @@ body.maple-guide{--panel:#fffdf7;--panel2:#f8f2e4;--ink:#3c2b20;--muted:#6d5b49;
 .maple-guide .mt-unlock-veil{background:#eaf4fa}
 .maple-guide .mt-x,.maple-guide .mt-back{background:none!important;border:0!important;box-shadow:none!important}
 @media(max-width:700px){.maple-guide .bar-inner{padding:10px 12px;gap:8px}.maple-guide .bar h1{font-size:16px!important}.maple-guide .tabs{padding-left:12px;padding-right:12px}.maple-guide .tabs button,.maple-guide .mt-nav button{font-size:13px!important}.maple-guide .card-head h2{font-size:23px!important}.maple-guide .mt-unlock-content{padding:25px 20px}}
+
+html:has(body.maple-guide){scroll-padding-top:calc(var(--guide-header-height,112px) + 18px)}
+.maple-guide .side{top:calc(var(--guide-header-height,112px) + 18px)!important;max-height:calc(100svh - var(--guide-header-height,112px) - 38px)!important}
+.maple-guide .mt-unlock-sticky{top:var(--guide-header-height,112px);height:calc(100svh - var(--guide-header-height,112px))}
+.maple-guide .mm:hover,.maple-guide .npcmap:hover{filter:none}
