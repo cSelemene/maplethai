@@ -40,3 +40,17 @@ jobs:
 
       - name: Test credit balance, remainder QR, cancellation and market redemption
         run: CHROME_BIN=/usr/bin/google-chrome node scripts/test-credit-browser.mjs
+
+  equipment-guide:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: npm install --no-save puppeteer-core@24
+      - run: python3 -m http.server 8765 --bind 127.0.0.1 >/tmp/maplethai-gear-web.log 2>&1 &
+      - name: Test equipment progression and route isolation
+        run: CHROME_BIN=/usr/bin/google-chrome node scripts/test-equipment.mjs
