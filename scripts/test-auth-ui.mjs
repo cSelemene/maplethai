@@ -73,6 +73,14 @@ try{
  assert(safe.url().includes('/premium-guide.html?guide=bandit'),'Safe post-login return to guide failed: '+safe.url());
  console.log('PASS: secure post-login return to premium guide');
 
+ const library=await createPage();
+ await library.goto(base+'/auth.html?next=my-guides.html',{waitUntil:'networkidle2'});
+ await library.type('#email','owner@example.com');
+ await library.type('#password','password_2026');
+ await Promise.all([library.waitForNavigation({waitUntil:'domcontentloaded'}),library.click('#submit')]);
+ assert(new URL(library.url()).pathname==='/my-guides.html','Return to purchased guide library failed');
+ console.log('PASS: post-login return to purchased guide library');
+
  const unsafe=await createPage();
  await unsafe.goto(base+'/auth.html?next='+encodeURIComponent('https://evil.example/steal'),{waitUntil:'networkidle2'});
  await unsafe.type('#email','owner@example.com');
