@@ -16,7 +16,9 @@ BEGIN
  PERFORM public.marketplace_save(post_id,jsonb_set(d,'{price}','"16000"'));
  IF (SELECT price FROM public.listings WHERE id=post_id)<>16000 THEN RAISE EXCEPTION 'Edit failed'; END IF;
  PERFORM set_config('request.jwt.claim.sub',v::text,true);
- IF public.listing_contact(post_id)->>'discord'<>'private-test-seller' OR (public.marketplace_contact_quota()->>'remaining')::int<>9 THEN RAISE EXCEPTION 'Free quota failed'; END IF;
+ -- Two statements: the quota function is STABLE, so in one expression it could read a snapshot from before the unlock.
+ IF public.listing_contact(post_id)->>'discord'<>'private-test-seller' THEN RAISE EXCEPTION 'Free contact failed'; END IF;
+ IF (public.marketplace_contact_quota()->>'remaining')::int<>9 THEN RAISE EXCEPTION 'Free quota failed'; END IF;
  failed:=false; BEGIN PERFORM public.marketplace_save(post_id,d); EXCEPTION WHEN OTHERS THEN failed:=true; END;
  IF NOT failed THEN RAISE EXCEPTION 'Other user edited seller post'; END IF;
  failed:=false; BEGIN PERFORM public.marketplace_close(post_id); EXCEPTION WHEN OTHERS THEN failed:=true; END;

@@ -6,6 +6,7 @@ DECLARE buyer uuid:=gen_random_uuid(); admin uuid:=gen_random_uuid(); other uuid
 BEGIN
  INSERT INTO auth.users(id,email) VALUES(buyer,'payment-test-buyer@example.invalid'),(admin,'payment-test-admin@example.invalid'),(other,'payment-test-other@example.invalid');
  INSERT INTO private.admins(user_id) VALUES(admin);
+ UPDATE private.payment_settings SET enabled=false WHERE id; -- start from a closed checkout whatever the live setting is
  PERFORM set_config('request.jwt.claim.sub',buyer::text,true);
  failed:=false; BEGIN PERFORM public.create_payment_order('guide_bandit'); EXCEPTION WHEN OTHERS THEN failed:=true; END;
  IF NOT failed THEN RAISE EXCEPTION 'Disabled checkout accepted order'; END IF;
@@ -30,9 +31,9 @@ BEGIN
  failed:=false; BEGIN PERFORM public.admin_review_payment(pid,true,99,'TEST-REF-001',''); EXCEPTION WHEN OTHERS THEN failed:=true; END;
  IF NOT failed THEN RAISE EXCEPTION 'Buyer approved own payment'; END IF;
  PERFORM set_config('request.jwt.claim.sub',admin::text,true);
- failed:=false; BEGIN PERFORM public.admin_review_payment(pid,true,1,'TEST-REF-001',''); EXCEPTION WHEN OTHERS THEN failed:=true; END;
- IF NOT failed THEN RAISE EXCEPTION 'Wrong amount approved'; END IF;
- PERFORM public.admin_review_payment(pid,true,99,'TEST-REF-001','Verified in bank account');
+ -- Orders carry a .11-.49 satang suffix, so the admin records the exact received amount.
+ -- Underpayment (kept as credit) is covered by scripts/test-credit.sql.
+ PERFORM public.admin_record_transfer(pid,(a->>'amount_due_cents')::numeric/100,'TEST-REF-001','Verified in bank account');
  IF NOT private.has_product(buyer,'guide_bandit') OR private.has_product(buyer,'guide_assassin') THEN RAISE EXCEPTION 'Wrong product rights granted'; END IF;
  failed:=false; BEGIN PERFORM public.admin_review_payment(pid,true,99,'TEST-REF-001',''); EXCEPTION WHEN OTHERS THEN failed:=true; END;
  IF NOT failed THEN RAISE EXCEPTION 'Repeated approval accepted'; END IF;
@@ -50,7 +51,7 @@ BEGIN
  IF NOT failed OR NOT private.has_product(buyer,'guide_bandit') THEN RAISE EXCEPTION 'Invalid revocation affected entitlement'; END IF;
  PERFORM set_config('request.jwt.claim.sub',buyer::text,true);
  b:=public.create_payment_order('guide_mage'); PERFORM public.cancel_payment_order((b->>'id')::bigint);
- INSERT INTO payment_test_results VALUES('PASS: disabled checkout, admin authorization, server price, idempotent order, slip ownership/existence, no premature access, wrong amount blocked, correct guide grant, repeated approval blocked, duplicate bank reference blocked, rejection, cancellation, revocation guard');
+ INSERT INTO payment_test_results VALUES('PASS: disabled checkout, admin authorization, server price, idempotent order, slip ownership/existence, no premature access, exact amount grant, correct guide grant, repeated approval blocked, duplicate bank reference blocked, rejection, cancellation, revocation guard');
 END $$;
 SET LOCAL ROLE authenticated;
 SELECT set_config('request.jwt.claim.sub','00000000-0000-0000-0000-000000000000',true);

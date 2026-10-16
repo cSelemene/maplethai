@@ -1,7 +1,7 @@
 BEGIN;
 CREATE TEMP TABLE auto_test_result(result text);
 DO $$
-DECLARE buyer uuid:=gen_random_uuid(); other uuid:=gen_random_uuid(); admin uuid:=gen_random_uuid(); a jsonb; b jsonb; done jsonb; pid bigint; path text; failed boolean; sid uuid;
+DECLARE buyer uuid:=gen_random_uuid(); other uuid:=gen_random_uuid(); admin uuid:=gen_random_uuid(); a jsonb; b jsonb; done jsonb; pid bigint; path text; failed boolean; sid uuid; due bigint;
 BEGIN
  INSERT INTO auth.users(id,email) VALUES(buyer,'auto-test-buyer@example.invalid'),(other,'auto-test-other@example.invalid'),(admin,'auto-test-admin@example.invalid');
  INSERT INTO private.admins(user_id) VALUES(admin);
@@ -12,7 +12,7 @@ BEGIN
  PERFORM public.admin_save_verification_settings(true,'11111111-1111-4111-8111-111111111111');
  IF public.admin_verification_settings() ? 'api_key' THEN RAISE EXCEPTION 'Admin read API leaked key'; END IF;
  PERFORM set_config('request.jwt.claim.sub',buyer::text,true);
- a:=public.create_payment_order('guide_bandit');pid:=(a->>'id')::bigint;
+ a:=public.create_payment_order('guide_bandit');pid:=(a->>'id')::bigint;due:=(a->>'amount_due_cents')::bigint;
  path:=buyer::text||'/'||pid||'/test.png';
  INSERT INTO storage.objects(bucket_id,name,owner_id,metadata) VALUES('slips',path,buyer::text,'{"mimetype":"image/png","size":100}');
  PERFORM public.submit_payment_slip(pid,path);
@@ -27,10 +27,15 @@ BEGIN
  done:=public.svc_finish_payment_verification(pid,(a->>'lease')::uuid,'{"verified":false,"code":"AMOUNT_MISMATCH"}');
  IF done->>'status'<>'pending' OR private.has_product(buyer,'guide_bandit') THEN RAISE EXCEPTION 'Failed verification granted access'; END IF;
  a:=public.svc_begin_payment_verification(pid,buyer);
- done:=public.svc_finish_payment_verification(pid,(a->>'lease')::uuid,jsonb_build_object('verified',true,'amount',1,'bank_code','004','recipient_account','0248522232','currency','THB','transferred_at',now(),'duplicate',false,'trans_ref','AUTO-TEST-001','code','VERIFIED'));
- IF done->>'status'<>'pending' THEN RAISE EXCEPTION 'Wrong amount was accepted by DB'; END IF;
+ done:=public.svc_finish_payment_verification(pid,(a->>'lease')::uuid,jsonb_build_object('verified',true,'amount_cents',100,'bank_code','004','recipient_account','0248522232','currency','THB','transferred_at',now(),'duplicate',false,'trans_ref','AUTO-TEST-001','code','VERIFIED'));
+ -- An underpayment closes the order as credit and never grants the guide.
+ IF done->>'status'<>'credited' OR private.has_product(buyer,'guide_bandit') THEN RAISE EXCEPTION 'Wrong amount was accepted by DB'; END IF;
+ a:=public.create_payment_order('guide_bandit');pid:=(a->>'id')::bigint;due:=(a->>'amount_due_cents')::bigint;
+ path:=buyer::text||'/'||pid||'/test.png';
+ INSERT INTO storage.objects(bucket_id,name,owner_id,metadata) VALUES('slips',path,buyer::text,'{"mimetype":"image/png","size":100}');
+ PERFORM public.submit_payment_slip(pid,path);
  a:=public.svc_begin_payment_verification(pid,buyer);
- done:=public.svc_finish_payment_verification(pid,(a->>'lease')::uuid,jsonb_build_object('verified',true,'amount',99,'bank_code','004','recipient_account','0248522232','currency','THB','transferred_at',now(),'duplicate',false,'trans_ref','AUTO-TEST-001','code','VERIFIED'));
+ done:=public.svc_finish_payment_verification(pid,(a->>'lease')::uuid,jsonb_build_object('verified',true,'amount_cents',due,'bank_code','004','recipient_account','0248522232','currency','THB','transferred_at',now(),'duplicate',false,'trans_ref','AUTO-TEST-002','code','VERIFIED'));
  IF done->>'status'<>'ok' OR NOT private.has_product(buyer,'guide_bandit') OR private.has_product(buyer,'guide_mage') THEN RAISE EXCEPTION 'Correct verification did not grant exact guide'; END IF;
  done:=public.svc_finish_payment_verification(pid,(a->>'lease')::uuid,'{"verified":true}');
  IF done->>'status'<>'ok' THEN RAISE EXCEPTION 'Idempotent successful result failed'; END IF;
