@@ -1,0 +1,16 @@
+# Large generated or content-only files: keep them compact.
+warrior-market-data.js
+free-routes.js
+warrior-free-routes.js
+warrior-content.js
+class-quiz-data.js
+equipment-data.js
+vendor/
+assets/
+database/
+supabase/
+i/
+*.html
+*.css
+*.md
+*.sql

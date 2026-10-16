@@ -1,9 +1,13 @@
 import assert from 'node:assert/strict';
-import {writeFileSync,unlinkSync} from 'node:fs';
+import { writeFileSync, unlinkSync } from 'node:fs';
 import puppeteer from 'puppeteer-core';
-const browser=await puppeteer.launch({headless:true,executablePath:process.env.CHROME_BIN||'/usr/bin/google-chrome',args:['--no-sandbox']});
-const base='http://127.0.0.1:8765';
-const stub=`
+const browser = await puppeteer.launch({
+  headless: true,
+  executablePath: process.env.CHROME_BIN || '/usr/bin/google-chrome',
+  args: ['--no-sandbox']
+});
+const base = 'http://127.0.0.1:8765';
+const stub = `
 const state=window.paymentTest;
 const products=['bandit','assassin','mage'].map((id,i)=>({id:'guide_'+id,name:['Pure Bandit','Assassin','I/L Mage'][i],price:99}));products.push({id:'market',name:'ตลาดซื้อขาย 30 วัน',price:50});
 const auth={getUser:async()=>({data:{user:state.user},error:null}),onAuthStateChange:fn=>{state.listeners.push(fn);return {data:{subscription:{unsubscribe(){}}}}}};
@@ -24,28 +28,369 @@ export const createClient=()=>({auth,from:query,functions:{invoke:async(name,{bo
  return {error:{message:'Unknown RPC'}};
 }});
 `;
-async function page(extra={}){const p=await browser.newPage();await p.evaluateOnNewDocument(extra=>{window.paymentTest={user:{id:'buyer',email:'buyer@example.invalid'},account:{is_admin:false,entitlements:[]},settings:{enabled:true,bank:'Test Bank',account_number:'1234567890',recipient_name:'Test Receiver',qr_path:'assets/payments/kbank-0248522232.jpeg'},orders:[],calls:[],uploads:[],listeners:[],autoVerify:false,verifyResult:"pending",...extra}},extra);await p.setRequestInterception(true);p.on('request',r=>r.url().startsWith('https://cdn.jsdelivr.net/npm/@supabase/supabase-js@')?r.respond({status:200,contentType:'application/javascript',headers:{'access-control-allow-origin':'*'},body:stub}):r.continue());p.on('pageerror',e=>{throw e});return p}
-const file='/tmp/maplethai-test-slip.png';writeFileSync(file,Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+jRZkAAAAASUVORK5CYII=','base64'));
-try{
- const guest=await page({user:null});await guest.goto(base+'/checkout.html?product=guide_assassin',{waitUntil:'networkidle0'});assert(await guest.$eval('#login-needed',e=>!e.hidden));assert((await guest.$eval('#checkout-login',e=>e.href)).includes('next=checkout.html%3Fproduct%3Dguide_assassin'));assert(!(await guest.evaluate(()=>window.paymentTest.calls)).some(c=>c.method==='create_payment_order'));console.log('PASS: guest login preserves selected product');
- const disabled=await page({settings:{enabled:false}});await disabled.goto(base+'/checkout.html',{waitUntil:'networkidle0'});assert(await disabled.$eval('#create-order',e=>e.hidden));assert(await disabled.$eval('#recipient',e=>e.hidden));console.log('PASS: disabled checkout never offers transfer');
- const buyer=await page();await buyer.goto(base+'/checkout.html?product=guide_assassin',{waitUntil:'networkidle0'});assert(await buyer.$eval('#payment-qr',e=>e.hidden));await buyer.click('#create-order');await buyer.waitForFunction(()=>!document.querySelector('#slip-form').hidden);assert.equal(await buyer.$('#bank-account'),null);assert.equal(await buyer.$('#copy-account'),null);assert(!(await buyer.$eval('#checkout-flow',e=>e.textContent)).includes('#12'));assert(await buyer.$eval('#payment-qr',e=>!e.hidden));assert((await buyer.$eval('#receiving-qr',e=>e.getAttribute('src'))).includes('kbank-0248522232.jpeg'));assert((await buyer.$eval('#qr-amount-note',e=>e.textContent)).includes('99'));await (await buyer.$('#slip-file')).uploadFile(file);await buyer.click('#confirm-transfer');await buyer.click('#submit-slip');await buyer.waitForFunction(()=>!document.querySelector('#pending-message').hidden);assert(await buyer.$eval('#slip-form',e=>e.hidden));assert((await buyer.evaluate(()=>window.paymentTest.uploads))[0].path.startsWith('buyer/12/'));assert((await buyer.evaluate(()=>window.paymentTest.calls)).some(c=>c.method==='submit_payment_slip'));assert(!(await buyer.evaluate(()=>window.paymentTest.calls)).some(c=>c.method==='claim_payment'));assert((await buyer.$eval('#order-history',e=>e.textContent)).includes('รอตรวจสอบ'));assert(!(await buyer.$eval('#order-history',e=>e.textContent)).includes('#12'));assert(await buyer.$eval('#recipient',e=>e.hidden));await buyer.reload({waitUntil:'networkidle0'});console.log('PASS: create order, recipient snapshot, upload slip, pending status, no auto-unlock');
- await buyer.setViewport({width:390,height:844});assert(await buyer.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+2));console.log('PASS: mobile checkout fits viewport');
- const auto=await page({autoVerify:true,verifyResult:'ok'});await auto.goto(base+'/checkout.html?product=guide_mage',{waitUntil:'networkidle0'});await auto.click('#create-order');await auto.waitForFunction(()=>!document.querySelector('#slip-form').hidden);await (await auto.$('#slip-file')).uploadFile(file);await auto.click('#confirm-transfer');await auto.click('#submit-slip');await auto.waitForFunction(()=>!document.querySelector('#payment-read-guide').hidden);assert((await auto.$eval('#payment-read-guide',e=>e.href)).includes('guide=mage'));assert((await auto.evaluate(()=>window.paymentTest.calls)).some(c=>c.method==='edge-verify'));console.log('PASS: verified payment unlocks purchased guide immediately');
- const fallback=await page({autoVerify:true,verifyResult:'pending'});await fallback.goto(base+'/checkout.html',{waitUntil:'networkidle0'});await fallback.click('#create-order');await fallback.waitForFunction(()=>!document.querySelector('#slip-form').hidden);await (await fallback.$('#slip-file')).uploadFile(file);await fallback.click('#confirm-transfer');await fallback.click('#submit-slip');await fallback.waitForFunction(()=>!document.querySelector('#pending-message').hidden);assert(await fallback.$eval('#payment-read-guide',e=>e.hidden));console.log('PASS: failed automated check stays pending without granting access');
- const owned=await page({account:{is_admin:false,entitlements:[{product:'guide_mage',expires_at:null}]}});await owned.goto(base+'/checkout.html?product=guide_mage',{waitUntil:'networkidle0'});assert(await owned.$eval('#already-owned',e=>!e.hidden));assert(await owned.$eval('#checkout-flow',e=>e.hidden));console.log('PASS: owned guide opens without repeat purchase');
- const market=await page();await market.goto(base+'/checkout.html?product=market',{waitUntil:'networkidle0'});assert.equal(await market.$eval('#product-select',e=>e.value),'market');assert(await market.$eval('#guide-features',e=>e.hidden));assert(await market.$eval('#market-features',e=>!e.hidden));assert.equal(await market.$eval('#product-duration',e=>e.textContent),'ใช้งาน 30 วัน');assert((await market.$eval('#product-price',e=>e.textContent)).includes('50'));await market.click('#create-order');await market.waitForFunction(()=>!document.querySelector('#slip-form').hidden);assert((await market.$eval('#qr-amount-note',e=>e.textContent)).includes('50'));assert.equal((await market.evaluate(()=>window.paymentTest.calls.find(c=>c.method==='create_payment_order'))).args.p_product,'market');console.log('PASS: market checkout uses its own price, duration and product');
- const member=await page({account:{is_admin:false,entitlements:[{product:'market',expires_at:new Date(Date.now()+86400000).toISOString()}]}});await member.goto(base+'/checkout.html?product=market',{waitUntil:'networkidle0'});assert(await member.$eval('#already-owned',e=>!e.hidden));assert((await member.$eval('#read-guide',e=>e.href)).endsWith('/marketplace.html'));console.log('PASS: current market subscriber opens market instead of buying again');
- const retryBuyer=await page({autoVerify:true,verifyResult:'ok',orders:[{id:101,email:'buyer@example.invalid',product:'guide_assassin',amount:99,amount_due_cents:9944,processing_fee_cents:44,status:'pending',created_at:new Date().toISOString()}]});await retryBuyer.goto(base+'/checkout.html?product=guide_assassin',{waitUntil:'networkidle0'});assert(await retryBuyer.$eval('#retry-verification',e=>!e.hidden));await retryBuyer.click('#retry-verification');await retryBuyer.waitForFunction(()=>window.paymentTest.orders[0].status==='ok');assert.equal(await retryBuyer.evaluate(()=>window.paymentTest.uploads.length),0);console.log('PASS: pending customer can recheck existing slip without uploading or paying again');
- const nonadmin=await page();await nonadmin.goto(base+'/admin-payments.html',{waitUntil:'networkidle0'});assert(await nonadmin.$eval('#admin-content',e=>e.hidden));assert(!(await nonadmin.evaluate(()=>window.paymentTest.calls)).some(c=>c.method==='admin_payment_orders'));console.log('PASS: nonadmin cannot view admin orders');
- const admin=await page({account:{is_admin:true,entitlements:[]},orders:[{id:15,email:'buyer@example.invalid',product:'guide_bandit',amount:99,status:'pending',created_at:new Date().toISOString(),slip_path:'buyer/15/test.png',recipient:{bank:'Test Bank',account_number:'1234567890',recipient_name:'Test Receiver'}}]});await admin.goto(base+'/admin-payments.html',{waitUntil:'networkidle0'});assert(await admin.$eval('#admin-content',e=>!e.hidden));const fields=await admin.$$('#payments-list form input');await fields[0].type('99');await fields[1].type('BANK-REF-001');await fields[3].click();await admin.click('#payments-list form button[type=submit]');await admin.waitForFunction(()=>window.paymentTest.calls.some(c=>c.method==='admin_review_payment'));const call=await admin.evaluate(()=>window.paymentTest.calls.find(c=>c.method==='admin_review_payment'));assert.deepEqual(call.args,{p_payment:15,p_approve:true,p_amount:99,p_bank_ref:'BANK-REF-001',p_note:''});console.log('PASS: admin approval sends actual amount and bank reference');
- const search=await page({account:{is_admin:true,entitlements:[]},orders:[{id:21,email:'a@example.invalid',product:'guide_bandit',amount:99,amount_due_cents:9931,processing_fee_cents:31,status:'ok',trans_ref:'BANK-SATANG-001',received_cents:10000,created_at:new Date().toISOString()},{id:22,email:'b@example.invalid',product:'guide_mage',amount:99,amount_due_cents:9949,processing_fee_cents:49,status:'ok',received_cents:9949,created_at:new Date().toISOString()}]});await search.goto(base+'/admin-payments.html',{waitUntil:'networkidle0'});await search.select('#payment-filter','all');await search.type('#payment-search','99.31');assert.equal(await search.$$eval('#payments-list article',e=>e.length),1);assert((await search.$eval('#payments-list',e=>e.textContent)).includes('a@example.invalid'));await search.$eval('#payment-search',e=>{e.value='100.00';e.dispatchEvent(new Event('input'))});assert.equal(await search.$$eval('#payments-list article',e=>e.length),1);await search.$eval('#payment-search',e=>{e.value='BANK-SATANG-001';e.dispatchEvent(new Event('input'))});assert.equal(await search.$$eval('#payments-list article',e=>e.length),1);console.log('PASS: admin reconciliation search matches requested amount, actual received amount and bank reference');
+async function page(extra = {}) {
+  const p = await browser.newPage();
+  await p.evaluateOnNewDocument(extra => {
+    window.paymentTest = {
+      user: { id: 'buyer', email: 'buyer@example.invalid' },
+      account: { is_admin: false, entitlements: [] },
+      settings: {
+        enabled: true,
+        bank: 'Test Bank',
+        account_number: '1234567890',
+        recipient_name: 'Test Receiver',
+        qr_path: 'assets/payments/kbank-0248522232.jpeg'
+      },
+      orders: [],
+      calls: [],
+      uploads: [],
+      listeners: [],
+      autoVerify: false,
+      verifyResult: 'pending',
+      ...extra
+    };
+  }, extra);
+  await p.setRequestInterception(true);
+  p.on('request', r =>
+    r.url().startsWith('https://cdn.jsdelivr.net/npm/@supabase/supabase-js@')
+      ? r.respond({
+          status: 200,
+          contentType: 'application/javascript',
+          headers: { 'access-control-allow-origin': '*' },
+          body: stub
+        })
+      : r.continue()
+  );
+  p.on('pageerror', e => {
+    throw e;
+  });
+  return p;
+}
+const file = '/tmp/maplethai-test-slip.png';
+writeFileSync(
+  file,
+  Buffer.from(
+    'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+jRZkAAAAASUVORK5CYII=',
+    'base64'
+  )
+);
+try {
+  const guest = await page({ user: null });
+  await guest.goto(base + '/checkout.html?product=guide_assassin', { waitUntil: 'networkidle0' });
+  assert(await guest.$eval('#login-needed', e => !e.hidden));
+  assert(
+    (await guest.$eval('#checkout-login', e => e.href)).includes(
+      'next=checkout.html%3Fproduct%3Dguide_assassin'
+    )
+  );
+  assert(
+    !(await guest.evaluate(() => window.paymentTest.calls)).some(c => c.method === 'create_payment_order')
+  );
+  console.log('PASS: guest login preserves selected product');
+  const disabled = await page({ settings: { enabled: false } });
+  await disabled.goto(base + '/checkout.html', { waitUntil: 'networkidle0' });
+  assert(await disabled.$eval('#create-order', e => e.hidden));
+  assert(await disabled.$eval('#recipient', e => e.hidden));
+  console.log('PASS: disabled checkout never offers transfer');
+  const buyer = await page();
+  await buyer.goto(base + '/checkout.html?product=guide_assassin', { waitUntil: 'networkidle0' });
+  assert(await buyer.$eval('#payment-qr', e => e.hidden));
+  await buyer.click('#create-order');
+  await buyer.waitForFunction(() => !document.querySelector('#slip-form').hidden);
+  assert.equal(await buyer.$('#bank-account'), null);
+  assert.equal(await buyer.$('#copy-account'), null);
+  assert(!(await buyer.$eval('#checkout-flow', e => e.textContent)).includes('#12'));
+  assert(await buyer.$eval('#payment-qr', e => !e.hidden));
+  assert((await buyer.$eval('#receiving-qr', e => e.getAttribute('src'))).includes('kbank-0248522232.jpeg'));
+  assert((await buyer.$eval('#qr-amount-note', e => e.textContent)).includes('99'));
+  await (await buyer.$('#slip-file')).uploadFile(file);
+  await buyer.click('#confirm-transfer');
+  await buyer.click('#submit-slip');
+  await buyer.waitForFunction(() => !document.querySelector('#pending-message').hidden);
+  assert(await buyer.$eval('#slip-form', e => e.hidden));
+  assert((await buyer.evaluate(() => window.paymentTest.uploads))[0].path.startsWith('buyer/12/'));
+  assert(
+    (await buyer.evaluate(() => window.paymentTest.calls)).some(c => c.method === 'submit_payment_slip')
+  );
+  assert(!(await buyer.evaluate(() => window.paymentTest.calls)).some(c => c.method === 'claim_payment'));
+  assert((await buyer.$eval('#order-history', e => e.textContent)).includes('รอตรวจสอบ'));
+  assert(!(await buyer.$eval('#order-history', e => e.textContent)).includes('#12'));
+  assert(await buyer.$eval('#recipient', e => e.hidden));
+  await buyer.reload({ waitUntil: 'networkidle0' });
+  console.log('PASS: create order, recipient snapshot, upload slip, pending status, no auto-unlock');
+  await buyer.setViewport({ width: 390, height: 844 });
+  assert(await buyer.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 2));
+  console.log('PASS: mobile checkout fits viewport');
+  const auto = await page({ autoVerify: true, verifyResult: 'ok' });
+  await auto.goto(base + '/checkout.html?product=guide_mage', { waitUntil: 'networkidle0' });
+  await auto.click('#create-order');
+  await auto.waitForFunction(() => !document.querySelector('#slip-form').hidden);
+  await (await auto.$('#slip-file')).uploadFile(file);
+  await auto.click('#confirm-transfer');
+  await auto.click('#submit-slip');
+  await auto.waitForFunction(() => !document.querySelector('#payment-read-guide').hidden);
+  assert((await auto.$eval('#payment-read-guide', e => e.href)).includes('guide=mage'));
+  assert((await auto.evaluate(() => window.paymentTest.calls)).some(c => c.method === 'edge-verify'));
+  console.log('PASS: verified payment unlocks purchased guide immediately');
+  const fallback = await page({ autoVerify: true, verifyResult: 'pending' });
+  await fallback.goto(base + '/checkout.html', { waitUntil: 'networkidle0' });
+  await fallback.click('#create-order');
+  await fallback.waitForFunction(() => !document.querySelector('#slip-form').hidden);
+  await (await fallback.$('#slip-file')).uploadFile(file);
+  await fallback.click('#confirm-transfer');
+  await fallback.click('#submit-slip');
+  await fallback.waitForFunction(() => !document.querySelector('#pending-message').hidden);
+  assert(await fallback.$eval('#payment-read-guide', e => e.hidden));
+  console.log('PASS: failed automated check stays pending without granting access');
+  const owned = await page({
+    account: { is_admin: false, entitlements: [{ product: 'guide_mage', expires_at: null }] }
+  });
+  await owned.goto(base + '/checkout.html?product=guide_mage', { waitUntil: 'networkidle0' });
+  assert(await owned.$eval('#already-owned', e => !e.hidden));
+  assert(await owned.$eval('#checkout-flow', e => e.hidden));
+  console.log('PASS: owned guide opens without repeat purchase');
+  const market = await page();
+  await market.goto(base + '/checkout.html?product=market', { waitUntil: 'networkidle0' });
+  assert.equal(await market.$eval('#product-select', e => e.value), 'market');
+  assert(await market.$eval('#guide-features', e => e.hidden));
+  assert(await market.$eval('#market-features', e => !e.hidden));
+  assert.equal(await market.$eval('#product-duration', e => e.textContent), 'ใช้งาน 30 วัน');
+  assert((await market.$eval('#product-price', e => e.textContent)).includes('50'));
+  await market.click('#create-order');
+  await market.waitForFunction(() => !document.querySelector('#slip-form').hidden);
+  assert((await market.$eval('#qr-amount-note', e => e.textContent)).includes('50'));
+  assert.equal(
+    (await market.evaluate(() => window.paymentTest.calls.find(c => c.method === 'create_payment_order')))
+      .args.p_product,
+    'market'
+  );
+  console.log('PASS: market checkout uses its own price, duration and product');
+  const member = await page({
+    account: {
+      is_admin: false,
+      entitlements: [{ product: 'market', expires_at: new Date(Date.now() + 86400000).toISOString() }]
+    }
+  });
+  await member.goto(base + '/checkout.html?product=market', { waitUntil: 'networkidle0' });
+  assert(await member.$eval('#already-owned', e => !e.hidden));
+  assert((await member.$eval('#read-guide', e => e.href)).endsWith('/marketplace.html'));
+  console.log('PASS: current market subscriber opens market instead of buying again');
+  const retryBuyer = await page({
+    autoVerify: true,
+    verifyResult: 'ok',
+    orders: [
+      {
+        id: 101,
+        email: 'buyer@example.invalid',
+        product: 'guide_assassin',
+        amount: 99,
+        amount_due_cents: 9944,
+        processing_fee_cents: 44,
+        status: 'pending',
+        created_at: new Date().toISOString()
+      }
+    ]
+  });
+  await retryBuyer.goto(base + '/checkout.html?product=guide_assassin', { waitUntil: 'networkidle0' });
+  assert(await retryBuyer.$eval('#retry-verification', e => !e.hidden));
+  await retryBuyer.click('#retry-verification');
+  await retryBuyer.waitForFunction(() => window.paymentTest.orders[0].status === 'ok');
+  assert.equal(await retryBuyer.evaluate(() => window.paymentTest.uploads.length), 0);
+  console.log('PASS: pending customer can recheck existing slip without uploading or paying again');
+  const nonadmin = await page();
+  await nonadmin.goto(base + '/admin-payments.html', { waitUntil: 'networkidle0' });
+  assert(await nonadmin.$eval('#admin-content', e => e.hidden));
+  assert(
+    !(await nonadmin.evaluate(() => window.paymentTest.calls)).some(c => c.method === 'admin_payment_orders')
+  );
+  console.log('PASS: nonadmin cannot view admin orders');
+  const admin = await page({
+    account: { is_admin: true, entitlements: [] },
+    orders: [
+      {
+        id: 15,
+        email: 'buyer@example.invalid',
+        product: 'guide_bandit',
+        amount: 99,
+        status: 'pending',
+        created_at: new Date().toISOString(),
+        slip_path: 'buyer/15/test.png',
+        recipient: { bank: 'Test Bank', account_number: '1234567890', recipient_name: 'Test Receiver' }
+      }
+    ]
+  });
+  await admin.goto(base + '/admin-payments.html', { waitUntil: 'networkidle0' });
+  assert(await admin.$eval('#admin-content', e => !e.hidden));
+  const fields = await admin.$$('#payments-list form input');
+  await fields[0].type('99');
+  await fields[1].type('BANK-REF-001');
+  await fields[3].click();
+  await admin.click('#payments-list form button[type=submit]');
+  await admin.waitForFunction(() => window.paymentTest.calls.some(c => c.method === 'admin_review_payment'));
+  const call = await admin.evaluate(() =>
+    window.paymentTest.calls.find(c => c.method === 'admin_review_payment')
+  );
+  assert.deepEqual(call.args, {
+    p_payment: 15,
+    p_approve: true,
+    p_amount: 99,
+    p_bank_ref: 'BANK-REF-001',
+    p_note: ''
+  });
+  console.log('PASS: admin approval sends actual amount and bank reference');
+  const search = await page({
+    account: { is_admin: true, entitlements: [] },
+    orders: [
+      {
+        id: 21,
+        email: 'a@example.invalid',
+        product: 'guide_bandit',
+        amount: 99,
+        amount_due_cents: 9931,
+        processing_fee_cents: 31,
+        status: 'ok',
+        trans_ref: 'BANK-SATANG-001',
+        received_cents: 10000,
+        created_at: new Date().toISOString()
+      },
+      {
+        id: 22,
+        email: 'b@example.invalid',
+        product: 'guide_mage',
+        amount: 99,
+        amount_due_cents: 9949,
+        processing_fee_cents: 49,
+        status: 'ok',
+        received_cents: 9949,
+        created_at: new Date().toISOString()
+      }
+    ]
+  });
+  await search.goto(base + '/admin-payments.html', { waitUntil: 'networkidle0' });
+  await search.select('#payment-filter', 'all');
+  await search.type('#payment-search', '99.31');
+  assert.equal(await search.$$eval('#payments-list article', e => e.length), 1);
+  assert((await search.$eval('#payments-list', e => e.textContent)).includes('a@example.invalid'));
+  await search.$eval('#payment-search', e => {
+    e.value = '100.00';
+    e.dispatchEvent(new Event('input'));
+  });
+  assert.equal(await search.$$eval('#payments-list article', e => e.length), 1);
+  await search.$eval('#payment-search', e => {
+    e.value = 'BANK-SATANG-001';
+    e.dispatchEvent(new Event('input'));
+  });
+  assert.equal(await search.$$eval('#payments-list article', e => e.length), 1);
+  console.log(
+    'PASS: admin reconciliation search matches requested amount, actual received amount and bank reference'
+  );
 
- const gift=await page({account:{is_admin:false,entitlements:[{product:'guide_bandit',expires_at:null}]},autoVerify:true,verifyResult:'ok'});await gift.goto(base+'/checkout.html?product=guide_bandit',{waitUntil:'networkidle0'});await gift.click('#gift-toggle');await gift.type('#gift-email','friend@example.invalid');assert(await gift.$eval('#checkout-flow',e=>!e.hidden));await gift.click('#create-order');await gift.waitForFunction(()=>!document.querySelector('#slip-form').hidden);assert.equal((await gift.evaluate(()=>window.paymentTest.calls.find(c=>c.method==='create_gift_payment_order'))).args.p_email,'friend@example.invalid');assert(await gift.$eval('#gift-email',e=>e.disabled));await (await gift.$('#slip-file')).uploadFile(file);await gift.click('#confirm-transfer');await gift.click('#submit-slip');await gift.waitForFunction(()=>window.paymentTest.orders[0].status==='ok');assert(await gift.$eval('#payment-read-guide',e=>e.hidden));assert((await gift.$eval('#order-history',e=>e.textContent)).includes('friend@example.invalid'));await gift.setViewport({width:375,height:812});assert(await gift.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+2));console.log('PASS: owned guide can be gifted; frozen email, isolated delivery and mobile checkout');
- const home=await page({account:{is_admin:false,entitlements:[{product:'guide_mage',expires_at:null}]},progress:[{guide:'mage',step_label:'Lv.25 · ฝึกเวทสายฟ้า',completed:5,total:20,updated_at:new Date().toISOString()}]});await home.goto(base+'/index.html',{waitUntil:'networkidle0'});await home.waitForFunction(()=>!document.querySelector('#home-owned-guides').hidden);assert(await home.$eval('#class-quiz',e=>e.hidden));assert.equal(await home.$$eval('#home-owned-guides .library-card',e=>e.length),1);assert((await home.$eval('#home-owned-guides',e=>e.textContent)).includes('Lv.25'));assert.equal(await home.$eval('#home-owned-guides progress',e=>e.value),5);assert((await home.$eval('#home-owned-guides a',e=>e.href)).includes('guide=mage'));assert(await home.$eval('#guides',e=>!e.hidden));await home.setViewport({width:375,height:812});assert(await home.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+2));await home.evaluate(()=>{window.paymentTest.user=null;window.paymentTest.listeners.forEach(fn=>fn())});await home.waitForFunction(()=>document.querySelector('#home-owned-guides').hidden&&!document.querySelector('#class-quiz').hidden);console.log('PASS: homepage owned guides, preserved catalogue, mobile and logout reset');
+  const gift = await page({
+    account: { is_admin: false, entitlements: [{ product: 'guide_bandit', expires_at: null }] },
+    autoVerify: true,
+    verifyResult: 'ok'
+  });
+  await gift.goto(base + '/checkout.html?product=guide_bandit', { waitUntil: 'networkidle0' });
+  await gift.click('#gift-toggle');
+  await gift.type('#gift-email', 'friend@example.invalid');
+  assert(await gift.$eval('#checkout-flow', e => !e.hidden));
+  await gift.click('#create-order');
+  await gift.waitForFunction(() => !document.querySelector('#slip-form').hidden);
+  assert.equal(
+    (await gift.evaluate(() => window.paymentTest.calls.find(c => c.method === 'create_gift_payment_order')))
+      .args.p_email,
+    'friend@example.invalid'
+  );
+  assert(await gift.$eval('#gift-email', e => e.disabled));
+  await (await gift.$('#slip-file')).uploadFile(file);
+  await gift.click('#confirm-transfer');
+  await gift.click('#submit-slip');
+  await gift.waitForFunction(() => window.paymentTest.orders[0].status === 'ok');
+  assert(await gift.$eval('#payment-read-guide', e => e.hidden));
+  assert((await gift.$eval('#order-history', e => e.textContent)).includes('friend@example.invalid'));
+  await gift.setViewport({ width: 375, height: 812 });
+  assert(await gift.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 2));
+  console.log('PASS: owned guide can be gifted; frozen email, isolated delivery and mobile checkout');
+  const home = await page({
+    account: { is_admin: false, entitlements: [{ product: 'guide_mage', expires_at: null }] },
+    progress: [
+      {
+        guide: 'mage',
+        step_label: 'Lv.25 · ฝึกเวทสายฟ้า',
+        completed: 5,
+        total: 20,
+        updated_at: new Date().toISOString()
+      }
+    ]
+  });
+  await home.goto(base + '/index.html', { waitUntil: 'networkidle0' });
+  await home.waitForFunction(() => !document.querySelector('#home-owned-guides').hidden);
+  assert(await home.$eval('#class-quiz', e => e.hidden));
+  assert.equal(await home.$$eval('#home-owned-guides .library-card', e => e.length), 1);
+  assert((await home.$eval('#home-owned-guides', e => e.textContent)).includes('Lv.25'));
+  assert.equal(await home.$eval('#home-owned-guides progress', e => e.value), 5);
+  assert((await home.$eval('#home-owned-guides a', e => e.href)).includes('guide=mage'));
+  assert(await home.$eval('#guides', e => !e.hidden));
+  await home.setViewport({ width: 375, height: 812 });
+  assert(await home.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 2));
+  await home.evaluate(() => {
+    window.paymentTest.user = null;
+    window.paymentTest.listeners.forEach(fn => fn());
+  });
+  await home.waitForFunction(
+    () => document.querySelector('#home-owned-guides').hidden && !document.querySelector('#class-quiz').hidden
+  );
+  console.log('PASS: homepage owned guides, preserved catalogue, mobile and logout reset');
 
- const referral=await page({autoVerify:true,verifyResult:'ok'});await referral.goto(base+'/checkout.html?product=guide_mage',{waitUntil:'networkidle0'});assert(await referral.$eval('#referral-fields',e=>!e.hidden));assert((await referral.$eval('#friend-promotion',e=>e.textContent)).includes('คนละ 10 ครั้ง'));await referral.type('#referral-email','referrer@example.invalid');await referral.click('#create-order');await referral.waitForFunction(()=>!document.querySelector('#slip-form').hidden);assert.equal((await referral.evaluate(()=>window.paymentTest.calls.find(c=>c.method==='create_referred_payment_order'))).args.p_email,'referrer@example.invalid');assert(await referral.$eval('#referral-email',e=>e.disabled));const savedReferralOrders=await referral.evaluate(()=>window.paymentTest.orders);await referral.evaluateOnNewDocument(orders=>{window.paymentTest.orders=orders},savedReferralOrders);await referral.reload({waitUntil:'networkidle0'});assert.equal(await referral.$eval('#referral-email',e=>e.value),'referrer@example.invalid');assert((await referral.$eval('#order-history',e=>e.textContent)).includes('ผู้แนะนำ: referrer@example.invalid'));await (await referral.$('#slip-file')).uploadFile(file);await referral.click('#confirm-transfer');await referral.click('#submit-slip');await referral.waitForFunction(()=>!document.querySelector('#payment-read-guide').hidden);console.log('PASS: optional referral, frozen email, reload/history and self guide delivery');
- const invalid=await page();await invalid.goto(base+'/checkout.html',{waitUntil:'networkidle0'});await invalid.type('#referral-email','not-an-email');await invalid.click('#create-order');assert(!(await invalid.evaluate(()=>window.paymentTest.calls)).some(c=>c.method==='create_referred_payment_order'));await invalid.setViewport({width:375,height:812});assert(await invalid.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+2));console.log('PASS: invalid referral blocks checkout; promotion form fits mobile');
- assert(await market.$eval('#friend-promotion',e=>e.hidden));assert(await market.$eval('#referral-fields',e=>e.hidden));assert(await gift.$eval('#referral-fields',e=>e.hidden));console.log('PASS: gift and referral cannot stack; market membership excluded');
-
-}finally{await browser.close();unlinkSync(file)}
+  const referral = await page({ autoVerify: true, verifyResult: 'ok' });
+  await referral.goto(base + '/checkout.html?product=guide_mage', { waitUntil: 'networkidle0' });
+  assert(await referral.$eval('#referral-fields', e => !e.hidden));
+  assert((await referral.$eval('#friend-promotion', e => e.textContent)).includes('คนละ 10 ครั้ง'));
+  await referral.type('#referral-email', 'referrer@example.invalid');
+  await referral.click('#create-order');
+  await referral.waitForFunction(() => !document.querySelector('#slip-form').hidden);
+  assert.equal(
+    (
+      await referral.evaluate(() =>
+        window.paymentTest.calls.find(c => c.method === 'create_referred_payment_order')
+      )
+    ).args.p_email,
+    'referrer@example.invalid'
+  );
+  assert(await referral.$eval('#referral-email', e => e.disabled));
+  const savedReferralOrders = await referral.evaluate(() => window.paymentTest.orders);
+  await referral.evaluateOnNewDocument(orders => {
+    window.paymentTest.orders = orders;
+  }, savedReferralOrders);
+  await referral.reload({ waitUntil: 'networkidle0' });
+  assert.equal(await referral.$eval('#referral-email', e => e.value), 'referrer@example.invalid');
+  assert(
+    (await referral.$eval('#order-history', e => e.textContent)).includes(
+      'ผู้แนะนำ: referrer@example.invalid'
+    )
+  );
+  await (await referral.$('#slip-file')).uploadFile(file);
+  await referral.click('#confirm-transfer');
+  await referral.click('#submit-slip');
+  await referral.waitForFunction(() => !document.querySelector('#payment-read-guide').hidden);
+  console.log('PASS: optional referral, frozen email, reload/history and self guide delivery');
+  const invalid = await page();
+  await invalid.goto(base + '/checkout.html', { waitUntil: 'networkidle0' });
+  await invalid.type('#referral-email', 'not-an-email');
+  await invalid.click('#create-order');
+  assert(
+    !(await invalid.evaluate(() => window.paymentTest.calls)).some(
+      c => c.method === 'create_referred_payment_order'
+    )
+  );
+  await invalid.setViewport({ width: 375, height: 812 });
+  assert(await invalid.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 2));
+  console.log('PASS: invalid referral blocks checkout; promotion form fits mobile');
+  assert(await market.$eval('#friend-promotion', e => e.hidden));
+  assert(await market.$eval('#referral-fields', e => e.hidden));
+  assert(await gift.$eval('#referral-fields', e => e.hidden));
+  console.log('PASS: gift and referral cannot stack; market membership excluded');
+} finally {
+  await browser.close();
+  unlinkSync(file);
+}

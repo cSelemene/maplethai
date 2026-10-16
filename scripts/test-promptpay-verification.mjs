@@ -1,41 +1,135 @@
 import assert from 'node:assert/strict';
-import {verifyBankSlip} from '../supabase/functions/verify-payment/provider.mjs';
-import {promptPayReceiver,evaluateReceipt} from '../supabase/functions/verify-payment/validation.mjs';
-const source='00020101021129390016A000000677010111031500499900465145053037645802TH6304BF03';
-assert.deepEqual(promptPayReceiver(source),{type:'EWALLETID',account:'004999004651450'});
-assert.equal(promptPayReceiver(source.replace('BF03','FFFF')),null);
-const payment={amount:99,amount_due_cents:9944,created_at:'2026-10-11T12:00:27Z',recipient:{account_number:'0248522232',recipient_name:'ด.ช. กวินทร์นิธิ พลาญทอง',qr_payload:source}};
-const now=Date.parse('2026-10-11T12:10:00Z');
-const fixture={success:true,data:{isDuplicate:true,amountInSlip:99.44,isAmountMatched:true,matchedAccount:{bank:{code:'PROMPTPAY'},bankNumber:'004999004651450',nameTh:'กวินทร์นิธิ พลาญทอง'},rawSlip:{countryCode:'TH',amount:{amount:99.44,local:{amount:0,currency:''}},date:'2026-10-11T12:02:36Z',transRef:'PROMPTPAY-TEST-REF-001',receiver:{bank:{id:'PROMPTPAY'},account:{proxy:{type:'EWALLETID',account:'XXXXXXXXXXX1450'},name:{th:'ด.ช. กวินทร์นิธิ พ'}}}}}};
-const valid=evaluateReceipt(fixture,payment,now);assert.equal(valid.verified,true);assert.equal(valid.amount_cents,9944);assert.equal(valid.bank_code,'PROMPTPAY');assert.equal(valid.recipient_account,'004999004651450');
-const bad=(mutate,code)=>{const x=structuredClone(fixture);mutate(x);const r=evaluateReceipt(x,payment,now);assert.equal(r.verified,false);assert.equal(r.code,code)};
-bad(x=>x.data.matchedAccount=null,'RECIPIENT_MISMATCH');
-bad(x=>x.data.matchedAccount.bankNumber='111111111111450','RECIPIENT_MISMATCH');
-bad(x=>x.data.rawSlip.receiver.account.proxy.account='XXXXXXXXXXX1451','RECIPIENT_ACCOUNT_UNCERTAIN');
-bad(x=>x.data.rawSlip.receiver.account.proxy.account='XXXXXXXXXXXX450','RECIPIENT_ACCOUNT_UNCERTAIN');
-bad(x=>x.data.rawSlip.receiver.account.proxy.type='NATID','RECIPIENT_ACCOUNT_UNCERTAIN');
-bad(x=>x.data.matchedAccount.nameTh='กวินทร์นิธิ คนอื่น','RECIPIENT_NAME_UNCERTAIN');
-bad(x=>x.data.rawSlip.receiver.account.name.th='ด.ช. กวินทร์นิธิ ค','RECIPIENT_NAME_UNCERTAIN');
-bad(x=>x.data.rawSlip.date='2026-10-10T12:00:00Z','TRANSFER_TIME_MISMATCH');
-const bankToken=structuredClone(fixture);delete bankToken.data.rawSlip.receiver.account.proxy;bankToken.data.rawSlip.receiver.account.bank={type:'TOKEN',account:'XXXXXXXXXXX1450'};assert.equal(evaluateReceipt(bankToken,payment,now).verified,true);
-const invalidQR={...payment,recipient:{...payment.recipient,qr_payload:source.replace('BF03','FFFF')}};assert.equal(evaluateReceipt(fixture,invalidQR,now).verified,false);
-console.log('PASS: registered PromptPay identity, .44 satang, SCB abbreviated receiver name, token receiver, wrong full ID/name, masked-only identity, wrong proxy type, currency/time/CRC checks');
+import { verifyBankSlip } from '../supabase/functions/verify-payment/provider.mjs';
+import { promptPayReceiver, evaluateReceipt } from '../supabase/functions/verify-payment/validation.mjs';
+const source = '00020101021129390016A000000677010111031500499900465145053037645802TH6304BF03';
+assert.deepEqual(promptPayReceiver(source), { type: 'EWALLETID', account: '004999004651450' });
+assert.equal(promptPayReceiver(source.replace('BF03', 'FFFF')), null);
+const payment = {
+  amount: 99,
+  amount_due_cents: 9944,
+  created_at: '2026-10-11T12:00:27Z',
+  recipient: { account_number: '0248522232', recipient_name: 'ด.ช. กวินทร์นิธิ พลาญทอง', qr_payload: source }
+};
+const now = Date.parse('2026-10-11T12:10:00Z');
+const fixture = {
+  success: true,
+  data: {
+    isDuplicate: true,
+    amountInSlip: 99.44,
+    isAmountMatched: true,
+    matchedAccount: {
+      bank: { code: 'PROMPTPAY' },
+      bankNumber: '004999004651450',
+      nameTh: 'กวินทร์นิธิ พลาญทอง'
+    },
+    rawSlip: {
+      countryCode: 'TH',
+      amount: { amount: 99.44, local: { amount: 0, currency: '' } },
+      date: '2026-10-11T12:02:36Z',
+      transRef: 'PROMPTPAY-TEST-REF-001',
+      receiver: {
+        bank: { id: 'PROMPTPAY' },
+        account: {
+          proxy: { type: 'EWALLETID', account: 'XXXXXXXXXXX1450' },
+          name: { th: 'ด.ช. กวินทร์นิธิ พ' }
+        }
+      }
+    }
+  }
+};
+const valid = evaluateReceipt(fixture, payment, now);
+assert.equal(valid.verified, true);
+assert.equal(valid.amount_cents, 9944);
+assert.equal(valid.bank_code, 'PROMPTPAY');
+assert.equal(valid.recipient_account, '004999004651450');
+const bad = (mutate, code) => {
+  const x = structuredClone(fixture);
+  mutate(x);
+  const r = evaluateReceipt(x, payment, now);
+  assert.equal(r.verified, false);
+  assert.equal(r.code, code);
+};
+bad(x => (x.data.matchedAccount = null), 'RECIPIENT_MISMATCH');
+bad(x => (x.data.matchedAccount.bankNumber = '111111111111450'), 'RECIPIENT_MISMATCH');
+bad(x => (x.data.rawSlip.receiver.account.proxy.account = 'XXXXXXXXXXX1451'), 'RECIPIENT_ACCOUNT_UNCERTAIN');
+bad(x => (x.data.rawSlip.receiver.account.proxy.account = 'XXXXXXXXXXXX450'), 'RECIPIENT_ACCOUNT_UNCERTAIN');
+bad(x => (x.data.rawSlip.receiver.account.proxy.type = 'NATID'), 'RECIPIENT_ACCOUNT_UNCERTAIN');
+bad(x => (x.data.matchedAccount.nameTh = 'กวินทร์นิธิ คนอื่น'), 'RECIPIENT_NAME_UNCERTAIN');
+bad(x => (x.data.rawSlip.receiver.account.name.th = 'ด.ช. กวินทร์นิธิ ค'), 'RECIPIENT_NAME_UNCERTAIN');
+bad(x => (x.data.rawSlip.date = '2026-10-10T12:00:00Z'), 'TRANSFER_TIME_MISMATCH');
+const bankToken = structuredClone(fixture);
+delete bankToken.data.rawSlip.receiver.account.proxy;
+bankToken.data.rawSlip.receiver.account.bank = { type: 'TOKEN', account: 'XXXXXXXXXXX1450' };
+assert.equal(evaluateReceipt(bankToken, payment, now).verified, true);
+const invalidQR = {
+  ...payment,
+  recipient: { ...payment.recipient, qr_payload: source.replace('BF03', 'FFFF') }
+};
+assert.equal(evaluateReceipt(fixture, invalidQR, now).verified, false);
+console.log(
+  'PASS: registered PromptPay identity, .44 satang, SCB abbreviated receiver name, token receiver, wrong full ID/name, masked-only identity, wrong proxy type, currency/time/CRC checks'
+);
 
-const bank=structuredClone(fixture);
-bank.data.amountInSlip=99.28;
-bank.data.rawSlip.amount.amount=99.28;
-bank.data.matchedAccount={bank:{code:'004'},bankNumber:'0248522232',nameTh:'กวินทร์นิธิ'};
-bank.data.rawSlip.receiver={bank:{id:'004'},account:{bank:{account:'xxx-x-x2223-x'},name:{th:'ด.ช. กวินทร์นิธิ พ'}}};
-const bankResult=evaluateReceipt(bank,payment,now);
-assert.equal(bankResult.verified,true);assert.equal(bankResult.amount_cents,9928);assert.equal(bankResult.bank_code,'004');
-for(const name of ['ด.ช. กวินทร์นิธิ ค','ด.ช. คนอื่น พ','ด.ช. กวินทร์นิธิ พงษ์ทอง','กวินทร์นิธิ']){
- const x=structuredClone(bank);x.data.rawSlip.receiver.account.name.th=name;assert.equal(evaluateReceipt(x,payment,now).code,'RECIPIENT_NAME_UNCERTAIN');
+const bank = structuredClone(fixture);
+bank.data.amountInSlip = 99.28;
+bank.data.rawSlip.amount.amount = 99.28;
+bank.data.matchedAccount = { bank: { code: '004' }, bankNumber: '0248522232', nameTh: 'กวินทร์นิธิ' };
+bank.data.rawSlip.receiver = {
+  bank: { id: '004' },
+  account: { bank: { account: 'xxx-x-x2223-x' }, name: { th: 'ด.ช. กวินทร์นิธิ พ' } }
+};
+const bankResult = evaluateReceipt(bank, payment, now);
+assert.equal(bankResult.verified, true);
+assert.equal(bankResult.amount_cents, 9928);
+assert.equal(bankResult.bank_code, '004');
+for (const name of ['ด.ช. กวินทร์นิธิ ค', 'ด.ช. คนอื่น พ', 'ด.ช. กวินทร์นิธิ พงษ์ทอง', 'กวินทร์นิธิ']) {
+  const x = structuredClone(bank);
+  x.data.rawSlip.receiver.account.name.th = name;
+  assert.equal(evaluateReceipt(x, payment, now).code, 'RECIPIENT_NAME_UNCERTAIN');
 }
-for(const change of [x=>x.data.matchedAccount.bankNumber='1111122232',x=>x.data.rawSlip.receiver.bank.id='014',x=>x.data.matchedAccount=null]){
- const x=structuredClone(bank);change(x);assert.equal(evaluateReceipt(x,payment,now).verified,false);
+for (const change of [
+  x => (x.data.matchedAccount.bankNumber = '1111122232'),
+  x => (x.data.rawSlip.receiver.bank.id = '014'),
+  x => (x.data.matchedAccount = null)
+]) {
+  const x = structuredClone(bank);
+  change(x);
+  assert.equal(evaluateReceipt(x, payment, now).verified, false);
 }
-const shortMask=structuredClone(bank);shortMask.data.rawSlip.receiver.account.bank.account='xxx-x-xx223-x';assert.equal(evaluateReceipt(shortMask,payment,now).code,'RECIPIENT_ACCOUNT_UNCERTAIN');
-console.log('PASS: KBank .28 receipt with exact registered account and abbreviated surname; wrong name/account/bank and insufficient visible digits rejected');
+const shortMask = structuredClone(bank);
+shortMask.data.rawSlip.receiver.account.bank.account = 'xxx-x-xx223-x';
+assert.equal(evaluateReceipt(shortMask, payment, now).code, 'RECIPIENT_ACCOUNT_UNCERTAIN');
+console.log(
+  'PASS: KBank .28 receipt with exact registered account and abbreviated surname; wrong name/account/bank and insufficient visible digits rejected'
+);
 
-const cached=structuredClone(fixture);cached.data.matchedAccount=null;const calls=[];const result=await verifyBankSlip({apiKey:'test-only',blob:new Blob(['mock'],{type:'image/png'}),payment,now,fetcher:async(url,opts)=>{calls.push(opts.body.get('checkDuplicate'));return {ok:true,json:async()=>calls.length===1?cached:fixture}}});assert.equal(result.verified,true);assert.deepEqual(calls,['true','false']);
-const freshCalls=[];const fresh=structuredClone(cached);fresh.data.isDuplicate=false;await verifyBankSlip({apiKey:'test-only',blob:new Blob(['mock']),payment,now,fetcher:async(url,opts)=>{freshCalls.push(opts.body.get('checkDuplicate'));return {ok:true,json:async()=>fresh}}});assert.deepEqual(freshCalls,['true']);console.log('PASS: stale cached account mismatch refreshed once; fresh mismatch not retried');
+const cached = structuredClone(fixture);
+cached.data.matchedAccount = null;
+const calls = [];
+const result = await verifyBankSlip({
+  apiKey: 'test-only',
+  blob: new Blob(['mock'], { type: 'image/png' }),
+  payment,
+  now,
+  fetcher: async (url, opts) => {
+    calls.push(opts.body.get('checkDuplicate'));
+    return { ok: true, json: async () => (calls.length === 1 ? cached : fixture) };
+  }
+});
+assert.equal(result.verified, true);
+assert.deepEqual(calls, ['true', 'false']);
+const freshCalls = [];
+const fresh = structuredClone(cached);
+fresh.data.isDuplicate = false;
+await verifyBankSlip({
+  apiKey: 'test-only',
+  blob: new Blob(['mock']),
+  payment,
+  now,
+  fetcher: async (url, opts) => {
+    freshCalls.push(opts.body.get('checkDuplicate'));
+    return { ok: true, json: async () => fresh };
+  }
+});
+assert.deepEqual(freshCalls, ['true']);
+console.log('PASS: stale cached account mismatch refreshed once; fresh mismatch not retried');

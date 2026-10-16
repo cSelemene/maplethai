@@ -1,29 +1,142 @@
-import {ITEMS} from './equipment-data.js';
-const tier=(level,items,note)=>({level,items,note});
-const thief=[
- tier(10,[723,950,1170,959,1179],'เริ่มจากของที่ใส่ได้ตามสเตตัส ยังไม่ต้องซื้อทุกชิ้น ถ้าของเดิมตีมอนได้สบาย'),
- tier(15,[760,969,1185],'หมวกยังเพิ่ม LUK เท่าเดิม เปลี่ยนเมื่ออยากได้พลังป้องกัน ไม่ใช่ของที่ต้องซื้อทันที'),
- tier(20,[777,987,1203,998,1214],'ชุดช่วงนี้เพิ่ม LUK +2 ต่อชิ้น เป็นจุดที่ควรเทียบกับของ Lv.10–15'),
- tier(25,[804,1224,1020,1231,1462],'ชุดหญิง Dark Sneak เพิ่ม LUK +2 แต่เสื้อชาย Black Sneak เพิ่ม DEX +1 / LUK +1 จึงยังใช้ Black Pao ที่มี LUK +2 ต่อได้ กางเกงใหม่ยัง LUK +2 เท่าเดิม ได้พลังป้องกันเพิ่ม'),
- tier(35,[845,1048,1264],'ชุดชาย Black Knucklevest เพิ่ม LUK +3 ต่อชิ้น ชุดหญิงที่แนะนำยังใช้ Dark Sneak ต่อได้'),
- tier(40,[864,1065,1281,1074,1290],'Dark Shadow เพิ่ม LUK +4 ต่อชิ้น เทียบค่าสเตตัสจริงกับชุดที่สกอลล์แล้วก่อนเปลี่ยน'),
- tier(50,[],'เก็บ Dark Shadow Lv.40 ใช้ต่อได้ ไม่จำเป็นต้องซื้อชุด Lv.50 ถ้าค่า LUK ลดลง เงินส่วนนี้อาจคุ้มกว่าถ้าใช้กับอาวุธ')
+import { ITEMS } from './equipment-data.js?v=86c189f4dc';
+const tier = (level, items, note) => ({ level, items, note });
+const thief = [
+  tier(
+    10,
+    [723, 950, 1170, 959, 1179],
+    'เริ่มจากของที่ใส่ได้ตามสเตตัส ยังไม่ต้องซื้อทุกชิ้น ถ้าของเดิมตีมอนได้สบาย'
+  ),
+  tier(
+    15,
+    [760, 969, 1185],
+    'หมวกยังเพิ่ม LUK เท่าเดิม เปลี่ยนเมื่ออยากได้พลังป้องกัน ไม่ใช่ของที่ต้องซื้อทันที'
+  ),
+  tier(20, [777, 987, 1203, 998, 1214], 'ชุดช่วงนี้เพิ่ม LUK +2 ต่อชิ้น เป็นจุดที่ควรเทียบกับของ Lv.10–15'),
+  tier(
+    25,
+    [804, 1224, 1020, 1231, 1462],
+    'ชุดหญิง Dark Sneak เพิ่ม LUK +2 แต่เสื้อชาย Black Sneak เพิ่ม DEX +1 / LUK +1 จึงยังใช้ Black Pao ที่มี LUK +2 ต่อได้ กางเกงใหม่ยัง LUK +2 เท่าเดิม ได้พลังป้องกันเพิ่ม'
+  ),
+  tier(
+    35,
+    [845, 1048, 1264],
+    'ชุดชาย Black Knucklevest เพิ่ม LUK +3 ต่อชิ้น ชุดหญิงที่แนะนำยังใช้ Dark Sneak ต่อได้'
+  ),
+  tier(
+    40,
+    [864, 1065, 1281, 1074, 1290],
+    'Dark Shadow เพิ่ม LUK +4 ต่อชิ้น เทียบค่าสเตตัสจริงกับชุดที่สกอลล์แล้วก่อนเปลี่ยน'
+  ),
+  tier(
+    50,
+    [],
+    'เก็บ Dark Shadow Lv.40 ใช้ต่อได้ ไม่จำเป็นต้องซื้อชุด Lv.50 ถ้าค่า LUK ลดลง เงินส่วนนี้อาจคุ้มกว่าถ้าใช้กับอาวุธ'
+  )
 ];
-const weapons={bandit:[[10,560],[15,562],[20,564],[25,566],[30,569],[35,570],[40,571],[50,574]],assassin:[[10,680],[15,682],[20,686],[25,688],[30,689],[35,692],[40,695],[50,702]],mage:[[10,648],[15,650],[20,651],[25,652],[30,653],[35,654],[50,656]]};
-const mage=[tier(10,[727,944,1166,953,1173,917],'ดู M.ATK ของไม้เท้าและ INT ของชุดเป็นหลัก ค่า W.ATK ไม่ใช่พลังโจมตีเวท'),tier(15,[750,1092,973,1189],'Blue Plain Robe เป็นชุดเต็มตัว จึงใช้แทนเสื้อและกางเกงพร้อมกัน'),tier(20,[768,981,1199,991,1207],'เสื้อและท่อนล่างเพิ่ม INT +2 ต่อชิ้น รวม +4 เมื่อใส่คู่กัน'),tier(25,[1099,1102],'Blue Doros / Brown Doroness เพิ่ม INT +5 และเป็นชุดเต็มตัว ใช้แทนเสื้อกับท่อนล่าง'),tier(30,[814,1107],'หมวก Brown Jester เพิ่ม INT +3 ชุดชาย Blue Wizard Robe เพิ่ม INT +6 ส่วนชุดหญิงใช้ Doroness ต่อได้'),tier(35,[1120],'Blue Chaos Robe ยังเพิ่ม INT +6 เท่า Blue Wizard Robe เปลี่ยนเพื่อพลังป้องกันหรือ MP ได้ แต่ไม่ต้องรีบซื้อ'),tier(40,[1133,1138],'Blue Starlight / Blue Moonlight เพิ่ม INT +8 ใช้ไม้เท้า Wizard ต่อได้ถ้ายังไม่มีชิ้นที่ M.ATK ดีกว่า'),tier(50,[877,1142,1149],'Cromi เป็นจุดเปลี่ยนไม้เท้าถัดไป ชุดเต็มตัวเพิ่ม INT +10 ต้องตรวจ LUK ที่ต้องใช้ก่อนซื้อ')];
-export const PLANS=Object.fromEntries(Object.keys(weapons).map(guide=>{
- const levels=new Set([...(guide==='mage'?mage:thief).map(x=>x.level),...weapons[guide].map(x=>x[0]),...(guide==='bandit'?[22]:[])]);
- return [guide,[...levels].sort((a,b)=>a-b).map(level=>{
-  const base=(guide==='mage'?mage:thief).find(x=>x.level===level);
-  return tier(level,[...(base?.items||[]),...weapons[guide].filter(x=>x[0]===level).map(x=>x[1]),...(guide==='bandit'&&level===10?[917]:[]),...(guide==='bandit'&&level===22?[922]:[])],base?.note||(level===22?'Nimble Wristguard เป็นโล่โจร Lv.22 ใช้กับมีดได้ เพิ่มพลังป้องกัน ไม่ได้เพิ่ม LUK':'เน้นเทียบพลังโจมตีของอาวุธกับชิ้นเดิม โดยเฉพาะชิ้นที่สกอลล์แล้ว'));
- })];
-}));
-export function equipmentAt(guide,level,gender='male'){
- if(!PLANS[guide])return {current:[],next:null,checkpoints:[]};
- const checkpoints=PLANS[guide].filter(x=>x.level<=level),slots=new Map();
- for(const t of checkpoints)for(const id of t.items){const item=ITEMS[id];if(item.gender!=='any'&&item.gender!==gender)continue;
-  if(item.slot==='Overall'){slots.delete('Top');slots.delete('Bottom')}else if(['Top','Bottom'].includes(item.slot))slots.delete('Overall');
-  slots.set(item.slot,{...item,checkpoint:t.level});
- }
- return {current:[...slots.values()],next:PLANS[guide].find(x=>x.level>level)||null,checkpoints};
+const weapons = {
+  bandit: [
+    [10, 560],
+    [15, 562],
+    [20, 564],
+    [25, 566],
+    [30, 569],
+    [35, 570],
+    [40, 571],
+    [50, 574]
+  ],
+  assassin: [
+    [10, 680],
+    [15, 682],
+    [20, 686],
+    [25, 688],
+    [30, 689],
+    [35, 692],
+    [40, 695],
+    [50, 702]
+  ],
+  mage: [
+    [10, 648],
+    [15, 650],
+    [20, 651],
+    [25, 652],
+    [30, 653],
+    [35, 654],
+    [50, 656]
+  ]
+};
+const mage = [
+  tier(
+    10,
+    [727, 944, 1166, 953, 1173, 917],
+    'ดู M.ATK ของไม้เท้าและ INT ของชุดเป็นหลัก ค่า W.ATK ไม่ใช่พลังโจมตีเวท'
+  ),
+  tier(15, [750, 1092, 973, 1189], 'Blue Plain Robe เป็นชุดเต็มตัว จึงใช้แทนเสื้อและกางเกงพร้อมกัน'),
+  tier(20, [768, 981, 1199, 991, 1207], 'เสื้อและท่อนล่างเพิ่ม INT +2 ต่อชิ้น รวม +4 เมื่อใส่คู่กัน'),
+  tier(25, [1099, 1102], 'Blue Doros / Brown Doroness เพิ่ม INT +5 และเป็นชุดเต็มตัว ใช้แทนเสื้อกับท่อนล่าง'),
+  tier(
+    30,
+    [814, 1107],
+    'หมวก Brown Jester เพิ่ม INT +3 ชุดชาย Blue Wizard Robe เพิ่ม INT +6 ส่วนชุดหญิงใช้ Doroness ต่อได้'
+  ),
+  tier(
+    35,
+    [1120],
+    'Blue Chaos Robe ยังเพิ่ม INT +6 เท่า Blue Wizard Robe เปลี่ยนเพื่อพลังป้องกันหรือ MP ได้ แต่ไม่ต้องรีบซื้อ'
+  ),
+  tier(
+    40,
+    [1133, 1138],
+    'Blue Starlight / Blue Moonlight เพิ่ม INT +8 ใช้ไม้เท้า Wizard ต่อได้ถ้ายังไม่มีชิ้นที่ M.ATK ดีกว่า'
+  ),
+  tier(
+    50,
+    [877, 1142, 1149],
+    'Cromi เป็นจุดเปลี่ยนไม้เท้าถัดไป ชุดเต็มตัวเพิ่ม INT +10 ต้องตรวจ LUK ที่ต้องใช้ก่อนซื้อ'
+  )
+];
+export const PLANS = Object.fromEntries(
+  Object.keys(weapons).map(guide => {
+    const levels = new Set([
+      ...(guide === 'mage' ? mage : thief).map(x => x.level),
+      ...weapons[guide].map(x => x[0]),
+      ...(guide === 'bandit' ? [22] : [])
+    ]);
+    return [
+      guide,
+      [...levels]
+        .sort((a, b) => a - b)
+        .map(level => {
+          const base = (guide === 'mage' ? mage : thief).find(x => x.level === level);
+          return tier(
+            level,
+            [
+              ...(base?.items || []),
+              ...weapons[guide].filter(x => x[0] === level).map(x => x[1]),
+              ...(guide === 'bandit' && level === 10 ? [917] : []),
+              ...(guide === 'bandit' && level === 22 ? [922] : [])
+            ],
+            base?.note ||
+              (level === 22
+                ? 'Nimble Wristguard เป็นโล่โจร Lv.22 ใช้กับมีดได้ เพิ่มพลังป้องกัน ไม่ได้เพิ่ม LUK'
+                : 'เน้นเทียบพลังโจมตีของอาวุธกับชิ้นเดิม โดยเฉพาะชิ้นที่สกอลล์แล้ว')
+          );
+        })
+    ];
+  })
+);
+export function equipmentAt(guide, level, gender = 'male') {
+  if (!PLANS[guide]) return { current: [], next: null, checkpoints: [] };
+  const checkpoints = PLANS[guide].filter(x => x.level <= level),
+    slots = new Map();
+  for (const t of checkpoints)
+    for (const id of t.items) {
+      const item = ITEMS[id];
+      if (item.gender !== 'any' && item.gender !== gender) continue;
+      if (item.slot === 'Overall') {
+        slots.delete('Top');
+        slots.delete('Bottom');
+      } else if (['Top', 'Bottom'].includes(item.slot)) slots.delete('Overall');
+      slots.set(item.slot, { ...item, checkpoint: t.level });
+    }
+  return { current: [...slots.values()], next: PLANS[guide].find(x => x.level > level) || null, checkpoints };
 }
