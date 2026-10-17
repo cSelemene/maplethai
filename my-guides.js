@@ -1,5 +1,5 @@
-import { supabase, GUIDES, hasGuide, readAccount } from './supabase-client.js?v=16f4430b96';
-import { readProgress } from './guide-progress.js?v=61bb5c74c4';
+import { supabase, GUIDES, hasGuide, readAccount } from './supabase-client.js?v=1e63dbc72a';
+import { readProgress } from './guide-progress.js?v=7be26c465b';
 const PUBLISHED_GUIDES = { bandit: true, assassin: true, mage: true };
 const $ = id => document.getElementById(id);
 let generation = 0;

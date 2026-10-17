@@ -1,6 +1,6 @@
-import { supabase, GUIDES, hasGuide, readAccount } from './supabase-client.js?v=16f4430b96';
+import { supabase, GUIDES, hasGuide, readAccount } from './supabase-client.js?v=1e63dbc72a';
 import { renderProfile } from './profile-ui.js?v=79ef17697c';
-import { readProgress } from './guide-progress.js?v=61bb5c74c4';
+import { readProgress } from './guide-progress.js?v=7be26c465b';
 import { guideCard } from './guide-library.js?v=54cf21afb3';
 let generation = 0;
 async function refresh() {

@@ -1,4 +1,4 @@
-import { supabase } from './supabase-client.js?v=16f4430b96';
+import { supabase } from './supabase-client.js?v=1e63dbc72a';
 import { renderProfile } from './profile-ui.js?v=79ef17697c';
 const $ = id => document.getElementById(id);
 const callbackUrl = new URL('./auth.html', location.href).href;

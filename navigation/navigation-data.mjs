@@ -1,4 +1,4 @@
-import { supabase, readAccount, hasGuide, GUIDES } from '../supabase-client.js?v=16f4430b96';
+import { supabase, readAccount, hasGuide, GUIDES } from '../supabase-client.js?v=1e63dbc72a';
 let bundlePromise = null,
   userId = null,
   invalid = false;

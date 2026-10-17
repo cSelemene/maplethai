@@ -1,10 +1,10 @@
-import { supabase as s, readAccount, GUIDES } from './supabase-client.js?v=16f4430b96';
+import { supabase as s, readAccount, GUIDES } from './supabase-client.js?v=1e63dbc72a';
 import {
   readProgress,
   attachProgress,
   createProgressSaver,
   pendingProgress
-} from './guide-progress.js?v=61bb5c74c4';
+} from './guide-progress.js?v=7be26c465b';
 const id = new URLSearchParams(location.search).get('guide');
 const $ = x => document.getElementById(x);
 let objectURL = null,

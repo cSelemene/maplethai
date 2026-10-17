@@ -1,4 +1,4 @@
-import { supabase } from './supabase-client.js?v=16f4430b96';
+import { supabase } from './supabase-client.js?v=1e63dbc72a';
 export async function readProgress() {
   const { data, error } = await supabase.rpc('my_guide_progress');
   if (error) throw error;
