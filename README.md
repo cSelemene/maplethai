@@ -9,14 +9,16 @@ Paid MapleStory Classic World guides, a player marketplace and PromptPay checkou
 - `supabase/` holds the database schema, seed, tests and the `verify-payment` Edge Function. See `supabase/README.md`.
 - `scripts/` holds the browser and SQL tests that GitHub Actions runs.
 
-## After editing any page, script or stylesheet
+## Cache-busting versions and formatting are automatic
+
+Every local `.js/.css/image` reference carries `?v=<hash>` taken from the file's contents (and what it imports), so browsers never mix old and new files and never load one module twice. Do not edit `?v=` values by hand.
+
+The **Auto-fix versions and formatting** workflow runs on every push: it runs `scripts/stamp-assets.mjs` and Prettier, and if anything changed it commits the fix back to the same branch (and rebuilds GitHub Pages on `main`). Edit files anywhere and push as usual. To do the same locally before pushing:
 
 ```
-node scripts/stamp-assets.mjs                 # refresh ?v= cache-busting versions
-npx prettier@3 --write "*.js" "navigation/*.mjs" "scripts/*.mjs"
+node scripts/stamp-assets.mjs
+npx prettier@3.9.10 --write "*.js" "navigation/*.mjs" "scripts/*.mjs"
 ```
-
-`stamp-assets.mjs` gives every local `.js/.css/image` reference a version taken from the file's contents (and what it imports), so browsers never mix old and new files and never load one module twice. Do not edit `?v=` values by hand. The **Code checks** workflow fails if either step was skipped.
 
 Large data files (`free-routes.js`, `warrior-*.js`, `equipment-data.js`, `class-quiz-data.js`) are kept compact and are excluded from formatting (`.prettierignore`).
 
