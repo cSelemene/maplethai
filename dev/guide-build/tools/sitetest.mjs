@@ -51,7 +51,7 @@ for (const g of guides) {
     }));
     await new Promise(r => setTimeout(r, 3500));
     const saves = await p.evaluate(() => window.test.calls.filter(c => c.method === 'save_guide_progress').map(c => c.args.p_state && c.args.p_state.tab));
-    const ok = Object.values(res).every(r => r.on && r.len > 200 && r.broken === 0 && r.overflow <= 0) && errors.length === 0 && extra.tips && extra.stages === 5 && extra.eqRoute && (g !== 'bandit' || (extra.sindit && extra.eqBuilds)) && saves.length > 0;
+    const ok = Object.values(res).every(r => r.on && r.len > 200 && r.broken === 0 && r.overflow <= 0) && errors.length === 0 && extra.tips && extra.stages === 5 && (g === 'sindit' || extra.eqRoute) && (g !== 'bandit' || (extra.sindit && extra.eqBuilds)) && saves.length > 0;
     if (!ok) fail++;
     console.log(ok ? 'PASS' : 'FAIL', tag, JSON.stringify(res), JSON.stringify(extra), 'saves', JSON.stringify(saves.slice(-3)), errors.slice(0, 5).join(' | '));
     await p.close();

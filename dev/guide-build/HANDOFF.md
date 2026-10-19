@@ -91,3 +91,9 @@ This folder is dev material only. Don't merge it to `main` as-is (GitHub Pages w
 ## Next tasks (queued 2026-10-19 10:04)
 1. New Sindit guide (claw/stars first, then dagger Bandit ~Lv.40-45), Bandit-guide standard. Owner framing and open questions: project doc `claude/next-tasks.md`.
 2. Finish the Warrior draft (`guide_files`: fighter / page / spearman) to Bandit-guide standard and open it for sale.
+
+## Sindit guide (done 2026-10-19)
+- Built by `build/sindit.py` from the site Assassin guide + Bandit daggers/explainers; run after `site_merge.py`, then `inline.py sindit` (uses the Assassin artifact's `i/` images). Uploaded to `guide_files` as `sindit`.
+- Bonus for Bandit owners: `private.guide_product('sindit') = 'guide_bandit'` (migration `20261019100000_sindit_guide.sql`, PR #28 merged to main). Progress KEY `sindit-route-v1`.
+- Plan: 1st job Lucky Seven 20 / Nimble Body 15 / Keen Eyes 3 / Disorder 3 / Dark Sight 20; hold all 2nd-job SP; switch at Lv.44 (SB 21 / Mastery 20 / Booster 1 / Haste 1), options Lv.36 / Lv.40. AP: Assassin plan to DEX 45 at Lv.44, then all LUK.
+- Next: Warrior guide (task 2).
