@@ -75,7 +75,9 @@ try {
   console.log('PASS: purchased library, resume label, unowned discover and mobile');
   {
     // Spearman is published: owners see it as owned, everyone else can discover it.
-    const sp = await page({ account: { is_admin: false, entitlements: [{ product: 'guide_spearman', expires_at: null }] } });
+    const sp = await page({
+      account: { is_admin: false, entitlements: [{ product: 'guide_spearman', expires_at: null }] }
+    });
     await sp.goto(base + '/my-guides.html', { waitUntil: 'networkidle0' });
     assert.equal(await sp.$$eval('#library-owned article', a => a.length), 1);
     assert.equal(await sp.$$eval('#library-discover article', a => a.length), 4);
@@ -177,7 +179,9 @@ try {
 
   {
     // Spearman is published: owners see it as owned, everyone else can discover it.
-    const sp = await page({ account: { is_admin: false, entitlements: [{ product: 'guide_spearman', expires_at: null }] } });
+    const sp = await page({
+      account: { is_admin: false, entitlements: [{ product: 'guide_spearman', expires_at: null }] }
+    });
     await sp.goto(base + '/my-guides.html', { waitUntil: 'networkidle0' });
     assert.equal(await sp.$$eval('#library-owned article', a => a.length), 1);
     assert.equal(await sp.$$eval('#library-discover article', a => a.length), 4);

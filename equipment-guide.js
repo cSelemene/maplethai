@@ -1,5 +1,5 @@
 import { ITEMS } from './equipment-data.js?v=a713c8dacb';
-import { equipmentAt, PLANS } from './equipment-plan.js?v=e2c5a7c0e5';
+import { equipmentAt, PLANS } from './equipment-plan.js?v=deb634df72';
 const script = document.querySelector('script[data-equipment-guide]');
 const guide = script?.dataset.equipmentGuide;
 const main = document.getElementById('main');
