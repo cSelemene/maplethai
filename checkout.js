@@ -5,7 +5,7 @@ let wallet = { available_cents: 0, reserved_cents: 0 },
   qrKey = '',
   qrGeneration = 0;
 const $ = id => document.getElementById(id);
-const allowed = ['guide_bandit', 'guide_assassin', 'guide_mage', 'market'];
+const allowed = ['guide_bandit', 'guide_assassin', 'guide_mage', 'guide_spearman', 'market'];
 let products = [],
   settings,
   user,
@@ -91,7 +91,9 @@ function render() {
   $('market-features').hidden = !market;
   $('product-note').textContent = market
     ? 'หลังอนุมัติ เปิดดูช่องทางติดต่อในตลาดได้ 30 วัน'
-    : 'หลังอนุมัติ เปิดอ่านฉบับเต็มได้ใน “ไกด์ของฉัน”';
+    : selected === 'guide_bandit'
+      ? 'หลังอนุมัติ เปิดอ่านฉบับเต็มได้ใน “ไกด์ของฉัน” พร้อมไกด์ Sindit (ปาดาว → โจรมีด) ฟรี'
+      : 'หลังอนุมัติ เปิดอ่านฉบับเต็มได้ใน “ไกด์ของฉัน”';
   $('free-preview').hidden = market;
   $('owned-message').textContent = market ? 'บัญชีนี้มีสิทธิ์สมาชิกตลาดแล้ว' : 'บัญชีนี้มีสิทธิ์อ่านไกด์แล้ว';
   $('read-guide').textContent = market ? 'เปิดตลาดซื้อขาย' : 'เปิดไกด์ฉบับเต็ม';
@@ -178,6 +180,8 @@ function render() {
     ? 'หลังชำระสำเร็จ เพื่อนจะเห็นไกด์ในบัญชีที่ยืนยันอีเมลนี้'
     : market
       ? 'หลังอนุมัติ เปิดดูช่องทางติดต่อในตลาดได้ 30 วัน'
+      : selected === 'guide_bandit'
+      ? 'หลังอนุมัติ เปิดอ่านฉบับเต็มได้ใน “ไกด์ของฉัน” พร้อมไกด์ Sindit (ปาดาว → โจรมีด) ฟรี'
       : 'หลังอนุมัติ เปิดอ่านฉบับเต็มได้ใน “ไกด์ของฉัน”';
   recipient(order?.recipient);
   showHistory($('order-history'), orders, Object.fromEntries(products.map(p => [p.id, p.name])));

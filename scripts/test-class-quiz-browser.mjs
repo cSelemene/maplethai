@@ -75,7 +75,7 @@ try {
     null,
     'Withdrawn Page guide must not be promoted'
   );
-  for (const guide of ['fighter', 'page', 'spearman']) {
+  for (const guide of ['fighter', 'page']) {
     assert.equal(await page.$('#guides a[href="./guide-preview.html?guide=' + guide + '"]'), null);
     assert.equal(await page.$('#guides a[href="./checkout.html?product=guide_' + guide + '"]'), null);
   }
