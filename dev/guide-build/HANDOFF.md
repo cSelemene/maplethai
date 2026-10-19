@@ -1,4 +1,16 @@
-# Guide update handoff: grind tab + consistency pass (paused 2026-10-19)
+# Guide update handoff: grind tab + consistency pass
+
+## STATUS (2026-10-19, later the same day): LIVE ON THE WEBSITE
+- Bandit, Assassin and Mage were uploaded to `public.guide_files` on 2026-10-19 via `svc_put_guide` (sizes 3,339,268 / 3,355,023 / 3,305,750 chars).
+- The previous website versions (2026-10-11) are backed up in `private.guide_files_backup_20261019` (guide, html, updated_at). Roll back with:
+  `update public.guide_files g set html = b.html, updated_at = now() from private.guide_files_backup_20261019 b where b.guide = g.guide;`
+- The site copies had owner edits the artifacts never had. `build/site_merge.py` re-applies them on top of the new content: artifact wrapper removed, market prices via `window.__MKT__`, site price note, owner money section `mkt-profit-tips` (`build/site_money_tips.html`), and for Bandit the owner's skill plan block (`build/site_bandit_block.js`: Sindit option, 2nd-job A/B/C, level plan, route SP overrides) plus Reef Claw "not sold by NPC" fixes. Both blocks were verified byte-identical to the site (md5).
+- Pipeline: `assemble.py` -> `out/` -> `site_merge.py` -> `site/` -> `inline.py` (images to data URIs, `i/` from each guide's own artifact files) -> upload. `tools/sitetest.mjs` loads each guide in `premium-guide.html` with Supabase stubbed and checks all tabs, images, overflow, progress saving, the site's equipment-guide mount, desktop + mobile. All pass.
+- Owner decisions: upload all three (done); Assassin keeps the current AP plan with early DEX shown as an alternative. The site's equipment-guide.js picker stays as is (it already coexisted with Bandit Builds).
+- From now on, edit the website copies as the source of truth, not the artifacts. The artifacts lack the owner's Bandit skill plan and money section.
+
+---
+
 
 สรุปสั้น: งานอัปเดตไกด์ Bandit / Assassin / Mage เสร็จแล้วในรูป artifact แต่ **ยังไม่ได้ขึ้นเว็บ MapleThai** ไฟล์ทั้งหมดที่ต้องใช้ทำต่ออยู่ในโฟลเดอร์นี้ (branch `feature/guide-grind-builds`, ไม่ได้ merge เข้า main)
 
