@@ -181,8 +181,8 @@ function render() {
     : market
       ? 'หลังอนุมัติ เปิดดูช่องทางติดต่อในตลาดได้ 30 วัน'
       : selected === 'guide_bandit'
-      ? 'หลังอนุมัติ เปิดอ่านฉบับเต็มได้ใน “ไกด์ของฉัน” พร้อมไกด์ Sindit (ปาดาว → โจรมีด) ฟรี'
-      : 'หลังอนุมัติ เปิดอ่านฉบับเต็มได้ใน “ไกด์ของฉัน”';
+        ? 'หลังอนุมัติ เปิดอ่านฉบับเต็มได้ใน “ไกด์ของฉัน” พร้อมไกด์ Sindit (ปาดาว → โจรมีด) ฟรี'
+        : 'หลังอนุมัติ เปิดอ่านฉบับเต็มได้ใน “ไกด์ของฉัน”';
   recipient(order?.recipient);
   showHistory($('order-history'), orders, Object.fromEntries(products.map(p => [p.id, p.name])));
   for (const id of [
