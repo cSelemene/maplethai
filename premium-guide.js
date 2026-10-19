@@ -4,7 +4,7 @@ import {
   attachProgress,
   createProgressSaver,
   pendingProgress
-} from './guide-progress.js?v=e2eb54f73c';
+} from './guide-progress.js?v=64a8c95522';
 const id = new URLSearchParams(location.search).get('guide');
 const $ = x => document.getElementById(x);
 let objectURL = null,
@@ -80,7 +80,9 @@ if (!Object.hasOwn(GUIDES, id)) {
 } else {
   $('heading').textContent = GUIDES[id] + ' — ไกด์ฉบับเต็ม';
   $('preview').href =
-    id === 'bandit' || id === 'sindit' ? './bandit-artifact-preview-v3.html' : './guide-preview.html?guide=' + id;
+    id === 'bandit' || id === 'sindit'
+      ? './bandit-artifact-preview-v3.html'
+      : './guide-preview.html?guide=' + id;
   $('login').href = './auth.html?next=' + encodeURIComponent('premium-guide.html?guide=' + id);
   try {
     const {

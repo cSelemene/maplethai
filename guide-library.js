@@ -25,7 +25,10 @@ export function guideCard(id, name, owned, progress) {
     box.append(a);
   } else {
     const a = text('a', 'ทดลองอ่าน');
-    a.href = id === 'bandit' || id === 'sindit' ? './bandit-artifact-preview-v3.html' : './guide-preview.html?guide=' + id;
+    a.href =
+      id === 'bandit' || id === 'sindit'
+        ? './bandit-artifact-preview-v3.html'
+        : './guide-preview.html?guide=' + id;
     const buy = text('a', id === 'sindit' ? 'ได้ฟรีเมื่อซื้อไกด์โจรมีด' : 'ซื้อไกด์');
     buy.href = './checkout.html?product=' + (id === 'sindit' ? 'guide_bandit' : 'guide_' + id);
     box.append(a, buy);
