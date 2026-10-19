@@ -1,10 +1,10 @@
-import { supabase as s, readAccount, GUIDES } from './supabase-client.js?v=1e63dbc72a';
+import { supabase as s, readAccount, GUIDES } from './supabase-client.js?v=662ee932f0';
 import {
   readProgress,
   attachProgress,
   createProgressSaver,
   pendingProgress
-} from './guide-progress.js?v=7be26c465b';
+} from './guide-progress.js?v=64a8c95522';
 const id = new URLSearchParams(location.search).get('guide');
 const $ = x => document.getElementById(x);
 let objectURL = null,
@@ -80,7 +80,9 @@ if (!Object.hasOwn(GUIDES, id)) {
 } else {
   $('heading').textContent = GUIDES[id] + ' — ไกด์ฉบับเต็ม';
   $('preview').href =
-    id === 'bandit' ? './bandit-artifact-preview-v3.html' : './guide-preview.html?guide=' + id;
+    id === 'bandit' || id === 'sindit'
+      ? './bandit-artifact-preview-v3.html'
+      : './guide-preview.html?guide=' + id;
   $('login').href = './auth.html?next=' + encodeURIComponent('premium-guide.html?guide=' + id);
   try {
     const {

@@ -1,4 +1,4 @@
-import { supabase, readAccount } from './supabase-client.js?v=1e63dbc72a';
+import { supabase, readAccount } from './supabase-client.js?v=662ee932f0';
 const node = document.getElementById('account-market-quota');
 let generation = 0;
 async function refresh() {

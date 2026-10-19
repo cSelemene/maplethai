@@ -1,4 +1,4 @@
-import { getBundle } from './navigation-data.mjs?v=e9d57feef7';
+import { getBundle } from './navigation-data.mjs?v=ec9c066e66';
 let profiles = { npcs: [], images: {} };
 let monsterProfiles = [];
 export async function loadMonsterProfiles() {

@@ -6,17 +6,22 @@ export const supabase = createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY, {
 });
 export const GUIDES = {
   bandit: 'Pure Bandit',
+  sindit: 'Sindit (ปาดาว → โจรมีด)',
   assassin: 'Assassin',
   mage: 'Ice / Lightning Mage',
   fighter: 'Fighter',
   page: 'Page',
   spearman: 'Spearman'
 };
+// Sindit is a bonus guide: anyone who owns the Bandit guide can read it.
+export function guideProduct(id) {
+  return id === 'sindit' ? 'guide_bandit' : 'guide_' + id;
+}
 export function hasGuide(account, id) {
   return Boolean(
     account?.is_admin ||
     account?.entitlements?.some(
-      e => e.product === 'guide_' + id && (!e.expires_at || new Date(e.expires_at).getTime() > Date.now())
+      e => e.product === guideProduct(id) && (!e.expires_at || new Date(e.expires_at).getTime() > Date.now())
     )
   );
 }

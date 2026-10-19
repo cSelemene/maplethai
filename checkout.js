@@ -1,5 +1,5 @@
-import { supabase, readAccount, hasGuide } from './supabase-client.js?v=1e63dbc72a';
-import { rpc, myOrders, showHistory, money, STATUS } from './payment-common.js?v=3b8a17f7a6';
+import { supabase, readAccount, hasGuide } from './supabase-client.js?v=662ee932f0';
+import { rpc, myOrders, showHistory, money, STATUS } from './payment-common.js?v=ddc065225e';
 import { paymentImage } from './payment-qr.js?v=ad42cece6f';
 let wallet = { available_cents: 0, reserved_cents: 0 },
   qrKey = '',
