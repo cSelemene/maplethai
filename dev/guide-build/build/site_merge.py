@@ -8,6 +8,7 @@ The website copies in Supabase guide_files carry edits the artifacts never had:
 This script re-applies those edits on top of the new content so nothing of the owner's is lost.
 """
 import re, sys
+import site_patch
 
 B = '/home/claude/build/'
 TIPS = open(B + 'site_money_tips.html').read().rstrip('\n')
@@ -59,13 +60,13 @@ def bandit(t):
     # owner's skill descriptions
     t = rep(t, '["Double Stab", "แทงมอนสองครั้งติดกันในการกดครั้งเดียว เป็นท่าโจมตีหลักตั้งแต่เลเวล 10 ไปจนถึงประมาณเลเวล 43", "ลงต่อเนื่องช่วงเลเวล 10 ถึง 17 จนเต็ม 20 แต้ม"]',
             '["Double Stab", "แทงมอนสองครั้งติดกันในการกดครั้งเดียว เป็นท่าโจมตีหลักช่วงแรก ใช้ต่อได้เมื่อฆ่ามอนครั้งเดียวเพื่อประหยัด MP", "ลงต่อเนื่องช่วงเลเวล 10 ถึง 17 จนเต็ม 20 แต้ม"]')
-    t = rep(t, '"ลง 1 แต้มตอนเลเวล 30 แล้วลงต่อตั้งแต่เลเวล 48"]', '"Lv.32–34 ลงถึง 5 จากนั้น Lv.50–54 ลงจนเต็ม 20"]')
-    t = rep(t, '"ลงต่อเนื่องช่วงเลเวล 31 ถึง 37 จนเต็ม 20 แต้ม"]', '"Lv.30–32 ลงถึง 5 แล้ว Lv.42–46 ลงจนเต็ม 20 ตามแผน Savage Blow ก่อน"]')
+    t = rep(t, '"ลง 1 แต้มตอนเลเวล 30 แล้วลงต่อตั้งแต่เลเวล 48"]', '"Lv.32 ลง 1, Lv.45–46 ลงถึง 5 จากนั้น Lv.50–54 ลงจนเต็ม 20"]')
+    t = rep(t, '"ลงต่อเนื่องช่วงเลเวล 31 ถึง 37 จนเต็ม 20 แต้ม"]', '"Lv.30–32 ลงถึง 5 แล้ว Lv.33–37 ลงจนเต็ม 20 ก่อนเริ่ม Savage Blow"]')
     t = rep(t, '["Savage Blow", "ฟันมอนรัวหลายครั้งในการกดครั้งเดียว เป็นสกิลที่แรงที่สุดของ Bandit เริ่มใช้แทน Double Stab ได้ตั้งแต่ลงไว้ 18 แต้ม", "ลงต่อเนื่องช่วงเลเวล 38 ถึง 47 จนเต็ม 30 แต้ม"]',
-            '["Savage Blow", "ฟันมอนรัวหลายครั้งในการกดครั้งเดียว โจมตีหนึ่งตัว 4 / 5 / 6 ฮิตที่สกิล 1 / 11 / 21 ตามลำดับ เลือกใช้ตามจำนวนครั้งที่ฆ่ามอนและ MP", "Lv.35–41 ลงถึง 21 ได้ 6 ฮิต จากนั้น Lv.47–49 ลงจนเต็ม 30"]')
-    # stale timing left over from the old skill order; align with the owner's plan (6 hits at Lv.41)
-    t = rep(t, 'ใช้ Savage Blow เป็นท่าหลักตั้งแต่ Lv.43', 'ใช้ Savage Blow เป็นท่าหลักตั้งแต่ Lv.41')
-    t = rep(t, 'จนกว่า Savage Blow จะถึง 18 (เลเวล 43)', 'จนกว่า Savage Blow จะถึง 21 (เลเวล 41)')
+            '["Savage Blow", "ฟันมอนรัวหลายครั้งในการกดครั้งเดียว โจมตีหนึ่งตัว 4 / 5 / 6 ฮิตที่สกิล 1 / 11 / 21 ตามลำดับ เลือกใช้ตามจำนวนครั้งที่ฆ่ามอนและ MP", "Lv.38–44 ลงถึง 21 ได้ 6 ฮิต จากนั้น Lv.47–49 ลงจนเต็ม 30"]')
+    # stale timing left over from the old skill order; Mastery-first plan gives 6 hits at Lv.44
+    t = rep(t, 'ใช้ Savage Blow เป็นท่าหลักตั้งแต่ Lv.43', 'ใช้ Savage Blow เป็นท่าหลักตั้งแต่ Lv.44')
+    t = rep(t, 'จนกว่า Savage Blow จะถึง 18 (เลเวล 43)', 'จนกว่า Savage Blow จะถึง 21 (เลเวล 44)')
     # owner's Sindit wording (intro)
     lines = t.split('\n')
     def swap(prefix, new):
@@ -94,6 +95,10 @@ for g in sys.argv[1:]:
     t = open(f'/home/claude/out/{g}.html').read()
     t = common(t)
     if g == 'bandit':
-        t = bandit(t)
+        t = site_patch.bandit_patch(bandit(t))
+    elif g == 'assassin':
+        t = site_patch.assassin_patch(t)
+    elif g == 'mage':
+        t = site_patch.mage_patch(t)
     open(f'/home/claude/site/{g}.html', 'w').write(t)
     print(g, 'ok', len(t))
