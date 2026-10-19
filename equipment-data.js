@@ -1832,5 +1832,84 @@ export const ITEMS = {
     },
     "icon": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACIAAAAhCAYAAAC803lsAAACdklEQVR4AcXBL2LbSBTA4d9TQwLHRxjDQC9cOD6CcoRcQYYtW9OFPoJ0BIuWeegyDV2mR8teR5t4bcdq/Cdu8n18MgOMTPg8lpEUphOh4HNYRlJISRkUfDx7Kj1JISVl/seETISPZV0diElpo7JqEpmQFXwceyo9yyYxWDWJTHjxhY9hXR24v4f07w8Wf/9DJuwp+P3sqfQsm8Rg1SQy4ZWC2zIO2VPpCTPH4HERyYQRBbdjXW9kxjPr6kCYOdqorJpEJvxCwQ15B11vZNbVgZiUwapJZMIbhNuyjKQwnQj1XzMeF5FMOKHgdowsKXgHXW88LiKZcIYv3IZZKPnqH9CyZPmtYfbnA/c88P178xX4xgl33JDGiJtOWWpiuYSqqjlXwfvZetOjMTKIKC9kuXzkXML72HrT87/5lMFclUy4QMH1rKpq2qZla67KXJVMuFDBdayqakIZCGVgq+uNawmXs6qq2QplYOC9Y2s6ETLhAsJlbL3pGbRNSygDA+8dW97xHxEhE850x/lsvelpm5aYIlVVMfDecQsF57GqqmmblpgiMz9j4L1jn3dcreA0W296YoqEMjDzM0IZ8N6xzzveRXibVVXNIJSBtmkJZcB7xz7vOCAiZMIFhF+z9aZn0DYtoQwMvHfs844DIkImXEg4ZmTrTc8+7x2veccBESETriDsGFnXG+fwjgMiQjZhnHKCAEZmZmwlZZR3jBIRsjnjlGcKKKCMuCMzM/Z5x1lEhBdLIADKOAUUSEAClFeEZ0ZmZpwiIuxZcUg5poACCiQgAcorwiHjtAXjlB1lRwEFFFBAGSEcc4Bjx3HMAcox5ZCyo7zhJ/B++tbF7H7WAAAAAElFTkSuQmCC",
     "source": "https://meowdb.com/msclassic/item-db/647"
+  },
+  "617": {
+    "id": 617,
+    "name": "Metal Axe",
+    "level": 10,
+    "slot": "Two-Handed Axe",
+    "gender": "any",
+    "requirements": {
+      "STR": 25
+    },
+    "stats": {
+      "W.ATK": 30
+    },
+    "icon": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABwAAAAfCAYAAAD0ma06AAACNklEQVR4AbXBsXnrNhiG0fdX2Nzy4whYgRmBGQErYAWoTDprBa6gFbgCVkCb7mIEBHxMPbJsSRZl5Rz+BxWo3PAHr1WDH9CvX+R/y9/AP3xivE4NfiDnwpwyjXGF8Rp1HByLOWUa44YdP1eDH1jMKdMYdxg/U4MfyLkwp0xjfMN4Xg1+IOfCnDKN8QDjOTX4gZwLc8o0xoN2bFdjGMm5MKdMY2xgbFNjGEkpM6dMY2xkPK7GMJJSZk6ZxniC8Zgaw0hKmTllGuNJxleVMwNqDCMpZeaUaYwfMC7VGCOSWOz3e2LwpJSYU6YxfqjjrMYYOfHek3PmME2sjBfY8a7GGFlIwnvPNE3knBnHkVcyoMYYWUjCe8/xeCSlRCkFSUhimiZWxlnlK+OOjpUkvPccj0dSSpRSkMRJCAFJHA6HyirGyDiODMPAou97vtMBdjgcKquUEqUUJHFNjJGPJLFFB9QQRhb7/Z5xHJHEiSRu8d7jnGOLHaucMot5npHEQhInkrin73sa4xs7wKZpZk6ZxgCbpglJ3OOcwznHVh3vjI2895z0fU9jPGDHE7z3LCSx1Y6NvPc455DEou97GuNBHQ+QhPeeYRj4yMxoekDcVvig444QAgvnHJL4yMxo/gIGbiu8K0ABSsclAb9jjEjCOYckPjMzmgMwcla4rgAFyEDuOBMgmre3N64xM1YTIL5X+KTjkrjCzFjtua5wVjgrQAEKUIBiXBLwm6/+5ExA4avCpcJZYfUfzQfKGlwuM9IAAAAASUVORK5CYII=",
+    "source": "https://meowdb.com/msclassic/item-db/617"
+  },
+  "620": {
+    "id": 620,
+    "name": "Two-Handed Axe",
+    "level": 25,
+    "slot": "Two-Handed Axe",
+    "gender": "any",
+    "requirements": {
+      "STR": 55,
+      "DEX": 25
+    },
+    "stats": {
+      "W.ATK": 45
+    },
+    "icon": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB0AAAAgCAYAAADud3N8AAACk0lEQVR4AbXBy2EaSRSG0e8ybGb5O4TrEEohyCG0QpBTYDmzMyGIEEQI1HZ2dAhdIXBDqKkGySDxlC2fwx9UgcoJf/Fn1NV6w99K9P8t/wH+5YDx+epqvWG5zCzmDzTGO8bnqqv1huUys5g/0BgnGJ+ndsnJfSHYMs6Y8Dlql5w+gmDLuMD4fbVLTh9BKUFjXGH8ntolp4+glKAxbmD8utolp4+glKAxbmT8mtolp4+glKAxPsD4uNolp4+glKAxPmjCx9QuOX0EpQSNcV7ljCm3qTRdcvoISgka47zKBROukeqPpzX33Q/6CEoJGuO8ul5vuGTKJVKtmw2vMlDKzDivPq8GUhKXTDhHqsN6YNQXDlWOVaA+rwbcxTVTTpHqsB5wF32BnHtyzpxQabruCQTuIrm4Zsp7Uh3WA+6iL5BzT86ZkSS6xyeWi++Vpnt8ggAEXXcPwU2mnOAu+gI59+ScGUniVff4xE8CAlxCEiMzozHOmPBWrZsN3x7m5NyTc2YkiR0B4pUkCLjv7pFA4iYT9mrDbJZJnph9v2MkiZEQYk8SI0+Oi0ZI3GTCgb5AEMzn32gsL2cIIYlXAiQREUQEI0m4s2VmNMYFE0ZSXQ+Vu6/GYv5AY+zYYvHAltgRECAJdycl56OmjCK4+2o0xiViSy5ScgTIhUuMzIzGuGIKVMC4wN0ppeDuuASClBwicBcjM6MxbmBcVp9XA69EI5FcSPxkZjTGjYzz6vNqYCR23IW7OGRmNF+4LDgw5YLkYkvCxRtmxotvQOK8YCeAAMI4JmBTa+UUM+PFnGPBaQEEUIAy5S0Bm1orh8yMAwt2xG2Cd4y3KqfNuC7YC/YCCCCAAMI4JkDsiWMCgmPBW8Fe8OJ/VDP/m2c+o8IAAAAASUVORK5CYII=",
+    "source": "https://meowdb.com/msclassic/item-db/620"
+  },
+  "622": {
+    "id": 622,
+    "name": "Niam",
+    "level": 35,
+    "slot": "Two-Handed Axe",
+    "gender": "any",
+    "requirements": {
+      "STR": 75,
+      "DEX": 35
+    },
+    "stats": {
+      "W.ATK": 55
+    },
+    "icon": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB0AAAAkCAYAAAB15jFqAAACeklEQVR4AcXBsXUbORRA0YeREod/wg1nSsCWgC0BLUAlbOrNrBLAEsh0Q5TAnzrTL0EoAYs5pA8pUZZokVzfy/+gAY0jd9xWW28z4v9A/9WvwD90AzdWVLGiTH6ia3QDN2ZFMatMk/CD43ZaiJ6yUY44Osf1NboQPWWjdI5X7riulnJCvkDZKJ3jDQPX09bbjBXFrPKegetoKSdWjyum4DE1OsdPDFyurbeZahWzyuphRed4x8Bl2nqb2WwK1QxTo3N84I7LfEW+oEXR8p3OcQbH+xrgeKmxF/8ObB4Le44zOd7X2HHstJQTi2rG5rHQOX7RwAfW20zXgJZyInhPNeMS95xhvc0UVYL3FFUWm8dC5/iEgTMF7ymqVDNijKy3ma7xCQM/19bbzA9FlWpGjJFF8IHPGjhDUaWaEWNkEXxg8dye6Bq/aOBtLeXEoqhSzYgxsgg+cKl7TrWUE8F7iirVjBgji+ADi9HNXMLxUks5EbynqFLNiDGyCD4wupk9xwXuOWgpJ94SfGB0M53jChw7LeXEInhPUaWaEWMk+MDoZjrHlQwcCd5TVKlmxBgJPjC6mc5xRQPQUk68FnxgdDOd48oG9oL3FFWqGflbZnQzneMGBn6DgSPVjPwtM7qZznEjA7/BALjVw4qiypkEEEAAAQQQQAABBBBAAAGEV+45ItPEEWFHOBB2hPNVdipQgeo4aCkngvcEHxjdTPcXIICwIxwIpypvq0AFDLCBA7d6WFFUOeKBCZiACZiACZgAAQQQQAABBBBAAAGENzheEuCZ7rk9MbqZ7gEQPlY5qBxUoAIVqEB1nBJAgCd2/uSUAJVTlZcqB5W9/wB4/PD5JCRe3QAAAABJRU5ErkJggg==",
+    "source": "https://meowdb.com/msclassic/item-db/622"
+  },
+  "623": {
+    "id": 623,
+    "name": "Sabretooth",
+    "level": 40,
+    "slot": "Two-Handed Axe",
+    "gender": "any",
+    "requirements": {
+      "STR": 85,
+      "DEX": 40
+    },
+    "stats": {
+      "W.ATK": 60
+    },
+    "icon": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAhCAYAAADOHBvaAAADcUlEQVR4Ab3BoZrTShiA4W9aTGRsZGzlcAlzCz1yJUhkKhPXsbgT2bjDJcxv4xhbR2zlb+PmTOjydJcu0IVd3pe/LAGJbM3fk5qmoSgKpmlqV/wdqWkaYoyoKgvD60tN0xBjRFWJMZIZw+tKTdMQY0RViTGSGTLD60nOORaqSoyRzHBvzetIIQTmeeZ4PBJjJDM8YHh5yTnHwlqL957M8J01LyuFEJjnmdPpxDAMZIYnrHg5KYSAiKCqiAiZ4QdW/FjidimEgIigqvR9T2b4iRVPS+kzi8SvpRACIoKq0vc9meEX3vBYIksJiNwihRAQEVSVvu/JDDd4w1kiS4mzyC1SCAERQVXp+57McKM1kFIKtO3AVxHMW5jLhqIomKapBToeSyEERARVpe97MsMzrHgognnLwnjveSABibMUQkBEUFX6viczPNMaaNt24KsTzGXDOI6tc47Fly8TbQvj6JimqQ0hICKoKn3fkxl+g+Esca9pGmKMLEIQdruGhXOOxW63w1pL3/dkht9kuJbIUoLdrsE5h4jgnENEWHjvyQx/4A1PSCmw2wkLEWHhvcdaS4yRBxIXhmdY8RPOOZxzxBhZxBhRVZxzZCl9hvSZ37LmWtd1QzvPM4tpmqiqitPphKqy3W6Zpokv/0142TNODhEh63iGNRcJaIE2hMBCRKjrmhgjqsp2u2Xx77seL3sW1lo2mw0i0gIdNzJcpBACC+891lq893yz3+9ZNM0O7/dYa/kmxshit9uRGW6w5qIbhqGtqorT6cQwDGQG6IBORNoQBO/3WGv59OkTHz58YJomqqridDohImQdN1jxmPHeY63lOykl8H6PtZbFdrvl/fv3OOdYWGvZ7/dkiRusuGa899xiu93ivcc5x3OteVoHdFy0XQciwuFwYJomvhnHkePxyN3dHfM8s9lsEJEW+AgUwMwT1jytBAqgAkrgIzAAfdd17w6HA3VdM00Tm82GcRw5Ho/c3d0xjiMiQiZAAVRAwdnMvTWPlUAFVEAN1MAGqIENUAPSdZ3ruo7D4UBd1xRFwTiOFEVBVVUMw0B2BGqgBErOZmAmM1yUQAnUQAnUnJWclVx7R5ZS4iFjDJkHFFBAgQmYACUzXJRADZRACZSclfzanmv/AAoooIACyj3DYyVQclFyrQSUa8pjyoXynf8BbcSxmKsOCYYAAAAASUVORK5CYII=",
+    "source": "https://meowdb.com/msclassic/item-db/623"
+  },
+  "624": {
+    "id": 624,
+    "name": "The Rising",
+    "level": 50,
+    "slot": "Two-Handed Axe",
+    "gender": "any",
+    "requirements": {
+      "STR": 105,
+      "DEX": 50
+    },
+    "stats": {
+      "W.ATK": 73
+    },
+    "icon": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB0AAAAdCAYAAABWk2cPAAAC90lEQVR4Ab3BLXbjSBSA0a/c3kAJBirQsAQDS7ChvAR5C4YJay8hRYdZdJiKhlk0rLUEPxr2RhXZx/9J5pxO38tfpIAyMPwdqhsHeY3JFkz4fqobB3lNWC5IDN9LdeMgrwnLBYtAYiZ8H32ugbwmLBcsAolhYPg65TrDJVVl0BIWJYtAYtiZ8jlloNoCFghAwBgSwyVVZdDSdyWLQGI4MuU2ZaC6BSywBHIgYgyJ4ZKqMmjpu5L7gsRwZsp1qroFLLBktCJpAreoKoOWviu5L0gMV0y4pAPAAktGK5rAu/mCxHBKVRm09F3JfUFiuGHKKR0wisCKpAmQOw9Ebmvpu5L7gsTwgSkHOmAUgTlfoAyqCowp2TF8YsqFJRBogrCXO49zkTOqyqDFmJKB4YsmjHTAXhOE3Hly59nrOg8CbUuim41nPoe+K7nFWqtcMeWKqnZAJHEOmhBJXA7eQVXxzju4L0gMl5QbJoAOGEWasAKEY1UNVcW7poH1M6xWkcWSxHBKAdUtN005kztP10FR9OxtNh7nIk0A76HrPevnSKyhLFGO6JaRrYDINVN2uq4kKYrIjmGnKKK2a09VR7rO4/JI4j3olhNNA1XFh34Ajz9/vlAUkRB6BgZ44tTTP03/+DDzPPgIb9A08IbnzvY0Dby+wmwGsxlgLfCL1arh7e3tiTM/gMcQegYGeOK2p3+jPHr/wF3e89qBvct5iT2589i7nJfYM3uwwJosmyMihismjAxfICKmLDuSqoa+i+TO41zEuUhVM1jzmQlg+KM8WTZHRAw3TPijlCTPcz5i+B+stdq2jr6LVDXvmgBV3QKeJMsyRCTjlHBkym2WkeWI9EJVt+xVtWcvyzJEpAQcB8JIAAHEcMkCFrCABSxgB8/b7ZqR51yWZYjIkusEEKAH+imnLGCBHLBAzsjyznPOGIO1FhEJgOWScGbKJcuBMPq13f7mWJZl7CxFhIFwIBwIIIAAAojhkgUsB785Y61FRAouCaeEA2HnP1nLMp91SeBDAAAAAElFTkSuQmCC",
+    "source": "https://meowdb.com/msclassic/item-db/624"
   }
 };
