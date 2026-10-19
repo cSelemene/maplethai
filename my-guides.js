@@ -1,9 +1,9 @@
-import { supabase, GUIDES, hasGuide, readAccount } from './supabase-client.js?v=1e63dbc72a';
-import { readProgress } from './guide-progress.js?v=7be26c465b';
-const PUBLISHED_GUIDES = { bandit: true, assassin: true, mage: true };
+import { supabase, GUIDES, hasGuide, readAccount } from './supabase-client.js?v=662ee932f0';
+import { readProgress } from './guide-progress.js?v=e2eb54f73c';
+const PUBLISHED_GUIDES = { bandit: true, sindit: true, assassin: true, mage: true };
 const $ = id => document.getElementById(id);
 let generation = 0;
-import { guideCard as card } from './guide-library.js?v=54cf21afb3';
+import { guideCard as card } from './guide-library.js?v=ccfa64820f';
 async function refresh() {
   const ticket = ++generation;
   $('library-owned').replaceChildren();

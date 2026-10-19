@@ -1,4 +1,4 @@
-import { supabase, GUIDES, hasGuide, readAccount } from './supabase-client.js?v=1e63dbc72a';
+import { supabase, GUIDES, hasGuide, readAccount } from './supabase-client.js?v=662ee932f0';
 const $ = id => document.getElementById(id);
 let generation = 0;
 async function refresh() {
