@@ -1,5 +1,5 @@
-import { ITEMS } from './equipment-data.js?v=86c189f4dc';
-import { equipmentAt, PLANS } from './equipment-plan.js?v=385eaaba18';
+import { ITEMS } from './equipment-data.js?v=a713c8dacb';
+import { equipmentAt, PLANS } from './equipment-plan.js?v=e2c5a7c0e5';
 const script = document.querySelector('script[data-equipment-guide]');
 const guide = script?.dataset.equipmentGuide;
 const main = document.getElementById('main');
@@ -17,6 +17,8 @@ const names = {
   Bottom: 'ท่อนล่าง',
   Overall: 'ชุดเต็มตัว',
   Gloves: 'ถุงมือ',
+  Shoes: 'รองเท้า',
+  Polearm: 'polearm',
   Shield: 'โล่'
 };
 let key = '';
