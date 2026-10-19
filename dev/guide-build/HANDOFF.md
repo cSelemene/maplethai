@@ -97,3 +97,9 @@ This folder is dev material only. Don't merge it to `main` as-is (GitHub Pages w
 - Bonus for Bandit owners: `private.guide_product('sindit') = 'guide_bandit'` (migration `20261019100000_sindit_guide.sql`, PR #28 merged to main). Progress KEY `sindit-route-v1`.
 - Plan: 1st job Lucky Seven 20 / Nimble Body 15 / Keen Eyes 3 / Disorder 3 / Dark Sight 20; hold all 2nd-job SP; switch at Lv.44 (SB 21 / Mastery 20 / Booster 1 / Haste 1), options Lv.36 / Lv.40. AP: Assassin plan to DEX 45 at Lv.44, then all LUK.
 - Next: Warrior guide (task 2).
+
+## Sindit SP plan fix (2026-10-20, owner)
+- No more holding SP. 2nd job follows the Bandit guide: Lv.30 Haste 1, Lv.31–37 Dagger Mastery 20 (Booster 1 at Lv.32), Lv.38–47 Savage Blow 30, Lv.48–50 Haste 8 / Steal 1 / Recovery 1.
+- Switch to dagger any time after Mastery 20 + Savage Blow 11+ (Lv.41); player's choice (when to change weapon / sell claw and stars).
+- Applied with `build/sindit_sp_fix.py` (49 string replacements) directly to `guide_files.sindit` via SQL and to `site/sindit.html`. Backup: `private.guide_files_backup_20261020b`.
+- `build/sindit.py` still has the old hold-SP texts: on any rebuild, run `sindit_sp_fix.py site/sindit.html site/sindit.html` after it (before inline.py).
