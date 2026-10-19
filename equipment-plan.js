@@ -1,4 +1,4 @@
-import { ITEMS } from './equipment-data.js?v=86c189f4dc';
+import { ITEMS } from './equipment-data.js?v=a713c8dacb';
 const tier = (level, items, note) => ({ level, items, note });
 const thief = [
   tier(
@@ -94,35 +94,76 @@ const mage = [
     'Cromi เป็นจุดเปลี่ยนไม้เท้าถัดไป ชุดเต็มตัวเพิ่ม INT +10 ต้องตรวจ LUK ที่ต้องใช้ก่อนซื้อ'
   )
 ];
+// Spearman (polearm): armour and weapons together, one list per checkpoint.
+const spearman = [
+  tier(
+    10,
+    [724, 942, 1164, 951, 1171, 640],
+    'ซื้อ Pole Arm ก่อนเป็นอย่างแรก ชุด Lv.10 จาก Harry ใน Perion ไม่บังคับ ถ้าเงินไม่พอให้รอซื้อชุด Lv.15 ทีเดียว'
+  ),
+  tier(
+    15,
+    [743, 965, 1183, 1094, 1321, 641],
+    'ชุด Lv.15 ของ Harry รวมราว 9,000 meso ช่วยลดค่ายาได้มาก Iron Ball ต้องมี DEX 15 รวมชุด ใส่ได้ราวเลเวล 17'
+  ),
+  tier(
+    20,
+    [765, 1096, 988, 1204, 1335],
+    'หมวกและรองเท้า DEX +2 ทำให้ถึงเกณฑ์ DEX ของ polearm เล่มถัดไป Red Kendo Robe ไม่บังคับ ใช้ชุด Lv.15 ต่อได้'
+  ),
+  tier(
+    25,
+    [1350, 643],
+    "Mithril War Boots ได้ฟรีจากเควสของ Nella ส่วน Janitor's Mop คราฟต์ได้เมื่อ Weaponcrafting ถึง 5 ถ้าไม่มีใช้อาวุธเดิมต่อ"
+  ),
+  tier(
+    30,
+    [812, 1106, 1112, 644],
+    'Mithril Pole Arm คืออัปเกรดที่คุ้มที่สุดของช่วงนี้ ซื้อจากผู้เล่นราว 15,800 meso ชุดเกราะใช้ของเดิมต่อได้'
+  ),
+  tier(35, [829, 1117, 1123, 645], 'ชุด STR +6 เป็นตัวเลือก ถ้างบไม่พอใช้ Sauna Robe จากเควสหรือชุดเดิมต่อ'),
+  tier(
+    40,
+    [847, 1404, 646],
+    'Steel Nordic Helm ได้ฟรีจากเควส Cursed Dolls ส่วน Crescent Polearm คราฟต์ด้วย Weaponcrafting 8 หรือซื้อจากผู้เล่น'
+  ),
+  tier(
+    50,
+    [873, 647],
+    'Bronze Crusader Helm ได้จากเควสของ Luke ไม่บังคับ The Nine Dragons ดรอปอย่างเดียว ถ้าแพงใช้ Crescent Polearm ต่อได้'
+  )
+];
 export const PLANS = Object.fromEntries(
-  Object.keys(weapons).map(guide => {
-    const levels = new Set([
-      ...(guide === 'mage' ? mage : thief).map(x => x.level),
-      ...weapons[guide].map(x => x[0]),
-      ...(guide === 'bandit' ? [22] : [])
-    ]);
-    return [
-      guide,
-      [...levels]
-        .sort((a, b) => a - b)
-        .map(level => {
-          const base = (guide === 'mage' ? mage : thief).find(x => x.level === level);
-          return tier(
-            level,
-            [
-              ...(base?.items || []),
-              ...weapons[guide].filter(x => x[0] === level).map(x => x[1]),
-              ...(guide === 'bandit' && level === 10 ? [917] : []),
-              ...(guide === 'bandit' && level === 22 ? [922] : [])
-            ],
-            base?.note ||
-              (level === 22
-                ? 'Nimble Wristguard เป็นโล่โจร Lv.22 ใช้กับมีดได้ เพิ่มพลังป้องกัน ไม่ได้เพิ่ม LUK'
-                : 'เน้นเทียบพลังโจมตีของอาวุธกับชิ้นเดิม โดยเฉพาะชิ้นที่สกอลล์แล้ว')
-          );
-        })
-    ];
-  })
+  Object.keys(weapons)
+    .map(guide => {
+      const levels = new Set([
+        ...(guide === 'mage' ? mage : thief).map(x => x.level),
+        ...weapons[guide].map(x => x[0]),
+        ...(guide === 'bandit' ? [22] : [])
+      ]);
+      return [
+        guide,
+        [...levels]
+          .sort((a, b) => a - b)
+          .map(level => {
+            const base = (guide === 'mage' ? mage : thief).find(x => x.level === level);
+            return tier(
+              level,
+              [
+                ...(base?.items || []),
+                ...weapons[guide].filter(x => x[0] === level).map(x => x[1]),
+                ...(guide === 'bandit' && level === 10 ? [917] : []),
+                ...(guide === 'bandit' && level === 22 ? [922] : [])
+              ],
+              base?.note ||
+                (level === 22
+                  ? 'Nimble Wristguard เป็นโล่โจร Lv.22 ใช้กับมีดได้ เพิ่มพลังป้องกัน ไม่ได้เพิ่ม LUK'
+                  : 'เน้นเทียบพลังโจมตีของอาวุธกับชิ้นเดิม โดยเฉพาะชิ้นที่สกอลล์แล้ว')
+            );
+          })
+      ];
+    })
+    .concat([['spearman', spearman]])
 );
 export function equipmentAt(guide, level, gender = 'male') {
   if (!PLANS[guide]) return { current: [], next: null, checkpoints: [] };

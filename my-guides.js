@@ -1,6 +1,6 @@
 import { supabase, GUIDES, hasGuide, readAccount } from './supabase-client.js?v=662ee932f0';
 import { readProgress } from './guide-progress.js?v=64a8c95522';
-const PUBLISHED_GUIDES = { bandit: true, sindit: true, assassin: true, mage: true };
+const PUBLISHED_GUIDES = { bandit: true, sindit: true, assassin: true, mage: true, spearman: true };
 const $ = id => document.getElementById(id);
 let generation = 0;
 import { guideCard as card } from './guide-library.js?v=49f9872ff0';
