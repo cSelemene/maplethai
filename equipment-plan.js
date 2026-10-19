@@ -135,14 +135,46 @@ const spearman = [
 ];
 // Fighter (two-handed axe): armour and weapons together, one list per checkpoint.
 const fighter = [
-  tier(10, [724, 942, 1164, 951, 1171, 617], "ซื้อ Metal Axe ก่อนเป็นอย่างแรก ชุด Lv.10 จาก Harry ใน Perion ไม่บังคับ ถ้าเงินไม่พอให้รอซื้อชุด Lv.15 ทีเดียว"),
-  tier(15, [743, 965, 1183, 1094, 1321], "ชุด Lv.15 ของ Harry รวมราว 9,000 meso ช่วยลดค่ายาได้มาก ขวานสองมือไม่มีเล่มเลเวล 15 ใช้ Metal Axe ต่อ"),
-  tier(20, [765, 1096, 988, 1204, 1335], "หมวกและรองเท้า DEX +2 ทำให้ DEX ถึง 25 พอใส่ Two-Handed Axe Iron Axe แรงกว่า Metal Axe แค่ 5 ไม่ต้องซื้อ"),
-  tier(25, [1350, 620], "Two-Handed Axe แรงกว่า Metal Axe 15 ใช้ได้ถึงเลเวล 35 ผู้เล่นขายราว 10,000 meso ถูกกว่าร้าน Mithril War Boots ได้ฟรีจากเควสของ Nella"),
-  tier(30, [812, 1106, 1112], "ใช้ Two-Handed Axe ต่อ Blue Axe (Lv.30) แทบไม่มีคนขาย ไม่ต้องตามหา ชุดเกราะใช้ของเดิมต่อได้"),
-  tier(35, [829, 1117, 1123, 622], "Niam คืออัปเกรดใหญ่ของช่วงนี้ คราฟต์ด้วย Weaponcrafting 7 หรือซื้อจากผู้เล่น ชุด STR +6 เป็นตัวเลือก"),
-  tier(40, [847, 1404, 623], "Steel Nordic Helm ได้ฟรีจากเควส Cursed Dolls ส่วน Sabretooth คราฟต์ด้วย Weaponcrafting 8 หรือซื้อจากผู้เล่น"),
-  tier(50, [873, 624], "Bronze Crusader Helm ได้จากเควสของ Luke ไม่บังคับ The Rising ดรอปอย่างเดียว ถ้าแพงใช้ Sabretooth ต่อได้")
+  tier(
+    10,
+    [724, 942, 1164, 951, 1171, 617],
+    'ซื้อ Metal Axe ก่อนเป็นอย่างแรก ชุด Lv.10 จาก Harry ใน Perion ไม่บังคับ ถ้าเงินไม่พอให้รอซื้อชุด Lv.15 ทีเดียว'
+  ),
+  tier(
+    15,
+    [743, 965, 1183, 1094, 1321],
+    'ชุด Lv.15 ของ Harry รวมราว 9,000 meso ช่วยลดค่ายาได้มาก ขวานสองมือไม่มีเล่มเลเวล 15 ใช้ Metal Axe ต่อ'
+  ),
+  tier(
+    20,
+    [765, 1096, 988, 1204, 1335],
+    'หมวกและรองเท้า DEX +2 ทำให้ DEX ถึง 25 พอใส่ Two-Handed Axe Iron Axe แรงกว่า Metal Axe แค่ 5 ไม่ต้องซื้อ'
+  ),
+  tier(
+    25,
+    [1350, 620],
+    'Two-Handed Axe แรงกว่า Metal Axe 15 ใช้ได้ถึงเลเวล 35 ผู้เล่นขายราว 10,000 meso ถูกกว่าร้าน Mithril War Boots ได้ฟรีจากเควสของ Nella'
+  ),
+  tier(
+    30,
+    [812, 1106, 1112],
+    'ใช้ Two-Handed Axe ต่อ Blue Axe (Lv.30) แทบไม่มีคนขาย ไม่ต้องตามหา ชุดเกราะใช้ของเดิมต่อได้'
+  ),
+  tier(
+    35,
+    [829, 1117, 1123, 622],
+    'Niam คืออัปเกรดใหญ่ของช่วงนี้ คราฟต์ด้วย Weaponcrafting 7 หรือซื้อจากผู้เล่น ชุด STR +6 เป็นตัวเลือก'
+  ),
+  tier(
+    40,
+    [847, 1404, 623],
+    'Steel Nordic Helm ได้ฟรีจากเควส Cursed Dolls ส่วน Sabretooth คราฟต์ด้วย Weaponcrafting 8 หรือซื้อจากผู้เล่น'
+  ),
+  tier(
+    50,
+    [873, 624],
+    'Bronze Crusader Helm ได้จากเควสของ Luke ไม่บังคับ The Rising ดรอปอย่างเดียว ถ้าแพงใช้ Sabretooth ต่อได้'
+  )
 ];
 export const PLANS = Object.fromEntries(
   Object.keys(weapons)
@@ -174,7 +206,10 @@ export const PLANS = Object.fromEntries(
           })
       ];
     })
-    .concat([['spearman', spearman], ['fighter', fighter]])
+    .concat([
+      ['spearman', spearman],
+      ['fighter', fighter]
+    ])
 );
 export function equipmentAt(guide, level, gender = 'male') {
   if (!PLANS[guide]) return { current: [], next: null, checkpoints: [] };
