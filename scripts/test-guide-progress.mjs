@@ -67,7 +67,8 @@ try {
   const library = await page({ progress: [cloud] });
   await library.goto(base + '/my-guides.html', { waitUntil: 'networkidle0' });
   assert((await library.$eval('#library-owned', e => e.textContent)).includes('อ่านต่อ'));
-  assert.equal(await library.$$eval('#library-owned article', a => a.length), 1);
+  // Bandit owners also get the bonus Sindit guide.
+  assert.equal(await library.$$eval('#library-owned article', a => a.length), 2);
   assert.equal(await library.$$eval('#library-discover article', a => a.length), 2);
   await library.setViewport({ width: 390, height: 844 });
   assert(await library.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 2));
@@ -78,7 +79,7 @@ try {
     });
     await archived.goto(base + '/my-guides.html', { waitUntil: 'networkidle0' });
     assert.equal(await archived.$$eval('#library-owned article', a => a.length), 1);
-    assert.equal(await archived.$$eval('#library-discover article', a => a.length), 3);
+    assert.equal(await archived.$$eval('#library-discover article', a => a.length), 4);
     assert(!/Fighter|Spearman|Page/.test(await archived.$eval('#library-discover', e => e.textContent)));
     await archived.close();
   }
