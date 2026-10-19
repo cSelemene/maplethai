@@ -69,7 +69,7 @@ try {
   assert((await library.$eval('#library-owned', e => e.textContent)).includes('อ่านต่อ'));
   // Bandit owners also get the bonus Sindit guide.
   assert.equal(await library.$$eval('#library-owned article', a => a.length), 2);
-  assert.equal(await library.$$eval('#library-discover article', a => a.length), 3);
+  assert.equal(await library.$$eval('#library-discover article', a => a.length), 4);
   await library.setViewport({ width: 390, height: 844 });
   assert(await library.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 2));
   console.log('PASS: purchased library, resume label, unowned discover and mobile');
@@ -80,18 +80,18 @@ try {
     });
     await sp.goto(base + '/my-guides.html', { waitUntil: 'networkidle0' });
     assert.equal(await sp.$$eval('#library-owned article', a => a.length), 1);
-    assert.equal(await sp.$$eval('#library-discover article', a => a.length), 4);
+    assert.equal(await sp.$$eval('#library-discover article', a => a.length), 5);
     assert(!/Spearman/.test(await sp.$eval('#library-discover', e => e.textContent)));
     await sp.close();
   }
-  for (const guide of ['fighter', 'page']) {
+  for (const guide of ['page']) {
     const archived = await page({
       account: { is_admin: false, entitlements: [{ product: 'guide_' + guide, expires_at: null }] }
     });
     await archived.goto(base + '/my-guides.html', { waitUntil: 'networkidle0' });
     assert.equal(await archived.$$eval('#library-owned article', a => a.length), 1);
-    assert.equal(await archived.$$eval('#library-discover article', a => a.length), 5);
-    assert(!/Fighter|Page/.test(await archived.$eval('#library-discover', e => e.textContent)));
+    assert.equal(await archived.$$eval('#library-discover article', a => a.length), 6);
+    assert(!/Page/.test(await archived.$eval('#library-discover', e => e.textContent)));
     await archived.close();
   }
   console.log('PASS: withdrawn guides retain existing ownership and stay out of discovery');
@@ -184,11 +184,11 @@ try {
     });
     await sp.goto(base + '/my-guides.html', { waitUntil: 'networkidle0' });
     assert.equal(await sp.$$eval('#library-owned article', a => a.length), 1);
-    assert.equal(await sp.$$eval('#library-discover article', a => a.length), 4);
+    assert.equal(await sp.$$eval('#library-discover article', a => a.length), 5);
     assert(!/Spearman/.test(await sp.$eval('#library-discover', e => e.textContent)));
     await sp.close();
   }
-  for (const guide of ['fighter', 'page']) {
+  for (const guide of ['page']) {
     const restored = { ...cloud, guide, state: { ...cloud.state, done: { ...cloud.state.done } } };
     const current = await reader(
       {
