@@ -10,7 +10,7 @@ export const ARTICLES = [
     category: 'ฟาร์มของ',
     date: '2026-10-21',
     minutes: 8,
-    cover: './assets/articles/rich-drops-cover.webp',
+    cover: './assets/articles/rich-drops-cover.webp?v=e23f2ef79f',
     coverAlt: 'มอนสเตอร์ 10 ตัวยืนเรียงกันบนกองเหรียญ meso'
   },
   {
