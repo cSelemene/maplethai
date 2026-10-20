@@ -1,0 +1,27 @@
+/* Launch-promotion banner for the all-guides pack (homepage) and the pack summary on checkout. */
+.pack-promo{position:relative;margin:22px 0;padding:22px 22px 20px;border:2px solid #e78320;border-radius:18px;background:linear-gradient(135deg,#fff3d6 0%,#ffe3b3 55%,#ffd08a 100%);color:#432b19;box-shadow:0 10px 26px rgba(120,69,31,.18);overflow:hidden}
+.pack-promo::after{content:"";position:absolute;right:-60px;top:-60px;width:200px;height:200px;border-radius:50%;background:radial-gradient(circle,rgba(255,255,255,.55),rgba(255,255,255,0) 70%);pointer-events:none}
+.pack-ribbon{display:inline-flex;align-items:center;gap:6px;padding:5px 12px;border-radius:999px;background:#c2410c;color:#fff;font:600 .85rem var(--display,'Mitr',sans-serif);letter-spacing:.02em;animation:pack-pulse 2.4s ease-in-out infinite}
+.pack-main{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:18px 26px;align-items:center;margin-top:12px}
+.pack-copy h2{margin:0 0 6px;font:600 clamp(1.35rem,3.6vw,1.9rem)/1.25 var(--display,'Mitr',sans-serif);color:#5a2d0c}
+.pack-copy p{margin:0 0 10px;line-height:1.7}
+.pack-points{display:flex;flex-wrap:wrap;gap:8px;margin:0;padding:0;list-style:none}
+.pack-points li{padding:5px 11px;border-radius:999px;background:rgba(255,255,255,.75);border:1px solid #f0b46a;font-size:.9rem}
+.pack-offer{position:relative;display:grid;justify-items:center;gap:2px;min-width:220px;padding:16px 18px;border-radius:14px;background:#fff;border:1px solid #f0b46a;text-align:center}
+.pack-badge{position:absolute;top:-14px;right:-10px;padding:6px 10px;border-radius:10px;background:#dc2626;color:#fff;font:700 1rem var(--display,'Mitr',sans-serif);transform:rotate(6deg);box-shadow:0 4px 10px rgba(220,38,38,.35)}
+.pack-was{color:#8a7560;font-size:.95rem}
+.pack-price{font:700 2.6rem/1.1 var(--display,'Mitr',sans-serif);color:#c2410c}
+.pack-personal{font-size:.88rem;color:#6b4b2a;max-width:240px;line-height:1.5}
+.pack-buy{display:inline-block;margin-top:10px;padding:13px 22px;border-radius:12px;background:linear-gradient(180deg,#f59e0b,#ea580c);color:#fff!important;font:600 1.05rem var(--display,'Mitr',sans-serif);text-decoration:none;box-shadow:0 6px 0 #9a3412,0 10px 18px rgba(234,88,12,.35);transition:transform .12s,box-shadow .12s}
+.pack-buy:hover{transform:translateY(-2px);box-shadow:0 8px 0 #9a3412,0 14px 22px rgba(234,88,12,.4)}
+.pack-buy:active{transform:translateY(3px);box-shadow:0 3px 0 #9a3412,0 6px 12px rgba(234,88,12,.3)}
+.pack-note{margin:12px 0 0;font-size:.85rem;color:#6b4b2a}
+.pack-promo[hidden],.pack-offer [hidden]{display:none}
+@keyframes pack-pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.05)}}
+@media (prefers-reduced-motion:reduce){.pack-ribbon{animation:none}.pack-buy{transition:none}}
+@media (max-width:640px){.pack-promo{padding:18px 16px}.pack-main{grid-template-columns:1fr}.pack-offer{min-width:0;padding-top:22px}.pack-buy{width:100%;text-align:center}}
+/* checkout */
+.pack-summary{margin:10px 0;padding:10px 12px;border-radius:10px;background:#fff3d6;border:1px solid #f0b46a;color:#5a2d0c;line-height:1.6}
+.pack-summary s{color:#8a7560}
+.pack-summary strong{color:#c2410c}
+.pack-summary[hidden],#pack-features[hidden]{display:none}
