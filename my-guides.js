@@ -12,7 +12,7 @@ const PUBLISHED_GUIDES = {
 };
 const $ = id => document.getElementById(id);
 let generation = 0;
-import { guideCard as card } from './guide-library.js?v=c4ba832e29';
+import { guideCard as card } from './guide-library.js?v=d70727a064';
 async function refresh() {
   const ticket = ++generation;
   $('library-owned').replaceChildren();

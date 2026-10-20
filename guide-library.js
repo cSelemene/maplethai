@@ -25,10 +25,7 @@ export function guideCard(id, name, owned, progress) {
     box.append(a);
   } else {
     const a = text('a', 'ทดลองอ่าน');
-    a.href =
-      id === 'bandit'
-        ? './bandit-artifact-preview-v3.html'
-        : './guide-preview.html?guide=' + id;
+    a.href = id === 'bandit' ? './bandit-artifact-preview-v3.html' : './guide-preview.html?guide=' + id;
     const buy = text('a', 'ซื้อไกด์');
     buy.href = './checkout.html?product=guide_' + id;
     box.append(a, buy);

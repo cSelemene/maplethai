@@ -1,7 +1,7 @@
 import { supabase, GUIDES, hasGuide, readAccount } from './supabase-client.js?v=0922a5286a';
 import { renderProfile } from './profile-ui.js?v=79ef17697c';
 import { readProgress } from './guide-progress.js?v=3ad50a48b2';
-import { guideCard } from './guide-library.js?v=c4ba832e29';
+import { guideCard } from './guide-library.js?v=d70727a064';
 let generation = 0;
 async function refresh() {
   const ticket = ++generation;
