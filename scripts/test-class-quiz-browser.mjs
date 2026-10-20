@@ -70,14 +70,14 @@ try {
   await page.waitForSelector('.quiz-result-card');
   assert.equal(await page.$eval('.quiz-result-card', e => e.dataset.class), 'page');
   assert.equal(await page.$$eval('.quiz-result-card', els => els.length), 3);
+  // Every guide on sale is linked from the quiz result and has a homepage card.
   assert.equal(
-    await page.$('.quiz-result-card[data-class="page"] .quiz-guide-link'),
-    null,
-    'Withdrawn Page guide must not be promoted'
+    await page.$eval('.quiz-result-card[data-class="page"] .quiz-guide-link', e => e.getAttribute('href')),
+    './guide-preview.html?guide=page'
   );
-  for (const guide of ['fighter', 'page', 'spearman']) {
-    assert.equal(await page.$('#guides a[href="./guide-preview.html?guide=' + guide + '"]'), null);
-    assert.equal(await page.$('#guides a[href="./checkout.html?product=guide_' + guide + '"]'), null);
+  for (const guide of ['fighter', 'page', 'spearman', 'fp']) {
+    assert.notEqual(await page.$('#guides a[href="./guide-preview.html?guide=' + guide + '"]'), null);
+    assert.notEqual(await page.$('#guides a[href="./checkout.html?product=guide_' + guide + '"]'), null);
   }
   assert(
     await page.$eval(
