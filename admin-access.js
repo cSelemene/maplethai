@@ -1,4 +1,4 @@
-import { supabase, readAccount } from './supabase-client.js?v=ffa6b49ed5';
+import { supabase, readAccount } from './supabase-client.js?v=cb12a9f448';
 const $ = id => document.getElementById(id);
 let saving = false,
   saleKey = null,

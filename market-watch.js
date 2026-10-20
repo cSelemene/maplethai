@@ -1,4 +1,4 @@
-import { supabase } from './supabase-client.js?v=ffa6b49ed5';
+import { supabase } from './supabase-client.js?v=cb12a9f448';
 import { STAT_LABELS } from './market-items.js?v=6fdbbaa1f1';
 import { selectWatchlist } from './market-watch-selection.js?v=1a006e7eda';
 const container = document.getElementById('market-watch-items'),
