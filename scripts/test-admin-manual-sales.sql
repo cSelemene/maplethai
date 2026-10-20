@@ -4,6 +4,8 @@ DECLARE buyer_uid uuid:=gen_random_uuid(); adm uuid:=gen_random_uuid(); request 
 BEGIN
  INSERT INTO auth.users(id,email) VALUES(buyer_uid,'manual-sales-buyer@example.invalid'),(adm,'manual-sales-admin@example.invalid');
  INSERT INTO private.admins(user_id) VALUES(adm);
+ -- Seeded Cleric starts inactive until content upload; enable it only in this rolled-back fixture.
+ UPDATE public.products SET active=true WHERE id='guide_cleric';
  PERFORM set_config('request.jwt.claim.sub',buyer_uid::text,true);
  failed:=false;BEGIN PERFORM public.admin_record_manual_sale('manual-sales-buyer@example.invalid','guide_cleric',99,request);EXCEPTION WHEN OTHERS THEN failed:=true;END;
  IF NOT failed THEN RAISE EXCEPTION 'Customer recorded own sale'; END IF;
