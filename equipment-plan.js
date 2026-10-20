@@ -1,4 +1,4 @@
-import { ITEMS } from './equipment-data.js?v=1ade3c6d87';
+import { ITEMS } from './equipment-data.js?v=8d89249229';
 const tier = (level, items, note) => ({ level, items, note });
 const thief = [
   tier(
@@ -219,6 +219,90 @@ const page = [
     'Bronze Crusader Helm ได้จากเควสของ Luke ไม่บังคับ Golden Mole ดรอปอย่างเดียว ถ้าแพงใช้ Titan ต่อได้'
   )
 ];
+const hunter = [
+  tier(
+    10,
+    [663, 731, 946, 955, 1180, 1175, 1314],
+    "Beginner's War Bow (ATK 29) ที่ได้ตอนเปลี่ยนอาชีพ แรงน้อยกว่า War Bow ในร้านแค่ 1 จึงไม่ต้องซื้อ ใช้เงินซื้อลูกธนูและชุด Lv.10 จาก Sam แทน"
+  ),
+  tier(
+    15,
+    [665, 751, 966, 974, 1180, 1190, 1324, 1439],
+    'Composite Bow ต้องมี STR 15 ซึ่งแผน AP นี้มีพอดีที่เลเวล 15 ชุดเกราะซื้อจาก Sam ใน Henesys ตัวละครหญิงใช้ Green Able Armor คู่ Green Able Armor Skirt'
+  ),
+  tier(
+    20,
+    [666, 665, 771, 984, 994, 1215, 1209, 1324, 1449, 1439],
+    "Hunter's Bow (ATK 42) แรงกว่า Composite Bow 7 คุ้มกับราคา 13,500 meso ชุด Lv.20 ของ Sam ให้ DEX เพิ่มรวมราว 5 แต้ม"
+  ),
+  tier(
+    25,
+    [666, 667, 798, 789, 1006, 1003, 1215, 1209, 1357, 1324, 1457, 1449],
+    "Battle Bow (ATK 44) ยิงเร็วขึ้นหนึ่งขั้น แต่ไม่บังคับ ใช้ Hunter's Bow ต่อแล้วเก็บเงินไว้ทำ Ryden ตอนเลเวล 30 ได้ รองเท้า Brown Jack Boots ได้จากสายเควสของ Nella"
+  ),
+  tier(
+    30,
+    [668, 666, 818, 798, 1023, 1006, 1003, 1238, 1215, 1357, 1380, 1470, 1457],
+    "Ryden ไม่มีขายจาก NPC แล้ว คราฟต์ด้วย Woodcrafting Lv.6 หรือซื้อจากผู้เล่น ถ้ายังไม่มีใช้ Hunter's Bow ต่อได้ ชุดเกราะ Lv.30 ส่วนใหญ่ต้องดรอปหรือคราฟต์ ใช้ชุด Lv.25 ต่อได้"
+  ),
+  tier(
+    35,
+    [669, 668, 831, 818, 1105, 1111, 1041, 1257, 1357, 1380, 1482, 1470],
+    'Red Viper ต้องใช้ Woodcrafting Lv.7 ถ้าคราฟต์ไม่ได้ ใช้ Ryden ต่อถึงเลเวล 40 Sauna Robe ได้ตอนเลเวล 37 ใส่แทนเสื้อและกางเกงได้'
+  ),
+  tier(
+    40,
+    [670, 669, 859, 1105, 1111, 1041, 1070, 1285, 1357, 1380, 1493, 1482],
+    'Vaulter 2000 ต้องใช้ Woodcrafting Lv.8 และ Drake Skull 40 ชิ้น ถ้าคราฟต์ไม่ได้ซื้อจากผู้เล่น หรือใช้อาวุธเดิมต่อ'
+  ),
+  tier(
+    45,
+    [670, 859, 1105, 1111, 1041, 1357, 1380, 1493, 1482],
+    'Olympus (Lv.50) ดรอปจากมอนเท่านั้น ถ้าไม่เจอใช้ Vaulter 2000 ต่อ'
+  )
+];
+const crossbowman = [
+  tier(
+    10,
+    [672, 731, 946, 955, 1180, 1175, 1314],
+    "ใช้ Beginner's War Bow ที่ได้ฟรีไปก่อน crossbow เล่มแรกที่ควรซื้อคือ Battle Crossbow ตอนเลเวล 15 สกิลขั้นแรกใช้กับ bow และ crossbow ได้เหมือนกัน"
+  ),
+  tier(
+    15,
+    [673, 751, 966, 974, 1180, 1190, 1324, 1439],
+    'Battle Crossbow ไม่ต้องใช้ STR ใส่ได้ทันทีที่เลเวล 15 เปลี่ยนลูกธนูเป็น Arrows for Crossbows ด้วย ตัวละครหญิงใช้ Green Able Armor คู่ Green Able Armor Skirt'
+  ),
+  tier(
+    20,
+    [673, 674, 771, 984, 994, 1215, 1209, 1324, 1449, 1439],
+    'Balanche (ATK 39) แรงกว่า Battle Crossbow แค่ 2 ให้เก็บเงินไว้ซื้อ Mountain Crossbow (ATK 47) ตอนเลเวล 25 ชุด Lv.20 ของ Sam ให้ DEX เพิ่มรวมราว 5 แต้ม'
+  ),
+  tier(
+    25,
+    [675, 673, 798, 789, 1006, 1003, 1215, 1209, 1357, 1324, 1457, 1449],
+    'Mountain Crossbow (ATK 47) แรงกว่า Battle Crossbow 10 ซื้อจาก Karl ราคา 16,500 meso รองเท้า Brown Jack Boots ได้จากสายเควสของ Nella'
+  ),
+  tier(
+    30,
+    [676, 675, 818, 798, 1023, 1006, 1003, 1238, 1215, 1357, 1380, 1470, 1457],
+    'Eagle Crow ไม่มีขายจาก NPC แล้ว คราฟต์ด้วย Woodcrafting Lv.6 หรือซื้อจากผู้เล่น ถ้ายังไม่มีใช้ Mountain Crossbow ต่อได้ ATK ต่างกันแค่ 5'
+  ),
+  tier(
+    35,
+    [676, 675, 831, 818, 1105, 1111, 1041, 1257, 1357, 1380, 1482, 1470],
+    'crossbow เลเวล 35 ไม่มีให้ซื้อหรือคราฟต์ ใช้ Eagle Crow ต่อถึงเลเวล 40 Sauna Robe ได้ตอนเลเวล 37 ใส่แทนเสื้อและกางเกงได้'
+  ),
+  tier(
+    40,
+    [677, 676, 859, 1105, 1111, 1041, 1070, 1285, 1357, 1380, 1493, 1482],
+    'Heckler ต้องใช้ Woodcrafting Lv.8 และยิงเร็วกว่า crossbow อื่น (Normal) ถ้าคราฟต์ไม่ได้ซื้อจากผู้เล่น หรือใช้ Eagle Crow ต่อ'
+  ),
+  tier(
+    45,
+    [677, 678, 859, 1105, 1111, 1041, 1357, 1380, 1493, 1482],
+    'Silver Crow (Lv.45) และ Rower (Lv.50) ดรอปจากมอนเท่านั้น ถ้าไม่เจอใช้ Heckler ต่อ'
+  )
+];
 export const PLANS = Object.fromEntries(
   Object.keys(weapons)
     .map(guide => {
@@ -252,7 +336,9 @@ export const PLANS = Object.fromEntries(
     .concat([
       ['spearman', spearman],
       ['fighter', fighter],
-      ['page', page]
+      ['page', page],
+      ['hunter', hunter],
+      ['crossbowman', crossbowman]
     ])
 );
 // F/P uses the same wands, shield and robes as I/L.

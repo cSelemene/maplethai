@@ -1,5 +1,5 @@
-import { supabase, readAccount, hasGuide } from './supabase-client.js?v=ffa6b49ed5';
-import { rpc, myOrders, showHistory, money, STATUS } from './payment-common.js?v=6ff74e298a';
+import { supabase, readAccount, hasGuide } from './supabase-client.js?v=cb12a9f448';
+import { rpc, myOrders, showHistory, money, STATUS } from './payment-common.js?v=61cdecd50c';
 import { paymentImage } from './payment-qr.js?v=ad42cece6f';
 let wallet = { available_cents: 0, reserved_cents: 0 },
   qrKey = '',
@@ -12,6 +12,8 @@ const allowed = [
   'guide_mage',
   'guide_fp',
   'guide_cleric',
+  'guide_hunter',
+  'guide_crossbowman',
   'guide_spearman',
   'guide_fighter',
   'guide_page',
@@ -21,7 +23,8 @@ const allowed = [
 const FAMILIES = [
   ['Thief · สายโจร', ['guide_bandit', 'guide_sindit', 'guide_assassin']],
   ['Magician · สายเมจ', ['guide_mage', 'guide_fp', 'guide_cleric']],
-  ['Warrior · สายนักรบ', ['guide_fighter', 'guide_page', 'guide_spearman']]
+  ['Warrior · สายนักรบ', ['guide_fighter', 'guide_page', 'guide_spearman']],
+  ['Bowman · สายธนู', ['guide_hunter', 'guide_crossbowman']]
 ];
 let products = [],
   settings,

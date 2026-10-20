@@ -11,6 +11,8 @@ export const GUIDES = {
   mage: 'Ice / Lightning Mage',
   fp: 'Fire / Poison Mage',
   cleric: 'Cleric',
+  hunter: 'Hunter',
+  crossbowman: 'Crossbowman',
   fighter: 'Fighter',
   page: 'Page',
   spearman: 'Spearman'
