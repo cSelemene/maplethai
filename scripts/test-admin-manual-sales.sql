@@ -1,0 +1,32 @@
+BEGIN;
+DO $$
+DECLARE buyer_uid uuid:=gen_random_uuid(); adm uuid:=gen_random_uuid(); request uuid:=gen_random_uuid(); r jsonb; again jsonb; dashboard jsonb; pid bigint; failed boolean; before_count bigint; expiration timestamptz;
+BEGIN
+ INSERT INTO auth.users(id,email) VALUES(buyer_uid,'manual-sales-buyer@example.invalid'),(adm,'manual-sales-admin@example.invalid');
+ INSERT INTO private.admins(user_id) VALUES(adm);
+ PERFORM set_config('request.jwt.claim.sub',buyer_uid::text,true);
+ failed:=false;BEGIN PERFORM public.admin_record_manual_sale('manual-sales-buyer@example.invalid','guide_cleric',99,request);EXCEPTION WHEN OTHERS THEN failed:=true;END;
+ IF NOT failed THEN RAISE EXCEPTION 'Customer recorded own sale'; END IF;
+ PERFORM set_config('request.jwt.claim.sub',adm::text,true);
+ PERFORM public.admin_set_customer_access('manual-sales-buyer@example.invalid','guide_cleric',true,'free access');
+ SELECT count(*) INTO before_count FROM public.payments WHERE user_id=buyer_uid;
+ IF before_count<>0 THEN RAISE EXCEPTION 'Free grant created sale'; END IF;
+ r:=public.admin_record_manual_sale('manual-sales-buyer@example.invalid','guide_cleric',99,request,'outside payment','2026-10-19T12:00:00+07:00');pid:=(r->>'id')::bigint;
+ IF NOT private.has_product(buyer_uid,'guide_cleric') OR (SELECT received_cents<>9900 OR bank_review_state<>'confirmed' FROM public.payments WHERE id=pid) THEN RAISE EXCEPTION 'Sale/access not recorded'; END IF;
+ again:=public.admin_record_manual_sale('manual-sales-buyer@example.invalid','guide_cleric',99,request,'outside payment','2026-10-19T12:00:00+07:00');
+ IF (again->>'id')::bigint<>pid OR NOT (again->>'already_recorded')::boolean OR (SELECT count(*) FROM public.payments WHERE user_id=buyer_uid)<>1 THEN RAISE EXCEPTION 'Duplicate sale created'; END IF;
+ failed:=false;BEGIN PERFORM public.admin_record_manual_sale('manual-sales-buyer@example.invalid','guide_cleric',199,request,'outside payment');EXCEPTION WHEN OTHERS THEN failed:=true;END;
+ IF NOT failed THEN RAISE EXCEPTION 'Idempotency key reused with different amount'; END IF;
+ dashboard:=public.admin_sales_report('2026-10-19','2026-10-19','manual-sales-buyer@example.invalid');
+ IF (dashboard#>>'{summary,sales_cents}')::bigint<>9900 OR (dashboard#>>'{summary,sales_count}')::int<>1 OR (dashboard#>>'{orders,0,manual_sale}')::boolean IS DISTINCT FROM true THEN RAISE EXCEPTION 'Report missing manual sale'; END IF;
+ failed:=false;BEGIN PERFORM public.admin_record_manual_sale('manual-sales-buyer@example.invalid','guide_sindit',0,gen_random_uuid());EXCEPTION WHEN OTHERS THEN failed:=true;END;
+ IF NOT failed OR private.has_product(buyer_uid,'guide_sindit') THEN RAISE EXCEPTION 'Invalid amount granted rights'; END IF;
+ request:=gen_random_uuid();r:=public.admin_record_manual_sale('manual-sales-buyer@example.invalid','market',50,request);
+ SELECT expires_at INTO expiration FROM public.entitlements WHERE user_id=buyer_uid AND product='market';
+ PERFORM public.admin_record_manual_sale('manual-sales-buyer@example.invalid','market',50,request);
+ IF (SELECT expires_at FROM public.entitlements WHERE user_id=buyer_uid AND product='market') IS DISTINCT FROM expiration THEN RAISE EXCEPTION 'Retry extended membership twice'; END IF;
+ IF (SELECT count(*) FROM private.access_audit WHERE customer=buyer_uid AND action='manual_sale' AND payment_id=pid)<>1 THEN RAISE EXCEPTION 'Missing audit'; END IF;
+ IF has_function_privilege('anon','public.admin_record_manual_sale(text,text,integer,uuid,text,timestamptz)','EXECUTE') THEN RAISE EXCEPTION 'Anonymous sale API'; END IF;
+ RAISE NOTICE 'PASS: admin-only sales, free rights exclusion, existing rights sale, exact price, backdated report, duplicate prevention, input guard, monthly retry and audit';
+END $$;
+ROLLBACK;
