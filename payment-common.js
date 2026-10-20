@@ -94,6 +94,12 @@ export function showHistory(container, orders, names = {}) {
       a.textContent = p.status === 'ok' && !p.gift_email ? 'เปิดไกด์ฉบับเต็ม' : 'ดูรายการ / ซื้ออีกครั้ง';
       row.append(a);
     }
+    if (p.product === 'pack_all') {
+      const a = document.createElement('a');
+      a.href = p.status === 'ok' ? './my-guides.html' : './checkout.html?product=pack_all';
+      a.textContent = p.status === 'ok' ? 'เปิดไกด์ของฉัน' : 'ดูรายการ / รับแพ็ก';
+      row.append(a);
+    }
     if (p.product === 'market') {
       const a = document.createElement('a');
       a.href = p.status === 'ok' ? './marketplace.html' : './checkout.html?product=market';
