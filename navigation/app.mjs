@@ -15,7 +15,7 @@ import {
   curatedText,
   bindMapZoom
 } from './guide-renderer.mjs?v=19ff6dabb9';
-import { route, search, recommendations, arrival, suggestions } from './route.mjs?v=45458d0711';
+import { route, search, recommendations, arrival, suggestions } from './route.mjs?v=0dd62ffc9a';
 const el = id => document.getElementById(id),
   esc = s =>
     String(s ?? '').replace(

@@ -2,7 +2,9 @@
 // only has portals, so without these Florina Beach (Lorang, Clang) cannot be reached.
 export const npcTrips = [
   { from: '010000000', to: '010007000', npc: 'Pason' },
-  { from: '010007000', to: '010000000', npc: 'Pison' }
+  { from: '010007000', to: '010000000', npc: 'Pison' },
+  // Leaving Maple Island is one way: Shanks in Southperry sails to Lith Harbor.
+  { from: '000000060', to: '010000000', npc: 'Shanks' }
 ];
 export function route(maps, start, end, scrollTown = null) {
   const byId = new Map(maps.map(m => [m.id, m]));
