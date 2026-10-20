@@ -10,7 +10,7 @@ export const ARTICLES = [
     category: 'เลือกอาชีพ',
     date: '2026-10-21',
     minutes: 10,
-    cover: './assets/articles/class-pros-cons-cover.webp',
+    cover: './assets/articles/class-pros-cons-cover.webp?v=e06251ef4e',
     coverAlt: 'ตัวละครทั้ง 10 อาชีพของ MapleStory ยืนเรียงกัน'
   }
 ];
@@ -21,5 +21,10 @@ export function articleUrl(article, base = './') {
 
 export function thaiDate(iso) {
   const d = new Date(iso + 'T00:00:00+07:00');
-  return d.toLocaleDateString('th-TH', { day: 'numeric', month: 'short', year: 'numeric', timeZone: 'Asia/Bangkok' });
+  return d.toLocaleDateString('th-TH', {
+    day: 'numeric',
+    month: 'short',
+    year: 'numeric',
+    timeZone: 'Asia/Bangkok'
+  });
 }
