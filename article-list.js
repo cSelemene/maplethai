@@ -1,4 +1,4 @@
-import { ARTICLES, articleUrl, thaiDate } from './articles.js?v=67d8df3d26';
+import { ARTICLES, articleUrl, thaiDate } from './articles.js?v=4a80183b49';
 
 // Fills every [data-articles] element. data-limit caps how many are shown; the first
 // article is drawn as the large featured card, the rest as compact rows.
