@@ -6,7 +6,8 @@ const PUBLISHED_GUIDES = {
   assassin: true,
   mage: true,
   spearman: true,
-  fighter: true
+  fighter: true,
+  page: true
 };
 const $ = id => document.getElementById(id);
 let generation = 0;

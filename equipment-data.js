@@ -1911,5 +1911,115 @@ export const ITEMS = {
     },
     "icon": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB0AAAAdCAYAAABWk2cPAAAC90lEQVR4Ab3BLXbjSBSA0a/c3kAJBirQsAQDS7ChvAR5C4YJay8hRYdZdJiKhlk0rLUEPxr2RhXZx/9J5pxO38tfpIAyMPwdqhsHeY3JFkz4fqobB3lNWC5IDN9LdeMgrwnLBYtAYiZ8H32ugbwmLBcsAolhYPg65TrDJVVl0BIWJYtAYtiZ8jlloNoCFghAwBgSwyVVZdDSdyWLQGI4MuU2ZaC6BSywBHIgYgyJ4ZKqMmjpu5L7gsRwZsp1qroFLLBktCJpAreoKoOWviu5L0gMV0y4pAPAAktGK5rAu/mCxHBKVRm09F3JfUFiuGHKKR0wisCKpAmQOw9Ebmvpu5L7gsTwgSkHOmAUgTlfoAyqCowp2TF8YsqFJRBogrCXO49zkTOqyqDFmJKB4YsmjHTAXhOE3Hly59nrOg8CbUuim41nPoe+K7nFWqtcMeWKqnZAJHEOmhBJXA7eQVXxzju4L0gMl5QbJoAOGEWasAKEY1UNVcW7poH1M6xWkcWSxHBKAdUtN005kztP10FR9OxtNh7nIk0A76HrPevnSKyhLFGO6JaRrYDINVN2uq4kKYrIjmGnKKK2a09VR7rO4/JI4j3olhNNA1XFh34Ajz9/vlAUkRB6BgZ44tTTP03/+DDzPPgIb9A08IbnzvY0Dby+wmwGsxlgLfCL1arh7e3tiTM/gMcQegYGeOK2p3+jPHr/wF3e89qBvct5iT2589i7nJfYM3uwwJosmyMihismjAxfICKmLDuSqoa+i+TO41zEuUhVM1jzmQlg+KM8WTZHRAw3TPijlCTPcz5i+B+stdq2jr6LVDXvmgBV3QKeJMsyRCTjlHBkym2WkeWI9EJVt+xVtWcvyzJEpAQcB8JIAAHEcMkCFrCABSxgB8/b7ZqR51yWZYjIkusEEKAH+imnLGCBHLBAzsjyznPOGIO1FhEJgOWScGbKJcuBMPq13f7mWJZl7CxFhIFwIBwIIIAAAojhkgUsB785Y61FRAouCaeEA2HnP1nLMp91SeBDAAAAAElFTkSuQmCC",
     "source": "https://meowdb.com/msclassic/item-db/624"
+  },
+  "625": {
+    "id": 625,
+    "name": "Wooden Mallet",
+    "level": 10,
+    "slot": "Two-Handed Blunt Weapon",
+    "gender": "any",
+    "requirements": {
+      "STR": 25
+    },
+    "stats": {
+      "W.ATK": 32
+    },
+    "icon": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB8AAAAfCAYAAAAfrhY5AAADY0lEQVR4AcXBLXMjRxCA4XfskIUdaDjUcAIPKjBwaeAYBq6hxFbwoARzLKLHrn9CmpqlqWBTs81sySqdv+1U+fI8/A8mYKJJ/FhT7Quz7c5I/DhT7QvugZrTpMSPMdW+4B6oOU2iSXy8qfYF90DNaRJ3Eh9rqn3BPVBzmsR3Eh9nqn3BPVBzmsQDiY8x1b7gHqg5TeIJiddNHCTeZqp9wT1Qc5rEM8552bQZKxcCdrNfAktgxfOm2hfcAzWnSbzgjOdNQ79gt1NmtS98+/aNZuJp01AXuAdqTpN4xRlPmzZjxdyZuQd9HTEznjENdYGZo+Y0iTc457FpM1bcnAsR9hEM4wYzQ1XJAr6PJbDiYBrqAjNHzWkSb5S4b9qMFTfnaFEHzAxVhXBmOQvbnTEb6gIzR81pEu9wzsm0GStuztGiDpgZqgrhHIl0lMsL7GZPB6g5TeKdzjiY/toMfG9RB2aqCuHkLBy5B7PaF9ScJvEfJGDajBURYRYR5NJjZqgqhJOzcOQeHOUszLY7o0m80xkP1GHDTFUhnJwFQRCEWc7CkXswq32hmYCJdzgHVl/VlotPl/z+x2dUlfV6DeHkLAjCUUfHLbeIdETcMou4RaSjXF4wfv6TL1++LIEVb3DGnTpsUFXW6zVZgr5fUErhIUGY5SwcuQd9HTEz3iNxMtHUvlBKQUSYRQRuzkNBMHMPhnGDmaGqZAm2O6NJvOKckxWwspv98rdFoes6Zl3X0UlH7IPv3XLLrA6fMTNUFcIR6SiXF9jNfgmseMEZj6Wr6y0RwZGIkEvmob6OmBmqCuHM3IO3Oudpq69qy8WnS7quY9Z1HZ10xD4Igr6OmBmqCuHkLETcMtvpDU3iFYmXTZuxIiIcRQS59JgZqgrh5CwcbXdGk3iDM16Wrq63RARHddhgZqgqhJOzMBOE7c5ofgYEEEAA4RmJ5wkHAvyzGSu59JgZqgrh5CzMBGG9U5pfeSw4CCCA4M5PPCaAAAIIIDR12LBer1FVsgRlscDMEIT1TmnWQOFpAQTggANBk7hPAAEyIEDmQICBpvaFUgoiQkRwdb2l2XIQPBZAAAE44EDQJO4TIAMCCCAcCCdj7QulFK6utzTXHAQnwUkAAQQQQHAn8ZgAwonw2N8c/MJ9wX3BSfDAv3NtqPG3l6OwAAAAAElFTkSuQmCC",
+    "source": "https://meowdb.com/msclassic/item-db/625"
+  },
+  "627": {
+    "id": 627,
+    "name": "Square Hammer",
+    "level": 20,
+    "slot": "Two-Handed Blunt Weapon",
+    "gender": "any",
+    "requirements": {
+      "STR": 45,
+      "DEX": 20
+    },
+    "stats": {
+      "W.ATK": 42
+    },
+    "icon": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAfCAYAAADwbH0HAAAC00lEQVR4Ab3BLXYjORSA0U8OMtRAw6KGFRg4s4TqJWQLMkyYRZtNLUGPDhRtpkfDRjRQ1EyjHLeP5dj56+nkXr5YBSrNFV+nupB4yIXd48Pdgq9RXUjM3nOw4PNVFxJRIk+KCo0xfK7qQiJKJGelqNAYGsPnqS4kokRyVooKjeEnw+eoLiSiRHJWigqNoWP4/aoLiSiRnJWiQmN4xvB7VRcSUSI5K0WFxnDBgtdV3q+6kIgSyVkpKjSGFyx4WR2nLU3lbdWFRJRIzkpRoTG8wnBZHactOStPigqN4bLqQiJKJGelqNAY3nDFuUqzW1oOlqs1u8eHO+CeU9WFRJRIzkpRoTG8wxWnqguJHQM5fme5WnOwXK3ZPT7cAffsVRcSUSI5K0WFxvBOhqPqQiJK5EBlgx0nekWFJy4kokRyVooKjeEDrtirLiRm77F2xcFq/Sc5fme5WnOwXK3ZPT6wYyBnpajQGD7IANWFxMHsPcMw0lPZYMeJXlHhJ8MvWPDMrXPkrPTGaUtRoWfHif/DsFddSPRm7xmGkZ7KBjtO9IoKjeGDDEfVhURv9p5hGOmpbLDjRK+o0Bg+wHCqupDozd4zDCM9lQ12nOgVFRrDOxnOVRcSvdl7hmGkp7LBjhO9okJjeAfDZdWFRG/2nmEY6alssONEr6jQGN6w4DLjv13Tu3WOnJXeOG0pKvwKw+uqC4ne7D3DMNJT2WDHiaJCY3iHK153/0Pmu5vploPx5ob4j2DtioPd0lJUaP4AlsASWAJLYAnseMbwMsueBf51IdGbvWcYRnJWigrNX1xW2CtAAQqN4ZwFLGABC1jAAn+7kOjN3lNUaDx7hcsKUIAMZKAsOGUBCwzAAIzAAAyA99+uOYgSKSo0M2ABC1jAAhawgOUFhlMWGAALWMCyZznajtMWlQ3NhqPCUeGoAAUoQAEKjeGcBSxHlnMJuOZc4VThqND5D1NNTrjHsgzlAAAAAElFTkSuQmCC",
+    "source": "https://meowdb.com/msclassic/item-db/627"
+  },
+  "628": {
+    "id": 628,
+    "name": "Monkey Wrench",
+    "level": 25,
+    "slot": "Two-Handed Blunt Weapon",
+    "gender": "any",
+    "requirements": {
+      "STR": 45
+    },
+    "stats": {
+      "W.ATK": 50
+    },
+    "icon": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB8AAAAdCAYAAABSZrcyAAADDElEQVR4Ab3BLWMbRwIA0Dd2iaAKBedg4AYWruBB9SdE8OAa2swLU2bBhlk0TEvFOtTMQ8201Gy6KzlV/NHEaS95L/ixiqMQ/DhlE6N1zkYrnPgxyiZG65xVjk58f2UTo5yzRYySo1PfV9nEKOcsYdL37rCyF4Lvp2xilHOWUCFhZS8YBN+uOApeVjYxyjlLqJCwshc8OPE6BcWDzeZK0ywMiufKJkY5ZwkVElb2gs+c+LpSyrU/royKQdd16rr2grKJUc5ZQoWElb3gieDLSinX5NYodck6L9R1bT5fGgRHZROjnLOECgkre8ELgr9XSrkmtz6XuuTt0ig4KAabGOWcJUcre8HfCF5WSrkmt0ZnbTK6bCqj1CVvl/Y2MRrlnCVUSFjZC77g1HOllGtya3TWJs3lrXv33vzyO/0Hszjz3zd3fOSm7930vTtUSFjZC77ixCt0Xeupqq68u/KXCgkre8Er/OQrLpuKeGkvz32uqivvrpLVkoSVveCVTj1WDO7vqRfv6LdSl8ymHf0He7Fh+gv91mgWZ2Zv7iw/GgXf4CdP7Ha3Uuqcna1dXjaqujVKXTJaLX81uirX5Na/ERwUg6ZZqOvaJ/P50h9X9lZLf6mQcFWupdWv3i6Ngm8UHJTd7lZKndF8vjRqmoXP9e1a5SDGaJ6zB8E/cILSNAspdUbz+dIgeFDXtbqufZIQYzTP2SAg+IdODJrm0gtC2659Ute1abMwbRbmORsE/9KJJ5pmYVAchPl86Xs5xUXb/nb+/v17d3dZjNFsNrHd3pzjAhcfPnw8n80mRm27Ngj+D04dnDfN/9zdZaMYo9lsYru9OccFLrbbm/Pt9sbgZ0wwwQQTTDDBBBNMMMEEE9x7QXBUdrtbKXU+6bpO264N/uNg6mDq9XoHPXr0HgSPld3u1iilzqjrOm27Nlhi6mjqud7LevTIyOgNgsem2Bnsdrfa9syobdcGLaa+rPdcjx49MjJ6g+CxKSKm2Dg683W9o95Rjx49evQeBM9NMXU09dwUved6j/WOek/8CSDfQfXXutbWAAAAAElFTkSuQmCC",
+    "source": "https://meowdb.com/msclassic/item-db/628"
+  },
+  "629": {
+    "id": 629,
+    "name": "Mithril Maul",
+    "level": 30,
+    "slot": "Two-Handed Blunt Weapon",
+    "gender": "any",
+    "requirements": {
+      "STR": 65,
+      "DEX": 30
+    },
+    "stats": {
+      "W.ATK": 52
+    },
+    "icon": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB8AAAAfCAYAAAAfrhY5AAADGElEQVR4AcXBvXEjORCA0Q9cOTT7TJmdAs48ExcCGMIohJG5682EoElB7nmLEK5TaFcmXHk4TFEskkv9raqke4//QQMaXeBrtZQyXh03Y8PXaSllVm5GFwJfo6WccXfcjC7QBT5fSznj7rgZXeBJ4HO1lDPujpvRBU4EPk9LOePuuBld4BeBz9FSzrg7bkYXeEbgbY29wPu0lDPujpvRBV6w4XUtxkRKma7xtpZyxt1xM7rAKwIvazEmTpkVngQutZQz7o6b0QXeEHheSylTa+Ug5wxUVre3t3SBo5Zyxt1xM7rAO2y41IZxYiUirHLOxKis5nnhFy3ljLvjZnSBd9pwrg3jhLuDCKucMzEqZsY8L6gqJ1rOA+6Om9EFfkPgqA3jhLtzkGIkRsXMmOcFVWVlVljlPGBuuBld4Dd9Y68N48RKRKi1kmIkRsXMmOcFVeXg+lp5eHAet+BmdIEPCECbpjsOvFZUhBgVM2OeF1QVEWFVa+XArNAFPugb8KOUf75r/AvZbpHtlnEcuL+/Z54XVBVRhe0WHh/Zbrc8Pj6yur5WHh78O/CDDwgctWm6YxwHSinsdjfEGEGEM7WyqrVyYFY4EXinDSfGcaCUwm53Q4yRlapyRoSViHAwjBM/f/5kmia6xjsFzjX2AtCm6Q6vlZW7c6ZWVhojOUXMjHleUFXMCl3gDYHXNbphnFi5O6dUlZwiZsY8L6gqB2aFLvCKDS9rOQ/kPLDMt6xUlQNVJaeImTHPC6rK7wq8rmmMuBmrYZw4yCliZszzgqpyyqzQBd6w4XXBzegCnYqwuptGVvO8oKqcMit0gXe44m2BJ14rd9NIKYXd7gZV5ZRZofsDEM5VnnHFy4Q94cndNFJKYbe7QVURVao7K7NC9zcQOVfZq0AFKk+uuCSAAAIIIIDQlVLY7W5QVUSEA7NCNwOR51WgAg44UOkC5wQQQAEBlD1hb6RLKYMIq3K/0C3sVS5VoAIVcMCBSnfFJeGocu4WmBBhVe4Xulv2KkeVowpUoAIVqDwJXBJAOBIu/cven5yrnKscVX7xH1AnX4HezgBjAAAAAElFTkSuQmCC",
+    "source": "https://meowdb.com/msclassic/item-db/629"
+  },
+  "630": {
+    "id": 630,
+    "name": "Sledgehammer",
+    "level": 35,
+    "slot": "Two-Handed Blunt Weapon",
+    "gender": "any",
+    "requirements": {
+      "STR": 75,
+      "DEX": 35
+    },
+    "stats": {
+      "W.ATK": 60
+    },
+    "icon": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAfCAYAAADwbH0HAAACm0lEQVR4Ab3BoVrkSBSA0f9Oq5K1smSQyLzC3UdIHqEtkpWNayS4jV3Xsbhciyy7jrKRZXG1ydfM12lgZmfohnP4YgUoTISvU1QVM2MmfI2iqpgZ3wmfr6gqZsaCCJ+rqCpmxoIwET5PUVXMjAXhhfA5iqpiZiwIC8L5FVXFzFgQXhHOq6gqZsaC8A7hfIqqYmYsCD8gnEdRVcyMBeEnhNMVVcXMWBD+xzdOU4Ztg5mxIPyCFR9Xhm1DTInKO2LKTIRfJBwr7Ak/V4ZtQ0yJlDKdJSbCbxAOytPTE7OLiwsmwvvKsG2IKZFSprPERPhNwl7Z7XYstW3LRDhWhm1DTImUMp0lJsIHCFB2ux0xRr6r65pZ27a8EKAM24aYEillOktMhA9aAZuqqlgax5GHhweGYeDq6or7+/vNsG2IKZFSprPERDiBsFdUlbqumcUYWa/XLLVty1orOktMhBMJB0VVma3Xa2KMLNV1Tdu2TIQzEI6V3W5HjJH31HVN27ZMhBN945UYIz/SdR3nsuLYzePj48Y5RwiBpRgjOWfu7u7o+34D3HCCFQcF2Ky1oreIc44QArMYIzlnrq+vmTVNQ9/3G+CGD1qxV4Ztw2Xl8N5ReUdvEecc4ziSc8Z7z2wcR0IINE1D3/cb4B5wgAMc4AAHOMABz7xjxd7NP/bvpvKOnJ/pLDH5I6V0nVLi8vKSWQiB2TiOhBDo+56JAQEIQAACEIAAOCAAjr1nXgjHylorOktM/gQ84IG/VZVZXdfMbm9vmdxykHlfBjKQgARkJsKBBzzwBLRAxZ5n71pVmZkZk45jmbcykIEMJCABmYlw4IEK8IAHPHuegy17f3Esc5A5yEAGMpCBzAvhmAc8B563PJB5K3Msc5B55T/zyRDsavwq/wAAAABJRU5ErkJggg==",
+    "source": "https://meowdb.com/msclassic/item-db/630"
+  },
+  "631": {
+    "id": 631,
+    "name": "Titan",
+    "level": 40,
+    "slot": "Two-Handed Blunt Weapon",
+    "gender": "any",
+    "requirements": {
+      "STR": 85,
+      "DEX": 40
+    },
+    "stats": {
+      "W.ATK": 65
+    },
+    "icon": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB0AAAAjCAYAAABo4wHSAAADlElEQVR4Ab3BIX/cNhjA4b/uRjymQo2JFnrQYzoYWJqx0EEZnlkMO1hqtnwEv3DHqq9gKigapknz7ndJ75K0XdLn4QfKQKZQ/BjZe081jiM/8fay954QAkcb3lb23nMkIhRK8Xay954QApWIUCiKDW8je+85EhEKxX8Ury977wkhUIkIheKBDa8re+85EhEKxRcUryd77wkhUIkIheKCDa8je+85EhEKxRMU/1/23hNCoBIRCsUzNjwt87I8zzMhBCoRoVC8YMNlOX+myjwtz/NMCIG2bRERCsVX2HAu5wy73vGMPM8zIQRSSozjSKH4ShseyznDbud4Rp7nmRACKSXGcaRQfAPFSc4Z+t4TQuBIRCgUkCnmeSaEQEqJcRwpFN9oyyrnDH3vqWKMHFlrWZZlnz/DYXEMw0DbtozjSKH4DgrIOc+I8C8RoQohULVty+2Hkf7OU4UQEBEKxXdSrDL/mecZEeHo9sOIpBkRwTmHiDCOI4XiO21YKUABarfb4Zyjur0dkTQjIjjnEBEuyEDmGyguyzmDyIyI4JxDRHDOISKEEBARKu89Wmv6vqdQfAXFuZwziMyICJVzDhGhCiHwpbZt0VrT9z2F4gVbzu2HAYwxOOdYloVlWahCCFRt22KMIcZIFWNEa83V1RUisgcGnrHlJAN77z1N0zBNE8YYjkIIVG3borWmaRq01sQYqWKMaK25urpCRPbAwBO2rPI8z1xfX3N3d0e1LAuHw4HD4UDTNFRt2+KcI8ZI1TQNWmtijFQxRrTW/P3xwPCJPTBwwZbVME3T3hiDMYZpmigUMADDsiz7m5sbuq6jMsYQY6RqmgatNTFGqo/XE00DwyeqgQs2nKhxHAkhcIn3nofatuVIa03btvzlhUr9SqV4guJcBhQnueBIRHgohEDlXU9K8G5HpXjGlnMDj+27rsNaS2WtZVkWjowxXL//nern36gUL9jysmGapn3XdVhrqay1LMtC5dwODKhfqN4BDdAADdAA93xhy2UaaAADaODPaZr+6LoOay2VtRZrF2BCKaodYAADGMAADWCAhtU9xZbHNGAAA1jAAu8BCxymaXJd12GtBYRKqYliBDRgAAMYwAAW0IBmdQ/cK040oAELaMCy0qw0q5ucKWaU2lF8YpU4l4AEJGABFiApTjRgAQ1oQLPSnLtl1bNKnCROEpCABCQgUSge04DmRHNOA4lziccSJ4kH/gH3nohXB5DFWQAAAABJRU5ErkJggg==",
+    "source": "https://meowdb.com/msclassic/item-db/631"
+  },
+  "632": {
+    "id": 632,
+    "name": "Golden Mole",
+    "level": 50,
+    "slot": "Two-Handed Blunt Weapon",
+    "gender": "any",
+    "requirements": {
+      "STR": 105,
+      "DEX": 50
+    },
+    "stats": {
+      "W.ATK": 75
+    },
+    "icon": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACEAAAAhCAYAAABX5MJvAAADVklEQVR4AcXBIXsbRwIA0DdKiOEcLFzBwuxP8MLAXRio/IQGWixHyyxatoJ3TPTgLg3r0MChYnOaVRrFtRPb+b4m7wU/R3ERgh+v/Lbh/e2EVgis/FillEk1DJ2/rPwk45hJFis/Tun7iNYiEdaqsPITvP+NsFYFJys/Run7KCUkwloVfBL880rfRykxz9knwRde+meVvo+qec5OggcET1NcBE9T+j5KiXnOToKvWHlcKWVSiucofR+lxDxnJ8E3vPRtpZQJrScqTvo+Sol5zk6CRwRfV0qZ0FokNISgCi6KT/o+qlJinrOT4AlWHlZKmdBaJDST/Z5SVMVZKWVSCq9eRSmREvOcnQRPFNxXSpnQWiSGdxbjOKFVhUApE1qSRTtE85ydBM8Q3FVKmdBaJDQ+GwbGcUKrattoGrNqP1sMgyp4hpWLUsqE1iKh8dnQNeRG13WYVNOUaSb72aJ/5busnJVSJrQWiXaIqq6LqvGQiBlR1w2Y7PdOWn0/6V8R1qrgmVYopUxoLZJFE6MvDV1jHLPDIamGbtD3k7NWWKuC77CyaC0Smsl+ZrxNhq5RdV00HpKubXRd43BIMoZuwKQqRVV8h+Cs+GTTN27HZJFoh6iapqwboirmaLxNhreNajyMaFUhqIJneOFsiy2284d88/FD43WfiWyuj3b7K/v9lcN/sj92vzjm7E1/tP9vNB6Stt3bbP5nv98ZR7ZbN7jBDbYe8cJ92/lDvvn4MXr9+khkc330+x9X9vtfHG6TN/3R8LZR9W+y3e7KZvO7X3+dsHNzw80N261q6xErDwu7XfZuiJjsZ6Yxyznr3ja6t43xkIyHpGqi+5InC76tlOIiobEYukY1HpJFQuMsEdaq4AmCx5VN37gdk0WiHaJpyj5LaJwlwloVPNELj9vOH/LN8di4vs5ENtdHbRftdlc210caZ4mwVgXPEDxdKcXJZL9v9T0SGmeJsFb9y33ZNwRfF51FF39u+sbtmEhonCXCWtW5LzvLyMj+JrgvIiIiIiI6i3hf/kTjLBHWqn8je1hGRkJC9oWX7oqIaBDROIvOoqpxlghr1Q7Rw7JHvHRfdJHdlf0lEdaqd86yi+wiIyMjI/ub4L6I6CK6b3LWuiu7K7vIvuL/wtRghdbbYzIAAAAASUVORK5CYII=",
+    "source": "https://meowdb.com/msclassic/item-db/632"
   }
 };

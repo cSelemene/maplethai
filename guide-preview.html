@@ -2,7 +2,7 @@
 'use strict';
 // No paid chapters are shipped to browsers. Entitlement-controlled delivery must be implemented server-side.
 import {FREE_ROUTES} from './free-routes.js?v=4387b11bda';
-import {WARRIOR_FREE_ROUTES} from './warrior-free-routes.js?v=4c964ac6a3';
+import {WARRIOR_FREE_ROUTES} from './warrior-free-routes.js?v=e1784cba22';
 const guides={...WARRIOR_FREE_ROUTES,bandit:{name:'Pure Bandit',steps:FREE_ROUTES.bandit},assassin:{name:'Assassin',steps:FREE_ROUTES.assassin},mage:{name:'Ice / Lightning Mage',steps:FREE_ROUTES.mage}};
 const key=new URLSearchParams(location.search).get("guide");const kind=Object.hasOwn(guides,key)?key:"bandit";const g=guides[kind];let i=0;const $=x=>document.getElementById(x);
 $("premium-link").href="./premium-guide.html?guide="+encodeURIComponent(kind);$("guide-title").textContent=g.name+" Route Lv.1–50";$("modal-desc").textContent="คุณอ่านตัวอย่างฟรีถึง Lv.10 แล้ว ต้องซื้อไกด์ "+g.name+" จึงจะอ่าน Route ถัดไปได้";
