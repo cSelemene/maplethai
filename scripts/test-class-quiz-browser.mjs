@@ -75,7 +75,7 @@ try {
     await page.$eval('.quiz-result-card[data-class="page"] .quiz-guide-link', e => e.getAttribute('href')),
     './guide-preview.html?guide=page'
   );
-  for (const guide of ['fighter', 'page', 'spearman', 'fp', 'cleric']) {
+  for (const guide of ['fighter', 'page', 'spearman', 'fp', 'cleric', 'hunter', 'crossbowman']) {
     assert.notEqual(await page.$('#guides a[href="./guide-preview.html?guide=' + guide + '"]'), null);
     assert.notEqual(await page.$('#guides a[href="./checkout.html?product=guide_' + guide + '"]'), null);
   }

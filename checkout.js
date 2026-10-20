@@ -12,6 +12,8 @@ const allowed = [
   'guide_mage',
   'guide_fp',
   'guide_cleric',
+  'guide_hunter',
+  'guide_crossbowman',
   'guide_spearman',
   'guide_fighter',
   'guide_page',
@@ -21,7 +23,8 @@ const allowed = [
 const FAMILIES = [
   ['Thief · สายโจร', ['guide_bandit', 'guide_sindit', 'guide_assassin']],
   ['Magician · สายเมจ', ['guide_mage', 'guide_fp', 'guide_cleric']],
-  ['Warrior · สายนักรบ', ['guide_fighter', 'guide_page', 'guide_spearman']]
+  ['Warrior · สายนักรบ', ['guide_fighter', 'guide_page', 'guide_spearman']],
+  ['Bowman · สายธนู', ['guide_hunter', 'guide_crossbowman']]
 ];
 let products = [],
   settings,

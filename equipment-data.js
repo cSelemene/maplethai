@@ -2021,5 +2021,947 @@ export const ITEMS = {
     },
     "icon": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACEAAAAhCAYAAABX5MJvAAADVklEQVR4AcXBIXsbRwIA0DdKiOEcLFzBwuxP8MLAXRio/IQGWixHyyxatoJ3TPTgLg3r0MChYnOaVRrFtRPb+b4m7wU/R3ERgh+v/Lbh/e2EVgis/FillEk1DJ2/rPwk45hJFis/Tun7iNYiEdaqsPITvP+NsFYFJys/Run7KCUkwloVfBL880rfRykxz9knwRde+meVvo+qec5OggcET1NcBE9T+j5KiXnOToKvWHlcKWVSiucofR+lxDxnJ8E3vPRtpZQJrScqTvo+Sol5zk6CRwRfV0qZ0FokNISgCi6KT/o+qlJinrOT4AlWHlZKmdBaJDST/Z5SVMVZKWVSCq9eRSmREvOcnQRPFNxXSpnQWiSGdxbjOKFVhUApE1qSRTtE85ydBM8Q3FVKmdBaJDQ+GwbGcUKrattoGrNqP1sMgyp4hpWLUsqE1iKh8dnQNeRG13WYVNOUaSb72aJ/5busnJVSJrQWiXaIqq6LqvGQiBlR1w2Y7PdOWn0/6V8R1qrgmVYopUxoLZJFE6MvDV1jHLPDIamGbtD3k7NWWKuC77CyaC0Smsl+ZrxNhq5RdV00HpKubXRd43BIMoZuwKQqRVV8h+Cs+GTTN27HZJFoh6iapqwboirmaLxNhreNajyMaFUhqIJneOFsiy2284d88/FD43WfiWyuj3b7K/v9lcN/sj92vzjm7E1/tP9vNB6Stt3bbP5nv98ZR7ZbN7jBDbYe8cJ92/lDvvn4MXr9+khkc330+x9X9vtfHG6TN/3R8LZR9W+y3e7KZvO7X3+dsHNzw80N261q6xErDwu7XfZuiJjsZ6Yxyznr3ja6t43xkIyHpGqi+5InC76tlOIiobEYukY1HpJFQuMsEdaq4AmCx5VN37gdk0WiHaJpyj5LaJwlwloVPNELj9vOH/LN8di4vs5ENtdHbRftdlc210caZ4mwVgXPEDxdKcXJZL9v9T0SGmeJsFb9y33ZNwRfF51FF39u+sbtmEhonCXCWtW5LzvLyMj+JrgvIiIiIiI6i3hf/kTjLBHWqn8je1hGRkJC9oWX7oqIaBDROIvOoqpxlghr1Q7Rw7JHvHRfdJHdlf0lEdaqd86yi+wiIyMjI/ub4L6I6CK6b3LWuiu7K7vIvuL/wtRghdbbYzIAAAAASUVORK5CYII=",
     "source": "https://meowdb.com/msclassic/item-db/632"
+  },
+  "663": {
+    "id": 663,
+    "name": "War Bow",
+    "level": 10,
+    "slot": "Bow",
+    "gender": "any",
+    "requirements": {
+      "DEX": 25
+    },
+    "stats": {
+      "W.ATK": 30
+    },
+    "icon": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAfCAYAAADwbH0HAAACN0lEQVR4AbXBAXkaSxgAwNn7MLCVcJGABSoBJICEIKGRcEh4K6EnoSehZ+GXsD1CWkgCFNK8meR+1WvJByT3qcvup1Nl8+CN5LLqxcwHlL73LLesv3tl97W6ZP2dCMrKzEeNA/PWO+vv3hl2lutvSj9QViap8RHjwLDTrRf+iCCCCCKIIIIIe6UfKCuTZJLcp1p25Fa3Xthsn8itZ2XjujBJXiS3qzm3YtkxDvRbbySXVSQnkhvknOt6/U3bzm1KT781SW5TkbzR+Iucc+26HxbtqFU8zrM7VCRnNK6rXffDXhlbezE+uVFFckFyWX187CzawTiOBkvGJ7symiTXVSRXzBxUb6zX38znc0O0xnGF0a6MJsl1FclfzFCX3U+/lX6wtytbe/3QW7TZrowmyXUVyQ1mXpR+8GzsaRfM13a7rb3dYC+5riK5UePU2DPsdI9L+q1JQkJyXUVyh5lT7ULXdTbbJ3eoSO7UIJXNg+Vibm/zVNyhIvmAxivhDhXJBzVO5dazfmuSXFaR/IPGQSrbr46yKyqSf9Q4J2cXVCSfoPFbjP6IcEZF8kkaZ4U3KpJP1Pi7iuSTNc7KXlQk/4OZU8POiYrkvex+4Y2Zg7rsfir94NlQTL4gIzvKDrLbhYNAIExmXpRh9KysTB7QIiMjO8iOsvfCeYHAiBEx81sEZWXygBYZrYPsILtfOGOGavkfZWXyBa2j8Fq4LByFo0AgEAiThOogOcjIjrL3MsJ74bVwFE78AmbByl8R9NbiAAAAAElFTkSuQmCC",
+    "source": "https://meowdb.com/msclassic/item-db/663"
+  },
+  "731": {
+    "id": 731,
+    "name": "Green Winter Hat",
+    "level": 10,
+    "slot": "Hat",
+    "gender": "any",
+    "requirements": {
+      "DEX": 10
+    },
+    "stats": {
+      "W.DEF": 15,
+      "DEX": 1
+    },
+    "icon": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB0AAAAaCAYAAABLlle3AAAC3klEQVR4AaXBsXnbVhSA0R8yG5a3dYkV3gpvBa5AlSmZ0u7IEcQRohGCEYIVbuvyb1+HAKIYkhLlyJ/P6fi8iY91/IKOz5n2T1sWKgKZSY7JIkd5o+MnOn5uYvb01w6VVC4kU1RMKbUnU0zJUV513NFx38Rssy3UWlFJBeTMFBUBFYRSezJFZZGDzDre+MJ7026/4Wu/ptaKikpDrjUbrTUa0FqDBusIWmus25pGI2KNP9o34DtXHrg1bfcbMpNaKyoqcmGKKWfBIljkmEQEBP/pazCbuPLAxbTZVcZxpJSCSpqIgPxM8DGFvgaziVcrrmQmi74vaFKi8E4PmcmYCRGYck3l/3zhZCqbHoTdHzs0UWgNWoPW4EdL/CEqItBoDdaxptlorbFYx5pFaw0aNGC9hui/YvoN+L7ilSn7/R5NhnHkLZW3au1ZPD+PbGqllIommUkqwzCyUAjkbMWrp6ctmUkqEfxHedFHQPAiUxaHw0AA210l6MlMNEllUUrPWY7J2QMw/f3PjsfHIx8TmQnIidL3gcDxOKCgSSpmYiYoKIu+9JytmA2jfCQCNFikciaw2RQWx+PA8/DMXUIgRFC3heE4TitePe23DCmaZMoLRe4QVA6HAZX9fsPxOBLBewEphBJ9sHhgVvvg8c8jCxWVTEkBAUFBRUUkIuj7YHE8DIAoqKhcC04yZbFiNqSUWjg8Himbnr7vuSczuTaOyaLUwmIcR5AXKgQEgSwEedEx60tMpRaeDwO/Y7OrXBuGkeBEwFFmXcfFtNlVQJ4PI78tYLMtnA1D4iizruPWxKxuC9eG5wTkUyK4kVK3hcVwHJl1HfdNXCmbAsivCRYBDM8jrzpmHZ8z8Xs6rnTcF5wEF8FJ8HlyIiAgs45bAQQQQAABBCfBRfCe3CcgkEACrrgIIIAeCKDnJDgJfp3cseJWcCG35GNyIRcCAgICMuu4FUBwEbwXgLwnt+RCrvwLuGzEGrveNO8AAAAASUVORK5CYII=",
+    "source": "https://meowdb.com/msclassic/item-db/731"
+  },
+  "946": {
+    "id": 946,
+    "name": "Green Archer Top",
+    "level": 10,
+    "slot": "Top",
+    "gender": "male",
+    "requirements": {
+      "DEX": 10
+    },
+    "stats": {
+      "W.DEF": 24,
+      "DEX": 1
+    },
+    "icon": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB0AAAAcCAYAAACdz7SqAAADx0lEQVR4AY3BIWMbBxaF0W9ck4F3oeGjhVNoOIGFCixUYKECW6bAhfZPsGhYRMM8NKyXlu2lYlPNyLKkWLvZcxr+t5GThutGLjX8QMN1I3urdY9jbBg2Zq/h0rhYFTbEYeIhvGj4LxreGlfrHsfYzIaNUYk4nFutexxj8yoOBOyw13DFDZfG1brHMTazYWMmcVAJlVAJlZjYzKqYqQSCKrE3csUN33GMDXE46sQsDnGIw3LZ4ZhJHK6pEnsj37nhZOwWhQ1xSJipRIBO0Bf0BSoxsZklzKo4EbMqsTdy5oaDsVsUkzgQXlUnIiGBgAGxXHZsB3PO5pVKzASrhagSeyMvboBx/M8zky+rnkmA6sRRHCYliINjXiXE4ej54Ylzn7ZhtRBVYm9k7yfgj9+XHb91Le8+bdl5xw7o7luGbXj+96+s1w/8uui47+9YdKJN2GyD7lrY7WjV8m37N+2dePy84fnhid/udzx+/sbkvlruf275/DXs/dlwMD4/9Aw2k4+bsFx2OMZDSMBD6HpxQYKEBDyEblFMvqxXvH/3gaenJR7MLx+2vGjYazgZ+4IBsVx2TB4fB/56WqBaEj8y8WAGm4+bUMUsAQJ2eH7oqa54//6Ro62ZNLxoOBn7ggGxXHY4ZuIhJOAhdL34XgKEmR0mfTETEA62ZtKwd8sZceCY7Sb89bRAqyXxIxMPZrD5uAlVkHChSthBnAgIlxoOxqdlsdmajWGxKmwgIQEPoevFuYSZxCwBAnZ46MFh5kA42JpJc8sVNpBwpBJInJM4SEiAQLhOQDi55Yo4nJPAQ5C4KoE4HKmKsnGgBA4XbnkRm0lfsB3CkUpM4kCJozj8PxzeaIDxoQcHHAiwNaiExEwSR0k4SpjFYVIl7PDQgwMOs3CyNdyy54DDK5WoApuZBzNRiaM4HFWJoyrxYRsWxawEDrNw8BPw59e/+eNnMfuK6Bciuxa1Oya6a6FtqQIJJLirllYtumuhBXacqGVZO46yg42hE3wL3HDQbAwbQ78QryQkXlUnkEACCQkkDgSIWRxURYkLGzNpGi6Ni1UxsYGESQIewmrd45iJzUHCJOEgzOxwRcPeLZeazSeP3aL4kSpmtiBBggQQEI7+BYTvNFw3sledmHgIe78Az6t1j2NsDhISXnkIL94B4SBAgLDXcEmAAAECvnDwARAH69W6Z7MZOPIQznzkUoAABgyk4USAgAIEFAfiQJwsufQIhLcCBAhgwEAaTgQUIECAOBA/Fk7CSYAAAQKEvYZLAsSJeEtAeCtcCifhzD9g5QGtwMQNLgAAAABJRU5ErkJggg==",
+    "source": "https://meowdb.com/msclassic/item-db/946"
+  },
+  "955": {
+    "id": 955,
+    "name": "Green Avelin",
+    "level": 10,
+    "slot": "Top",
+    "gender": "female",
+    "requirements": {
+      "DEX": 10
+    },
+    "stats": {
+      "W.DEF": 24,
+      "DEX": 1
+    },
+    "icon": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABoAAAAaCAYAAACpSkzOAAACvElEQVR4AZ3BrXrjVhSG0VeJieEuDNw0UAMDTy9BtNADCx3oMvsS7FsQLRvRsBwauKlYPyqmRlIc/8bPzKxV8Pt6ThXcUPB7+oUzEpM62Cu44p5f1y8cSocHgxAkh0eDhzm8iRXwD2dmXNdzQ+lgboxCmBseYlA51EEPFByZcalPVeIWs4x7SURm4F4SZMjiKzNO9alKhBpuKdMCKTjmXgIZsqgc6qAHCj7ccdAvt4lq4dyUGZk57iVVMja7hnOVM+j5MOOIu2PmrNdrpOBcRLBcVigyUhCRGdQBXjdUVQIyZBHixB2TfrlNHDNzzBwzx8wZSGIgBRGZvRLYZKjrBveSvcoZ9Ly7Z7J6fDK6rmM+h/ncOCYFEcHq8S8i10RkBgrxkjtaQQs8PcB8Lp6enmgjUAePBm9iNeOIJCICd05EBJJQZCIyChECCcTBJsPWRJAZuEGI0T2TlXmHmdF1HW3b0rYtbdvy8vLC3/MHkj2y2ezI0RECddABEYxaRsW/wSpZh80ht4zeBDMmRbNTnxbBwMwYNE3wo0psdg17EfySOhgUBaf6tDAGOYsfVaKuG/YkRmISwafMqGDSc1DwruBUXy2dpgm2pZGzOCcxEpMIRplPBVfccUYSt5gxMibujEo+9Vxxx0HPu5zFtjRyFgM3cAM3PpkxMiYZyMDrOvGVGUde14lvzw0Z4cYFN0YhRrtg9LpODL4/N3xlxpHcNLyuE9+eG37G6zox2OwaIiAzKrii4FS/TWBupGrNQJEZ7HY76oB1ZbiXDHa7hoGAOhgUfKHgUr8sYbFYkHPNXtOIRlA5uDH63nDsD06JIwWnjMl//Jw/uU5MBAhQwcQAAwwwwABjYhwYl8R1AgQEEDPAAAMcMMCZGBPj14kzMybGgTglviYOxIEAAQIEqGBigHFgXDJAXBKnxIH48D9WOUM+8eN3RAAAAABJRU5ErkJggg==",
+    "source": "https://meowdb.com/msclassic/item-db/955"
+  },
+  "1180": {
+    "id": 1180,
+    "name": "Archer Pants",
+    "level": 10,
+    "slot": "Bottom",
+    "gender": "any",
+    "requirements": {
+      "DEX": 10
+    },
+    "stats": {
+      "W.DEF": 17,
+      "DEX": 1
+    },
+    "icon": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABoAAAAcCAYAAAB/E6/TAAACYUlEQVR4AaXBAXXbVhgG0CsfE/gH4VFQIWgQPAgZhBZCC2GBMEOYIEwUHoR9EDw7So/rRHbb7d7Beyf/3+CNvQ2f/3xCqVZala96ovcuPYgkEjfm58WWvQ3HL0dbeo//am9DG0fEfFxMh8kqkkUbm967cZx8NR9n1cpFltiyt2E+zi4OHw9KiUgIqjWWrorEi+kwmo+LR/Y2TIcJUYhY5llCYZkXCcuyoFSVKtrYJJEltuxsiFBFlcI4TlprvlXVtFaqlapGeWjvOxJ6X/QeCelxkXQJVaWNo1Ii7tnZEspXUVUuEheDF6Va09roR+zcU+UiSLxTRSkEpcpDO3eU8iIk0Zc4G6yG+dgRsaoqF20sZydv7Nw6jVNRKMSLJLYkIShn5ZGdd0opqyAeC6GKKnftbKjyIiGJO4b52CXOgkK5Z2dLlYskEvoSZ4M7EhRV5Z69N/rSVcXFMke18j3H56NxKhfpsWXvjelpNI6jJKp18/PikWVeTE+TcWySYFE4HvsJg1c7V6fp0JSS0Jdumbtxah6ZniZJpEdCwtLjrZ0bpapIxCqJB4bjl5kQFForW3ZWp+kwqiqUJJK4WOY4GzxSSKxKtdLGcnbyaufVeBgpIpKQ+FGFuGpVpsPoWzuvvvz27OPHJ+M0ChI/J/TE9DRp0+j50+xbg1snZ3/8/VnvXXr3/Gl29ov7/nn6PKnWtNb8/uGTV4NvDG6V1T9ufUDZ9pdbvyJWQZDBqlAoFAplVa7Ke7EtCDr6HoVCQ6FZlVX5efHG3qpcxa24L67iKgiCIINVoVyV9wrxXtyKq3j1L2VvI/RRLL/PAAAAAElFTkSuQmCC",
+    "source": "https://meowdb.com/msclassic/item-db/1180"
+  },
+  "1175": {
+    "id": 1175,
+    "name": "Green Avelin Skirt",
+    "level": 10,
+    "slot": "Bottom",
+    "gender": "female",
+    "requirements": {
+      "DEX": 10
+    },
+    "stats": {
+      "W.DEF": 17,
+      "DEX": 1
+    },
+    "icon": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABwAAAAZCAYAAAAiwE4nAAAB5UlEQVR4Aa3BC3XbQBRF0SOtELgUHoUpBFMIBVFwKJRCINgQGgqi8ChcCFNPbEXyR3acdu+OdZWf61jRcVvdDYFfN0jBfv8OAkmERDNmgsE2TY7GCSEYk6bjhp5rdTcEft0gBZ8EkgiJMwJJNGUT2JCGEjSVG3rO1d0QjJlM7KQJiUeigA1pKEFTudBzQRKxHZCCZsyRexRCEgpRNsEjPbO6GwLbLNlGEmts80UQBWxIQwmaykLPgiTGTC6FxEQKGklMFGJSNsE9PUd1NwRNbAekYCKJZ0UBG9JQgqZy0vNASCxJwV3irp4F2yzZyTMk0UQRa3pOJPGIFExCYmKbNWkoQVM56IG6G4LvkIJ7QmJSAkJc6fkmKbhintazwk7s5CcksZSGEjS158LH2zv/av87WdOzMGbS2MklKbhkG8yXMZNxn5SAEDf1nNimCcHH2ztr7GSVQYYQq164UCIowP7tnaZsNzwy7hOZTyHu6jiquyEYM9mUwsQ2+zH5qTSkwWbSdcwqB3+2hVtsMxkzWbLFxJhmP7LUcdJxrfJ//OLIgAFz0DETIECAAAHiSMzENXObAQMJJOAXjgQICEBAcCSOxPPMDS/MxMycM+vMzMwMGDBgwBx0zASImbgmwFwz58zMLPwFwJ3BHELhkFYAAAAASUVORK5CYII=",
+    "source": "https://meowdb.com/msclassic/item-db/1175"
+  },
+  "1314": {
+    "id": 1314,
+    "name": "Brown Hard Leather Boots",
+    "level": 10,
+    "slot": "Shoes",
+    "gender": "any",
+    "requirements": {
+      "DEX": 10
+    },
+    "stats": {
+      "W.DEF": 10
+    },
+    "icon": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABsAAAAgCAYAAADjaQM7AAADBklEQVR4AZXBK2IjRxSG0a9skYI3cGBtobfQgYHJEnoLChyzzBKiJVg0sGiYioblUrH8tFinS1LrYT0snxP4mpFrgScFPjdysFl2NC4x+23lTAJPCNw3MtksOxqXyEVkF7M/fk2sssguJoFPLLht3Cw7mlV2souZi533IbEuDhjPClwbN8uOVXayi8bF0WbZ4RLr4jSS0WQXk8ADCy6Nm2XHKjvZhYujzbLDJda5IAzDEOIrFtyQXTSbZUfjEtkdufjITEjGMxZ8sM6F96HDJdbFMeOKIYTxVa9cevt7y3erW7ZbQYzUCjGyEy1SVWkqkUql+eufyiTwiRcekbhFGEI0xXla4LZx2bFnxpGEs1ecCy6awAML7nAOJGbFuatPRnaN7AVuCNw3ciYZNyUzXOKciybwQeA5Y58Ml2iSGS6RzGhc4iMXTeDMK895c9Xvy1+MRKXWyraCxYghYjQsRlQrM4ugynfgjYMXnjP2ycgFXFAEyYyZIZpkxiMvPMklXKIIkhmNS5xziVmfjD4Zk5GDBbeNnAQmQ280cgHCxZEwZkNvuIOLK4FLI5NlbzQSrIqY9ckwRFMEyYyZSwy9kQsXsotJYBI4Gd+HhEs0EkggBAJhZBfJ2ElmNC7RDL2RCxeyi0ng4JW98d8/B2IVjWolRpAgEqmxEmvlmxllW7EIqhXVysyIqLKTXbgqk8CZV2B8HxKxika1olqZ1QqRSI2VWCvfzCjbikUuJIuoQnYxCcAbHyyYuMTMJR4xRJ8Ml5j1yXDxqQUTCRxxTuLLsotJ4I4XDiSOJHYkdoRA7AjDJWZ9MlyQXUwCD7wA4UcWEkggsSNxRRguMRt6w8XTAjC+D4lcxC1CIBCGSzRDbzS5sJNdTH7imjizYJKL6DtjXZwLYkcYQ2+A4RK5cJRdTH4GOi6JPQECFNgbh87oO+OeXEQjiWbtzH4A4jYBAhzwwJ4B/w2d8Ygk1s5sxYm4JkCAAAc8sGdAAjZ87ncuiRNxIkCAAAEKnBhgnBjXDBDXxCVxIg7+BwoAsZWynNCRAAAAAElFTkSuQmCC",
+    "source": "https://meowdb.com/msclassic/item-db/1314"
+  },
+  "665": {
+    "id": 665,
+    "name": "Composite Bow",
+    "level": 15,
+    "slot": "Bow",
+    "gender": "any",
+    "requirements": {
+      "STR": 15,
+      "DEX": 35
+    },
+    "stats": {
+      "W.ATK": 35
+    },
+    "icon": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAfCAYAAADwbH0HAAABxUlEQVR4Ab3B0VHjSBQAwH46EpgNYVPAqTCp8LufigWnMkphUpgQ3ooSVQaMsQzsdYf/X1qF70s3eHp6UmsVvi6tWmteOxwOdojwNdla03v3rNbqlXBZIqzC7bK1pveu1upFuC4RXoTbZGtN712t1SrskwivhP2ytab3rtZqFfZJhHcmn0ubbK3pvau1WoV9EuEDk8tynmerbK3pvau1WoV9EuGCcFk+PDx4djwevQj7JMInJh/LeZ713j27v793g0S4IpzLeZ4ty+JZ792yLFbhukTYYfJWzvPseDx61nu3LItVuC4RdvrPW39KKUopeu+WZbEK1yXCDSYn2VrTe9d7tyyLVbguEW40eefx8dGyLFbhukT4grDJ1preu1qrVbguEb5o8kqt1SpclwjfMLldInzT5DaJ8AMm+yXCD0uky9IPm1yXCD9s8rlE+AcmlyXCP3LnY4nwseJ2wzt3ziUCxaY4KTbFfsNmYGBYhU221hwOB6tfKCgoKCg2xUlxbvjYwEBHxwikk18o+I2C3zbFpvjccG5gYKCjY9xZtdYcDgcvipPhreGy4WQ4GRgYGBhWgbQJm4LipDhXMJwb3hpOhlf+Akuxslu1MgugAAAAAElFTkSuQmCC",
+    "source": "https://meowdb.com/msclassic/item-db/665"
+  },
+  "751": {
+    "id": 751,
+    "name": "Green Feather Hat",
+    "level": 15,
+    "slot": "Hat",
+    "gender": "any",
+    "requirements": {
+      "DEX": 20
+    },
+    "stats": {
+      "W.DEF": 18,
+      "DEX": 1,
+      "HP": 5
+    },
+    "icon": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAcCAYAAAAAwr0iAAACTElEQVR4AcXB4X2iSBzH4e/s0cC/hdkSNiV4JWgJUoKWACXEEpwSoAQpIfPy8s5fCbMgGghCTO4un30e/oDEH5KAxMQPvl8C0vl8Zk7G90rn85lOjJE5Gd8n0TIzOk9PT7QcEz/4HqmoPJ2maWiahiV/8f9L22ejWP/D6+srTdOQ5zktx4yMxxLzHAu8N0IIrFYrNpsNLceCjI+l4ujpRImxQ67EPUdrt3ohhMBms6Hl+IBjWXo+eTpmnthEBEhiySEXE44HHPNSUXkuxIV5UAQBkngjesaFmdEpN5EFjhHHvVRUnjcC0TMGYiCJC9EzMDM6TWmM1U3DmOO9RGt39Bg90ZOEmdFRFI+YN26a0ripTiekiCR+/nzCMUinY8EhlmBgZoxJAnFRbE+MSWKsDH8ztltXmBlmnkO5p5PvS1ouYySEwHa94xBLJDFVbE906jqwRILdumKsqQMdiTsZExHP1u+48as1Zp5OCCWfUdc1hhiTeJPvS1qOVsZIjCKWe26eq4q6DnyKRMcAYSzJ9yUtx1XGiDAM0TmeXgih5I3EHIkZQtzL9yUtx4ijl1a/ftE5Vkc6dR1AYkzioRgjU+UhcOWYcEB6eTlx0zQ1SIxJfCjGyJzyELhyLHD0Eq3nYscjMUaWlIfAhOMBx3uJ/8bxRY5/x/g6McPxMaNnDIye8XmiJ0CAuHLMM8AAAwwwwOgZA+OemCdAQAQiIFoZ9wwwwAMGeHpGz/g6sSBjnjEQ74llYiAGAgQIECCuHPMMMAbGPQPEPfGeGIiJ371h9D7r134tAAAAAElFTkSuQmCC",
+    "source": "https://meowdb.com/msclassic/item-db/751"
+  },
+  "966": {
+    "id": 966,
+    "name": "Green Leather Hoodwear",
+    "level": 15,
+    "slot": "Top",
+    "gender": "male",
+    "requirements": {
+      "DEX": 20
+    },
+    "stats": {
+      "W.DEF": 28,
+      "DEX": 1,
+      "HP": 5
+    },
+    "icon": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB8AAAAeCAYAAADU8sWcAAAD+klEQVR4AZ3BrUIr5xqG4XsAM/KtjHztkrNlZSq3zJaV4RCCBBcOoXMIYOs6Frc+i3xs5GPHZefLDwyQrK72uhr+nS2XNfykhp+zZWK57rikvyuc0XBGw49t2VmuO6YkcU5m8pltnh/FUcNEw2Xb5bqjksQ/MZ93SMY2J7YZerPTcHTFD2QGVSmmkoxkJCMZyUimKsWUYubzDslIwja2sU01XwY7W45u+BuZwWLR8fxcqCL4ohSzWs2pJCOJUsxU1wWfXXPeNjoYR5M5wx55fd1QjSOMI4wjjCOMI6zXS15fhT0iiVJM1wWzWctmMxIB9khES3YtKuM98HDDV9un72tscXfXA4XFYkH1/FyYWq+XVKUUJFGVYrouOOm6oBQTAZKZuuaj7dP3Nbawxa+/JtDy8vKCn8V/W+jYMYwb+DYPxtGU8kpE0LYtmUHbtozjyMls1iKNtC17FtVDw7vt0/c1tqhscSIZSTAYmb3V0xJbSCYimLKNbSrbnJRiXKgadm6YsEVliylJlGK6eZBARBCR2CIz+CqYsk3lQtVwdMXB9o+/lpwjmamIICKoIpJzIiAiqCKCiKCaL4OdLUdXfGKLKUmUYrouiAgigqrvH4lIfkZEEBF8dsVBc/tbjy2mJHNOZpCZ/EgERARTQ292Go6ueNfc/W9gShKlmK4LLolIfsbzo9hpmLjik/52oL8dkEzlwl5EEBGcZAZ9/0hEckkEDI+F4bFwzjUf3Xcz8Ah62VBeRubLoGrblrZtqSJaDloyv1GNo5nqbwfKn+IkWvDIPfDA0Q3vtqsOzIEM8wQGE4skIljYDINgNadSX+j7wvJpjS3624GpDN7IfNHwbvu0gCIwMIi9DPZWi2QYRFUMMmSwJ7NnDgLIgAz2ZPZkkKkadq64IIM9mb1hEMVQDDJ7MshAB3S8MZABAQSQwVlXHGyfFpyVi0AJzwIZZA46oINcBOf0hb91w1ERdMkXmQkIkosyA8l81iUUQQAZvJHZAs0NR8WA+CIzyOyQzDmSqDKDUkxl86ZLKOKsK2CbATIU80YGmTeZQZUZZAYnmcmUTdWw0xcYxF4AGXxww84ieWNA5iLJZAaZQSWZzEQSNtUvwHbV8YEBmantNfDwsuH+ZQPfZiCzVzZUvwzPWs0XSRXRYo/YIxEtlT0iiaE3O78BM+D3lw28bKBtoW1hEHhkL1rwCNccPAAPZcO9DDLVf4AEfp8vkhN7RBLQYo9IYujNziMQwAwYgPmqg1kLI5DBnkeQqZqGjwIIIIEAkoP1+mnOiWQkcTL0ZqcHzEcrLmsaPgoggQACCA4CWHPZHWDemXcGDBgwYI4avgogeBd8FYD5ynxk3plP/g/mDhtju11M3AAAAABJRU5ErkJggg==",
+    "source": "https://meowdb.com/msclassic/item-db/966"
+  },
+  "974": {
+    "id": 974,
+    "name": "Green Able Armor",
+    "level": 15,
+    "slot": "Top",
+    "gender": "female",
+    "requirements": {
+      "DEX": 20
+    },
+    "stats": {
+      "W.DEF": 28,
+      "DEX": 1,
+      "HP": 5
+    },
+    "icon": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABoAAAAdCAYAAAC0T3x2AAADDklEQVR4AY3BK2IjRxiF0a8mIoHXS6gsob2EDgxsLUGzBAsmTF6CGybMDUObhk3RsPmpmS8166j0iFoP23NO4trEucT7Jm5LXEicTGw9tdAXKIYuwxBUiWvTKrNj9oZgLjGzYG96atkZLYpNl/nItMrQZM5kQRiGoJqAxMECmJ5XIueGahwKN0xcaDI0bUsVUahymKrLMATVBCS2Fmzl3CBl9grVEOy0XculcRhRFkc5N1RBIYcJc2XBlpSxg8o2Vdu1VOGRW5qmww7mcm4ICsNougxD8L8vQPrla09EIaJgsxMeCY98RMocRRQiCsvedJkrC/bSsvfEzPPzM1kNImOCyjYmuL9bUtlBRKFa9qbqMjtDUCUOEifTw1NLlXNGylyyg6qUQr8uzLUrMfZmJjGzYMY2TdMgZW6RMlXbZthwJiI4SNywYMY2pRSahk9JoiqlYPOpBTO2sY1tJHGLbSrbVDbY5jOJc1PTiSOJKzY7tpmLkSrxji+cS2UwlcRNEkiQs5DEj1pwg8SOJN5jG4ktYZvcQoxM7CUufOHcxIEkKklIQhKSkEQliUoCSRx927RsTVxYcOHbpmUdhco2tjmSRCUJ20jCNtVz20ILX9cjtyy4UMaRTduyjsJzt8FRqPq+pzTs2OZokxuqx34kAgo7iQuJa9NTC93DE+Ow5shhSsBo2HQi54aq70eqEuAWJFEGs5WY+YlzU7sS//Azv0m8vPxL5TDViyHeQG9vvL0ELxH8JQjBWwZJ5Cz+/PuJ/nH4HfiDgwUn07fXZx4f14BZjgNtmMpmZ8zsDJxIQgJJfGTBjMhIorLNIPbEjiSOJJDEpa5bcX+3ZCsxkzg3vU7fWT8uaZqGcRz5UV23olrer9lKXEhcm16n74hMP35lrpRCZZujh4cN1f3dkoM79sxM4pzYe2VrmiZMMGebIxPc3y05+JUTs2fAgBN7AgQIECBAwBOfW3ObAQMBRAIECMiAgMye2BMfM9cMGDAQQCzYEyfmnHmfOTEnBgwYMODEngBxIq4JMNfMOXNiDv4DfXxm6ETKctkAAAAASUVORK5CYII=",
+    "source": "https://meowdb.com/msclassic/item-db/974"
+  },
+  "1190": {
+    "id": 1190,
+    "name": "Green Able Armor Skirt",
+    "level": 15,
+    "slot": "Bottom",
+    "gender": "female",
+    "requirements": {
+      "DEX": 20
+    },
+    "stats": {
+      "W.DEF": 20,
+      "DEX": 1,
+      "HP": 5
+    },
+    "icon": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB0AAAAcCAYAAACdz7SqAAACE0lEQVR4AbXBDXnbZhiG0Vu6TOCh8FFIIXgQVgijsEJwITQQXAqCYEHYS+GGoEVxHf9EltPl2jkd6yb+u447Ou6bdvu/gJAWWsJJKVWFJSAqypXheeRFx4INK35+/8mSKvmMjmXT/rBjVjUwjkVrjSUqKirjKAlvamDWcWPDCi3aMOIoZeG20VpY8mfJEzAM4JZVGx4YWqOQp6fGOBb3PBNKyRMP9TzQWkigtUZrQWVJGhAgPNSzQov/Q88DyjsqM5UlSVjT8960P+zQ4iNU7mlbZhM3ej5IixMVlZnKkiTc03OHFsorlTUqv6Pnk5IwUz6s59q0P+zQ4qSqGEe5lASVW468SSAJbcts4kLPAyqXknArCbeUu3oWaDGrKtaonCS8UVnTc4fykILK7+o5m/aHHVp8RBJmCipLEkhC2zKb+KXnhhazqkKlhuDIooRXCsqrGnilck/P0bQ/7DhRViXhlsothQSS0LbMJl70wLQ/7JhVDVyqIZwoqFxKQgIql2pgUdsym3qg+/rlG1+/fGOmUFWoVBWfoaKQQA1QA7Ou49rEHX//2DKOI0mYJUFlplIlNbCm45cN1zqOwlE4+ocXyguZqdzxB2dyJBBAXnRcCxAgQIAA4egHj33jPQGBAgpww1mAAA0I0DgKR8+sEwjXZMGGa+FMrsl9ciZnAgICAvKi41qAcBbeCyDvyTU5kwv/Am+gH6GCEiC+AAAAAElFTkSuQmCC",
+    "source": "https://meowdb.com/msclassic/item-db/1190"
+  },
+  "1324": {
+    "id": 1324,
+    "name": "Green Woodsman Boots",
+    "level": 15,
+    "slot": "Shoes",
+    "gender": "any",
+    "requirements": {
+      "DEX": 20
+    },
+    "stats": {
+      "W.DEF": 12,
+      "HP": 5
+    },
+    "icon": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABoAAAAcCAYAAAB/E6/TAAAClklEQVR4AZ3BIWKjWgCG0Y+8mMr75Mi7BbZAlsAWghxJZceVJSR2HCwh2ErsuPz2yd+O40ETEtKmTdpzEr6n572ETyR8Tc9gtyt5a7WqGCR8YMn9+t2uZNS2DXNZlnNLwn363a6kbRsmkhk9P29o2y2jomgZJFyx4E4xpowkI5mRZKSOSVmmDHquWPBNkqnrmolkRptNxqDnjQW39ft9zXb7iGRGkhlJHVLHnGQ2m4xBz8yCL5LMqK5rrokxcM2Sz/X7fc12+8hcXddIHRPJxBiYFEXLIGFmwZ0kI5k5qWMUY2BSVS1pxqhnZsENUsdcXddIHVLHKMaUGFNGVdUysiDNGPUcLfmmGFMmUkdVtXzmHz736/fvl6enpzW2kEye54TwgxB+YP9HUVS8vAgC8AA8AH/h5zrj4cH8+fP3Cfi15LZktar63a5E2jKSOoqiggAhcmJDnkVijLRtx9yCOxVFRZalSB1FUUGAEHgVAtiQZxHJtG3HKMbAJOFjPVfEyEGAECAEkCDPIpKZxBioKjFIGCx5r2eQrwO2GdmcdC3EFEKAEMAGzIWmMWAGCUdLLvX5OhBi5JWEbUIAm1dpBl0LMQIRbC40jRkkvLHgrM/XgRAjt8SUVxZgyPOIZD6z4KDPci5YwjZf0TRmkHDFkjcsMbLNxObEBsxJnkck0zRmkPCBJTO2+Yo8j0jmHgnQbzYZ26YlBC7YnNgcGPI8MpLMqGnM4F8umZklA0k8lyWPVcWczUm5zpi0bcekacxgBaScmQMDBpxw0JdlJMtyJlLHnCTmqkocPXKdAQMClAABCMC+LCO3VJU42nJg3jNgwIAAJUAAIhCAHbc9cmbOzJkBAwYMOOEgAIGzwHsBMO+ZS+bMHP0PQ6FBtbJOVIYAAAAASUVORK5CYII=",
+    "source": "https://meowdb.com/msclassic/item-db/1324"
+  },
+  "1439": {
+    "id": 1439,
+    "name": "Basic Archer Gloves",
+    "level": 15,
+    "slot": "Gloves",
+    "gender": "any",
+    "requirements": {
+      "DEX": 20
+    },
+    "stats": {
+      "W.DEF": 8,
+      "DEX": 1
+    },
+    "icon": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABoAAAAaCAYAAACpSkzOAAAC2UlEQVR4AZ3BoXbbWBSG0U9uieApHHho4Q0sVB5BhQNtWKjCmFWP4NBhFg2LqJkvDetPh/XQMI21FC8rsZtJunfBnxk4V/CKgvcbfjQ1VVUxd3W9YqbghYL3GbabBndn1Yq5TeOM+r7ne9vxpOBJwfsMqWoYuTvuxkgKJDHaNM6o73u+tx0HBQcL3m5IVYO74+64G5esWnFJwdsMqWpwd9yNOSk4ksRR7lsOCp4s+H9DqhrcHXfjT33kDaoqcYkUXBIhXlrwuiFVDVLwVhHikg/83vDr55Zvf3+hvd0BJWYlc2YlZiURj4wigsfHYFlB9eUz/e7hBlhzsOCyYX+/wcyJEPttjSSkIHliTgpGkogQ+23Nclnz0oJzw/5+Q0qJnDNmzmi/rZFE1/ckT8xJIkL8vG8wc0buztyC54b9/YaUEjlnUkpEiAiRc2a/rZHEKHlCCiQx2m9r5tyduQUnw3bTkFKibVvcjSMpcDeOsjJZGUmMIoQURIiRmeNuzC2YDNtNQ13XtG3Lcllj5kQIKXA3zJw5KRhFCOWOq+sVUhAhLvnA5Ka721ESuDspfSFCSIG7MSpLY3TbPQAlkhg97G45KID17T93N823mrI0Hh+D9Nnp7nY3wHrBpACK722Hu3PU9z0jM2d09bXD3TnKfctBwYwURAgpmFtwMmw3De5GhLi97Vgua8yclyQRIS4orq5XSIEk5j7yghT0fc9yWWPmjCLE9Srj7hwpdxwUnCuurlcDJwUHHzhZd3e7G/+rpKoqzErK0sg5k/MDuwcwMyQRIeLfBw7WXLYG1sCaJwXnhu2mwd2RxNdVy8hTjZkzyn3LwSdeF8wUPGdMfnFyxWTvqWak3HFwze8FkwACiIKJAQYYYIABxsQ4+cGk5SS4LIAABKgADDDAAQOciTExXhecCyCAAAToIxPjJHgu+L3gJDgJIIAAAoiCiQHGiXHOgOBc8FxwEjz5D5YCXcAtq6jiAAAAAElFTkSuQmCC",
+    "source": "https://meowdb.com/msclassic/item-db/1439"
+  },
+  "666": {
+    "id": 666,
+    "name": "Hunter's Bow",
+    "level": 20,
+    "slot": "Bow",
+    "gender": "any",
+    "requirements": {
+      "STR": 20,
+      "DEX": 45
+    },
+    "stats": {
+      "W.ATK": 42
+    },
+    "icon": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAYAAAA7MK6iAAACE0lEQVR4Ab3BvVkjVxQA0HNlJQ5nQ4dKN5wtAUpgS/CWIEpgSkCpM1OCpgWlhC91xk2dPWskQBL6QQI+nxP+X9Wz8DnVvnBYnbf0SVcIH1Mt1fupbf2sc73wImzUeWulT7pCuFyt91ODftY55nrh1by10iddMYhwmVrvp/pZZ9Cng64aO/q00hWDsDR2oX7WGfRpR1doPJt41RXbwrNwvjpvrfTp1axYScKzhupZEqgIW8YuUG6m2nbCr19mxUoS3kjCRkV4Y+wCpbnSKmbZSBneVxEOGDlPnd7PlUw/u4XMdIaKcMTYcdWgafx597ebNv287ZV+ZimcVhFOCPuqpXmL6b2HMlFKUcpC6WeWwmkV4R2/2VWf7m5Mr7775/HR4vc/XH3/11/9o9LPLIXTKsIZwkZ9uruxeHjwok+64kU4rSKcaeyARVrpikF4X0W4wMhafbq7sXh48AEV4UIjbyzSym0xCKdVhA8Y+biK8EEjB9wWg3BcRfiEkctVhE8aWYtvtw/OUBG+wMgbbcPdxKDaVRG+yMhGXC8cUxG+0Mj7KsIXGzvgthgEKsKuxuXSG2Gjzlv6pCtefENjo7HWOF9aSyTS0thanbf0adsPtGjQWGtsNPalwxKJgoIco85b+rTSFYNrTDCx1lhrXC4dMLZ0vbDtBxpraVc6Lm2kjUQikUhLYV+DxkZjX4O0L+1KG2nLfzUywPANz6T6AAAAAElFTkSuQmCC",
+    "source": "https://meowdb.com/msclassic/item-db/666"
+  },
+  "771": {
+    "id": 771,
+    "name": "Green Robin Hat",
+    "level": 20,
+    "slot": "Hat",
+    "gender": "any",
+    "requirements": {
+      "STR": 10,
+      "DEX": 30
+    },
+    "stats": {
+      "W.DEF": 21,
+      "DEX": 2
+    },
+    "icon": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAdCAYAAADLnm6HAAADW0lEQVR4AcXBoX/bRhzG4a9ck8Cf4eAFFmpw0IGFKhyUYcZkmDAJbsyiZREds2hYj5r1/oS+1Oyms+Nadpy03Wdrn4efJPKTRCAyMuHHifXacW7CjxHrteOSCf+/WK8die/FuSnfJ3KUsRc5yniB70XXiEHGyJRvExmsPjkU2FnehMigejAOmveK7GXsxQFNf81L3vB1ccDt7e88bj4gie12y7vyF/J3fCGBe3vF29+u2Dxu74B74O729hZtHPd/fGCQcWbC6+KArmvo+44yXyOBxI6ZkUicKCpjEAcsmms6v+AlbziKwB1wB9wD8eGhZrN55CCEDeW7P+n+btmyBbaYGWZXwBauYCt2No9bNtu/SLpGDDJOReB+wl4cUJUFVVkwiLxCARQgeAhBhCAkdsxxomvEkwhE9uKnTx8ZxAyIA5aL9xyURYFX4CXzecH7xa+MmWPHHLQL8fnzZ/q+x/cdzjkOFsuGqiwoq4rr61+ZcsFyuaSoSr6QwIwTHqqywOVzkkW7IFFgZzabMS8Mc9AsRVUWJKtVTfAeMyOZciZ4T1GVnDBjrO87Hj5+ZHFzg/OeZFWuSILv6buWsXVdcrNsqcqC4D1jU84I40ACM/YkMGNMEiGAc0bbNoQgknVdMtZ2PefMHMmEgRQ4J3HKDCQO+r5jtV6ThCBCEEVVkzRtR9v1tF1P2/W8ZsKI94GyKpAAiUQCCZCQQAKJHe976ocHXJ6TdM2SxMxIiqpGEpJInHMk9eqBLMsYZBMgm82uKauKRAIkkuA9SCAhsRO8Z8z7nrKqcHmOy3NcnnPQLhccrFY1mOGcY2zKOYkkhEDTdhzM85wx5xyYYQbe95RVRds0JC7PSZxz7Jhhxk5R1mRZxiBjMGGkKAuSEAJN2zHPc+Z5zjzPGfM+0HU9SEgggfc9ZVWROOdwzrFjxmsyjuKqrggh0LQdY/M852uKYk4yLwrG2qYhqeqaZDa7ZpDxJONUZC/jVOQbreqKsaIsSWaza55kjGT89yKXZVyQ8e8Y309ckPE6Y884MvaMbyf2BAgQTzIuM8AAAwwwwNgzjoznxGUCBAQgAGIw5TkDDHCAAY49Y8/4fuIFUy4zjsQp8TJxJI4ECBAgQDzJuMwA48h4zgDxnDgljsSZfwBIa4m1TQT0pQAAAABJRU5ErkJggg==",
+    "source": "https://meowdb.com/msclassic/item-db/771"
+  },
+  "984": {
+    "id": 984,
+    "name": "Brown Hard Leather Top",
+    "level": 20,
+    "slot": "Top",
+    "gender": "male",
+    "requirements": {
+      "STR": 10,
+      "DEX": 30
+    },
+    "stats": {
+      "W.DEF": 32,
+      "DEX": 2
+    },
+    "icon": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAdCAYAAADLnm6HAAACyklEQVR4AbXBIVojWRiG0bdCTMlvJPJviSzbkllCttBbYGRwvYWwBbZQW7gW+dvIz15Xk0ogIaQowvQz5zR8z8BJw6WBcw1fuOF6w+ZhxW1bCcHLtq6BR06G379W3Hd3hCoheNnWNfDIjAXXGTYPK0op2KakCTEaOGNK6bFNSRNiNDBjydeGzcOKUgq2KWnehCDNwE4XYPNtS/4LcxScZBa+a8kV+r5nVNKEQCE+ShubvbQJsZdm1pIrlDSjLsRIEns2IwNCZJpRBHtSAMmchnnDqhPvSeLIxpzYvDIjKVCIp+fCTsOEJV+QRNd1ZCa2mSOxZwQ2BsS8BZ8bVp3oug7bTBKTBEgCJ07za9WxMzBhwQxJ/N8WfIMkPhJ/ZsGVJDGSxHvmzyyZYZu+7/mKzTkBNtdomHEfDFzB7JgTgRREiNHTc2GnYcKSzw0RQdd1vLHNkY1tzIFt3rOTLHxpwRVs40ywsY1tbGPANrYZ2WCDbd67D0YDE5Z8gwHbnJg3NtgGgSRCAWLPaSCZsuQLfd/TdR1zbDAGgSQk0ZfCm/v7DgqTFsywTUlTSgGJcwZzRhKSKCV57+m58JkbPvf4sq1rtbB1hWpCgral1gpUqFCBbTWSkEQpyUeujBomNBwMXGo4GELsdSFGktizScA2EUHpE8SZNKMGGLjU3ADD5mHFz7tbQiCB2srWrIFH4NGVtVpoqbRtS62VWisVaAHXiiS2aWg5SjNqgGHzsOLn3S0hkEBtZWvWC3Zsk5nMaNKQBtvYxja2sc2ROEoz+gsQO7bJTD5asJOZpE3a2CYieCVAQAA/0pDmQAEKUCCJUdcFaUgz+hvogI6dzCRt0sY2EcGo4WDg0g9AgAAB4mDDvH+Y9ptLTcMlAQICEBAciAMxz1wyYMBAAgmYnSXTxIk5Zz5nTsyJAQMGDJhXDdMEiBNxSYC5ZM6ZE/PBv/KYc/hnWDBPAAAAAElFTkSuQmCC",
+    "source": "https://meowdb.com/msclassic/item-db/984"
+  },
+  "994": {
+    "id": 994,
+    "name": "Green Shivermail",
+    "level": 20,
+    "slot": "Top",
+    "gender": "female",
+    "requirements": {
+      "STR": 10,
+      "DEX": 30
+    },
+    "stats": {
+      "W.DEF": 32,
+      "DEX": 2
+    },
+    "icon": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAcCAYAAAAAwr0iAAADMUlEQVR4Aa3BoXZaWxSG0e8QDHJdiVw2cldWUllJZCV5BJDEkUcg9jqQvQ5sHdvWZVlcf3vcvueUpBBCAhmjc/IBBSicV4DCha64TJmvRvSvIa+3U+CO08piM8Nc5PV2CtxxRofzymIz4/bLAw+TjA9oFV4rm18Lbj5NWK8zl+rwvrL5teDm04RGxRkRwUd1OCMiOFDFGgYjo1E4kvOalrtxqS5nSMGxCOEDiDWFJ+aQc+ajOpyxXC45pgAFmIM5v6WB4e581BVvK/PViLquidhSiykwNecPCeoa5t9H9Pt9WtefjeV98OSOM7qcMRgMaT3cZw5JsFjNkIJjw5mznASXuOK0Ml+NMHPcHHo1NUH8rOn1QILNZoFqUddCEpKQRKumpmew/VlPgTve0eEdbk4oiAjcncHQkGCxmhEK3Bwz55AQCnGpLm8wczDI6zWS+M2MwRCkoBWAu5PzGkkIEVm0JHGJK06bygJtA0mEhOqalrY1UFPXNb0ebLdBRBARbKOmJYlY06rYK8AUuONAxUuFnQoog7HTUggzkEASz8yMlhlIIIlWZEC0KnbKajEn58zk/oFGxZMr9kqDz9d9/l3+NwWq+KGp9fltuxXfrr8x+jria/pKnz49+vzcZqBHq65rIrNT07oDSimP0DN6wLX3Wf/IU+CORped0iAic6TKS5XZeERKCU8JM0MSnhKRM56NZyGxZkkr1hxw3IPIkFJiNh4xuX8oQNXhj+AtKSU8JdwTZo57wszwlBiORozGY1JKuBkDHzIejjlQNWh5ShzrAKWURyJE5EzOmWOeEu6JQ2bgbjzzlEgp4WbkHMznYxqFPxx3w1MipcRsPKJROjQixLPJ/QONir+ragDOsS5PImdyzhwpj48b/ib3xKEOF3A3Pur29p5GxV7VoOVufLm5pVFV7BT2Kl4qq8UcTwl3I0KcEjnz5eaWAxWvFfYqGhWXKVzmH94mTqh4n7Fj7Bk7xuXEjgAB4knFaQYYYIABBhg7xp7xmjhNgIAAAhCNLq8ZYIADBjg7xo7xceINXU4z9sRL4m1iT+wJECBAgHhScZoBxp7xmgHiNfGS2BNH/gcPp4MtfEQWIAAAAABJRU5ErkJggg==",
+    "source": "https://meowdb.com/msclassic/item-db/994"
+  },
+  "1215": {
+    "id": 1215,
+    "name": "Brown Hard Leather Pants",
+    "level": 20,
+    "slot": "Bottom",
+    "gender": "male",
+    "requirements": {
+      "STR": 10,
+      "DEX": 30
+    },
+    "stats": {
+      "W.DEF": 23,
+      "STR": 1,
+      "DEX": 1
+    },
+    "icon": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABoAAAAcCAYAAAB/E6/TAAACdklEQVR4AaXBDXkiVxgG0AMPBj4LY2EqgUrAQiohKyFIWCTsSNixcC1cCX0lpBkgm4QM6d85G589+/82buys+P6wd1aD9CaJs0L8kkQSQeKsxaqdFdM8W9O7/2xnxWF/oDgeJ4+PB+kdZcqsioShqCpJtM4wkCBW7aw4niaLx8eD3poIIV7EWTAUVYOqmFt8ZWfF48OeGiyqiqC8CEU6hYRxHCQxanpHrNpZk1CRRO9dEkFhKJoXRURPJLGoQqzaWVNUDWooSUhI9B5Tc3YYCmUc95KuNZLunq0VCaosqgpBdGcbV1WFqBqUIu7aWlHeSSwSK+JVDUW5a2tNlfd6i7lbbFxsjnMIgipVpbAvi2c3tj56ftoP1OAskcR9EXFRVLln61b5JemIe+JF4lVVUVZtfVKqCpFE73HH5jhHEhKLUsq6rRvlKkgs5lhs3JF0F3HPzo3j1Ox7t5hbjIO/EcfjZD+WRetW7dz4/uNJ1WAxnI5OU/OV09R9//GkarAYTkdza+buGRtXO2+ef/540udZDYP0rvfu4TD6NjX3PD4+aNNJDaP0rrVmP47m3ry39U6bJmchSGKemy9s/jieCBKv5tbc2rp4HotpbhbxIhHMsdj4QkQSrxLGsnh2tXN12I8Wp2m2OIyDxD9SCjHN3WIoZy1+2bn6NjVPh9FhP1pMc/NPTa1bHPaD3iOJqftg52LjxbepPXvxdBiNA617Vb6wH8si4dTiauOdjY/KxZ8++g1l3U8f/Y64CIJsXBQKhUKhXJQ35bNYFwQdfYdCYUBhcFEuyr8XN3Yuypv4KO6LN/EmCIIgGxeF8qZ8VojP4qN4E1d/AeqZQh06t948AAAAAElFTkSuQmCC",
+    "source": "https://meowdb.com/msclassic/item-db/1215"
+  },
+  "1209": {
+    "id": 1209,
+    "name": "Green Shivermail Skirt",
+    "level": 20,
+    "slot": "Bottom",
+    "gender": "female",
+    "requirements": {
+      "STR": 10,
+      "DEX": 30
+    },
+    "stats": {
+      "W.DEF": 23,
+      "DEX": 2
+    },
+    "icon": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABoAAAAYCAYAAADkgu3FAAACXUlEQVR4AcXBrXrbSBiG4UeOieBHA4cunFNw4EIHFjqH4MCEOYdgH0KXlkU0rEPF+tFhfamY1lNVteWfXMm1YO+74rqez6u4Ys47fv78gRl7AXAkkISnREqJwiWCGY8vO95zw2X9druhrmu6LNQJeSZL5JzxnGndUdeBhIDV6gvfvjVPwDMXzLkiLgIgBLgSheSYBQiOISRRSE7jiffccK7//uMryRveUkNthuS0bcLdCeEv2jYhiUIIOpBEXNzSvukJeObEjAtcjrsjicLdKcyMYIFrJLFcB/Z6TsyY6r9+35BSgyTMjJEkCpczEsIwMDAz3jPjoN++rkipQRJCFJJTCCEJyYlxwTWSWK4Dez1HZpyQhBCGEULA3ZFEIYS7IzkjIQwDAzOjkMSpGYN++7rC3Snk4hK5kIS7E2PEMAp355i7WK4Dez2/3QD9ahPJOZO7TPaMu1gu/8bdkYQQcuEuLNSoE8qiuLVbcs506qhva2pq6hraNrNYBto3PQHPc/Z2j4liuQm4ixCMJjWM/nlxRt44GL8s1wEEFgy5OOYNeOOMKqZ6RsYfm9WK4vFlx14F9Jv1isfdjglxrOLInKmKQf+63TJKKRFj5FiMkdftlpQSRYyRu/sH9ioumHFFiJG4WDC6u39gr2JQ3d0/EGIkxshHzPgPzIwQIx9RcV3PVMW5nqmK/1vFxxifJ45UTBkD48AYGB8nBgIEqGJggAEGGGCAMTAOjHPiMgECHPA5YIABATAgMDAGxueJE3MGxoGYEteJA3EgQIAAAaoYGGAcGOcMEOfElDgQv/0LlyBEnpDR5F8AAAAASUVORK5CYII=",
+    "source": "https://meowdb.com/msclassic/item-db/1209"
+  },
+  "1449": {
+    "id": 1449,
+    "name": "Green Diros",
+    "level": 20,
+    "slot": "Gloves",
+    "gender": "any",
+    "requirements": {
+      "STR": 10,
+      "DEX": 30
+    },
+    "stats": {
+      "W.DEF": 10,
+      "DEX": 2
+    },
+    "icon": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABoAAAAbCAYAAABiFp9rAAADCUlEQVR4AZ3BoXpaWRSG4W/TmiNXZOWylTuyEi7h5BKIHHkig4NLADsObBxYHNvG9b+ELlt3hj3AA0lIJ5n3Tfw/Pdcl3pH4vH467cg5k/OQysyoUkocJV5JfF4/nXbknMl5iJlRRQQnNzc3HCWOEp/Tu2eu2e3WVKVsqEopPDzM2EvsJT6nH3ZO5e64OZVCbGZBNZ93lFKocs6MRnfspQEf1w87x91xd9ycS94G3gb39zOqnDOXBnxMP+wcd8fNcXNOFKJydypvg8ViQzUa3bGX2Ev8t37YOe6Om/OaQpxIotLKkAp7iaOvfMAwD7lGIa7KBcQLA/6sH3aOQnyUJK4Z8L7+188l626JJBTiNTfHzXlt7C3TrmWv52jAdf1uPcfMiRDrbokkFMK95ZJCVJKQxG66ZDxueW3AW/1uPSfnTCkFM6dad0sksSkz3FsuSUISP+c7zJzK3bk04KV+t56Tc6aUQs6ZCBEhSimsuyWSqNxbFEIS1W665JK7c2nAWb+cd+Scmc1muBsnUuBunEgrpBWSqCQhBRGiMnPcjUsDDvrlvKNtW2azGeNxi5kTIaTA3TBzLilEJQmt4HZ0jxREiGu+cPC4etrSELg7Of8gQkiBu1E1jVH9vV1BA5KoyiLYS8Bk8ffTY/dXS9MYv38H+buzeto+ApMBBwlID7MV7s7JZrOhMnOq0ewOd+dkMxN7iQtSECGk4NKAs34573A3IsRisWI8bjFzXpOEJK5It6N7pEASl77yihRsNhvG4xYzp4oQd4sH3J0TragSb6Xb0X3PWWLvC2eT1dP20b81DIdDzBqaxiilUMozJZ4xMyQhiXimmnDdBJgAE46+8NJks31+HP74DjRst1tGdw+snrbwLTgpi2DvBmiABmiABmiABmiA31xIvGQc/OLsloOdt/xLK6oR7wsOAgggEgcGGGCAAQYYB8bZlIMZZ8F1AQQgQAkwwAAHDHAOjAPjz4K3AgggAAH6yoFxFrwUvC84C84CCCCAACJxYIBxZrxlQPBW8FJwFhz9A5OkayM8wvGKAAAAAElFTkSuQmCC",
+    "source": "https://meowdb.com/msclassic/item-db/1449"
+  },
+  "667": {
+    "id": 667,
+    "name": "Battle Bow",
+    "level": 25,
+    "slot": "Bow",
+    "gender": "any",
+    "requirements": {
+      "STR": 25,
+      "DEX": 55
+    },
+    "stats": {
+      "W.ATK": 44
+    },
+    "icon": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB8AAAAfCAYAAAAfrhY5AAACG0lEQVR4AbXBAXUiVxQA0Ps4GPhIoBJAQiKhlbArgUqYkZCVkEgIEvgWkMBIeB0ynB0SAoGUvTfcV/pc+ES4XRqEUerlbmWv1mpvsVjYi1nrIByZ+oZ8+iF+/koHm9cH28c15W8RS6O1vcyNvYhlIpB64XaZTz+8/PylxWa3shez1kE4lXqb1wfLx7XcrcSsNXUHMWv1wnmht3xcp17MWr0It8tng4o1KuFriXBk6psqWldLhA8mvqF6J1yWCJ+YuE02TWON1ptwWSKcMXG9bJpGrZXFwhUS4YIwSoNwKpumUWu13W7VWvXCeYnwhYkj+fRDL5FG2TSNWqvtdqvWqhfOS4QrTH3wbPAPqbfAy8uLvVqrXjgvEa4URrnCwqgatH4L5yXCDaaOLAyqUetNuCwRbjR1pMWDQeu3cFkifMPEkc1uZY3Wm0C4LBH+p8zdKp9JpOukO8lnEuk66Q6myNytvJm1rpAIdzDVq7VaPq71wmWJcCcT10uEO5q4TiLc2URvsVi4IBH+gImDzI1eei8R/pAJImatTyTCqYKCgoKCgoKCgoKCguKMqYO6/teRxAwFxagYFNfrDDp06ByEURr9hYKCgmJQjIpTnc916LDFFp3exJHMjYM55lhgjjnmmGOOOQoKCgoKCgoKCooLwiA3rw+Wj2u9JQoKikHxtc6oM+rQoUOHzkEYpEGgoBgVpwo6pzrvdUadD/4DiWOx9n1O16QAAAAASUVORK5CYII=",
+    "source": "https://meowdb.com/msclassic/item-db/667"
+  },
+  "798": {
+    "id": 798,
+    "name": "Green Hunter",
+    "level": 25,
+    "slot": "Hat",
+    "gender": "any",
+    "requirements": {
+      "STR": 15,
+      "DEX": 40
+    },
+    "stats": {
+      "W.DEF": 24,
+      "DEX": 2,
+      "HP": 5
+    },
+    "icon": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAaCAYAAADWm14/AAADPElEQVR4Ac3BIV/jSBjA4f+wmMoXiRwkspWca+Wdm8o7l0pkIotjPkJiz3XsutSuayyuY3F55eHmSAptaQsL+ztxz2P4msRphl/0jc9JwLxta9z4kvH1gLCMLFbCovyHu7u7OTAH7vgiw8+ltq2JzRJfLQmhoW1rLi4mfMDwSed8QmyW+GqJc44QGmKzpFPe58QYOeSrkNgw/MQ5H0uLMmc08SwW90ynBW1bs6w8HRGw1nIozxwdX4XEMcMew07iQHmfMys8izKnaSK+CrxalDmIcJIqqhBjxFeBVLNlJrwyPDtnI6WaHUvPXHk6qhA10lnVOaOJ5yRV9llryTNH0QTE0ktreuaKBJgzIKUaggiVglcoAhAhrXmXKkdUYTrzTGeefb4AjfSqBoIKaU0nnfHCWhArCCAWvEIRIK1hVnisWPLMMZp42rZmVnhQBVVQBVVmhSelhHNDZoUnxsg+jaC8dcYBsYKwJ0Jag68CHeeGXFxMaNua6cxzKFQFITQ4N8RXAV8FOr7grUjvGzCf/wk/nga8etInBjwT+P4A4wHM5zD564Hfb264GV7zx7SgbWtGv82wl5cMBsL35Q/c/IGxvSW7zbm9zbi9zXh8bHh4eORmDAMBkQHXT0/c/Q1nvEMBjfSKBoiQ1myV9zkXFxNWdY6vAjFGek2GWk/lPZX3VN6DNCzux/iCrbCkd8YnFQ00S7jPA50YI3nmGE08qzrHV4GOKkjMwQawgUjgkFPllWEjrUqIQ6ETo6KRXoy8kQ9hOAZzBXnm6PgqsKpzRhNPx7kh+0Jo6LgMrIWhwtTTMecc0KhohBg5yTeQA2kNUx/o5JljNPGs6pxDsWkIAVwG1nLEsJNWJTQCMUKMbIWKI6sShmN6RaDnC05yGT0n9KaejuGZ4a3Es1UJvqEXKjqGY4lnq5KtoBxxwtZoxivDC8NpiR3DxxIvViVbMdKbevYZDhj+W4ljhv8zw68Rvk45wfAxYUPYETaEz1M2FFBAeWE4TQABBBBAAGFD2BGOKacpoEAEIqA8O+eYAAJYQADLhrAhfJ3yjnNOE3aUt5T3KTvKjgIKKKCA8sJwmgDCjnBMAOWY8payoxz4F0EUbGlroaXvAAAAAElFTkSuQmCC",
+    "source": "https://meowdb.com/msclassic/item-db/798"
+  },
+  "789": {
+    "id": 789,
+    "name": "Brown Bamboo Hat",
+    "level": 25,
+    "slot": "Hat",
+    "gender": "any",
+    "requirements": {
+      "DEX": 10
+    },
+    "stats": {
+      "W.DEF": 24,
+      "HP": 10,
+      "ACC": 1
+    },
+    "icon": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAaCAYAAADWm14/AAADiUlEQVR4AZ3BoWLbSBiF0W82IYJ3oeFQw6ELvY/gwoXOI8SwZe4jOI9Q0bKKhmWoWX8qeKmYVqrdOk7SNO05iT83cinxBxK/Z+TkYX9L1EpEAOJjV5mZbxJvlHibkcnDfsPMESAxcxgkIgLbzD52wUniFxKvG5l8/bLHUbGNJGwjZaJWHEYlA8YG29jGNl1A2EwSP5F42cjk65cdtpk5gu9sgw0SUYNcClErNiBwGLLAkLPYtpWTxBOJ58aHTztwgMQFQ0SHyCAxs4PogrIumIlNrcF3kogwJYubtjJJPHLFpfHh0w5HpWkWaJEZBmOboe8Z+qDRAg+mP1RomAgY0CLT1wN9DDQ0LPIC2/R9j9QQ/cBqKe7D74EPnFxxNj7sN7ivSEvANFow9GaIA1ou6fsD/SFoJBbK9HFgUZZIDY6eoR8YAGUhiaZpWCwWSNA0DcMw8I/Efe/3wAcmiaPxYb8BZSSBhKMiZWyDTdSOXFaAiQiwUS7MolZmyhlsbINE1ABBhJlJwjalZLZtZZKuecwBKsyUCzNJzErOfFdyZmabWdGKI2OEzMRIhVorWQJBhFEWtQYCDCRgfNhvUC7MtjdbZtUmDKsizCTMU+aSDTlzZrjdrHnMNrOuq7RhrpmorNi+u2FmwDZhEEcCjADzmLhkZgIMCGO2dy3iTIjZel1o7zoSRyOTlQSCCBNAEZQiEETlknmm2qzXmVqDnDOuxpjHhJh1NpN0zVFi0tkj5odqKAIM4pLFBdvMJDGTwAIhZgLaMGBOEpNrLiUujbaQoI3gLUoWWq+wTRfBE4knrvkFCWxzknjdyESCCHOSeMVfvC7dtcHvqGFqDe7aYJL4hb94g5Izm3VmMnI2AiNn4+2mYJu7Npgk3iDxNuPtptB2lQi+2awzs7s2mOXMNxHMEm90xdt8uK/9+91mxaEPJCjLTNM09O6RIEvUw8Ak8RsSv2dcr0TbmfVKzNrO5AwRzP7m58wLEq8TRwK+7ncruq5Sw0Tww+62cNdWInjJv4A5MmDAnCReJkCAAAFf9rsV2HTVtF0w2QLi6HZ/WwiDBJKY3Ww7JluODBgIIAAzueI5AQIysACWQPe5i9VyuQAG6sFMAmiABqif7/vy33pJ0zTMbrYdk49AAwzAAAyAAQMDk8RzAjIgQIA4ErDjbMtzO87ecWbAgAED5iTxMgHiTDwnwDxnLpkz88T/oGDbcMMzdxQAAAAASUVORK5CYII=",
+    "source": "https://meowdb.com/msclassic/item-db/789"
+  },
+  "1006": {
+    "id": 1006,
+    "name": "Black Bennis Chainmail",
+    "level": 25,
+    "slot": "Top",
+    "gender": "male",
+    "requirements": {
+      "STR": 15,
+      "DEX": 40
+    },
+    "stats": {
+      "W.DEF": 36,
+      "STR": 2,
+      "HP": 5
+    },
+    "icon": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB8AAAAeCAYAAADU8sWcAAAEpklEQVR4AZXBLXhbSRKG0VexSMNaKFhUsAde2AMNFTjLYhhoQ5mN6bIIrlkEJyxNxdxUzEXF8tFmWt3YevzvZM+Z8Hv2/H8m/IYJ79tzUEphJInXSOJIEpK4N+EdE962L6UwiggkIYn3uDsjSYwkcTDhDR943b6UwkgSZoYk3mJmuDsjSfyuKb9gZoxKKYwkcSSJxyQxksTvmPIOSZgZkhhJ4jlJPCaJZ/bAhFec8LplRJBS4rGUEiklUkr03hmllEgp0XtHEiMzI6VESomUEr33JXDJM1Ne2pdSiAgiAnfnPZKQxGixKKzXFTNjJIn3THmT+Pr1Cx8/nvErOTvujhQcmRkjSZgZkvbAhEdOeGpfSkESvYvFYsHnz58wSwxDZjYzTk8Ls5lxelqYzYzT08Io54zUGeZO3TRSSpgZo947vXcOLnnkhKeW7s5utwM6y89LYhfknOm7HWUYoHfKMEDvlGGA3inDQJcow8Bmu2WYO3XTSCkx6r2TUqL3vgQuuTflGUkchYJR9gwFsmdaNLJnWjSyZ1o03BxRGZkZSBxJ4i0feEYSR61WzIzaKm5ObRU3p7aKm1Nbxc2prWLAulbMjNW6cjCJCMwMM8PMMDMO9tyb8mDv7owkIYmr1Yov7kQESEQESEQESEQESCiCACSBxHNmhiRGZoakPTD5wJ39j9tbbm9ukMRjEUEuBQG5FATkUhCQSyEiEBARuDuh4D1fv/zN0Ql3lmWYYzZjeX5Ons/YtA2jz+fnSGKYD8QuGOYDsQuG+UDbNuY5owiSGdvtllky1EHSkoPbmxv+s1ox+uef/9IlZj5js2nLKbD/cXtLKGitMmoRRIhSCkdmhplhZpgZZoaZcZTdiQhqbUQEI3djdHtzw6hFo0WgCEYfeEdEcHFxhZmxrmvcnNoqbk5tleyZiGBdG1erNa0Fkhjl7By1aNS6ptaKJI6mHJgZiJ9aBJIYSSIiuLi4YrRizWsigpEkJLFYFKRA4ic3Jxwy0CLAndGUV6zXa25uvhMRnJ1dIInXSGIUERwtFgUpcHOCxsjMcJxwyEBtjdGUN0QEJRf+Pv/ExdWK10hitCgZc0cRuDsRvMvMGE05aNFQBC0CSYzcnRaNxeITP5kREbg7EYG7U2vF3ZHEKJdCaw13JyI4ksRrToDL1ep6+dfilJ3EbrulbraUMjDMB0LBkAudzqIs6HRyzvTeGeZz6J0hZxKwjWA+n7Pb7bi+/obUWfx1iiVjpC66xE6i1g0n3Lm8Xn9b1rqhbYODyXr9bVlOB4b5wHa3JaWEzxx14eaoC5vN6MDMnV0EQ85sWmO1WnMwAS5Xq+tlGebsdkGXGP377IKDyYT37X/c3hIKsmdaNLJnWjTcnBaN7JnaKu5Oq5WziysO/sVTP3hqwsGEtxl3fnz//pXsmRaN7JkWjeyZFg0zIyL4+PGMe3/ylLgjQIC4N+ElAwwwwAADvnJwc/OdiMDdiQjcnT/++JN7V4B4nQABAQQgDiY8ZYABDhjg3DHunPPSigfiJQECBAQQgDiY8JQBDhhggHHH+DXxQDwQIECAAHFvwksGGA+MlwwQL4mnxAPxzP8A4BOzIjeoxFEAAAAASUVORK5CYII=",
+    "source": "https://meowdb.com/msclassic/item-db/1006"
+  },
+  "1003": {
+    "id": 1003,
+    "name": "Green Bennis Chainmail",
+    "level": 25,
+    "slot": "Top",
+    "gender": "female",
+    "requirements": {
+      "STR": 15,
+      "DEX": 40
+    },
+    "stats": {
+      "W.DEF": 36,
+      "DEX": 2,
+      "HP": 5
+    },
+    "icon": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB8AAAAeCAYAAADU8sWcAAAE2UlEQVR4AZXBLUAjWRaG4TfdMSXPyshjI+/IkndkyxrZ64JsCRIc2HWUHBxl2/WVi8u1cRwbx2fLZVP8DNAEuvd5ZvyeHf+fGb9hxsd27F2vz5lEFA4JiYkkEAwXwaMZH5jxvt31+pzJUHoUIkIoeFd3nJAEAkmUXuzNeMecw3bX63MmEYXkTl8KCg7KnWNuSAKBJH7HnF9wz0zOzzOTiMKTkJhIQhIIJFGL+B1zPhBRcM9EFCYhMZHEP8Q/JFGLMOeeOURhB8w44DOHnZZSWCSDccsTaxqsaViYMQJN0zAyQgPailqEObgbZg1mDZ4aoo6nwBk/mfPW7np9zlB6hotKd5w4RBL3BGUIJjllqgrmxj2BJN4z5x21F5fnlxydHPErbo67IwVRIHeGm1EjMIy8gtJrB8x44TOv7a7X50QUatnSdR2rrysaGtIyYY2R24w1Rm4z1hi5zUxSSkgj7dLpL27wbCwXC7ajGDUSdWTvjBc+cUBITJInJNF1HW7GqutwM1Zdh5ux6jrcjFXXYcCq6xCw6jL9USUkJmZGXhl7O16Y85OIwpNQMEmeIEPyRI1K8kSNSvJEjYqbIwoTMwOJiSQQ7/rET0JCEpNaCmZGqQU3p9SCm1Nqwc0pteDmlFowYCgFM6MfCnuz4STAwNwwN/LK2NvxaM6z3eoyIQkEuLjoey7diQiQiAiQiAiQiAiQUAQBSAKJl8wMNyMAIfLKKL12wOwTD3Z3t7dcdj9A3FNwLyJIOSMg5YyAlDMCUs5EBAIiAncnFLwkiZeO8zlPPvPgNLdLzBZ8zd+w0Sjlhsm342Mk0S5bYhu0y5bYBu2ypW4qy5RQBI0Zm82GRWOkb0b9vj1l77+Xa/qb/zCOI6fd34wSC19wc1NP58Du7vaWUFBrYVIjEOLy+pwnZoaZYWaYGWaGmfEkuRMRkIIyVMzBMCbXqzWTGpUagSKYfOIDpQ4EFTNjKANuTqkFN6fUQvJERGDZkAvPImqgADfnSY1KKQOlFCTxZM6emYG4VyOQhAKiBoWBnACHogEMigIMigIcSh2QBIJaRE4ZKZC45+aEQwJqBLgzmXPAMAys1z+ICPpyQljhkJCYDBeVJzllpMDNCSoTM8NxwiEBpVYmc94REeSUUawYSs8htYhJ9oS5owjcnQg+ZGZM5uzVqCiCGoEkJu5OjUrXrWAAzIgI3J2IwN0xFdwdSUxSztRacXcigieSOOQzcNb3V6dfuy9sJbabDeVmQ84t7bIlFLQpMzLS5Y6RkZQS4zjSLpcwjrQp0QCbCJbLJdvtlqur70gj3dcvWGNMNIpRYitRyg2feXB2NXw/LeWGugn2ZsPw/TR/aWmXLZvthqZp8IWjUbg5GoUtFozAwp1tBG1K3NRK3w/szYCzvr86ze2S7TYYJSb/PjphbzbjY7u721tCQfJEjUryRI2Km1OjkjxRasHdqaVwdHLB3r947Y7XZuzNeJ/x4O7Hj2uSJ2pUkidqVJInalTMjIjgr7+OePQnr4kHAgSIRzPeMsAAAwww4Jq99foHEYG7ExG4O3/88SePLgBxmAABAQQg9ma8ZoABDhjgPDAeHPNWzzPxlgABAgIIQOzNeM0ABwwwwHhg/Jp4Jp4JECBAgHg04y0DjGfGWwaIt8Rr4pn4yf8AqO/OOrOfISUAAAAASUVORK5CYII=",
+    "source": "https://meowdb.com/msclassic/item-db/1003"
+  },
+  "1357": {
+    "id": 1357,
+    "name": "Brown Jack Boots",
+    "level": 25,
+    "slot": "Shoes",
+    "gender": "any",
+    "requirements": {
+      "STR": 15,
+      "DEX": 40
+    },
+    "stats": {
+      "W.DEF": 16,
+      "STR": 1,
+      "HP": 5
+    },
+    "icon": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABoAAAAeCAYAAAAy2w7YAAADpklEQVR4AY3BLUMj2RqF0acmMUeeK5HHIssiayQyLZGxLYNMOfITJvJKYsfdsrg+NnLbcr3t63JTBDrQfDRrNXzNgY81fEHDxw48uV+2SGZSJZ4tupZv28pRwx/MeevA0Y+7BcNQqRK7oVLNLzIs24xkvmrOa4cfdwuGobLZ7qjmFRnuusKkSoivm3N2uOsKm+2OyWq5QBLPJDOpEtWQMxSbr2o4Odx1hcVyiVWRhGRkM7HNMwE2j9oMbSncDuKo4RNznpSSqcMOyUxWdx0TqzKRhGR+EWwE2eYrZpysM8Hqv3dcLVdcXV9CLmCR8gXhkZwzENjBowxXQB2Dm7YwyGug5wNzntytCmiAAmhgt61IZiKbZza/dBkWHQzV/MmMk36zG9ffO/h3+0A4kXMGAjtwBM9SSny/STzUoFxAylD3wU1bGOQ10POOGWf9ZjeuM0FOUNqORAABATklHMGk7uHmJgHB7Q4iQQJW15fs6rgGen4z47W+jrHOBA8PD3TXC0btsQPZvPTwYPaCSDwaIwgHq+tLdnVcAz0vzHirr2Os24tEipFSChAQkFMip4QjSCkREWTAnKQIRger60t2dVwDPU9mvK+vY6wzQd2L7qpFGpGNI7DNPoKSMxGBARsiQYogkRhkjnqezPhYX8dYtxeJuhfDOLK+uSYnuCwXXJBwBBGBgQhICTIQwOLygkFeAz1HMz7X1zHW/3y/5jInbncD4aDuxWizj8CcpAQ2RIIUwUXODDJHPUdzvmAYKrJpc6bkjDhpAduIswK0pVAlXprxZ/0gr1fXl3RXLRAQ4AgmEYEBG9oMbSlsqxgDHEx6jv7izw7LNtN2C94jztpS2FYxkZk0PJnzBV1bsCqSkIxsJraZ2NBmkI3Ms4YX5nzu8PO+JS/uwZXh2y2ymdhGgA1thpwz22qOGt7R8L4DRz/vW3K3Ag1YFUlIZjfwSEABcs5sqzlq+EDDW4f7ZUvbLbAqkpCMbLrWPBJsBAVoS+F2EEcNn5jx2uF+2dJ2C6yKJCQzySlRBSUCG7orSBS2VTiY9Hxizm8kw7BjIpmJbCa22RhWHUiFbRUyk/8AmdfMCw1nhx93C7a7gd/ZZiJg1bVIZidRxeRv3jInBgy44SQDP9sC/ywXvCSJlzZDZVLFZAOY9xkwIEANkIEMFOB/yzYzsc1EvFbFsy0n5i0DBgwIUANkoAAZyMA9n7vlzJyZMwMGDBhww0kGMmeZtzJg3jKvmTPz5P/mpyVpIo52UAAAAABJRU5ErkJggg==",
+    "source": "https://meowdb.com/msclassic/item-db/1357"
+  },
+  "1457": {
+    "id": 1457,
+    "name": "Blue Savata",
+    "level": 25,
+    "slot": "Gloves",
+    "gender": "any",
+    "requirements": {
+      "STR": 15,
+      "DEX": 40
+    },
+    "stats": {
+      "W.DEF": 12,
+      "DEX": 2,
+      "HP": 5
+    },
+    "icon": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABoAAAAaCAYAAACpSkzOAAAC1UlEQVR4AZ3BoWLbSBCA4X/dEMM5WDgHC9ewUIYHZXrMhgcVmLDqERxaZtEwiYZ56bHMI2So2Z5VxScldtOk3xf4PZlzgTcEPi7nlkHBUQYCITAVeCXwMTm3sFxxpt3xv7DkJPAs8DG5EPBYoaqoCj0zx5sNJ+0OujtYNvQCR1e8X45FhagigKow5bHiZLmqqQpeCLxPjkWFqqIqTJk5J2bGSepqjgLPZvxajkWFqqIq/K4r3qEoIpeYOZe4G6/NeFvWWGLmvJe7ccknfi4/Pe6o1n9xXX9nPv+MyJwpkTkic9wP9Nydw8FZF1B8/UL38O8NcMvRjMvyvt0iorgbj21FSh1mTtTIlJnTMzPcjf2uZL0ueW3Gubxvt8QYSSkhovQe24qUOpquI2pkysxwNx7bChGlp6pMzXgp79stMUZSSsQYcTfcjZQSj21FSh29qBEzx8zo7XclU6rK1IxR3m0rYozUdY2qcGLmqAo9ESVZIlnCzOi5G2aOu9ETUVSFqRmDvNtWlGVJXdes1yUiirth5qgKIsqUmdNzNyw1LJYbzBx345JPDG6a+wfmOKpKjF9xN8wcVaE3nwu95vpvDp8LzAx3w1LDUQBu777f31T/lMznwuHgxC9Kc/9wA9zOGAQgXNcNqspJ13X0RJTe8s8FPW82uBuWGo4CE2aOu2HmTM0Y5d22QlVwN+7uGtbrEhFlqn2CdgdqDReExXKDmWNmTF3xipnTdR3rdYmI0nM3VosV7RNHGQh0Ti9wLiyWm8wocHTFKKw2df5WlRRFwUlKCTNjkIFAd8evBF4JnMu7bYWqYmasNjW9QqDd8UNY0vuDtzkTgZeEwROjBYN9W/LDsqG35OecgQMOeGAggAACCCCAMBBG3xjUjJzLHHDAAAuAAAIoIIAyEAbC25xzDjjggAF2xUAYOS85P+eMnJEDDjjggAcGAggj4ZwAzjnnJWfkPPsPMR1VixAdSzAAAAAASUVORK5CYII=",
+    "source": "https://meowdb.com/msclassic/item-db/1457"
+  },
+  "668": {
+    "id": 668,
+    "name": "Ryden",
+    "level": 30,
+    "slot": "Bow",
+    "gender": "any",
+    "requirements": {
+      "STR": 30,
+      "DEX": 65
+    },
+    "stats": {
+      "W.ATK": 50,
+      "STR": 1
+    },
+    "icon": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAhCAYAAAC4JqlRAAAB3ElEQVR4Ab3BC3UaQRQA0Pv2YGAqgViohEUCsVAJQQKxUAlgYSzUQiyMhFc2CwcIkO8m94bppUvhhjCttO4N8qEaxHbJ/daJMEpEmE7uiMeFfKhU4l/vzLxwv/Vss+R+K0wjbZYGudxSiYVL655VZd17tqpmJpLLDYJKLAzCS6uaBqtqLzqTCSqxMAjXhVEg7HR+ViKc6PycRHih8zMS4YrOVCqxMAjnEuGGzvdKhFd0vi4zXZMIb+h8TfZ9L8JLifAO4fPSpUAivFP4nOz7Xq3VXhglwgd0Pi4zqbXaC6NE+KCZ90s7mU6FUSJ8wsy5dEOmUfVSInxSOEqbJU9NPlQXqmexcBBIhC8Io9wRjwv5UKkuxMJBGCXCF4VR2izlckslFq4JR4kwgUBmevb0l7s/BuG2RJhI56By98cg3JYIE+rsxb/eGxJhYp2d2C69IRG+QYdwv/WKRPgmnYN5cUUi/JC07hNplK4rKCgoKCgoKCgoKCgoXjFzXeIXCoqjYlS8XzNqaGhOzJxaVXt3mKOgoBgVR8Wl5rqGhic8odmbGaXBumdV7cxRMDcqRsXHNa+YOVj3rKqd3yhGzbnmtuaoOWpoaGhoTswcrKqdQEFxVFwqaC4155qj5or/BomUPeb6BbUAAAAASUVORK5CYII=",
+    "source": "https://meowdb.com/msclassic/item-db/668"
+  },
+  "818": {
+    "id": 818,
+    "name": "Green Hawkeye",
+    "level": 30,
+    "slot": "Hat",
+    "gender": "any",
+    "requirements": {
+      "STR": 20,
+      "DEX": 50
+    },
+    "stats": {
+      "W.DEF": 27,
+      "DEX": 3
+    },
+    "icon": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB8AAAAeCAYAAADU8sWcAAADRUlEQVR4Ab3BAZWqWhSA4R+XBbYRMAJGOBOBiYARJAJEkAgSgRPBE4EdwR3hXHBkRNRZ6725730fP4j8NyI3K/5fkZkVr8XqJAwif08sKmFuxQ+KShhEfi+ezilLK95IU+FvMjOWVjyLp3PKpKiEQeTfi6dzSgg8WfGCS89MCtfxW2bGKyveyLOePDvxS3FACLy04gWvOyaN/+C38uxE4ToK1zG35o3GbwiBX/Pe886aF1x6pg1bRnl2ouGDQeSfSRi04ZN31rzgdUfhLng8Hx8f9OcO7z2qissdV8aVmSJpCgaGYWqoKnXTxgH7esM7Ca/FYyfsP4z+3KGm+NZjqiwdjkc0BAwDM0JQ6qZlFGPEe89IRNjtdgwSbhJeiwy67sjIVJE0xVR5IsKVGSEoddNSVEJTGkUlzDWlMUi4SbiLzPTnDjXFVAlBMVXmXO5AhImpsS9rikqYNKXRdR0iwm63YyZhkPAlXi49k81mS9cdmaRpRgieb2ZkLkdDwDBGwQfqpqWoBBGuzKApjaISDnnHZLvdMUjWQLxcesr9HnGBem903ZGRBiV4z5LLHRoC38yYE+FbUQlNaRBKRk3r6fsz2+0urpkx44Gq4nLHUuZyNAQMY0mEJ0UlNKVn1PdnmrpmtGYQgqc6HtlstvTnDjVl5HLHEwMNAcO4MiMEpW5aikqYiHBV743R5dIzqsuSyZqbEDxLvvWYKksudyDCUlMaS5dLz6htGpbWvGOQpimSpSxlLicEz1KRO5zLQISJ9y2YMWdmjNYMzAwRIcZIkiRMTqeKV0LwfH6WLDWtZ+Ryx0+a1jNIEr7Erjsycq7ATBltNlsORU7mMuY+P0tijEzMFDNj5NsWEUCEKzPMuFJVRnXTMkjWLLRtzeRQ5NRNS6HKUtvWfDNjZMZbqsqobloGCYOEu9h1R8yMKzM+9zWHIifLUhBhZGqoKnXTcjoemDODEAJZljGnqozqpmWQcJPwKDJzKHLSNEWEB2Zc7cuapWN1YLQva17YAMZNwjMBLvxeyZ0BBiiggDFIeCSAACkgQMoX4YvwM+OZAQYYoIACxmDNM+HOeGS8Z9wZdwYYYIABxk3CMwGEO+GZAMYz45FxZyz8AXL7rXQqVInEAAAAAElFTkSuQmCC",
+    "source": "https://meowdb.com/msclassic/item-db/818"
+  },
+  "1023": {
+    "id": 1023,
+    "name": "Green Hunter's Armor",
+    "level": 30,
+    "slot": "Top",
+    "gender": "male",
+    "requirements": {
+      "STR": 20,
+      "DEX": 50
+    },
+    "stats": {
+      "W.DEF": 40,
+      "DEX": 3
+    },
+    "icon": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB8AAAAdCAYAAABSZrcyAAADTklEQVR4AZXBDXkiSxCG0bd5MPAhoSz0SmgkEAlEwkTCIiGRECTQErYl3JJASZjLDL8DJJs9J/FzPX+X+AeJn+k5kZgyLqIxSEDPVOKJxM/0uUCrXEhcRIAE6wKbLfT7HagwikpaLDlJ3Eh8r+cgF77lDdYFPiq8r6GsOmQFVCAq4RVZIS2WHCRO5nytz4UJiYsIRh6wLlyUlSErhFdkgAoyCK/cm/Fcv//TcUtiQgKJUc5GzsZgsXTQB7JCeKVtfxFeca/0+x0HPSczHvX9fod75Uziqebw33vHav2OmThLiy3oA1nBrOBe2W4bb69Lbs14RoXla2MgMZIJmZAJmRj8994hKwzMCusCAmSQFlvCX4Etufym6zq6zrg1Z6rv9zuIyi2ZMOOi1eCz65AVUIGo3JPBYukMPtdLBi8bBomTGfdUCK+cyYQZE59dh6yACrdWq8xZNMgZcobXCq8fPJhzLyr33LkID7QqoMIoKt+RwAA3oDEx46ovGcIr7pWz8CA8CA/Cg8+u41545SyAaAxSqyATEqNcGPSczLix+9Pz8rrBPYhgFAEREAHNuYoKUTlzr7gHXzGBBxMzjvp+v4OorFfGx9YZeAMPRh6w6zLulfBKeCW8El75TnggE2e5MOg5mHOmAlExE9mgNnjvjNX6nUF4pdYtZsK98q8kIJiYA32/3zEIr7gHg8/fxsubo80SDExMeGPivTNac7oCmy0XESCOTODBxZyzqNx6eXNGBiaQmLDMyIPR68YZBFMeYDw3Y6DCWWtOzsYtCWRCJs4kRiaOjJGMWykaD3Jh0M8YRCW84l4ZvLw5B4kDE8iEGSOZOJN4KhcGPSfhQQR4Axy8MZpxwz3I2TjpcwGJvzJxEc6DVsEbI8sQHM04CK+4V1pz7snEmRkjmfhOqwwSJ5YhF7AM3riYAWnxa8MTqVUID34qAggGiRse0Cp4YyJx1XOVuOo5WHXCDNwZhQeDCGiVs8SjPheQIAK8QQSDlPi5nq8t+N6eqcRB4mviSFyJI/FzwVEAAQQniUcCBAgQIEAciSvxKHgugAAccCA4mDMlQIABAowjcST+XfCFOY/EVTAVfC24Cq4CCCCAAIKTxCMB4ko8EhA8CqaCq+DO/y//exIEYiufAAAAAElFTkSuQmCC",
+    "source": "https://meowdb.com/msclassic/item-db/1023"
+  },
+  "1238": {
+    "id": 1238,
+    "name": "Green Hunter's Pants",
+    "level": 30,
+    "slot": "Bottom",
+    "gender": "male",
+    "requirements": {
+      "STR": 20,
+      "DEX": 50
+    },
+    "stats": {
+      "W.DEF": 29,
+      "DEX": 3
+    },
+    "icon": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABoAAAAdCAYAAAC0T3x2AAACnUlEQVR4Ab3BrVocZxgA0LMbzMqvsvLjEqYSOZWRi4wMl5BKcMXWJTaOuQTG4jK2Lq/F5bXjtgwssLA/bZ6mPWdmv5XvN7PHzG6rtqGpNE1VazGJSJNhCJMhPGkql53JzA5H9ri+vnavtB417mSvjd6miF5E0oV95vbI6L2QPdmblNp6VGprMgzhkLk9InovlNajjN6k1NYkIv2duT1qbWX0ZO9JaU1KbZXamgz9b4YhLJeNQ47sUWprktEr1U4ZvVpbHz60+r5zyJFDSqtUMnoRvVpbm0ptTTJ6tRaHvLFttfp2TWnJXkYvotd1gz8+3zi7uCFvnJycWNT3jGHMkBnaZqHr8xwXXpnbIeMMp5RP6MQwmPSDyeyyo9QWp5RP6MQwaFt7Hdnh+CzUEiaR7n1svZBx5vgs1OJeJPqwzxvbzt++K5qThbwdLZAjnzuTmQcXl5/y/O27ovy8YBwtUBbchsmFV+b+pVoptSjFQXP/k7kdaiXCDzX30qpd2pKDycxLs+4yDX3a1LQmK6/M/QC1UmpxyNwOEWSk71WKveaerZrWf2buB4ggIz0qjcnKhjeenY+F20SOxpE/b8hbFgvG0TkuPFvVlrhFjsaRcSQGJONocmHtyIZaiIHwzxR3ColMBx3ZkGhaMklkehB2StRCJgo52Gvuwerqg3uZxEAOCIRNBQXFWiaJTFRPvn2p7qysza21y+rr9VIplAbVk6/X1VqDBo07vzeUQkEpCPc+vrepuHPkleurlRyOPeq70HdhrbWhXVbLpsGVHI5N+i5M+i6sVcQMBQVf3VmtliY5DCZ9F04vTT7Z9v7bl6o0jUkOg8lPv4S1UwRihoKKgoIr236zW+Kjbb8ikUjkzIOC4lmxrSBtSy+lZ2ntL2pvITZ4jHmDAAAAAElFTkSuQmCC",
+    "source": "https://meowdb.com/msclassic/item-db/1238"
+  },
+  "1380": {
+    "id": 1380,
+    "name": "Black Hunter Boots",
+    "level": 30,
+    "slot": "Shoes",
+    "gender": "any",
+    "requirements": {
+      "STR": 20,
+      "DEX": 50
+    },
+    "stats": {
+      "W.DEF": 18,
+      "STR": 2,
+      "DEX": 1
+    },
+    "icon": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABoAAAAhCAYAAADH97ugAAADJElEQVR4AZ3BrWIbRxSG4XcckYUnMHByCccw0L2ENSxUYGENLehbECyMYMskWuahZjk0rB8V285E2mqtH0fp8ySuN3BZ4gcSbxvYc3caSUhiShJV4g2J8waqvu+JCBpJSKKRRM4ZSYwkUSUumHFq6PueppSCJEaScHckIYnR8+/i4wNvSrw29H1PKYVGEpJo3J2cM6UUGkk0615YBsvG+3tRJc644WDo+x5JNBGBJNydvu9pSimMzIzR0wpWS/HPF6MaOGPGhJlRSiEi6PseM0MSEcHUeh40t09Gsywwd7gLcUliZ5jP50QEOWcaSUQEjSSa9TywbIwUotls4POGUeKMGyZyzjSSkISZ0ZgZjWUjNmK1FLERlo3GM6PEBe/YeZTEVNd1/PlHx/zThuVfH+i6jt9+DRZLWPwNywK9bfngxseHLXuPwIIzEgdDzpmcM+v1GliBVnxnPZR7muUDfN5wwsyQRJU44x0HC0mPX58dOoine1ZPL5hesE9foHsBvUDAsvCKmdF0Xcd2u30EFhy54VisQCuazxv4+ADoHqwn3cLtkv+YGWbGlJlRDRxJnBqGZ75Lt2BmSGJkZlxDElViL3Fq4CABg5nxf0iiSlSJ6wxUOWfMDEmMJHGJJKpEdcOV3J0mIpDENdydaqB6x3UW3759e6QyM7quY9R1HdvtlmM5ZyKC7XZLtZhxneHu7o5GEo0kznF3JBERTM1420BlZpRSaMyMxsyQxJS7U0rhnBmnBvZyzhyTxJQkGnenlMKUJKpENeO1wd2ZksSUmSEJSUxJYiSJvcTejIPB3ck500hCEmaGJK4liSpxZMZEzhlJ/KycMxHBW27YGdwdSYwk8bMkUSXOuOEMSVwiiamcMxGBJKrEBTdMSEISU5K4xN2JCK6RgKHveyKCY5KYkkTj7jSlFBpJVO95TUzMqCKCnDOlFC5xdxpJlFIYSaL6BXAOxI4AAUrsDO5OzplLIoJGEk1EsPfAeQIEBBAJMMCAr+7OWyQREewt2RGnBAgQEEAkwIAMGLDmxx44EAfiQIAAAQKU2DHAODBOGSBOidfEgdj7F5prrL6+qK2IAAAAAElFTkSuQmCC",
+    "source": "https://meowdb.com/msclassic/item-db/1380"
+  },
+  "1470": {
+    "id": 1470,
+    "name": "Green Marker",
+    "level": 30,
+    "slot": "Gloves",
+    "gender": "any",
+    "requirements": {
+      "STR": 20,
+      "DEX": 50
+    },
+    "stats": {
+      "W.DEF": 14,
+      "DEX": 3
+    },
+    "icon": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABsAAAAbCAYAAACN1PRVAAADEklEQVR4AaXBIWLbWBSG0U9uiOEtHHi7BBkWqkuQYaEDCyOYMoWWRUuwluBHh0l0WC8d+FMzjV9sjV03mUnTcwp+z8TLCq4UvN203Q5EBO6OuzGLEOv1ipOCk3e83X1ZVrg7mbRH2mO2xGyJ+0eqqial/h74ysE73mZq2y3ujrthtsRsidmSCCHtMTMk4VYy/pXuga8FbzNxZRi+M4sQWUSQxRh0fcMNv26aBo5KDiagoCg+MNtuByKCLMYgQmQFv2aaBlit+Mkw8K9ixZNN3RIhsjQ+UPBrphJQbZgZ5kamEHTBbBhgbGCVuFQUvN7ktWFmZObGTCEkMbNePFawSmQFJwWvM3ltmBnmxiWFmEliFr04KLiw4P9NXhtmhrnxO254BS+d5yjEc5R41oL/NpkZCuHmvIYSL3rHy6btduDLly98a76xN/G5/sxee7QX2dKWLG3JXnuy/X7PPqD0Df7HR+LvP++Br5wseN7UtlvcjQix2w1EL7quoyxL3JyZQmSSUILHxx2bu5rnLPjZ1LZbqqokpRF3I9vtBqIXXddRliVujpuTSUIJdrsBdyNzN64t+NHUtluqqiSlkaoqiRARIqWR3W4gejEbxxFJZI+POy556VxbcDZt6paqKmluO9ydWUTg7mRWwTiOhAJJZEoQEUSIzN1wd64tOJo2dcvmrqa57djc1bgbESIicHfcjVkoUIhMCSTRNGsiggjxkgUnXd/Q3Ha4G+5GhIgI3J1L1guFkIQSSOKgAIqmWXNpU7ccTJwsOCqAIo0PeOnMUj+SuRvZ7eoDT7pACSRx8B4wwDiICCJERHBtwdm0qVvcnQjRPfRs7mrcjUvDBMMALnFSAiVQAp+aZk1EEGNw7YYj4yQiSP3I5q7G3cgixMN6xTBxMAEFI08egJIfNU2zbjlbAQboBjDAgE9d3+yquKOqS2YpjcQYHE1AwdgwM57XAALEhRuOjKN1Gh+27i1Z6oOub8hKDsaCbJXIGkCciTMBAgQIEAcFRwYYZ985W3E0DBVPVolsxZH4kTgTv2ECJt7oHxqXjglhTz1nAAAAAElFTkSuQmCC",
+    "source": "https://meowdb.com/msclassic/item-db/1470"
+  },
+  "669": {
+    "id": 669,
+    "name": "Red Viper",
+    "level": 35,
+    "slot": "Bow",
+    "gender": "any",
+    "requirements": {
+      "STR": 35,
+      "DEX": 75
+    },
+    "stats": {
+      "W.ATK": 52
+    },
+    "icon": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACEAAAAiCAYAAADRcLDBAAACHklEQVR4Ab3BDVUbSxgA0PvtwcBEwlZCn4RgYSxgAQmphGhJJDASGgk7Er4XzqYnAQLlZ8u9FpJInzRYSG62jhJplkgk0hvCcjI3W/v7O7eYyuiP1g9uPRFmiQjLydxs9V+/POoPO601j9Z39/5o/eDWbIdbhGXlVEb9Yae1ptbquamMVv1gKqNHq34QlpNTGfWHndaaWquj8FJ6KgYLa62ptToK14VZIBwNvl8iXBh8r0R4ZvB9EuGKwcJqrY7CU4nwisG/lwhvGCwjpzLabzeeSYS/GHxdrtdrq37wTCK8Q/ia9FIgEd4pfF6u12v7/d5JmCXCBww+J6cy2u/3TsIsET5oQCK9TyKnMuoPOydhlgifcOMoN1txf5dmgXTFVEaP9tsNrbmQCJ8UZpmbrf39nVvs8LOMnttvNx7VWp0EEuELblz4WUa7fjD+/m3fmudqrU7CLBG+KJzlVEb9Yae1ptbqinCWCAsIs5zKqD/stNbUWh2F1yXCQgYXWmtqrY7C6xJhQYOPSYSFDS6s7+69IRH+gcEsVv3gDYnwjwz+LhG+UU5lTKRZuq6goKCgoKCgoKCgoKB4w43XJVYoKM6KWfF+3ayjo7sQnkpnP1BQUFDMirPipe66jo4DDuhObpylo6mMVv3gaETBaFbMio/r3nDjwlRGq35w9B+KWfdU97rurDvr6Ojo6C6EszQLFBRnxUsF3UvdU91Zd8X/3RnFmSspX3IAAAAASUVORK5CYII=",
+    "source": "https://meowdb.com/msclassic/item-db/669"
+  },
+  "831": {
+    "id": 831,
+    "name": "Green Pole-Feather Hat",
+    "level": 35,
+    "slot": "Hat",
+    "gender": "any",
+    "requirements": {
+      "STR": 25,
+      "DEX": 60
+    },
+    "stats": {
+      "W.DEF": 30,
+      "DEX": 3,
+      "HP": 5
+    },
+    "icon": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAcCAYAAAAAwr0iAAACjElEQVR4AcXBAZUaSRQAwBoeBvokdCSwElgJIAEkJBKCBJDASAAJiwS+hZbQB83esCyQXO695Kr8j6r/SUX1buzPqU5mC/qNQefPqNsjJVi+Ouu8G/n96na7dbbv3Rn5ver2iMmcw9ZsuvXZ2H9T3eo8McvVZt/Z7+f6jbPOB2O/rq53mgjNaqm66lzU9U6TytZsSr+Z+6zzXHWrQ13vNBHse97WbnRfDLZH+pWm3zjrfDL2WK1HV0H3qs4WRGi+T5GZr9yoR033hRI+6jww8gPzFfMVMpOppgT7HsG816RESuQJ85Wm7li+spjt9BtPde7VeuTb3iBnJsHqoNl+Zb7S5IkmZ02E5vsUQffqrPPEyK1ajyw3Bjn7qZwNctZ82yNTd86qJ0YuqneHPSlrcnYnwo0S7uSsma/81Aj1be2svq3ZhCZng8V0Z9kbvCz5OjGIIIIIg5zJE+Y9deesuqqoTkbe1SOrAylrIvzQJHsogggiNHmCzNvaWUWtO+rOWR07mUyZr8gTj+1f3clEkDNCk7KHvu2JA3XHITgEk6wZOZmvPBTBYrpzCHJ2Zz1zo4Sn8oR5z+qgOYRmhK7faEp4aNm787I0KMWghKfyRLM68LJ01o1ddP1GdTJbkJKmFMSrf0RociZCE0HOlKJJiRJulKLpNz7qnHTuVSezhcF2xrw3iOBtzctSk7OH+o3POp+M3euc9Bt1tnCRiXDjsDeIMDjsfdT5ic6PVe/q0eCw52Xpmb88VjzQ+bHkIuHo1qt/r7goKCjedR5LSEhISEgukqvkXvFYQUEgUJyM3UtIyEjILpKL5NcVT4w9llwVt4rniqviqqCgoKB413ksIblK7iUU94pbxVXxyd8UogAMNlyR7wAAAABJRU5ErkJggg==",
+    "source": "https://meowdb.com/msclassic/item-db/831"
+  },
+  "1105": {
+    "id": 1105,
+    "name": "Blue Sauna Robe",
+    "level": 30,
+    "slot": "Overall",
+    "gender": "male",
+    "requirements": {},
+    "stats": {
+      "W.DEF": 75,
+      "STR": 1,
+      "DEX": 1,
+      "INT": 1,
+      "LUK": 1,
+      "HP": 10,
+      "MP": 10
+    },
+    "icon": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAdCAYAAAC9pNwMAAAEKElEQVR4AZ3BIWDbSBBA0a80pHACDYcGjmHgChbK8KAMCyXYMomW2fDKYloW0zItDVwalqFhOitrn504zV37XsGfGTlX8BsK/tvIa80KrIL1klUVEBEWiwWvFLyj4H3jMAxMItmy7aGqwQK0S7qgiAgTd+egbVv2Ct7wgV8bh2HAzHiYzZjNZnyazfh0ray/fQf5CH99Zrv+xs1MeHp6IsbIw8MD3+4foPkbrg1+/vgCfOWVS942DsOAmRHJjCyJ8pIQY2TjHHW3sN3wnoJz4zAMqCpJhImRRTJ152rRQlWBBWiXUHcggAjELbjDdkNX17SLkr2CvYJz4zAMYMbEyCKZkW2Ss1i2UFVgAdolmEHccrDqGiZGNp/P2SsKXhqHYSCJoioYWSQzskim7lwtllDVYAHaBV1dE1RIoqgKBrg7Wwf3hLpTliWXHI3DMKCqIIKRRTIji2QGOBPhlAmoKohgZEkEFSCCk12QjcMwoKokEQ4imZFFMiNLItyuOtisIW6hXlH2G7YO7s4kkhlZEmFywZ6qkkSYGEdGFsmMLJIF4RVnYhwZEGMkAsv5nJ3iAhgfHx/ZOs+MLHIUyYwskqk7V4sWqhoswHrJqmsIAiJCJHN3IrBse+puxc54wc4mJdwT6s4kkhlHRhbJjLeJKJNIpu6klFi2PXUIBBUml+wZkFIiklWqOJBEOIhkBrg7V4sWqgosQLtg1TUEARFhou6klJi3PXUIBBVUlckFUCznc9wdd8eTY0BKiU1KxBhRd9ydiQHuztWihaoCC9AuWXUNlSoiQgRSclJKRDIRQVU5uATGZnVL2a85uGtqJu5gAiklIpmq8i93SA44BxFIyVFPuDvLfk0dApUp87Zn6Boml+w1VcXEBMp+zamha/DkmECMkbJfgwUQhfWSVdcQRJik5ASBmJyyX1OHQB2MedvTVBXuzuSSHRFBVDCypqqYmPBs3vaccQd3Jp4cV9i6M0kOZb+mDgELxoEJ//oAfN1uvn+5CRXJnxCeQGeEmSAiJBGuZcbnm2squ0b1mp/39+APkCITU+V6Jtwn50Y+4u58/7El3NwQZsK87WmqiuuZUJYlO0XB0ched3vHxASiQ1BhEskkJRb9GtRADeKGg7um5lTZr2mqiqDCpCxLdoqCt42c6G7vMIHoPGvXa7AACMQNdQiYQELoNxtO1SFQmTIpy5Kdgp2C/2fkVKjAAqjBpueuqRERImBASonoPKtMcXfKsmSnYK/gz4ycaFa3mEBCMIEkwsTI5vM5OwUnCn6fcO6RE93tHSY8K8uSnYJXCn5NyIQjIRPed8fRnMwBB5ydgnMCCCCAAAIImXAknHPe5oADCUiAX/KSAAIoIICSCZnw+5w3XHJOOHJecn7NOXKOHHDAAQecnYJzAghHwjkBnHPOS86Rc+IfKIvC9ZhVDjYAAAAASUVORK5CYII=",
+    "source": "https://meowdb.com/msclassic/item-db/1105"
+  },
+  "1111": {
+    "id": 1111,
+    "name": "Red Sauna Robe",
+    "level": 30,
+    "slot": "Overall",
+    "gender": "female",
+    "requirements": {},
+    "stats": {
+      "W.DEF": 75,
+      "STR": 1,
+      "DEX": 1,
+      "INT": 1,
+      "LUK": 1,
+      "HP": 10,
+      "MP": 10
+    },
+    "icon": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAdCAYAAAC9pNwMAAAEWUlEQVR4AZ3BLWAaWReA4XfSGOSJjDyRyIOsvCMrQa6ckZWDTB3YOpBfHNi6YNfNtZXHxvVYHMvc/NGQdr/u81T8NwfOVfyBin934I2VwlSgdUiLFSLCbDbjjYrfqPi9Q9/3FJ4ZLNuWRiAJtA7aLRARBhHBs/l8zpOKd3zg1w5932NmXD88cC3XXKdPaPrE3XrNCPh8DV+/7RD7yH6/J+fMw8MDD3df+d8YbATfglvgC29c8r5D3/eYGeRMYcZAwzklQM4ZdluebRS2wW9VnDv0fY+qIu4UZhQ5MwhV5jdXTAWSQOuwUl7sAgLYBjSLBXU750nFkw+cu22aBo2gMKPImcKM0WjERxvz9W7LCPh8Da3DHvjyAHkP3/fQrVaMRiOa7pamaViv17fALfCl4meHvu/RcEQUzChypjCjyJlBqNLeXNEIJIGZw2KzQXgkomBGREDe4RGEKHVdc8mrQ9/3qCrigBlFzhRmFDlTmEEEwjssIe5gxkDcQRQEiGBwwaND3/eoKuLOi5wpzChypjBjIO4sNhvWAbuAlcJyNkPc8XCKnCnMGEg4gwueqCriTmHGCzOKnCnMKHKmsMSpADwcscQLM3LO4JnJrOWougAOP378gLyjMKPImRc5U5hR5MwgVJnfXNEIJIHWYbHZIJYQEciZQUSAZ5Zty6prODpccOS7LR5BqFLkTGHGCzOKnCnMeE8Ej3JmEKq4O8u2JTUNYonBJc/UcHfwzEDTFCIQd17kTGFGRDC/uWIqkARmDt1qg6aEiDAIVdydZT0hNQ1iCVVlcAFUk1lLRBARRASo4e74bkv2TKgSERRmRATzmyumAkmgdehWGzQlRARyJsJxd/DMQERQVZ5dAofNomM9q3nWbO4pIkANdwfPDFSVZwEEEJzImQjHRYkI1m1Laho0TVnWE7r7nsElT6ZdR6HGelZzqrvviQhQI+fMelaTBFSgdehWG8SMQYSDJSJn1rOa1DTYtGFZT5h2HRHB4JIjEUFEQI3BtOso1Bgs6wlvBRBBEeEQSuQdhTvrWU1qGsyMF2o8+wB8ufu2u52mj+wfnP1IuB6BWEJEkHCux2PGf31m/GnKeKx8//tvHvaQ9xRqhuiY8O+Mxh+JCHbbOz6mhFhiWU+Ydh2iY+q65qiqeHXgyf1qQaEGnhFLFJ4ZOMK6nWGACWyDF83mnlPrWc206xBLDOq65qiqeN+BE/erBaiBZwbr+ZwkIMA2YNp1hCgSzna55FRqGjRNGdR1zVHFUcX/58CJqUASMIGlQ7O5R0TAM6jh7uCZgaYpEUFd1xxVPKn4bw6c2Cw6UEPCQQ0Jp1BjMJlMOKo4UfHnhHM/OHG/WoAag7quOap4o+LXhEfCK+GR8Hv3vJrwKIAAgqOKcwIIIIAAAgiPhFfCueB9AQTggANxyc8EEEABAZRHwiPhzwXvuOSc8Cr4WfBrwavgVQABBBBAcFRxTgDhlXBOgOBc8LPgVXDiH9V08ru88QwpAAAAAElFTkSuQmCC",
+    "source": "https://meowdb.com/msclassic/item-db/1111"
+  },
+  "1041": {
+    "id": 1041,
+    "name": "Green Legolier",
+    "level": 35,
+    "slot": "Top",
+    "gender": "male",
+    "requirements": {
+      "STR": 25,
+      "DEX": 60
+    },
+    "stats": {
+      "DEX": 3,
+      "HP": 5,
+      "W.DEF": 44
+    },
+    "icon": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB8AAAAeCAYAAADU8sWcAAAEdklEQVR4AZXBrWIbWRaF0U+KScE9UPBQwxvYsAIbVh5BhoEyTJhNh6VoMxdtZr3CpYKHis2mxTQq2bIky+mftWb8Ozv+2ox/Ycav7Xjn4SnINEdO3mRCXZtfmPGBGR/b7X5CH0GtJkJMHu8SuzApbXIuAjI5iODNCvO5ZzLjnU9c2+3+90Q/ViRhm9vbBXdfNjQNNM2Wptni7Uhubtmm+PYA2xyxIQIU0Ai+2dQuaBrY1PE78IMzN3wkvyIVbCOJycNTcM1M6tpkQgREgQcMBajAkNAFQ2/eu+EfqDWxQVyzwQkRUFoxeUSQsCJ5RDxlcse1Gz4wULDNRGJPgBHQVlOLmJRq1kUoeGObc0NvZhSg8t4nrn0f+i2//S4WCzGOI00DUsNCDe1vJscFTTPStiObsYFGjOPIOI5MbBhH+GPTMHqBveHVD87M+UBEMPTGNpKQBAgpIH5CCCJALYpAAklMbHByMPRmEhF8ZM6lXSmFK4KIoC3PVFckESoQz0jBe07eSEISH5nzTtu22EaAbWyD2RMTMxElflLznszknNgTB5KICCalFPZ2nJnzTtu2RASTLo0N2ICBCpgXSboCZiJMAEuMME4OIoJf+cSl79vtlsViwTgm22j4xpYExtHcUlnnBnuksGazNaO3aBz5HXM7jvwxiu3Y4ITNxjRNw2KxIDOJCLbb7XfgB3s3nOxWqxW1VjITCRD0FqswyPRrMJOkT7FsgTROGCwsMC/MJUm8N+eMbUop2OaNoE/xWIUxqzZYhbFNvzZ9igGBeCEu2MY2bdsyKaWwt2Nvzovd8/MzEcFEEhMBnc1EgNjLNU6QAIEEEnSYpU0AESBOIoKjiOBozqtaK13XUWslIph0NusQncwyzKS3GCQkWIbpZFrMgBgk2jRHEtRa6boO27RtS2ZydMOZzOTIQC8hYEDIsAzTW0w6mbWFAQPJi6EIEhRA5S/Ngd1yuaTrOoZhoJTCej1QWl4JJAw4OTEYMMIImwNJIC4Mw8BqtaLWStu2lFLY292w1y4rmUlmIomJxIHEC4MTCA5sIADxtzKTSURwbs6rdX6llEJmciSJI/HC5sDmwOaKJM6VUhiGga7rqLWCksmcPdtM0j2ZleWDiBATSQjTydQiEIhLtplI4pxdmGQmmUlEoKgczYHZ3ZfEhkwObJCEBALEnsC86GRqEZY4cnIgiZPKJNo17bKyzi9MsprJnBez/t7UtVk+iLYNzrUya4QBsScwJzZ/yza1monNZDbnZAbMHu9MR+VImIk5I65kcuGpmFf/ebwzd1+S/t4MvdmbsXfDRyp03Yqh3lOcrBWYiUG8sbmwioR4Ar5Se44C+AwYMGBefeLaf3/8yep7DNyG4faB6mQcR5pxZCnTb4QbsEeapuGBLWUcWbDXDMw+Q1+Z3AMBCBAvRmBkb8YlAQICeGZvt9uBB8ivUKFWDkrhReFg9plzj5wYMGAggQTM3oxLAgIQIEDAT/6ZO07MiQEDBgyYVzOuCRAn4poAc81cMifmnf8DS55INLF1AzcAAAAASUVORK5CYII=",
+    "source": "https://meowdb.com/msclassic/item-db/1041"
+  },
+  "1257": {
+    "id": 1257,
+    "name": "Green Legolier Pants",
+    "level": 35,
+    "slot": "Bottom",
+    "gender": "male",
+    "requirements": {
+      "STR": 25,
+      "DEX": 60
+    },
+    "stats": {
+      "W.DEF": 32,
+      "DEX": 3,
+      "HP": 5
+    },
+    "icon": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABoAAAAdCAYAAAC0T3x2AAADbUlEQVR4AZXBoWLbSBCA4V9OSOBQw6WB00fYwsINLFTgwQYmTH0EiZZFj9ClZh0qdkMDh4r57KQ9O46ctt/XcN6Wv9dwRsOy7fbfAlJACvgNz2LkmcHdIBQNVHlmBh8G9hoWrHhru/3Bs+H2DmLkWYzc3QofPgIKXRuMJpjxPxX2tixY8Y6270AKz6TQ9cGP74DBhzsoGhz70XFWw7JtKYWIIKWEuyMiuDspJcyMU6rKOI7sNCy45Iy2bRnHka7rGIaBnDO1VlSVWispJWqt/JJS4j0rzjAzSinc3d3Rti3jOCIijONISolaK7/knHF33rPiHaqKiDAMAyKCmeHumBnujqqSUuJPrHhr23UdbdtSa6WUQkQQEZgZIkKtlb7v2Sul4O6oKqUUdrYsuOQvRATjOPKLiPCnVizIOTOOIzlnaq2klHB33J2dhp1aK6UUaq3knDEzVJVzViwYhoGIwN2JCCKCiOCYmbEnIogIe2bGORe8df+lc/xpw7dhYp5nNpsNm82GnYYXD9M03ZsZ8zwzDAOajZiNydh74MQFr22/dMKnTwlV4SkmZO1w5UzG3gMH910flM8zMTvuwd6nImzqfA88cGTFiS4HiS8kNzoJigfjwF7Da83NxyC50bU9jy08KhQPllxyyti5AQMzUOV9xs4NGJiBKosueO3++h/h6vqaOs/U+YphmrlWmIx74IGD7eN34SpfU31mkivqfMUwzUzG3gNHLjlRx8Lw1RHJmBkgvHBODV+VlBJmkFLCzAABnFMrTqgqj4+PqCpd1yEiqCpL+r4n50zf94gIqoqIsGTFb6SUUFX+hIiQUmLJioNt3/eUUhjHkZwztVZSSrg7S2qt5Jxxd9q2ZU9EKKWws+XIijPcnYhARBiGgZ2G15rb21sigj0R4T0rjuScqbWSc8bMEBHcnffUWlFVxnEkpYSZkVLi1CVHIoKIICKICE4IC9ydiCAiiAj2IoJTFxzcmxlt2zIMA3tmxjRNRAQ7FVgDa2ANrIHP6/Wap6cnRAQzY71es9lsiAh2vvFiXvFC2CmlkFIipUTOGRGhbVt+UiADGchAZqfrOlSVlBIiwp6q8pMCCZAGEECABHxn2cB5LctugQAc8AYQIAECCCC8EH4vOAgOAggggACi4YUAwoHwlgDBW8FrwUHw038HyLCSZR/2TgAAAABJRU5ErkJggg==",
+    "source": "https://meowdb.com/msclassic/item-db/1257"
+  },
+  "1482": {
+    "id": 1482,
+    "name": "Mithril Scaler",
+    "level": 35,
+    "slot": "Gloves",
+    "gender": "any",
+    "requirements": {
+      "STR": 25,
+      "DEX": 60
+    },
+    "stats": {
+      "W.DEF": 16,
+      "DEX": 3,
+      "MP": 5
+    },
+    "icon": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABsAAAAeCAYAAADdGWXmAAAEB0lEQVR4AaXBK3gbORSA0X+cksJrGKhAQ9FABQZOYOEMLbNhwjR0WQRrZsGaWXRZRZf10sJLw2bHn5PPbh59ntPw90ZeanhFw98Z42aHc44nqsrq5opHDSca/twYNztWN1ec2nz5yp6qsrq5YtLw6Iw/d1vyGu89i8WCEAIiwrD6iA/XOOfw4ZqS17fAHZMz/tyt9x4RwTnHnoggIqThDh+ucc7hwzUlr2+Buxm/bwRGJrVWnHM8UVX2vPesbq5QVZxzPGn4PWMX73HO4ZxDVVndXPEkhICZsaeqmBlxs0NVSaueht8zighP7ndf2FNVVJW06vHeo6rsmRldvEdrpeTEGb9mBG6d8ywuAw/2wOIykO4+sl0nzhce5xzOX7JdJ96/f8/ew8MDIufs6X+Vhh8bmYS2w0zxoaWWjA8tJSWc92itmCl7y/sNqkpa9XjvqbVyoml42+icx3mPmeJDi9ZCaDtKTjgfqCUj4tBaCV1HHla0y4jWSsmJScOJGa8bnfM47zFTfGjRWghtR8mJ0HZoLfjQYqaErqOkRLuM5GGF857XzHiD8x4zxYcWrYXQdpScCG1HyQnnA7VkfGgpKeG8J6eBH2l4aQxth5niQ4vWQmg7Sk6EtqPkhPOBWjI+tJSUcN6jtSJOMDXMFDNreGbGK2otiDhqyTgfKDkR2o6SE84Hasn40FJLxnmP1oo4wdQQJ5gZrznje+Nms+HSe9Z5DQZmyuLympITi8trasn40FJLRsShtSJOMDWWyw6/WLDdbpnc8cwZR+OE8/Nzttstm0+faNtr0j9rtFYe7AEzxYeWWjIiDq0VcYKpcX8fERHMjO12y+SOZ844GCeYGTlnlssl3759I6XE588bPnxoEXlP2f6L1sq5W1Br4dydY2rsdhtEBBFhb71eM7njmRmPzIxhGOi6DlWllEKMETPDzFBVdrsNMS6pteB9wNS4v4+ICCLCz8yAccIwDMQYUVVKKXRdh5lhZpRSiDEiInjvicslJSdUK1dXV+yJCCLCj8w4YWbsqSpmhplRSqHrOswMM6OUQt/3TBqgAZr5fI6ZISI459jtdkxGnpkxWa1WxBjZSykRY+SJqvKklELf90wa3iAivGUGNMMwYGacMjNSSsQYMTNyzvR9z6ThpWY+n2NmiAjee17zjkdmRkqJGCNmRimFYRiIMfKLmvl8PnLU8Mw7TgzDQIyRU2ZGzpm+75nMAeFtc44EME6846C5uLgYmagqpRT6vucVnl9nHBhggL3jaA7IxcXFVw5ugE2tlRMeEF4yXmeAAQpow4EAAjhAAMeBAEsOEm8zXjLAAAMU0IYDARwggADCgfBzxpFxZIABBhhgDUcCCEfCSwIYLxnfM46MR/8DPsonUjOQSbEAAAAASUVORK5CYII=",
+    "source": "https://meowdb.com/msclassic/item-db/1482"
+  },
+  "670": {
+    "id": 670,
+    "name": "Vaulter 2000",
+    "level": 40,
+    "slot": "Bow",
+    "gender": "any",
+    "requirements": {
+      "STR": 40,
+      "DEX": 85
+    },
+    "stats": {
+      "W.ATK": 60
+    },
+    "icon": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAhCAYAAAC4JqlRAAACWklEQVR4Ab3BMXbbOhBA0TeKNoDWpX6pEtlClgCuBWXSzVrIrWRad0HrLljCBDy0DyWLsqBY+fcK/4azTXhHeCxnJVxyFgI4jfAYTqOqzMyMaZr4yDiODMPAns9zVSXnzCznTEqJ2TiObBmGgTdCPweEc66qmBnTNBFjZHY4HJimiQ4i9HFVJedMIyzcHYYhUUrBzHhHuM4BoRH6uaqSc2bmDl+/Rn7+NESYCX0cEF4J25xzwsJVFTNjNo4TIsyEPg4IJ75wyVWVEALH45Hj8cjz8/N34AfwPYTAm2F4phH6OCC8I5xzVSXnzJuUEqUUzIyUEqUUZmZGI/RxQNggrFxVyTnTCCtPKVFKwcyIMWJmNEIfB4QrhIWrKjlnGuGc08QYmZkZjdDHAeEDO16ZGRs8pUSMETPjTg4IN+y4zlNKlFJ4Y2Y0wm0OCB32bPOUEqUUZmZGI/RxQOi040RKicZTSpRSmJkZjdDHAeEOwspTSsymaSLGiJnRCH0cEO4knPMYIzMzoxH6OCD8hR0rpzEz7uSA8JeEhasqMzNjmiYa4TYHhE/YcSLnzB0cED7pC+A0tVaenp6otfLy8kLzg+scEB7EWTjggPMx54F2nBjHkRscEB5oRz8HhAfb0ccB4R/Yc5sDwipwv8oVe64LwG/gP+DAIrAI9KssKlCByok9IIBz7gD8Ar4BEQgsAqvApcq2ClSgAAWovNqz7RcwAJFFYBG4X+UDwspZfQMCEFgEbqusKqsKVKACFaic2LPwcRyZDcNAU1gFLgWgcqlyrrKqbBAWzkr4H/0BYBLs6UKMaNAAAAAASUVORK5CYII=",
+    "source": "https://meowdb.com/msclassic/item-db/670"
+  },
+  "859": {
+    "id": 859,
+    "name": "Dark Distinction",
+    "level": 40,
+    "slot": "Hat",
+    "gender": "any",
+    "requirements": {
+      "STR": 30,
+      "DEX": 70
+    },
+    "stats": {
+      "W.DEF": 33,
+      "STR": 2,
+      "DEX": 2
+    },
+    "icon": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAcCAYAAAAAwr0iAAADM0lEQVR4Ab3BLX4aWwDG4f9JY5DvyMoTeeXpEmbklbAEWEKQrQtLgCXAEsDWZWxdj63jtXHnzvARSEJy+/FrnifwfgongYPA+ygdetnmpqroBDpXvJNVmxlNpkSJcx94H59hwHA85p+P4tuPB761Xz8DX674+8r37ZbVYsYwRbJNb3n/nU654u8qHXqlFC655tcUTgJQ2AtAYS9wJttEiWzTZrNaLLi7u+WmquiEa35OoVO2a7xp6FUjSrkH4ppQNaXcsxM+UdgLXDAcj7mpKjqBTuBthU7ZrvGmQRGceaQIzjxSvSZUDZKwTSmFVZtJUdxUFWcCB4HXle0SNCxsZoEU2alGPDEfR2LMpMiO6jWhajha3n9n9OmGg8AzV1xW6GhYoA2kCG2GagQpJVJKpJSo65rJItNMQRHaDOSGXrlnZ/Tphu2S5wpQ6ASeKnTKPTvO7FQjduq6RhLnbGObtm3ZLtlRBGdQBGd22gzNlJ31HeQcmSwygb1CZ7sERXAGRdhsoJmCJFJKSOIS29imbVvKPThDmyFFHrWZnRShzew0U/gAlA6f//3CQLDZwEfB1xaaKUgipYQkJDEYDBgMBgwGAx4eHugNBgN6kph8+UGd2PkoHn1tI7Z4wOQcGc1M74qeNziDM+QcqUbQTEESMUZ6y/mK3vxugW3m4wW95e2KI0mklGim0Ex51GYe5RyZLDIHIbBXOCOJGCOS6EliPlyhes1kumI+XjCaDVneruiNZkNs07NNzzY5Z/5HCJyUuq45ksSRJGzTs81yvGGyGnIu58yRbWzTs82RJHq26QQ6gadKXdf0JHEkibt6wXOK7DhDM0sc2cY2Pdv0JNGzTSdwEHip1HVNTxLz4YpeM0u8ZX3b0maYrhK2sU3PNpK4G4rJItMJnAlcVubjyLDONLPEUdu2XCKJniTm40wv58i5ySLTCTwTeF3hD0nCNgeBCwI/p/D7Am8I/B7x68wFgbeJPXEi9sTPM3sGDJiDwGUCBAgQIEDsiRPxkrnMgIEMZMB0rnlJgIAICIjsiT3x68wrrrlMnJinzOvMiTkxYMCAAXMQuEyAOBEvCTAvmafMiXnmP1aTZcqmbPRXAAAAAElFTkSuQmCC",
+    "source": "https://meowdb.com/msclassic/item-db/859"
+  },
+  "1070": {
+    "id": 1070,
+    "name": "Brown Piettra",
+    "level": 40,
+    "slot": "Top",
+    "gender": "female",
+    "requirements": {
+      "STR": 30,
+      "DEX": 70
+    },
+    "stats": {
+      "W.DEF": 48,
+      "DEX": 4
+    },
+    "icon": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB8AAAAeCAYAAADU8sWcAAAErElEQVR4AZXBIUAbWxqG4TcUM/JHVv6VrDtI1iWy1yWy1yWy6zISXCJXZiyuI4vLyF7Hsdf1yI3js8fN5gBpIIS293kG/L6eXxvwDwz4uZ4n0+mUX2mahgMDfuIdb+stjPnv1Wdub28xM4qcMzlncs7knMk5k3Mm58zl5SUhBGKMrFYrbm9vr4Br3nDCcT1HSEISkpCEJCQhiUISTdOwWq2wWLMaGls9bzjhtf77lzE7IQQKSUhCEpKQhCSKruto25a2bbm7u8PVUJjDamhs9RxxyhEpJQozw90pYoy8pe97JJFSwtIScycBSomfOeWlfr0IFF+mxqRpuJjA/f09Z2dn3N/fY2Yc6uoPpCQKMwjDIb/jhDdMGrFjZhRd/YGd2IyIzYjYjDB33A13Y9KI2HW4O+aOOayGxlbPgROOGNWR9dx5YMah2Iw4ZO4UUzMmjSjcHXPnLae8QRLHpHaCmVFIQilRSCJFfkgp4e4U5hz1jpeubroNRaBi+rGiuem43VT8727Nv/6oOdcGENpsyBKSyDmTIkiQM8Sc+TR8z8Ws46bb0MbMkyvgmien7PU+XyMl1MwoUuSVlEAShySQ+GFUR3y+ppASKKF2yXPv2Luy849kMpWfc9t1eK6IOXM+HHPTRb5/+8roPzW2yeRcIYEEEuTMAwF/54zP1zyQqKjIVUXl5+S//7oCrtk64RkpghKkxM7cjW45oxjVDX3f0wJm4A5mYMZrElJCikgRlCAlnhvwUs8TC2MUWxbBMIdZK6aLNcVqPmQwGDB3w4wHEkggHrUSNp6jdskRA7ZOOPBlaiyCodhSmPNgNTaaekQxW3b0fc8yiR0zMANjT+2SRTCmZiyCsQjGc+/Y69eLwHkI5JwIVHSbzMfzip1PlxX1ssHCJTdd5Pu3r/x7VtNtMqGqKHKGCog5swhGGDt5I8LYqSrRxszWNVvv2Lv6NHyPmZGBP28Sq7FRmEHOUFUQqGjaFr/8yE0X+f7tK58/f+aP+pq/lAlVRRFzpttkPg3fU1WiMqMy46Nn2pivgOtTHvXrRcDdOWQGEiiBDw0Qi2DUyxlhuuBitqS4v78npcTFxQW/65QDKSVGdWQ1NgoJzMACDyQYjo0FUDc1YbqguJjUFHd3d8QYKWazGUUYDkkpceiUJ+5OSgmlxHNmkCKEoRE7kcSDMDQWQN3UFD6cUoxmS37XKdCvF4FjzEACD/zQSkwxCg+wwCjqruEYpQTuuDspJYovU2PSqD/hSUoJpYS5syOBGQ9iJ+ootgajZWLHA5jDIhhzN+ZuPBlwhLmzc8KWUuK51diYtcKMB2bGMWbGjjmYwTKJrQFPzJ122VG4O8+dAINJI4oUQSnxCwacjZaJHTMe1FFsnQEGGHA2qiN1FM+ZO8UJT5QSEkwaMWvF1tmkEUXsRB3F1gXgQODArBVbIyAAAQhAAC6Aiw+TlsLdGdWRrcGAvZ5HZ4ABBhiwXgSjjmKrZs+A+XrujJaJrSUgjhMg4AuPBmwNeMkAAxwwwHm0AJaA8doUaHgkXhMgQEACEiC2BrxkgAMGGGA8Mn5N7Ik9AQIECBBPBrxmgLFnvGaAeE28JPbEgf8DuPRXweh/ZL0AAAAASUVORK5CYII=",
+    "source": "https://meowdb.com/msclassic/item-db/1070"
+  },
+  "1285": {
+    "id": 1285,
+    "name": "Brown Piettra Skirt",
+    "level": 40,
+    "slot": "Bottom",
+    "gender": "female",
+    "requirements": {
+      "STR": 30,
+      "DEX": 70
+    },
+    "stats": {
+      "W.DEF": 35,
+      "DEX": 4
+    },
+    "icon": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABoAAAAfCAYAAAD5h919AAADkElEQVR4AY3BIUMbaxqG4XtSTORjI99K5FeJzMqVyU/I/oRUgiNyZSr3OMauC7aun8XltXE8dtycDJDTAAnluho+r+e9hk9qOK/nSN/32ObANl+/fuWNhjMuOK1fz0SZFpzJf1qwjSS+fYeaya+liQiCZCqRmB+VHmg4YcQH5qvk2LfvUDMhK8d+WPzJBR+4WwbO5OBukdgGgszkYCGTfKzhvX5ReJKGNE9CEII0T9I8CUEI0pCGNIOGNxpe6++WIiQiCpmVtKlpQqKESBsb0qZWmE1FrUYBtUIpsGo5aHjxhWc9cH23FCERURjYO3LXkQ8dl5djyuUVdKajY8yYsTo0HvPvqwk/fxqN4SFhNoWfDwyugWvg5gvQb7dbrsZ/ERIRhUFmJW0eduYyxOVESBOkCXSmo2PnDo3HXJUr3O3oxh3jDh4SZlP47/9+MZ1Oadv2+oK9iCBuHxm4nZNZSZuapszuKKUQERwUQJmEzaD98S9KiNoaBSxmd9RayUzm8zl7TcOznr2+78lMBrbJTGqttG3LwWw2o21bDkopLJdLSilkJrbJTObzOS8a9hpe69mLCI5ZhYFcyUwiAmKGnQzkykFm8qLhSMNpfUyXHNjJwLVlrwH6mN2CjZ0cuLbsNZww4gxFgMRACt6SBBJS8BlfeK8vizWDruug67AT15a9hmc3u/r/a00Kg64zg/Hkkm73cA3c8MYFZ/h+xZOY8SdyZWAVzhlxgu9XbDYb1us1ZMuHsmW9XrNcLpEr54w4Yb1ek5lkJsvlErlyUras12syk8F0OuWcESdkJpnJoNZKZrLX8FqTmWQmtVZqrUjinBGv9XdLsVqtGNRakcRHaq0MJNG2LYvCoOeNC94IiduZ+b5a8Rn39/ccTJWc84Xf+l+3QUSBzoTMRDsuJ+bnA4Mb3ru+ncFVdFxFRzfu6AxlAnXHNXDDixFnSBASfyKBBBKEhIKTRnwgbf4kJELiICQUvDPiWf/rNogoHAuJz4gohITEPxaFQc+LEW9kVtLmBAECBAgQZ4SEgldGnGFD2gw2mw2SHoECFKBIetxut5wzXWyQxJ7YG7EnCc02nFJmdxyZAlNgyp4kjoWEBJquORKAGkCA9raPj4/YxjaZiW0kMZ/Psf2DNyQtttsttslMbDOQxHw+x/YcSCAbQEAA2ttwgu3vnGZJa06w/Q0wYMANzwSI38R7Asx75jXzm3nxN6GUzGgcZSa4AAAAAElFTkSuQmCC",
+    "source": "https://meowdb.com/msclassic/item-db/1285"
+  },
+  "1493": {
+    "id": 1493,
+    "name": "Aqua Brace",
+    "level": 40,
+    "slot": "Gloves",
+    "gender": "any",
+    "requirements": {
+      "STR": 30,
+      "DEX": 70
+    },
+    "stats": {
+      "W.DEF": 18,
+      "DEX": 4
+    },
+    "icon": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABoAAAAeCAYAAAAy2w7YAAADm0lEQVR4AaXBLUAjRxjH4d8ETOR7MvJFIjeyclaezMnIIK8uyMOBxWUtLmvrWHuOsXWMxd3frtvuEFJS4L7o8wT+n4HXAm8IvN9weXlJVVWYGWZGcXJywpPAgcD7DJeXl1RVhZlhZrg7hSQkcXJywijwJPA+g8VbDn27jUhCEpIo5vM5o8DoiPf5MvUlZsZ0OuX0dMafV4nr9oHFHzySxHK55Obm5gtwMeH3DRZvMTPcDXejqCrHzKjPhSSKlBJ7R/yegVGfb9DfDcyWSD1mU3IWkiiavxKn9kDRdR2ji2N+gbsPjDabDWaGmeHuhBB4tLhDEoWU2Kuqir3AT7j7sNlsKMwMM8PdORRC4FF1SWFWoa7mSWAU+A53HxitViuKGCNmhrvzkiRyzszncyzeoq5mFDgQeIO7D9vtFjPD3Sm6rqOIMXJIEpKQhCTqumYUeGHCC+4+3K9WVPM57s5ejJEYI13X0XUdkpCEJCTxMxMOuPuw3W4hJRIHrq4gBIoYIzFGUkqklJBEIYkfmfCGtF7j374hCUmQEolnknB33B1JdF3H3mazwd0HXjjigKQvTQdNm1hERxKSmC6X2HpN3/dMr6+Z1jX6/Jk9MyOlRN/3FF+/fkXSBQeOecF8QTH/1LB3t11RmBmWEgkwQBKSKM6bDOaYVShnXgo8G+L6npxFTg1erZCEcsve3XZFYWZIQhJFfdaCOf9K54wCB47YGeL6npxFTg1xsSbnB6RE/LiC6SlMnevmhqZNLD+eIomiPmsxXzCbnQJG3z/AQ8foggMTnuQscmqIizUpZaREjAtyFpIwM7xagTnzTw1FfdaCOWaGu2FmmFW8ZQIMcX1PTg1xsSaljHJLjAtyFpJQbnE3CrMKzKnrGnID6ZxfMeFAzkK5JS7W5CwkodwSF2tyFpJ4lM4ZBSAAIbdzchbuhplh8ZbRwIEJo669wqsVPyKJQl3NKPCbJkAgNxQ5NcTFmpyFJJRb4mJNzqJQVzMKvBZyOydnIYm3HPNEEijzH8oUkvgFIbfzgWeBA8ccUsdLOYtCXc3oA2B83we+44idiz7ffGGk6Uf6vkddDVMHqyj6fMOoA2bADJgBM2AGzIAZMANmwBSYAVN2+sCOAQYYcMfOGbCxeEuhrmZ0xWvibQIEZCAHwAADHDDA2TF21uw0vE28JkCAgAzkABjggAEGGDvGz4ln4pkAAQIEKLBjgPHMeM0A8Zr4L/FMPPkHlHfMIAWNG74AAAAASUVORK5CYII=",
+    "source": "https://meowdb.com/msclassic/item-db/1493"
+  },
+  "671": {
+    "id": 671,
+    "name": "Olympus",
+    "level": 50,
+    "slot": "Bow",
+    "gender": "any",
+    "requirements": {
+      "STR": 50,
+      "DEX": 105
+    },
+    "stats": {
+      "W.ATK": 70
+    },
+    "icon": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACEAAAAgCAYAAACcuBHKAAACVUlEQVR4Ab3BIXoiSRgA0FcEE9kjV2JXVo7AyJXJEXaOkEhws0cgV8CuxI6jbWTZdikb92/zQT7IhKRJhtn3kt8jvC3ZCyRnFgjvC1uxWD8GYuw8Qm+xfvTt6oteeF/otaXYSD4v7Exv1zZWq6W/b689y5OJjbYUeTLRluLZ/c2VnTT2MWFnerv2rJTWofubKydKeslpQm96u/aslNZ6cW21WrlbVqVdUZZ2kvcFkp1kWExv1zZKaW18v27cLatnpV1RlnrJsEBy4MKweflxP/NHtvH9ujGdTk0uO6uHJ6VdUZZ6ybBA8pMLBGaYe9u8Pvw7a/78y+rhyeSyc7esSruiLPWSYYHkiJFezlkvvC+V5Tcbd8uqtCvKUi8ZFkjecIF513WznLOu62aYOy5yzh5W9+rTJWWplwwLJO9I9iLnrG1bveSlyDlr29aBZFggGXBhb9513SznrOu6Gea2IuesbVsHkmGB5ATJazG9XVv9c2Uj56xtWweSYYHkRGNvmFwvbLTLbw4kwwLJB4ycLhkWSD5o5DTJsEDyCRdeisX60dNlVZ8uPdzf6CXDAskZhK1YrB8D4TThF438mkDyi0Y+L5CcwcjnBJIzGfm4QHJGI0e0pXhDIDmzkdMFkt9g7Ig8mfhJIHmp8XHVEWNHtKU4EPiCib3GVuN01VZFRbUztpcQXgpcIaNBY6ux13itOq6ioqCg6o297ysmmNhqbDU+rnpD8lrY+4oGja3GsGqv2quoqKiodsZeisX6UVuK+5srvWKv8VqD6rXqpWqvOkEg/I/+Ay/U4+BG+i/sAAAAAElFTkSuQmCC",
+    "source": "https://meowdb.com/msclassic/item-db/671"
+  },
+  "1153": {
+    "id": 1153,
+    "name": "Green Lumati",
+    "level": 50,
+    "slot": "Overall",
+    "gender": "female",
+    "requirements": {
+      "STR": 40,
+      "DEX": 90
+    },
+    "stats": {
+      "W.DEF": 106,
+      "DEX": 10
+    },
+    "icon": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABoAAAAeCAYAAAAy2w7YAAADOElEQVR4AY3BAXniShSA0X/4MHAtzEq4SEglEAlEQpCQSOhKmEggEjoSuBK4EuZllvKaUmD3nMC/Kfxd4IXA35V0uWBm/O461obTicrN6Xa/WASeCLxWWKTLBTNDVblxd9ycOc/MMlF5O7MIPLDhuSKpoTIz9qo0QMOXOc9MXUezbxCNvLLhBW9n0uVCrzsiEzDxSDZDY0RSw6LwwIbHSjwfuDEKVy3GT56NSjQiqWFRuLPhCc/GTSQAe6rogbWoircz2QyNkWc2/FTi+YC3M+lyQUXAuXLAobFAparo4UDl2chmiEYkNSwKK1uuCp/i+YBn4xspVCYFBIyFOzfDxwfH3Q5Sg2jkkQ1QFkivVJ6NewYYYIDxbyQ1LApQgLLlk48Z6RWy42Nm+PigMr64OzdmxiOeDW9nqvP5zDzPdF1HAMq+DBxm5e3tjepcChEYcybGyI2ZcSMIUSPuzjRNqCrH3Y6qlIKZscsdZMfHzJZPXZw4nU6YGb9CoCqlMObMzV6Vyrh6C4GbCTifz8QYaRnJGGtbVlofwZxKeiWEQCmFyoBfIbAmvVL5mDmfz7wxokS+UaEKXBVJDWSn8jEjqYHs+Ji5kV55xsdMPB+oNEbmaabydmYRAl8KK5IaPvSdqm1bUkpUu9zxQ3YqHzOSGipvZz4FFlu+BL4UUeGNIycGqhgjLSOCsObZQQWyI73i7cynwMqGn4qkhurEQIyRm0SPRqU6MVCJCn+osBK4s+GFY5xYaxm52eWOEwMnBkSFaogHntnyQqJnLdHTMlKJCrvcUQ2+pzrab57Z8F2R1CAqaFRaRtZaRiqNSiUqiApH+83RfvPKhhcSPWuJnodUQIVXNrzQMrLWMvI30iuLwp0NLyR61hI99zw7/2LLnQ99p4pEHkn0VIZRmRg3Fo2qo+Ne4LvCHVXFGogz/8s5o6o8knPm0w5wwAEPXAkggAACCCDAu6SGP7JT+ZhZjEAvqeGP7FQ+ZhZHrhxwwADbAgIIEAEBIlfD+/s7OJgZlZkxkVkIi8H3VIZhZrCPTNM0AEfuBECACAgggHD1znNHYOC5N8ABBxzwwJUAwhfhJwGcn5zvnC/Op/8A1+R3lkXAxLgAAAAASUVORK5CYII=",
+    "source": "https://meowdb.com/msclassic/item-db/1153"
+  },
+  "672": {
+    "id": 672,
+    "name": "Crossbow",
+    "level": 10,
+    "slot": "Crossbow",
+    "gender": "any",
+    "requirements": {
+      "DEX": 25
+    },
+    "stats": {
+      "W.ATK": 32
+    },
+    "icon": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB0AAAAYCAYAAAAGXva8AAAC1ElEQVR4AaXBrXrbPBiA4efNSgJVWBjDwvQQlEPw4KADC13YwtAxC26sPgSLlk2H4JeOTbRMn/wpudI0SX+2+xbelzhNOJYohDcIRaIQisRWSgliJBKJUfF9z2R959gSirRcGIwBHyKZcIYAKcNt1qzvHJOUEkVE5JKXxnFg4vueyfrOMWnqJSEoE2PAh0gmnCBAGseBSVWtSCkxERG2hEOJbBwHXqqqFU29JATFGP7nQyQTXhEgZbwkImTC2xLZcmFomhpb11TViqZeEoJiDPgQyYRXhCJxSHhfGrqWoErfe5qmxtY1VbWiqZe4PpAJJwiHEiC8Lw1dS1DFe88kRmiaGlvXVNWKTDhjxiEBEm9LQ9cSVPHes1PXFud6PmLG56ShawmqeO/ZsdaiqgSNTNrWkiXOmHFMgMSxNHQtQRXvPTvWWlQV1wc+6gun3QMP7KWhawmqeO/Zsdaiqrg+kAnw8P37z/sfPzrm8988Pek98MArM04TIFGkoWsJqnjv2bHWoqq4PpAJnzDjAzbO4b1nx1qLquL6QCYckqpa0TQt58w4T4Bkl4bu8ZGdxWKBquL6QCb8hRlvsEvD8OsPk+7xkcViwcT1gUz4SzPOS23TsLq5ZLGwrL9+xfUB1wcy4R8Ip6WhawmqqCqqysSHKLwvjeNAVa3IhBMuOJaGriWooqq4PpAJRaIQ/sEFh9LQtQRVVBXXBzJhTwADJIpLDv0ZxwHnNmwZisgLwl4aupagiqri+kB2CRj2DIWhGChWwDCOA85t2Gw82YoiUkQgAvGCIg1dS1BFVXF9ILsBloABDIVhzwAbioGtzcaztWQvAhFQQL9Q3F9fX6GquD6QrYAr4BowwBVggCvAAAaYA3NgDgRgeXv7jdvbb8znv3l6UgsE4Bl4Bp6BCMQLCrnb9IniBjAUkUORzwlABCIQgQhE4ZgBDHuGYwaIHPvFXgVE9iJb/wFATk6AQ/tvrQAAAABJRU5ErkJggg==",
+    "source": "https://meowdb.com/msclassic/item-db/672"
+  },
+  "673": {
+    "id": 673,
+    "name": "Battle Crossbow",
+    "level": 15,
+    "slot": "Crossbow",
+    "gender": "any",
+    "requirements": {
+      "DEX": 35
+    },
+    "stats": {
+      "W.ATK": 37
+    },
+    "icon": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAgCAYAAAAFQMh/AAADDUlEQVR4Ab3BC3HjMBRA0StPCagQHAhZCA4EFUICQYIQQbApCIINYQUhD0IF4a08TiZJ82l3d9pz+GHKUcPPUS40/AytuNTw/bQixsgFNXwvrYgxEkKgMoBSNXwfrYgxEkKgMoBWzBq+h1bEGAkhUBlAK2KMzAxfo9xnuKUVMUZCCFQG0IoYIyEEKmN4TDk6HEbuWa02HBkWum4tbusJIVAZQCtijIQQqAyVYaF8cDiMnKxWGy71+y2zzjlmq9WG2bq1ONeR0oRzHSEmVJUYIyEEKsORYaH9fkvnHLMpJWa7MHBkuKZU/X7LSeccs7fNG851pDTx+/BOjJEQApXhguFMqfr9ltkuDFSG55TK+45Za1s653jbvOFcR4iJI8MHhlvKwvA5HXtPiAOzzq1pbUvnHG+bN7IUKsMdDfcZPqdj78kinEwpI0WYUiJLoTI80HDLAMpzOvaeLEJKE/+i4e/p2HuyCClNnDjX0baWGCdm/X5LpTzQcJ8BlFs69p4sQkoTJ8515JxJk/BVDV+nY+8JcSCliRPnOnLOpEmoDGB2YWDW77dUyh0NjxlAWejYe0Ic2PstJ8515JxJk1AZ/kLDF4U4sPdbsgjOdcxyzuQsVIZrZhcGnnnhOQMo1d5vySLMUpqYTVkoBcM/aHhOqVSVEAdmKU20rSVLoRQMT0gRHmn4xNh7Xl8Nvw/vhJjIUkiTUBn+g+ExXbeWkyyFI8Pn1PuOGCcqwx0N9+nYe5zrmGUpHBlAAeU/vXBLx96TRRARshQqw5lhoSwM19T7js8YrunYe7IIIsKQMpXhmuXaO4tX4N37jlmME9Uri8IHL5zp2HuyCCLCkDLVK9ByZllYzjYs3jlqbcvRGigsClCAQvXCQsfek0UQEYaUqX4Ba8ACloXlzHItAp5raxYFKIAAApQG0LH3ZBFEhCFlqg3QAmugBVqgBVqgBVrAAhawgAUsEGOcuGB54IUqiyAiDClT/QIsi8K1wmOFxW4Xhp5FBgpQgAIUoFAZFsrCABawnFluWaBwq3CtcFa48Af2WnwKvZ3WXgAAAABJRU5ErkJggg==",
+    "source": "https://meowdb.com/msclassic/item-db/673"
+  },
+  "674": {
+    "id": 674,
+    "name": "Balanche",
+    "level": 20,
+    "slot": "Crossbow",
+    "gender": "any",
+    "requirements": {
+      "STR": 10,
+      "DEX": 45
+    },
+    "stats": {
+      "W.ATK": 39
+    },
+    "icon": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAgCAYAAAAFQMh/AAADEElEQVR4AcXBsZnCRhCA0X/wNbAOHUolrEOHqARoRUqdidThpc6gBNHClKBJnbEljHcR9wkO6Y7vHPg9fsAB5z/a8APjOJA5/8GG/8mGH6iqyDgOZM46B5wVG17ngLtfeIH3beTGWSC8xt0vfDif3imqGKnrhkyY+W4bOJ0Tnwh3NnzP3S+cT++cT++cT+80+45m31GM40DmLBNmzh3ha+5+wUyp64Y7wsSHY08VI3XdUOy2gdM5kQngZH0b6Q5KJtwI69z9gplS1w2Z8MyHY09RxUhdN9wI4GS7beB0TmTCHeGZk7lfMFPquiET1vlw7CmqGKnrhg+7beB0TmTCJ8LEuXG/UJgpdd2QCV9zsuHYU1QxUtcNd4QFwsTdLxTn0ztFs+/IhK9530aK7qAMx56iipG6bsiEFcLMeSR8zfs20h2U3TZgllCD4dhTxUhR1w2ZsEBY5oCwzvs20h2UIlZcqXE1HHuqGCnquuGOcCMsc0BY5n0b6Q5KESuu1CiEiZMNx54qRj7UdcONCOscEB5530a6g1LEiis1CuGZj+OAqXKv2Xe88Trv20h3UIpYcaVGIXyj2Xfce+M13reR7qAUseJKjUJY5uM4YKo0+45MuPPGOgGcbLcNdAeliBVXahTCD234Rt9Git028EGNQljn4zhgqjT7jkz4RFjnfRtRNQqzRKFGIazzcRwwVZp9RyYs2LDM+zbSHZTCLKEGahTCOh/HAVOl2XdkwopfeOZ9Gym2f/zGX38b/yTu/ckyH8cBU6XZd2TCF9545H0bKVQNs8SNMHNmwsTHccBUafYdmfCNN2bet5FC1TBLqFEIj4SZc2OqNPuOTHjBhon3baRQNcwSLxJA+IE3wPs2UqgaZolCjUJ4FPhe4FFigQC+2wYKs0ShRvErEJgFJoFlA5OGWWKSgAQkboSJx4orNYrfgQAEIDAJzALPEssSkAADDEhkwsyZNEAAKiaBSeBriWcJSEACDDAgkQmzAFRAAAIQmAS+l5glZglIQAISkLgRHgUgMAs8C0DiWeJRYpb45F+bZ0/ZseoXbAAAAABJRU5ErkJggg==",
+    "source": "https://meowdb.com/msclassic/item-db/674"
+  },
+  "675": {
+    "id": 675,
+    "name": "Mountain Crossbow",
+    "level": 25,
+    "slot": "Crossbow",
+    "gender": "any",
+    "requirements": {
+      "STR": 15,
+      "DEX": 55
+    },
+    "stats": {
+      "W.ATK": 47
+    },
+    "icon": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAhCAYAAAC4JqlRAAAC6klEQVR4AcXBrXobRxSA4W9k3cDSQAUWbmDhCAauYOH2EhQoMe0ldC5hTcP2UDMfanho4dCy05G2fmRZv3ac5n35Hzm/iAPOGRN+Ll/2Pb+KL/veAeeCCT+Hb4YBFeGaCR/PN8NAzhlJiSJwnk+5nXMscMg3w0DOGRXhAmcUAsecUWDkFO4cCYEDm2Eg54yKIClRBA45RWxbJCWKEDjm7hACO+7shMABd86af1myJdpRBMApln2PiiApUQSKwDEfenbmC14KHHKKoedIbGD+ZYllxUzYDAM5Z1QESYki8J/Aac4ocJ0PPTtdgmXLTmzg8+dI+9eSnDMqgqREEXjhjtPWwApYc5nPZpEnMx4UzCLfZcbXaNgTPJlR/fYVFUFSogi8MuG8ADg3mFU95CXP/vwWeaYiSEoUgROm/KBYt5gplpVYtzTNgmf1DLqUKAJnTHk/b5seM8WyEusW0URVsRMjN5nwPt42PWaKZSXWLWbK1r1EusTNJrydt02PmWJZiXWLmSLaYSaYCUWYLyBGrrrjsjXgwJqRt02PaCL/8zexbjFTRDuKAKyBNaPVHw18quBBWQFrTphwO2+bHjNlK9YtZopoRxE4FuYLrppyG2+bHtFErFtm1Jgpoh1F4AdMuUHb9Jgps6pGNDGrakQ7isAPmnADMyU2DZaVLdGOIvABJlzms1kkNg1yf8+WmVAErvOhhy6xFThjynneNj3pfkFK3zATXnA+SOA0b5seM2VLtKMI3M6HHuYLtgIX3HHIgVXb9JgpW6IdReBtVp8q+L2GB2UFrDkjsOebzSOmhpmyJdpRBN7H2QucERj5ZvOIqWGmbIl2FIFDFW+XuWAK+GbziKlhprwyY69iVHG7zCgDGci8MqUwNcyUZ6IdxRyogYpRxV7FscxpGciAAQZkXphSmCnPRDuKBVAzqhhVvF3misDI2ZsDFVAxqrgus5fZy0AGMpCBzCuBQxVQsVdxrAIyxzKHMnuZM/4FLOBhHTJ7osMAAAAASUVORK5CYII=",
+    "source": "https://meowdb.com/msclassic/item-db/675"
+  },
+  "676": {
+    "id": 676,
+    "name": "Eagle Crow",
+    "level": 30,
+    "slot": "Crossbow",
+    "gender": "any",
+    "requirements": {
+      "STR": 20,
+      "DEX": 65
+    },
+    "stats": {
+      "W.ATK": 52,
+      "DEX": 1
+    },
+    "icon": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABwAAAAdCAYAAAC5UQwxAAADEElEQVR4AbXBIZfiSBSA0e/R/IEaiQxyJC1HJnIkyJaJ3HVEdjvKrkvktkt+Qj2L27LrKLsydlxtMcABGmi655y5l98sApETwu8TY4TgYfrIgYz5vMgl4VyMEYIHayFGEOEn4eMiyWbjOBW8p1jU7Ak7cfMPWMuZtgfhY+Jm4wjes1Usag5ct2JLvWKtclDO+Wm5BGuh6UAEHrgvbjaO4D3Foua1VxIBXoCX116fn+Y52SRjksF6Hdjq/ob1GtZraDoIHv5q4YH3xc3GEbynWNQkArxw7uW11+eneU42yZhksF4H/ihhvYblEob/YPrIlgi3xc3GEbynWNQkwnWxKR1VW+C6FVvqFWuVN4TkgUsReCb5/u0rxaImEa6LTekIIfAt+05l/+RpnpNNMiYZrNeBRIAX9oRz0XUrstmMrem0IBGui03pCCFwymqF61ZsqVesVRJhb8Q5KRY1wXum04JfMctyikXNLSMuSbGoSYTb4jJvqNqCUxp6fFASKRY1+SxnucxJInsjrhNui03psFqxZbVCQ4+GHh+URNiRYlGTz3JOjfmc2JSOqi04mGU5Pih7wh1jPi42paNqCw5mWY4PSiJ80IiPiU3pqNqCg1mW44OSCNdF161Qr5wacV9sSkfVFhzMshwflES4w1olEfZG3NGUjqotOJjPSnxQEuG26LoV6pW3hNtiUzpCCGxZrZjPSnrfkgi3RdetUK9YqyTCiQdue/5qvnHwgx/ovz2JcFt03Qr1irVKIrwx5h0aevJsjoYeH5S9yDvUK9YqiXCFcF1sSkerli0flES4LbpuhXrFWiURbhhzKTalQ32PD0oivC+6boV6xVolEd4x4lxsSof6nt63JMI5AxjAAAYwwJdiUXPCAAYwgOENYSeSNKVDfU/vW5IvgOHIsGO4zrFTcDSwMwADMAgQy7Jkxhz1Pb1vSR4BAxjAsGM4MlwauG4ABiAAYcxe1RbsFUAGZOwYdgyfN/CGsBPZeQQMYADDjuG+gaOBowEYgAEYgEE4ZwDDkeGSAQYuDZwbOBrY+x9Ck1GMImixYgAAAABJRU5ErkJggg==",
+    "source": "https://meowdb.com/msclassic/item-db/676"
+  },
+  "677": {
+    "id": 677,
+    "name": "Heckler",
+    "level": 40,
+    "slot": "Crossbow",
+    "gender": "any",
+    "requirements": {
+      "STR": 30,
+      "DEX": 85
+    },
+    "stats": {
+      "W.ATK": 59
+    },
+    "icon": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB8AAAAgCAYAAADqgqNBAAADA0lEQVR4Ab3BLXojVxYA0HPdJg1fw4HyEjxLkJbghkN7CQq0mYaaCQcazjDXFoqG6dGwXBizOy5XO/KPZLsnX3KOv1F54cTfoxxw4q9XVQ4Kf62qIsIkzMqfUCjvqyqFsle1Uyj3TvwfamdSjqvaEWESZlU74swk3Dv1ceVeFbq3VO2IM09V7Ygzk/DdqY+pKh9RdUuceapqR5yZhCfC+6oK3d4CA7EyCbOyF2ZVt8TKJLwQ3lZVGIiVP9QOCwzEyoP1ZuvfP33zXaDqlliZhAPCc2UWqCoMxMok7FXtsMDgwdm3c4vFQu9d76O6JVYm4YhPnrus4vra5e//Ic64+tkkPHd1de3y8l9oSK7/+w+ZaZL5q6ufTcIbwgutKfcyTcJxtd5sbc6/ebAsk4hwL3zAiRcyhVk4rtabrXEYxArLQiD8iBM/rtabrXEYDMON5fJCRHhUZVI+IBzRmsoUnqv1ZmscBsNwY7m80HuXOcqkdlh4EOGpcEA4ojWVKezVerM1DoNhuLFcXui9yxxlCrOqHRZmHZ1YmYQXPjni7s5Va+ruzhWqNfovvxrHwXJ5ofcuc5Qp7F1dXbu8vET3IP7p0ZUXTr2v1putcRiM443F4lzvXeYoUzikoxMrk3DEqXesN1vjMJi0di5zNMkU/qRP3vD5s0t3n0167zJHk0zhsKodOrEyCW8Ih1Vr/tDauczRJFM4rGqHzpevZArvOPFarTdb5+cXWjs3yRw9ak05phMrMoUPCM/VerM1DoNH43gjU3iiNeVepjCruiVWJuGDwl6tN1vjMHjUe5c5yhQOaE35LtMk/IATs1pvtsZh8Kj3LnOUKRyRKTKFe7UzKT8gUFUerFYXJr13maNMYa95229mX+ylN5x64nZ94+zbucxRpjMszJpZc9zK7NwszRKJ9EKYVd168OUrmVZoaGbNXvNaOiyR6OhIT4RZw2+tkekrFmbNrHlbei2RSHR0pCfCrGGBhoZm1rwv7aW9RCKRSC+EvYZmr3mtIb2Wnkt76Yj/AVA4b4FBzHosAAAAAElFTkSuQmCC",
+    "source": "https://meowdb.com/msclassic/item-db/677"
+  },
+  "678": {
+    "id": 678,
+    "name": "Silver Crow",
+    "level": 45,
+    "slot": "Crossbow",
+    "gender": "any",
+    "requirements": {
+      "STR": 35,
+      "DEX": 95
+    },
+    "stats": {
+      "W.ATK": 67
+    },
+    "icon": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB8AAAAhCAYAAAAh3nDkAAADCElEQVR4AcXBIXojRxCA0b+0IoJtaDiBgW4Y2HsE+wjjKwjaLKZhmiPIV2gaNnOFOkIXFat0R9YnWbJkefNl9z1+IecXcMCpZvxcXkrhV/BSigPOT+SAl1IccA7M+f84VSmFRlU5NufrnFPCe55SIudMo6rEGKmEA3O+xiuOiYgDwpanlMg5U0pBVTlnzvW8opmmiabrOo54SomcM6UUVJUYI2+EI9/4nANP7o6ZsdlsMDOaEALN/f09wzA8pZTIOVNKQVWJMXLgmSNzwLmglEIzTRM7qkrXdTSqSpNSIudMKQVVJcbIAeEDwpaP44iqklLikKrSxBg5No4jO8vlkvV6jaoSY+SAcIaw51wmnPJxHGmWyyU7OWfeCBfM2RO2HBCupKoMw0CzXq8JIdCICJUDwhnCxxwQLvNx1RMfB1JKrNdrmhACO2bGzc0NlfCBGR8TwDnPx1VPfBz4l03knAkhsGNmqCqXzDhPAOeUj6ue+DjQpLtAnoyHhwd2zIxrzLhMAGfPx1VPfBxo0l0gT0YlgFRM04Sqco05nxPAqcZVT3wcaNJdIE9GJRxQVbqu4xpzvmB4zfSpQ83Ik1EJR1JKXGvGlfrUMWRFzciTUQkXqCoxRirhjBmf8z51NOkukCejEi5QVWKMVMIFMy7zPnU0Q1byZFQCOKe8lIKqEmOkEj4x4zzvU0czZKUSQNgSwPmPZpxywPvU0QxZqYRTAjhHYoxUwhVmvOfjqqdPHc2QlUo4TwDnB83Y83HVM7xmGjXjSgI4P2DGlo+rnuE106gZeTIq4b0ABCAAAQhAAG6ocs68CUAAAhfMAS+lsHyINGpGnozqBujYC2wFzui6jjd3bBlbBhhgHBDASyk0D99/I09GFYEABCCwFdgLnDLgT7aW7BlggAIKGG++Ac8vLy9P9/f3LJ//ovoO3AK/AwG4BQJwCwQgAAtgASyABbBg62/gD2ACFsAG2AAbwAADNrwR9hyIQAACENgKfM7YM/YMMMAAA4wDwnsBCOwFTgXAOGW8Z+wZH/gHJ/FZSQo9ZNUAAAAASUVORK5CYII=",
+    "source": "https://meowdb.com/msclassic/item-db/678"
+  },
+  "679": {
+    "id": 679,
+    "name": "Rower",
+    "level": 50,
+    "slot": "Crossbow",
+    "gender": "any",
+    "requirements": {
+      "STR": 40,
+      "DEX": 105
+    },
+    "stats": {
+      "W.ATK": 72
+    },
+    "icon": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAADBUlEQVR4AbXBsXXj2BUA0Pu40wCmBEwJYAlw6HRDO8OkDhV6MrZAtLAlDFJnQAn+qUOU8BYgqKEoUhLlc/ZeH0h/sZ1NIl3LHK3SXyiQmUR4T9ikTXhMIrxj5yzTSSaZZJLpWSJz9BnZtbVFekfYpDdk+iXCs3CRNuFaHrpGKbN+KBbhjnArES7SWaaTCL/kSOytwkUeusbqqZ90ba0fikV4JdyXCLfSIkc0TiI8Cxd56BpP/WQRyK6t9UOxCC/s3BdItwIRe0xOMr2WFqXMXoh+KLq2tkgvhPclwn2ZIxonEU7GY2eYJqXMVv1QrA5do5RZPxSLcBY+lgj3ZY42jZMIDl1jVcpsVdeVp35yFl4Ij0mE+zJHm4b+b3wfOHSNp37yQrjjN4/5gcQPt/79n9L6R1v0/3Ty95p//fE/Z4Ef3rDzuEC6luOx09az2Pul+0mmh3zxOYF01rat/ffesz+0fv4cfEb4/2TbtoZh8FLX1vqhyNGmIcJr4YWdz8vx2BmGwWv9UKxibzOR6SRHd4XPyfHYGabJUz+5I1xkjjYNEVbhlZ3H5XjsDNPkqZ/cEa5F7H1o5xOGafLUT1Zt2+ra2lm4L2LvXeExOR47+++9Vdu2akU/FItAIrwtM4nwUljsfCzHY2eYJoeu0batWtEPxSJsAukBOboS3pfjsTNMk1Ups34ozsKtRLgvM4mwCmc7b8vx2BmmyaqUWT8UHwikT9i5L8djZ5gmq1Jm/VAswia8LZDel0iLnVs5HjvDNFmVMuuHYhEeF0jXIoJMJzla5c4dwzRZlTLrh2IRNonwmEB6Q+yt4otreegaq6d+chZIm0DlcV+RCLfC4ouLPHSNUmb9UCy+2iS+2TQ2lcftkfjmjrDJQ9coZdYPxeIbKoz4HZVN5aJya3bfjKNrYbFDHrpGKbN+KBbfUGO0qVGjRo0aNSpUqFChQoUKFSpULn63yPQsLb4gnvopbb6idm12MXvb7GJ2MWPG7CyTCCfhVoUK/7XZu1Vhdmt2bXYx26RNWPwJfrJIjcAMcUUAAAAASUVORK5CYII=",
+    "source": "https://meowdb.com/msclassic/item-db/679"
   }
 };

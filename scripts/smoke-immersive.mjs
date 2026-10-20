@@ -348,7 +348,8 @@ try {
     [
       ['thief', ['bandit', 'sindit', 'assassin']],
       ['mage', ['mage', 'fp', 'cleric']],
-      ['warrior', ['fighter', 'page', 'spearman']]
+      ['warrior', ['fighter', 'page', 'spearman']],
+      ['bowman', ['hunter', 'crossbowman']]
     ]
   );
   await artPage.close();

@@ -21,6 +21,8 @@ const names = {
   Polearm: 'polearm',
   'Two-Handed Axe': 'ขวานสองมือ',
   'Two-Handed Blunt Weapon': 'ค้อนสองมือ',
+  Bow: 'bow',
+  Crossbow: 'crossbow',
   Shield: 'โล่'
 };
 let key = '';

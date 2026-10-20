@@ -7,6 +7,8 @@ const PUBLISHED_GUIDES = {
   mage: true,
   fp: true,
   cleric: true,
+  hunter: true,
+  crossbowman: true,
   spearman: true,
   fighter: true,
   page: true
