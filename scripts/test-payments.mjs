@@ -9,7 +9,7 @@ const browser = await puppeteer.launch({
 const base = 'http://127.0.0.1:8765';
 const stub = `
 const state=window.paymentTest;
-const products=['bandit','assassin','mage','spearman','fighter','page'].map((id,i)=>({id:'guide_'+id,name:['Pure Bandit','Assassin','I/L Mage','Spearman','Fighter','Page'][i],price:99}));products.push({id:'market',name:'ตลาดซื้อขาย 30 วัน',price:50});
+const products=['bandit','sindit','assassin','mage','fp','spearman','fighter','page'].map((id,i)=>({id:'guide_'+id,name:['Pure Bandit','Sindit','Assassin','I/L Mage','F/P Mage','Spearman','Fighter','Page'][i],price:99}));products.push({id:'market',name:'ตลาดซื้อขาย 30 วัน',price:50});
 const auth={getUser:async()=>({data:{user:state.user},error:null}),onAuthStateChange:fn=>{state.listeners.push(fn);return {data:{subscription:{unsubscribe(){}}}}}};
 const query=table=>{const q={select:()=>q,in:()=>q,eq:()=>q,order:()=>q,limit:()=>q,then:(resolve,reject)=>Promise.resolve({data:table==='products'?products:state.orders,error:null}).then(resolve,reject)};return q};
 export const createClient=()=>({auth,from:query,functions:{invoke:async(name,{body})=>{state.calls.push({method:'edge-verify',args:body});if(state.verifyResult==='ok'){const p=state.orders.find(p=>p.id===body.payment_id);p.status='ok';if(!p.gift_email)state.account.entitlements.push({product:p.product,expires_at:null})}return {data:{status:state.verifyResult},error:null}}},storage:{from:()=>({upload:async(path,file)=>{state.uploads.push({path,type:file.type});return {error:null}},createSignedUrl:async path=>({data:{signedUrl:'data:image/png;base64,iVBORw0KGgo='},error:null})})},rpc:async(method,args)=>{
@@ -121,13 +121,13 @@ try {
   await buyer.setViewport({ width: 390, height: 844 });
   assert(await buyer.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 2));
   console.log('PASS: mobile checkout fits viewport');
-  for (const id of ['spearman', 'fighter', 'page']) {
+  for (const id of ['spearman', 'fighter', 'page', 'fp', 'sindit']) {
     const w = await page();
     await w.goto(base + '/checkout.html?product=guide_' + id, { waitUntil: 'networkidle0' });
     assert.equal(await w.$eval('#product-select', e => e.value), 'guide_' + id);
     await w.close();
   }
-  console.log('PASS: Warrior guide links open their own product in checkout');
+  console.log('PASS: Warrior, F/P and Sindit guide links open their own product in checkout');
   const auto = await page({ autoVerify: true, verifyResult: 'ok' });
   await auto.goto(base + '/checkout.html?product=guide_mage', { waitUntil: 'networkidle0' });
   await auto.click('#create-order');

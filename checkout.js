@@ -1,5 +1,5 @@
-import { supabase, readAccount, hasGuide } from './supabase-client.js?v=2b187ad0f8';
-import { rpc, myOrders, showHistory, money, STATUS } from './payment-common.js?v=e1d4d52cba';
+import { supabase, readAccount, hasGuide } from './supabase-client.js?v=0922a5286a';
+import { rpc, myOrders, showHistory, money, STATUS } from './payment-common.js?v=fcc0fac8ab';
 import { paymentImage } from './payment-qr.js?v=ad42cece6f';
 let wallet = { available_cents: 0, reserved_cents: 0 },
   qrKey = '',
@@ -7,6 +7,7 @@ let wallet = { available_cents: 0, reserved_cents: 0 },
 const $ = id => document.getElementById(id);
 const allowed = [
   'guide_bandit',
+  'guide_sindit',
   'guide_assassin',
   'guide_mage',
   'guide_fp',

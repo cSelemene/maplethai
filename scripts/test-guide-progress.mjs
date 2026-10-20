@@ -96,6 +96,17 @@ try {
     assert(/Fighter/.test(await pg.$eval('#library-discover', e => e.textContent)));
     await pg.close();
   }
+  {
+    // Sindit is sold on its own: a Sindit-only buyer owns Sindit but not Bandit.
+    const sd = await page({
+      account: { is_admin: false, entitlements: [{ product: 'guide_sindit', expires_at: null }] }
+    });
+    await sd.goto(base + '/my-guides.html', { waitUntil: 'networkidle0' });
+    assert.equal(await sd.$$eval('#library-owned article', a => a.length), 1);
+    assert(/Sindit/.test(await sd.$eval('#library-owned', e => e.textContent)));
+    assert(/Pure Bandit/.test(await sd.$eval('#library-discover', e => e.textContent)));
+    await sd.close();
+  }
   console.log('PASS: published Warrior guides show as owned or discoverable');
   const guest = await page({ user: null });
   await guest.goto(base + '/my-guides.html', { waitUntil: 'networkidle0' });

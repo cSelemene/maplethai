@@ -1,11 +1,11 @@
-import { getBundle, onAccessChange } from './navigation-data.mjs?v=e1592262b0';
+import { getBundle, onAccessChange } from './navigation-data.mjs?v=33600e0cde';
 import {
   browseChoices,
   loadNpcProfiles,
   npcProfile,
   loadMonsterProfiles,
   monsterProfile
-} from './browse.mjs?v=39041dcc94';
+} from './browse.mjs?v=181ea299d2';
 import {
   loadReference,
   mapThumbnail,
@@ -14,7 +14,7 @@ import {
   navHTML,
   curatedText,
   bindMapZoom
-} from './guide-renderer.mjs?v=d20b6384f2';
+} from './guide-renderer.mjs?v=3c176093d8';
 import { route, search, recommendations, arrival, suggestions } from './route.mjs?v=7b83e8485c';
 const el = id => document.getElementById(id),
   esc = s =>
