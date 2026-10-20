@@ -1,4 +1,4 @@
-import { supabase } from './supabase-client.js?v=662ee932f0';
+import { supabase } from './supabase-client.js?v=2b187ad0f8';
 export async function readProgress() {
   const { data, error } = await supabase.rpc('my_guide_progress');
   if (error) throw error;
@@ -9,7 +9,7 @@ const json = value => JSON.stringify(value).replace(/</g, '\\u003c');
 export function attachProgress(html, { userId, guide, initial, token }) {
   const key = 'maplethai:guide:' + userId + ':' + guide;
   const original =
-    /const KEY\s*=\s*["'](?:pure-bandit|sindit|assassin|il-mage|fighter|page|spearman)-route-v1["'];/;
+    /const KEY\s*=\s*["'](?:pure-bandit|sindit|assassin|il-mage|fp-mage|fighter|page|spearman)-route-v1["'];/;
   if (!original.test(html)) return { html, supported: false };
   html = html.replace(original, () => 'const KEY = ' + json(key) + ';');
   if (initial) html = html.replace(/localStorage\.getItem\(KEY\)/, () => json(JSON.stringify(initial)));

@@ -9,6 +9,7 @@ export const GUIDES = {
   sindit: 'Sindit (ปาดาว → โจรมีด)',
   assassin: 'Assassin',
   mage: 'Ice / Lightning Mage',
+  fp: 'Fire / Poison Mage',
   fighter: 'Fighter',
   page: 'Page',
   spearman: 'Spearman'
