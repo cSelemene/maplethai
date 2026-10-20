@@ -63,9 +63,14 @@ for (const box of document.querySelectorAll('[data-articles]')) {
     };
     const move = direction => {
       const cards = [...box.children];
-      const current = cards.reduce((best, item, index) =>
-        Math.abs(item.offsetLeft - cards[0].offsetLeft - box.scrollLeft) <
-        Math.abs(cards[best].offsetLeft - cards[0].offsetLeft - box.scrollLeft) ? index : best, 0);
+      const current = cards.reduce(
+        (best, item, index) =>
+          Math.abs(item.offsetLeft - cards[0].offsetLeft - box.scrollLeft) <
+          Math.abs(cards[best].offsetLeft - cards[0].offsetLeft - box.scrollLeft)
+            ? index
+            : best,
+        0
+      );
       const target = cards[Math.max(0, Math.min(cards.length - 1, current + direction))];
       box.scrollTo({
         left: target.offsetLeft - cards[0].offsetLeft,
