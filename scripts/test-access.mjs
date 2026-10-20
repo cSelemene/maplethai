@@ -128,21 +128,32 @@ try {
     p_note: ''
   });
   console.log('PASS: admin visibility and exact customer/product grant request');
-  assert(await admin.$eval('#manual-sale',e=>!e.checked));
+  assert(await admin.$eval('#manual-sale', e => !e.checked));
   await admin.click('#manual-sale');
-  assert(await admin.$eval('#manual-sale-fields',e=>!e.hidden));
-  await admin.type('#manual-sale-amount','99');
-  await admin.$eval('#manual-sale-date',e=>{e.value='2026-10-19T12:00'});
+  assert(await admin.$eval('#manual-sale-fields', e => !e.hidden));
+  await admin.type('#manual-sale-amount', '99');
+  await admin.$eval('#manual-sale-date', e => {
+    e.value = '2026-10-19T12:00';
+  });
   await admin.click('#grant-submit');
-  await admin.waitForFunction(()=>window.testState.calls.some(c=>c.method==='admin_record_manual_sale'));
-  const sale=await admin.evaluate(()=>window.testState.calls.find(c=>c.method==='admin_record_manual_sale'));
-  assert.equal(sale.args.p_email,'customer@example.com');assert.equal(sale.args.p_product,'guide_assassin');assert.equal(sale.args.p_amount,99);assert.equal(sale.args.p_paid_at,'2026-10-19T05:00:00.000Z');assert.match(sale.args.p_request,/^[a-f0-9-]{36}$/);
-  await admin.waitForFunction(()=>!document.querySelector('#grant-submit').disabled);
-  assert(await admin.$eval('#manual-sale',e=>!e.checked));
-  await admin.select('#access-action','suspend');
-  assert(await admin.$eval('#manual-sale-option',e=>e.hidden));
-  console.log('PASS: offline sales checkbox, amount, Thai transfer date, duplicate request key and reset; suspension excludes sale option');
-
+  await admin.waitForFunction(() =>
+    window.testState.calls.some(c => c.method === 'admin_record_manual_sale')
+  );
+  const sale = await admin.evaluate(() =>
+    window.testState.calls.find(c => c.method === 'admin_record_manual_sale')
+  );
+  assert.equal(sale.args.p_email, 'customer@example.com');
+  assert.equal(sale.args.p_product, 'guide_assassin');
+  assert.equal(sale.args.p_amount, 99);
+  assert.equal(sale.args.p_paid_at, '2026-10-19T05:00:00.000Z');
+  assert.match(sale.args.p_request, /^[a-f0-9-]{36}$/);
+  await admin.waitForFunction(() => !document.querySelector('#grant-submit').disabled);
+  assert(await admin.$eval('#manual-sale', e => !e.checked));
+  await admin.select('#access-action', 'suspend');
+  assert(await admin.$eval('#manual-sale-option', e => e.hidden));
+  console.log(
+    'PASS: offline sales checkbox, amount, Thai transfer date, duplicate request key and reset; suspension excludes sale option'
+  );
 } finally {
   await browser.close();
 }

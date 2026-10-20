@@ -52,7 +52,7 @@ function render(report) {
     const when = el('td', '#' + p.id);
     when.append(el('small', fmtDate(p.created_at)));
     const customer = el('td', p.email || 'บัญชีถูกลบ');
-    if(p.manual_sale) customer.append(el('small','โอนส่วนตัวนอกระบบ'));
+    if (p.manual_sale) customer.append(el('small', 'โอนส่วนตัวนอกระบบ'));
     if (p.gift_email) customer.append(el('small', 'ซื้อให้ ' + p.gift_email));
     const amount = el('td', money(p.amount));
     if (p.processing_fee_cents) amount.append(el('small', 'ทศนิยม ' + money(p.processing_fee_cents / 100)));
