@@ -1,4 +1,4 @@
-import { getBundle } from './navigation-data.mjs?v=33600e0cde';
+import { getBundle } from './navigation-data.mjs?v=608009c7ee';
 const escape = s =>
   String(s ?? '').replace(
     /[&<>"']/g,

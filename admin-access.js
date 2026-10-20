@@ -1,4 +1,4 @@
-import { supabase, readAccount } from './supabase-client.js?v=0922a5286a';
+import { supabase, readAccount } from './supabase-client.js?v=ffa6b49ed5';
 const $ = id => document.getElementById(id);
 async function verify() {
   $('grant-form').hidden = true;

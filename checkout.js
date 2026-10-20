@@ -1,5 +1,5 @@
-import { supabase, readAccount, hasGuide } from './supabase-client.js?v=0922a5286a';
-import { rpc, myOrders, showHistory, money, STATUS } from './payment-common.js?v=fcc0fac8ab';
+import { supabase, readAccount, hasGuide } from './supabase-client.js?v=ffa6b49ed5';
+import { rpc, myOrders, showHistory, money, STATUS } from './payment-common.js?v=6ff74e298a';
 import { paymentImage } from './payment-qr.js?v=ad42cece6f';
 let wallet = { available_cents: 0, reserved_cents: 0 },
   qrKey = '',
@@ -11,6 +11,7 @@ const allowed = [
   'guide_assassin',
   'guide_mage',
   'guide_fp',
+  'guide_cleric',
   'guide_spearman',
   'guide_fighter',
   'guide_page',
@@ -19,7 +20,7 @@ const allowed = [
 // Guides in the product menu are grouped by class family, Thief first.
 const FAMILIES = [
   ['Thief · สายโจร', ['guide_bandit', 'guide_sindit', 'guide_assassin']],
-  ['Magician · สายเมจ', ['guide_mage', 'guide_fp']],
+  ['Magician · สายเมจ', ['guide_mage', 'guide_fp', 'guide_cleric']],
   ['Warrior · สายนักรบ', ['guide_fighter', 'guide_page', 'guide_spearman']]
 ];
 let products = [],

@@ -257,6 +257,7 @@ export const PLANS = Object.fromEntries(
 );
 // F/P uses the same wands, shield and robes as I/L.
 PLANS.fp = PLANS.mage;
+PLANS.cleric = PLANS.mage;
 export function equipmentAt(guide, level, gender = 'male') {
   if (!PLANS[guide]) return { current: [], next: null, checkpoints: [] };
   const checkpoints = PLANS[guide].filter(x => x.level <= level),

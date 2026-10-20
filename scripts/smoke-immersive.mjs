@@ -347,7 +347,7 @@ try {
     ),
     [
       ['thief', ['bandit', 'sindit', 'assassin']],
-      ['mage', ['mage', 'fp']],
+      ['mage', ['mage', 'fp', 'cleric']],
       ['warrior', ['fighter', 'page', 'spearman']]
     ]
   );
