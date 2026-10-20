@@ -634,6 +634,9 @@ function selectItem(item, row = null) {
   refreshPriceReference();
 }
 async function start() {
+  // ?q=<item name> opens the market already searching for that item (used by articles).
+  const initialSearch = (new URLSearchParams(location.search).get('q') || '').trim().slice(0, 60);
+  if (initialSearch) $('search').value = initialSearch;
   try {
     const response = await fetch('./assets/market/items.json?v=25997792fb');
     if (!response.ok) throw Error('โหลดรายชื่อไอเทมไม่ได้');

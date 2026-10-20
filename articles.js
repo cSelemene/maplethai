@@ -3,6 +3,17 @@
 // articles/<slug>.html, put its cover in assets/articles/, then add one entry here.
 export const ARTICLES = [
   {
+    slug: 'rich-drops',
+    title: '10 มอนสเตอร์ดรอปของแพง พร้อมแมพฟาร์ม Lv.10–50',
+    excerpt:
+      'เก็บเลเวลไปพร้อมลุ้นของราคาสูง ตั้งแต่เห็ดเขียวถึงลิงลูพิน พร้อมวิธีไป ของที่ควรเก็บ และราคาล่าสุดจากตลาดที่อัปเดตให้อัตโนมัติ',
+    category: 'ฟาร์มของ',
+    date: '2026-10-21',
+    minutes: 8,
+    cover: './assets/articles/rich-drops-cover.webp',
+    coverAlt: 'มอนสเตอร์ 10 ตัวยืนเรียงกันบนกองเหรียญ meso'
+  },
+  {
     slug: 'class-pros-cons',
     title: '10 อาชีพใน Classic World เก่งตรงไหน ติดตรงไหน ใครควรเล่น',
     excerpt:
