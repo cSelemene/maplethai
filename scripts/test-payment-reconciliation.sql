@@ -1,0 +1,34 @@
+BEGIN;
+DO $$
+DECLARE buyer uuid:=gen_random_uuid(); adm uuid:=gen_random_uuid(); pid bigint; lease uuid; a jsonb; result jsonb; failed boolean; due bigint;
+BEGIN
+ INSERT INTO auth.users(id,email) VALUES(buyer,'reconcile-buyer@example.invalid'),(adm,'reconcile-admin@example.invalid');
+ INSERT INTO private.admins(user_id) VALUES(adm);
+ PERFORM set_config('request.jwt.claim.sub',buyer::text,true);
+ a:=public.create_payment_order('guide_bandit');pid:=(a->>'id')::bigint;due:=(a->>'amount_due_cents')::bigint;lease:=gen_random_uuid();
+ UPDATE public.payments SET status='pending',verification_lease=lease WHERE id=pid;
+ failed:=false;BEGIN PERFORM public.admin_payment_dashboard();EXCEPTION WHEN OTHERS THEN failed:=true;END;
+ IF NOT failed THEN RAISE EXCEPTION 'Buyer accessed admin dashboard'; END IF;
+ result:=public.svc_finish_payment_verification(pid,lease,jsonb_build_object('provisional',true,'verified',false,'code','INVALID_CURRENCY','amount_cents',due-1,'transferred_at',now(),'trans_ref','RECONCILE-REF-TEST'));
+ IF result->>'status'<>'pending' THEN RAISE EXCEPTION 'Mismatched amount granted'; END IF;
+ UPDATE public.payments SET verification_lease=lease WHERE id=pid;
+ result:=public.svc_finish_payment_verification(pid,lease,jsonb_build_object('provisional',true,'verified',false,'code','INVALID_CURRENCY','amount_cents',due,'transferred_at',now(),'trans_ref','RECONCILE-REF-TEST'));
+ IF result->>'status'<>'ok' OR NOT private.has_product(buyer,'guide_bandit') OR (SELECT bank_review_state FROM public.payments WHERE id=pid)<>'needs_review' THEN RAISE EXCEPTION 'Provisional unlock failed'; END IF;
+ IF (SELECT balance_cents FROM private.credit_accounts WHERE user_id=buyer)<>0 THEN RAISE EXCEPTION 'Provisional excess credit'; END IF;
+ failed:=false;BEGIN PERFORM public.admin_reconcile_payment(pid,true,'');EXCEPTION WHEN OTHERS THEN failed:=true;END;
+ IF NOT failed THEN RAISE EXCEPTION 'Buyer confirmed own transfer'; END IF;
+ PERFORM set_config('request.jwt.claim.sub',adm::text,true);
+ a:=public.admin_payment_dashboard();IF (a->>'needs_review')::int<1 THEN RAISE EXCEPTION 'Missing notification'; END IF;
+ PERFORM public.admin_reconcile_payment(pid,true,'bank checked');
+ IF (SELECT bank_review_state FROM public.payments WHERE id=pid)<>'confirmed' THEN RAISE EXCEPTION 'Confirm failed'; END IF;
+ PERFORM public.admin_reconcile_payment(pid,false,'not received');
+ IF private.has_product(buyer,'guide_bandit') THEN RAISE EXCEPTION 'Revoke failed'; END IF;
+ PERFORM public.admin_set_customer_access('reconcile-buyer@example.invalid','guide_bandit',true,'compensation');
+ IF NOT private.has_product(buyer,'guide_bandit') THEN RAISE EXCEPTION 'Manual grant failed'; END IF;
+ PERFORM public.admin_set_customer_access('reconcile-buyer@example.invalid','guide_bandit',false,'not received');
+ IF private.has_product(buyer,'guide_bandit') THEN RAISE EXCEPTION 'Manual suspension failed'; END IF;
+ IF (SELECT count(*) FROM private.access_audit WHERE customer=buyer)<>4 THEN RAISE EXCEPTION 'Audit records missing'; END IF;
+ IF has_function_privilege('anon','public.admin_payment_dashboard(integer)','EXECUTE') OR has_function_privilege('authenticated','public.svc_finish_payment_verification(bigint,uuid,jsonb)','EXECUTE') THEN RAISE EXCEPTION 'Privileges leaked'; END IF;
+ RAISE NOTICE 'PASS: amount check, provisional unlock, zero excess credit, admin authorization, queue, confirmation, revocation, manual access, audit and service restrictions';
+END $$;
+ROLLBACK;

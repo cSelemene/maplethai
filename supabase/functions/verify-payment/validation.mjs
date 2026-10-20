@@ -57,3 +57,17 @@ export function evaluateReceipt(response,payment,now=Date.now()){
  const receipt=evaluateSlip(normalized,{...payment,amount},now);
  return receipt.verified?{...receipt,amount_cents:Math.round(amount*100)}:receipt;
 }
+
+// Amount-only fulfilment is provisional; the owner must confirm actual bank receipt.
+export function evaluateProvisionalReceipt(response,payment,now=Date.now()) {
+ const strict=evaluateReceipt(response,payment,now);
+ if(strict.verified)return strict;
+ const fail=()=>strict;
+ const d=response?.data,raw=d?.rawSlip,amount=d?.amountInSlip;
+ if(response?.success!==true||typeof d?.isDuplicate!=='boolean')return fail();
+ if(!['INVALID_CURRENCY','RECIPIENT_MISMATCH','RECIPIENT_NAME_UNCERTAIN','RECIPIENT_ACCOUNT_UNCERTAIN'].includes(strict.code))return fail();
+ if(typeof amount!=='number'||!Number.isFinite(amount)||amount<=0||amount>1000000||Math.abs(amount*100-Math.round(amount*100))>0.000001||raw?.amount?.amount!==amount||Math.round(amount*100)!==(payment.amount_due_cents??payment.amount*100))return fail();
+ const paid=Date.parse(raw.date),created=Date.parse(payment.created_at);
+ if(!Number.isFinite(paid)||!Number.isFinite(created)||paid<created-300000||paid>now+300000||typeof raw.transRef!=='string'||raw.transRef.length<6||raw.transRef.length>200)return fail();
+ return {verified:false,provisional:true,code:strict.code,amount_cents:Math.round(amount*100),transferred_at:raw.date,trans_ref:raw.transRef};
+}

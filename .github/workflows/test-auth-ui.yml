@@ -29,6 +29,9 @@ jobs:
       - name: Test automatic slip validation and fraud checks
         run: node scripts/test-auto-verification.mjs
 
+      - name: Test provisional amount-matched access
+        run: node scripts/test-provisional-verification.mjs
+
       - name: Test PromptPay receiver identity and abbreviated names
         run: node scripts/test-promptpay-verification.mjs
 

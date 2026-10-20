@@ -20,7 +20,8 @@ export const createClient=()=>({auth:{
   if(args.p_code!=='VALID')return {error:{message:'โค้ดไม่ถูกต้อง'}};
   window.testState.account.entitlements.push({product:'guide_mage',expires_at:null});return {error:null};
  }
- if(method==='admin_grant')return {error:window.testState.account.is_admin?null:{message:'Forbidden'}};
+ if(method==='admin_set_customer_access')return {error:window.testState.account.is_admin?null:{message:'Forbidden'}};
+ if(method==='admin_customer_access')return {data:[],error:null};
  if(method==='get_guide')return window.testState.allowed?{data:'<!doctype html><html><body><h1>Purchased guide</h1></body></html>',error:null}:{data:null,error:{message:'Forbidden'}};
  return {error:{message:'Unknown RPC'}};
 }});`;
@@ -113,9 +114,9 @@ try {
   await admin.type('#customer-email', 'customer@example.com');
   await admin.select('#product', 'guide_assassin');
   await admin.click('#grant-submit');
-  await admin.waitForFunction(() => window.testState.calls.some(c => c.method === 'admin_grant'));
-  const call = await admin.evaluate(() => window.testState.calls.find(c => c.method === 'admin_grant'));
-  assert.deepEqual(call.args, { p_email: 'customer@example.com', p_product: 'guide_assassin' });
+  await admin.waitForFunction(() => window.testState.calls.some(c => c.method === 'admin_set_customer_access'));
+  const call = await admin.evaluate(() => window.testState.calls.find(c => c.method === 'admin_set_customer_access'));
+  assert.deepEqual(call.args, { p_email: 'customer@example.com', p_product: 'guide_assassin', p_grant:true, p_note:'' });
   console.log('PASS: admin visibility and exact customer/product grant request');
 } finally {
   await browser.close();

@@ -19,7 +19,8 @@ export const createClient=()=>({auth,from:query,functions:{invoke:async(name,{bo
  if(method==='my_guide_progress')return {data:state.progress||[],error:null};
  if(method==='sync_account')return {data:state.account,error:null};
  if(method==='payment_settings')return {data:state.settings,error:null};
- if(method==='admin_payment_orders')return state.account.is_admin?{data:state.orders,error:null}:{error:{message:'Forbidden'}};
+ if(method==='admin_payment_dashboard')return state.account.is_admin?{data:{orders:state.orders,needs_review:state.orders.filter(p=>p.bank_review_state==='needs_review').length,pending:state.orders.filter(p=>p.status==='pending').length},error:null}:{error:{message:'Forbidden'}};
+ if(method==='admin_reconcile_payment'){const p=state.orders.find(p=>p.id===args.p_payment);p.bank_review_state=args.p_confirm?'confirmed':'revoked';if(!args.p_confirm){p.status='revoked';p.has_access=false}return {error:null}};
  if(method==='create_payment_order'||method==='create_gift_payment_order'||method==='create_referred_payment_order'){const order={id:12,gift_email:method==='create_gift_payment_order'?args.p_email:null,referral_email:method==='create_referred_payment_order'?args.p_email:null,product:args.p_product,amount:args.p_product==='market'?50:99,status:'awaiting_slip',recipient:state.settings,created_at:new Date().toISOString()};state.orders.push(order);return {data:order,error:null}}
  if(method==='submit_payment_slip'){state.orders.find(p=>p.id===args.p_payment).status='pending';return {error:null}}
  if(method==='cancel_payment_order'){state.orders.find(p=>p.id===args.p_payment).status='cancelled';return {error:null}}
@@ -218,7 +219,7 @@ try {
   await nonadmin.goto(base + '/admin-payments.html', { waitUntil: 'networkidle0' });
   assert(await nonadmin.$eval('#admin-content', e => e.hidden));
   assert(
-    !(await nonadmin.evaluate(() => window.paymentTest.calls)).some(c => c.method === 'admin_payment_orders')
+    !(await nonadmin.evaluate(() => window.paymentTest.calls)).some(c => c.method === 'admin_payment_dashboard')
   );
   console.log('PASS: nonadmin cannot view admin orders');
   const admin = await page({
@@ -238,6 +239,7 @@ try {
   });
   await admin.goto(base + '/admin-payments.html', { waitUntil: 'networkidle0' });
   assert(await admin.$eval('#admin-content', e => !e.hidden));
+  await admin.select('#payment-filter','pending');
   const fields = await admin.$$('#payments-list form input');
   await fields[0].type('99');
   await fields[1].type('BANK-REF-001');
@@ -255,6 +257,18 @@ try {
     p_note: ''
   });
   console.log('PASS: admin approval sends actual amount and bank reference');
+  const provisional = await page({account:{is_admin:true,entitlements:[]},orders:[{id:99,email:'review@example.invalid',product:'guide_bandit',amount:99,amount_due_cents:9928,status:'ok',has_access:true,bank_review_state:'needs_review',created_at:new Date().toISOString()}]});
+  await provisional.goto(base+'/admin-payments.html',{waitUntil:'networkidle0'});
+  assert((await provisional.$eval('#payment-summary',e=>e.textContent)).includes('1 รายการ'));
+  assert((await provisional.$eval('#payments-list',e=>e.textContent)).includes('ใช้งานได้'));
+  await provisional.click('#payments-list article button');
+  await provisional.waitForFunction(()=>window.paymentTest.orders[0].bank_review_state==='confirmed');
+  await provisional.select('#payment-filter','all');
+  await provisional.type('#payments-list article input','not received');
+  provisional.on('dialog',d=>d.accept());
+  await (await provisional.$$('#payments-list article button'))[1].click();
+  await provisional.waitForFunction(()=>window.paymentTest.orders[0].status==='revoked');
+  console.log('PASS: provisional notification, bank confirmation and revocation UI');
   const search = await page({
     account: { is_admin: true, entitlements: [] },
     orders: [
