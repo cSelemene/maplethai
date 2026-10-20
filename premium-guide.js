@@ -159,7 +159,7 @@ if (!Object.hasOwn(GUIDES, id)) {
             '<script type="module" data-equipment-guide="' +
               id +
               '" src="' +
-              new URL('./equipment-guide.js?v=c79358c4cd', location.href).href +
+              new URL('./equipment-guide.js?v=7bb7488ca5', location.href).href +
               '"></script></body>'
           );
           doc = doc.replace(

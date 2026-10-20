@@ -1,5 +1,5 @@
-import { ITEMS } from './equipment-data.js?v=ceb827a795';
-import { equipmentAt, PLANS } from './equipment-plan.js?v=ccff505268';
+import { ITEMS } from './equipment-data.js?v=1ade3c6d87';
+import { equipmentAt, PLANS } from './equipment-plan.js?v=b6a67c9ca6';
 const script = document.querySelector('script[data-equipment-guide]');
 const guide = script?.dataset.equipmentGuide;
 const main = document.getElementById('main');
@@ -20,6 +20,7 @@ const names = {
   Shoes: 'รองเท้า',
   Polearm: 'polearm',
   'Two-Handed Axe': 'ขวานสองมือ',
+  'Two-Handed Blunt Weapon': 'ค้อนสองมือ',
   Shield: 'โล่'
 };
 let key = '';

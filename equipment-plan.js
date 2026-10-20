@@ -1,4 +1,4 @@
-import { ITEMS } from './equipment-data.js?v=ceb827a795';
+import { ITEMS } from './equipment-data.js?v=1ade3c6d87';
 const tier = (level, items, note) => ({ level, items, note });
 const thief = [
   tier(
@@ -176,6 +176,17 @@ const fighter = [
     'Bronze Crusader Helm ได้จากเควสของ Luke ไม่บังคับ The Rising ดรอปอย่างเดียว ถ้าแพงใช้ Sabretooth ต่อได้'
   )
 ];
+// Page (two-handed blunt weapon): armour and weapons together, one list per checkpoint.
+const page = [
+  tier(10, [724, 942, 1164, 951, 1171, 625], "ซื้อ Wooden Mallet ก่อนเป็นอย่างแรก ชุด Lv.10 จาก Harry ใน Perion ไม่บังคับ ถ้าเงินไม่พอให้รอซื้อชุด Lv.15 ทีเดียว"),
+  tier(15, [743, 965, 1183, 1094, 1321], "ชุด Lv.15 ของ Harry รวมราว 9,000 meso ช่วยลดค่ายาได้มาก Heavy Mace แพงเกินไป ใช้ Wooden Mallet ต่อถึงเลเวล 20"),
+  tier(20, [765, 1096, 988, 1204, 1335, 627], "Square Hammer แรงกว่า Wooden Mallet 10 ต้องมี DEX 20 หมวกหรือรองเท้า DEX +2 ทำให้ถึง"),
+  tier(25, [1350, 628], "Monkey Wrench คราฟต์ด้วย Weaponcrafting 5 ถ้าไม่ได้ปั๊มใช้ Square Hammer ต่อ Mithril War Boots ได้ฟรีจากเควสของ Nella"),
+  tier(30, [812, 1106, 1112, 629], "Mithril Maul ซื้อจากผู้เล่นราว 15,000 meso ต้องมี DEX 30 ชุดเกราะใช้ของเดิมต่อได้"),
+  tier(35, [829, 1117, 1123, 630], "Sledgehammer คืออัปเกรดใหญ่ของช่วงนี้ คราฟต์ด้วย Weaponcrafting 7 หรือซื้อจากผู้เล่น ชุด STR +6 เป็นตัวเลือก"),
+  tier(40, [847, 1404, 631], "Steel Nordic Helm ได้ฟรีจากเควส Cursed Dolls ส่วน Titan คราฟต์ด้วย Weaponcrafting 8 หรือซื้อจากผู้เล่น"),
+  tier(50, [873, 632], "Bronze Crusader Helm ได้จากเควสของ Luke ไม่บังคับ Golden Mole ดรอปอย่างเดียว ถ้าแพงใช้ Titan ต่อได้")
+];
 export const PLANS = Object.fromEntries(
   Object.keys(weapons)
     .map(guide => {
@@ -208,7 +219,8 @@ export const PLANS = Object.fromEntries(
     })
     .concat([
       ['spearman', spearman],
-      ['fighter', fighter]
+      ['fighter', fighter],
+      ['page', page]
     ])
 );
 export function equipmentAt(guide, level, gender = 'male') {

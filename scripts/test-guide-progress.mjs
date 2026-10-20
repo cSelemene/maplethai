@@ -69,7 +69,7 @@ try {
   assert((await library.$eval('#library-owned', e => e.textContent)).includes('อ่านต่อ'));
   // Bandit owners also get the bonus Sindit guide.
   assert.equal(await library.$$eval('#library-owned article', a => a.length), 2);
-  assert.equal(await library.$$eval('#library-discover article', a => a.length), 4);
+  assert.equal(await library.$$eval('#library-discover article', a => a.length), 5);
   await library.setViewport({ width: 390, height: 844 });
   assert(await library.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 2));
   console.log('PASS: purchased library, resume label, unowned discover and mobile');
@@ -80,21 +80,23 @@ try {
     });
     await sp.goto(base + '/my-guides.html', { waitUntil: 'networkidle0' });
     assert.equal(await sp.$$eval('#library-owned article', a => a.length), 1);
-    assert.equal(await sp.$$eval('#library-discover article', a => a.length), 5);
+    assert.equal(await sp.$$eval('#library-discover article', a => a.length), 6);
     assert(!/Spearman/.test(await sp.$eval('#library-discover', e => e.textContent)));
     await sp.close();
   }
-  for (const guide of ['page']) {
-    const archived = await page({
-      account: { is_admin: false, entitlements: [{ product: 'guide_' + guide, expires_at: null }] }
+  {
+    // All three Warrior guides are published: a Page owner sees it as owned and can discover the rest.
+    const pg = await page({
+      account: { is_admin: false, entitlements: [{ product: 'guide_page', expires_at: null }] }
     });
-    await archived.goto(base + '/my-guides.html', { waitUntil: 'networkidle0' });
-    assert.equal(await archived.$$eval('#library-owned article', a => a.length), 1);
-    assert.equal(await archived.$$eval('#library-discover article', a => a.length), 6);
-    assert(!/Page/.test(await archived.$eval('#library-discover', e => e.textContent)));
-    await archived.close();
+    await pg.goto(base + '/my-guides.html', { waitUntil: 'networkidle0' });
+    assert.equal(await pg.$$eval('#library-owned article', a => a.length), 1);
+    assert.equal(await pg.$$eval('#library-discover article', a => a.length), 6);
+    assert(!/Page/.test(await pg.$eval('#library-discover', e => e.textContent)));
+    assert(/Fighter/.test(await pg.$eval('#library-discover', e => e.textContent)));
+    await pg.close();
   }
-  console.log('PASS: withdrawn guides retain existing ownership and stay out of discovery');
+  console.log('PASS: published Warrior guides show as owned or discoverable');
   const guest = await page({ user: null });
   await guest.goto(base + '/my-guides.html', { waitUntil: 'networkidle0' });
   assert(await guest.$eval('#library-login', e => !e.hidden));
@@ -184,7 +186,7 @@ try {
     });
     await sp.goto(base + '/my-guides.html', { waitUntil: 'networkidle0' });
     assert.equal(await sp.$$eval('#library-owned article', a => a.length), 1);
-    assert.equal(await sp.$$eval('#library-discover article', a => a.length), 5);
+    assert.equal(await sp.$$eval('#library-discover article', a => a.length), 6);
     assert(!/Spearman/.test(await sp.$eval('#library-discover', e => e.textContent)));
     await sp.close();
   }
