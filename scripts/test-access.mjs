@@ -114,9 +114,18 @@ try {
   await admin.type('#customer-email', 'customer@example.com');
   await admin.select('#product', 'guide_assassin');
   await admin.click('#grant-submit');
-  await admin.waitForFunction(() => window.testState.calls.some(c => c.method === 'admin_set_customer_access'));
-  const call = await admin.evaluate(() => window.testState.calls.find(c => c.method === 'admin_set_customer_access'));
-  assert.deepEqual(call.args, { p_email: 'customer@example.com', p_product: 'guide_assassin', p_grant:true, p_note:'' });
+  await admin.waitForFunction(() =>
+    window.testState.calls.some(c => c.method === 'admin_set_customer_access')
+  );
+  const call = await admin.evaluate(() =>
+    window.testState.calls.find(c => c.method === 'admin_set_customer_access')
+  );
+  assert.deepEqual(call.args, {
+    p_email: 'customer@example.com',
+    p_product: 'guide_assassin',
+    p_grant: true,
+    p_note: ''
+  });
   console.log('PASS: admin visibility and exact customer/product grant request');
 } finally {
   await browser.close();

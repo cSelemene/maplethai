@@ -32,7 +32,10 @@ function render() {
   const term = ($('payment-search')?.value || '').trim().toLowerCase();
   const rows = payments.filter(
     p =>
-      ($('payment-filter').value === 'all' || ($('payment-filter').value === 'review' ? p.bank_review_state === 'needs_review' : p.status === 'pending')) &&
+      ($('payment-filter').value === 'all' ||
+        ($('payment-filter').value === 'review'
+          ? p.bank_review_state === 'needs_review'
+          : p.status === 'pending')) &&
       (!term ||
         [
           p.email,
@@ -60,25 +63,51 @@ function render() {
       el('span', STATUS[p.status] || p.status, 'tag ' + p.status),
       el('p', `${p.email || 'บัญชีถูกลบ'} · ${date(p.created_at)}`)
     );
-    row.append(el('p', 'สิทธิ์ปัจจุบัน: ' + (p.has_access ? 'ใช้งานได้' : 'ยังไม่มีสิทธิ์ / หมดอายุ / ถูกระงับ')));
-    if(p.bank_review_state === 'needs_review') row.append(el('p','⚠ ปลดล็อกแล้ว · รอตรวจยอดเงินจริงในบัญชี','message'));
-    if(p.bank_review_state === 'confirmed') row.append(el('p','✓ ผู้ดูแลยืนยันเงินเข้าแล้ว'));
-    if(p.bank_review_reason) row.append(el('p','เหตุที่ต้องตรวจย้อนหลัง: '+p.bank_review_reason));
-    if(p.status === 'ok') {
-      const note = el('input'); note.placeholder='หมายเหตุ / เหตุผลที่ระงับ'; note.maxLength=500; note.setAttribute('aria-label','หมายเหตุรายการ '+p.id);
-      const confirm=el('button','ยืนยันเงินเข้าแล้ว'); confirm.type='button';
-      const revoke=el('button','ระงับสิทธิ์รายการนี้','outline'); revoke.type='button';
-      confirm.disabled=p.bank_review_state==='confirmed';
-      const action=async accept=>{
-        if(working)return;
-        if(!accept && note.value.trim().length<3){say('กรอกเหตุผลการระงับอย่างน้อย 3 ตัวอักษร',true);return;}
-        if(!accept && !window.confirm('ระงับสิทธิ์จากรายการ #'+p.id+' ของ '+p.email+'?'))return;
-        working=true;confirm.disabled=revoke.disabled=true;
-        try{await rpc('admin_reconcile_payment',{p_payment:p.id,p_confirm:accept,p_note:note.value.trim()});say(accept?'ยืนยันเงินเข้าแล้ว':'ระงับสิทธิ์จากรายการนี้แล้ว');await loadOrders();}
-        catch(e){say(e.message,true);}finally{working=false;confirm.disabled=p.bank_review_state==='confirmed';revoke.disabled=false;}
+    row.append(
+      el('p', 'สิทธิ์ปัจจุบัน: ' + (p.has_access ? 'ใช้งานได้' : 'ยังไม่มีสิทธิ์ / หมดอายุ / ถูกระงับ'))
+    );
+    if (p.bank_review_state === 'needs_review')
+      row.append(el('p', '⚠ ปลดล็อกแล้ว · รอตรวจยอดเงินจริงในบัญชี', 'message'));
+    if (p.bank_review_state === 'confirmed') row.append(el('p', '✓ ผู้ดูแลยืนยันเงินเข้าแล้ว'));
+    if (p.bank_review_reason) row.append(el('p', 'เหตุที่ต้องตรวจย้อนหลัง: ' + p.bank_review_reason));
+    if (p.status === 'ok') {
+      const note = el('input');
+      note.placeholder = 'หมายเหตุ / เหตุผลที่ระงับ';
+      note.maxLength = 500;
+      note.setAttribute('aria-label', 'หมายเหตุรายการ ' + p.id);
+      const confirm = el('button', 'ยืนยันเงินเข้าแล้ว');
+      confirm.type = 'button';
+      const revoke = el('button', 'ระงับสิทธิ์รายการนี้', 'outline');
+      revoke.type = 'button';
+      confirm.disabled = p.bank_review_state === 'confirmed';
+      const action = async accept => {
+        if (working) return;
+        if (!accept && note.value.trim().length < 3) {
+          say('กรอกเหตุผลการระงับอย่างน้อย 3 ตัวอักษร', true);
+          return;
+        }
+        if (!accept && !window.confirm('ระงับสิทธิ์จากรายการ #' + p.id + ' ของ ' + p.email + '?')) return;
+        working = true;
+        confirm.disabled = revoke.disabled = true;
+        try {
+          await rpc('admin_reconcile_payment', {
+            p_payment: p.id,
+            p_confirm: accept,
+            p_note: note.value.trim()
+          });
+          say(accept ? 'ยืนยันเงินเข้าแล้ว' : 'ระงับสิทธิ์จากรายการนี้แล้ว');
+          await loadOrders();
+        } catch (e) {
+          say(e.message, true);
+        } finally {
+          working = false;
+          confirm.disabled = p.bank_review_state === 'confirmed';
+          revoke.disabled = false;
+        }
       };
-      confirm.onclick=()=>action(true);revoke.onclick=()=>action(false);
-      row.append(note,confirm,revoke);
+      confirm.onclick = () => action(true);
+      revoke.onclick = () => action(false);
+      row.append(note, confirm, revoke);
     }
     if (p.referral_email) row.append(el('p', 'ผู้แนะนำ: ' + p.referral_email));
     if (p.gift_email) row.append(el('p', 'ซื้อไกด์ให้ ' + p.gift_email));
@@ -244,12 +273,13 @@ function render() {
   }
 }
 async function loadOrders() {
-  const data = await rpc('admin_payment_dashboard',{p_offset:offset});
+  const data = await rpc('admin_payment_dashboard', { p_offset: offset });
   payments = data.orders;
-  $('payment-summary').textContent = `แจ้งเตือน: ปลดล็อกแล้วรอตรวจเงินจริง ${data.needs_review} รายการ · ยังไม่ปลดล็อกรอตรวจ ${data.pending} รายการ · อัปเดต ${new Date().toLocaleTimeString('th-TH')}`;
-  $('previous-page').disabled=offset===0;
-  $('next-page').disabled=payments.length<200;
-  $('page-label').textContent='หน้า '+(offset/200+1);
+  $('payment-summary').textContent =
+    `แจ้งเตือน: ปลดล็อกแล้วรอตรวจเงินจริง ${data.needs_review} รายการ · ยังไม่ปลดล็อกรอตรวจ ${data.pending} รายการ · อัปเดต ${new Date().toLocaleTimeString('th-TH')}`;
+  $('previous-page').disabled = offset === 0;
+  $('next-page').disabled = payments.length < 200;
+  $('page-label').textContent = 'หน้า ' + (offset / 200 + 1);
   render();
 }
 async function verify() {
@@ -350,6 +380,28 @@ $('verification-settings-form').onsubmit = async e => {
 
 if ($('payment-search')) $('payment-search').oninput = render;
 
-$('previous-page').onclick=async()=>{offset=Math.max(0,offset-200);try{await loadOrders()}catch(e){say(e.message,true)}};
-$('next-page').onclick=async()=>{offset+=200;try{await loadOrders()}catch(e){say(e.message,true)}};
-setInterval(async()=>{if(!$('admin-content').hidden&&!working&&!document.hidden){try{await loadOrders()}catch(e){say('รีเฟรชไม่สำเร็จ: '+e.message,true)}}},30000);
+$('previous-page').onclick = async () => {
+  offset = Math.max(0, offset - 200);
+  try {
+    await loadOrders();
+  } catch (e) {
+    say(e.message, true);
+  }
+};
+$('next-page').onclick = async () => {
+  offset += 200;
+  try {
+    await loadOrders();
+  } catch (e) {
+    say(e.message, true);
+  }
+};
+setInterval(async () => {
+  if (!$('admin-content').hidden && !working && !document.hidden) {
+    try {
+      await loadOrders();
+    } catch (e) {
+      say('รีเฟรชไม่สำเร็จ: ' + e.message, true);
+    }
+  }
+}, 30000);

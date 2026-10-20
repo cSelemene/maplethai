@@ -219,7 +219,9 @@ try {
   await nonadmin.goto(base + '/admin-payments.html', { waitUntil: 'networkidle0' });
   assert(await nonadmin.$eval('#admin-content', e => e.hidden));
   assert(
-    !(await nonadmin.evaluate(() => window.paymentTest.calls)).some(c => c.method === 'admin_payment_dashboard')
+    !(await nonadmin.evaluate(() => window.paymentTest.calls)).some(
+      c => c.method === 'admin_payment_dashboard'
+    )
   );
   console.log('PASS: nonadmin cannot view admin orders');
   const admin = await page({
@@ -239,7 +241,7 @@ try {
   });
   await admin.goto(base + '/admin-payments.html', { waitUntil: 'networkidle0' });
   assert(await admin.$eval('#admin-content', e => !e.hidden));
-  await admin.select('#payment-filter','pending');
+  await admin.select('#payment-filter', 'pending');
   const fields = await admin.$$('#payments-list form input');
   await fields[0].type('99');
   await fields[1].type('BANK-REF-001');
@@ -257,17 +259,32 @@ try {
     p_note: ''
   });
   console.log('PASS: admin approval sends actual amount and bank reference');
-  const provisional = await page({account:{is_admin:true,entitlements:[]},orders:[{id:99,email:'review@example.invalid',product:'guide_bandit',amount:99,amount_due_cents:9928,status:'ok',has_access:true,bank_review_state:'needs_review',created_at:new Date().toISOString()}]});
-  await provisional.goto(base+'/admin-payments.html',{waitUntil:'networkidle0'});
-  assert((await provisional.$eval('#payment-summary',e=>e.textContent)).includes('1 รายการ'));
-  assert((await provisional.$eval('#payments-list',e=>e.textContent)).includes('ใช้งานได้'));
+  const provisional = await page({
+    account: { is_admin: true, entitlements: [] },
+    orders: [
+      {
+        id: 99,
+        email: 'review@example.invalid',
+        product: 'guide_bandit',
+        amount: 99,
+        amount_due_cents: 9928,
+        status: 'ok',
+        has_access: true,
+        bank_review_state: 'needs_review',
+        created_at: new Date().toISOString()
+      }
+    ]
+  });
+  await provisional.goto(base + '/admin-payments.html', { waitUntil: 'networkidle0' });
+  assert((await provisional.$eval('#payment-summary', e => e.textContent)).includes('1 รายการ'));
+  assert((await provisional.$eval('#payments-list', e => e.textContent)).includes('ใช้งานได้'));
   await provisional.click('#payments-list article button');
-  await provisional.waitForFunction(()=>window.paymentTest.orders[0].bank_review_state==='confirmed');
-  await provisional.select('#payment-filter','all');
-  await provisional.type('#payments-list article input','not received');
-  provisional.on('dialog',d=>d.accept());
+  await provisional.waitForFunction(() => window.paymentTest.orders[0].bank_review_state === 'confirmed');
+  await provisional.select('#payment-filter', 'all');
+  await provisional.type('#payments-list article input', 'not received');
+  provisional.on('dialog', d => d.accept());
   await (await provisional.$$('#payments-list article button'))[1].click();
-  await provisional.waitForFunction(()=>window.paymentTest.orders[0].status==='revoked');
+  await provisional.waitForFunction(() => window.paymentTest.orders[0].status === 'revoked');
   console.log('PASS: provisional notification, bank confirmation and revocation UI');
   const search = await page({
     account: { is_admin: true, entitlements: [] },

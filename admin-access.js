@@ -25,14 +25,20 @@ async function verify() {
 }
 $('grant-form').onsubmit = async event => {
   event.preventDefault();
-  if($('access-action').value==='suspend' && !window.confirm('ระงับสิทธิ์ '+$('product').selectedOptions[0].textContent+' ของ '+$('customer-email').value+'?'))return;
+  if (
+    $('access-action').value === 'suspend' &&
+    !window.confirm(
+      'ระงับสิทธิ์ ' + $('product').selectedOptions[0].textContent + ' ของ ' + $('customer-email').value + '?'
+    )
+  )
+    return;
   $('grant-submit').disabled = true;
   try {
     const { error } = await supabase.rpc('admin_set_customer_access', {
       p_email: $('customer-email').value.trim(),
       p_product: $('product').value,
-      p_grant:$('access-action').value==='grant',
-      p_note:$('access-note').value.trim()
+      p_grant: $('access-action').value === 'grant',
+      p_note: $('access-note').value.trim()
     });
     if (error) throw error;
     $('status').textContent = 'บันทึกสิทธิ์แล้ว ลูกค้ารีเฟรชหน้าเว็บเพื่อรับสถานะล่าสุด';
@@ -46,10 +52,26 @@ $('grant-form').onsubmit = async event => {
 supabase.auth.onAuthStateChange(() => setTimeout(verify, 0));
 verify();
 
-async function lookup(){
- const {data,error}=await supabase.rpc('admin_customer_access',{p_email:$('customer-email').value.trim()});
- if(error)throw error;
- $('customer-access').replaceChildren();
- for(const p of data){const row=document.createElement('p');row.textContent=p.name+' · '+(p.has_access?'ใช้งานได้':'ไม่มีสิทธิ์ / ระงับ / หมดอายุ')+(p.expires_at?' · ถึง '+new Date(p.expires_at).toLocaleString('th-TH'):'');$('customer-access').append(row);}
+async function lookup() {
+  const { data, error } = await supabase.rpc('admin_customer_access', {
+    p_email: $('customer-email').value.trim()
+  });
+  if (error) throw error;
+  $('customer-access').replaceChildren();
+  for (const p of data) {
+    const row = document.createElement('p');
+    row.textContent =
+      p.name +
+      ' · ' +
+      (p.has_access ? 'ใช้งานได้' : 'ไม่มีสิทธิ์ / ระงับ / หมดอายุ') +
+      (p.expires_at ? ' · ถึง ' + new Date(p.expires_at).toLocaleString('th-TH') : '');
+    $('customer-access').append(row);
+  }
 }
-$('lookup-access').onclick=async()=>{try{await lookup()}catch(e){$('status').textContent=e.message}};
+$('lookup-access').onclick = async () => {
+  try {
+    await lookup();
+  } catch (e) {
+    $('status').textContent = e.message;
+  }
+};
