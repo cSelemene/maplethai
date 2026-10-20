@@ -5,7 +5,7 @@ let wallet = { available_cents: 0, reserved_cents: 0 },
   qrKey = '',
   qrGeneration = 0;
 const $ = id => document.getElementById(id);
-const allowed = ['guide_bandit', 'guide_assassin', 'guide_mage', 'market'];
+const allowed = ['guide_bandit', 'guide_assassin', 'guide_mage', 'guide_spearman', 'guide_fighter', 'guide_page', 'market'];
 let products = [],
   settings,
   user,
