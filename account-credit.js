@@ -1,5 +1,5 @@
-import { supabase } from './supabase-client.js?v=0922a5286a';
-import { money, date, rpc } from './payment-common.js?v=fcc0fac8ab';
+import { supabase } from './supabase-client.js?v=ffa6b49ed5';
+import { money, date, rpc } from './payment-common.js?v=6ff74e298a';
 const status = document.getElementById('account-credit-status'),
   box = document.getElementById('account-credit-history');
 let generation = 0;

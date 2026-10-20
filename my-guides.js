@@ -1,11 +1,12 @@
-import { supabase, GUIDES, hasGuide, readAccount } from './supabase-client.js?v=0922a5286a';
-import { readProgress } from './guide-progress.js?v=3ad50a48b2';
+import { supabase, GUIDES, hasGuide, readAccount } from './supabase-client.js?v=ffa6b49ed5';
+import { readProgress } from './guide-progress.js?v=7390044d8b';
 const PUBLISHED_GUIDES = {
   bandit: true,
   sindit: true,
   assassin: true,
   mage: true,
   fp: true,
+  cleric: true,
   spearman: true,
   fighter: true,
   page: true

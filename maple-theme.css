@@ -43,7 +43,7 @@ header>strong:has(.maple-logo),header .brand:has(.maple-logo){display:flex;align
 .section-intro{margin-bottom:22px}.section-intro h2{font-size:1.6rem}.section-intro p{margin:8px 0}
 #guides .guide-card{display:flex;flex-direction:column;padding:0;overflow:hidden}
 .class-art{position:relative;height:246px;background:#292a20;border-bottom:2px solid var(--frame);overflow:hidden}
-.assassin .class-art{background:#31252d}.sindit .class-art{background:#2a2730}.mage .class-art{background:#e1f5ff}.fp .class-art{background:#fff1e3}
+.assassin .class-art{background:#31252d}.sindit .class-art{background:#2a2730}.mage .class-art{background:#e1f5ff}.fp .class-art{background:#fff1e3}.cleric .class-art{background:#fbf6e6}
 .class-art img{display:block;width:100%;height:100%;object-fit:contain;transition:transform .25s ease}
 .guide-card:hover .class-art img{transform:scale(1.035)}
 .class-level{position:absolute;left:16px;bottom:14px;padding:4px 11px;border-radius:999px;background:#fff8e7;border:1px solid #78451f;font-size:.78rem;font-weight:800;color:#684322;box-shadow:0 2px 0 #78451f33}

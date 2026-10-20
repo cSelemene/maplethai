@@ -1,4 +1,4 @@
-import { supabase } from './supabase-client.js?v=0922a5286a';
+import { supabase } from './supabase-client.js?v=ffa6b49ed5';
 export const STATUS = {
   awaiting_slip: 'รอส่งสลิป',
   pending: 'รอตรวจสอบ',
