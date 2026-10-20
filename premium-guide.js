@@ -1,10 +1,10 @@
-import { supabase as s, readAccount, GUIDES } from './supabase-client.js?v=662ee932f0';
+import { supabase as s, readAccount, GUIDES } from './supabase-client.js?v=2b187ad0f8';
 import {
   readProgress,
   attachProgress,
   createProgressSaver,
   pendingProgress
-} from './guide-progress.js?v=64a8c95522';
+} from './guide-progress.js?v=606cb326ad';
 const id = new URLSearchParams(location.search).get('guide');
 const $ = x => document.getElementById(x);
 let objectURL = null,
@@ -159,7 +159,7 @@ if (!Object.hasOwn(GUIDES, id)) {
             '<script type="module" data-equipment-guide="' +
               id +
               '" src="' +
-              new URL('./equipment-guide.js?v=2ced0a1b0c', location.href).href +
+              new URL('./equipment-guide.js?v=564db3078e', location.href).href +
               '"></script></body>'
           );
           doc = doc.replace(

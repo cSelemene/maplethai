@@ -6,6 +6,7 @@ insert into public.products (id, name, price, kind, days, sort, active) values
   ('guide_spearman', 'ไกด์ Spearman',       99, 'once',    null, 4,  false),
   ('guide_page',     'ไกด์ Page',           99, 'once',    null, 5,  false),
   ('guide_fighter',  'ไกด์ Fighter',        99, 'once',    null, 6,  false),
+  ('guide_fp',       'ไกด์ F/P Mage',       99, 'once',    null, 7,  false),
   ('market',         'ตลาดซื้อขาย 30 วัน', 50, 'monthly', 30,   10, true)
 on conflict (id) do nothing;
 

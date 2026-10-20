@@ -1,5 +1,5 @@
 import { STAT_LABELS, itemCategory, itemFields, itemUrl, findItems } from './market-items.js?v=6fdbbaa1f1';
-import { supabase, readAccount } from './supabase-client.js?v=662ee932f0';
+import { supabase, readAccount } from './supabase-client.js?v=2b187ad0f8';
 const $ = id => document.getElementById(id),
   categories = {
     weapon: 'อาวุธ',

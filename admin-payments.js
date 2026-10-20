@@ -1,5 +1,5 @@
-import { supabase, readAccount } from './supabase-client.js?v=662ee932f0';
-import { rpc, money, date, STATUS } from './payment-common.js?v=ddc065225e';
+import { supabase, readAccount } from './supabase-client.js?v=2b187ad0f8';
+import { rpc, money, date, STATUS } from './payment-common.js?v=e1d4d52cba';
 const $ = id => document.getElementById(id);
 let payments = [],
   names = {},
