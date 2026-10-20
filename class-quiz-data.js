@@ -2,17 +2,19 @@
 // Scope: Classic World first and second jobs. Owner-supplied class pros/cons
 // transcript (0:00–14:38) supplements mechanics; cost weights are qualitative,
 // not live market prices. Bandit timing follows the owner's detailed skill guide.
+// 2026-10-21: aligned with the free article articles/class-pros-cons.html (low mob density
+// favours single-target skills, warrior scroll costs, class rarity, element-favoured rare-drop mobs).
 export const CLASSES = [
- {id:'fighter',name:'Fighter',thai:'นักรบสายดาบ / ขวาน',family:'Warrior',source:'fighter',guide:'fighter',summary:'ชอบเข้าประชิด ใช้ท่าโจมตีตรงไปตรงมา แล้วเสริมแรงด้วย Rage',strength:'Rage เพิ่มพลังโจมตี และ Rush ช่วยขยับเข้าหากลุ่มมอน',tradeoff:'ยังใช้ Power Strike / Slash Blast เป็นหลัก เดินค่อนข้างช้า และการเข้าประชิดกับใช้ Rush เพิ่มภาระค่ายาได้ อุปกรณ์มีแนวโน้มใช้งบน้อยกว่าสายที่นิยมสูง'},
- {id:'page',name:'Page',thai:'นักรบสายดาบ / กระบอง',family:'Warrior',source:'page',guide:'page',summary:'เข้าประชิดเหมือนนักรบ แต่ชอบมีเครื่องมือกดดันมอนด้วย Threaten',strength:'Threaten ช่วยลดความสามารถของศัตรู เหมาะกับคนที่ชอบดีบัฟมากกว่าบัฟโจมตี',tradeoff:'เดินค่อนข้างช้า ต้องรับการชนและค่ายา Threaten ไม่ได้ช่วยทุกจุดฟาร์มเท่ากัน และยังไม่มีเวทธาตุของ White Knight ในขั้นสอง'},
- {id:'spearman',name:'Spearman',thai:'นักรบสายหอก / ทวน',family:'Warrior',source:'spearman',guide:'spearman',summary:'ชอบอาวุธด้ามยาว เข้าประชิดแต่มีระยะตีมากกว่านักรบสายอื่น',strength:'หอกและทวนมีระยะเอื้อมยาวในกลุ่ม Warrior ส่วน Iron Will ช่วยป้องกันให้ตัวเองระหว่างฟาร์ม',tradeoff:'ยังใช้ท่าโจมตีขั้นแรกเป็นหลัก เดินค่อนข้างช้า แม้มีระยะและบัฟป้องกันช่วยก็ยังต้องคุมค่ายาเมื่อเข้าประชิด'},
- {id:'il',name:'I/L Wizard',thai:'เมจน้ำแข็ง / สายฟ้า',family:'Magician',source:'i-l-wizard',guide:'mage',art:'mage',summary:'ชอบวาร์ปไปตามแมพ แช่แข็งมอน และใช้สายฟ้าโจมตีเป็นกลุ่ม',strength:'Teleport คล่องตัว มี Cold Beam แช่แข็งและ Thunder Bolt กวาดกลุ่มมอน ส่วน Meditation ช่วยปาร์ตี้สายเวท',tradeoff:'ต้องดูแล MP และเลือกมอนให้เหมาะกับธาตุ การอัปเกรดอุปกรณ์ INT อาจใช้งบมากตามตลาด'},
- {id:'fp',name:'F/P Wizard',thai:'เมจไฟ / พิษ',family:'Magician',source:'f-p-wizard',guide:'fp',art:'mage',summary:'ชอบใช้ Fire Arrow ตีเป้าเดี่ยว และเลือกมอนที่แพ้ธาตุให้คุ้ม',strength:'Fire Arrow เป็นท่าหลักสำหรับเป้าเดี่ยว มี Teleport ขยับตำแหน่งและ Meditation ช่วยปาร์ตี้สายเวท',tradeoff:'Poison Breath มีภาระ MP จึงไม่ควรสมมติว่าคุ้มสำหรับกวาดมอนทุกช่วง ต้องเลือกมอนตามธาตุและวางงบอุปกรณ์'},
- {id:'cleric',name:'Cleric',thai:'เมจสายฮีล',family:'Magician',source:'cleric',guide:'cleric',art:'cleric',summary:'สนุกกับการช่วยให้ปาร์ตี้เล่นสบายขึ้น และฟาร์มมอนที่เข้าทางเวทศักดิ์สิทธิ์',strength:'Heal ช่วยลดการซื้อยา HP ให้ตัวเองและคนใกล้ตัว โจมตี undead ได้ มี Bless ช่วยปาร์ตี้และ Teleport สำหรับเดินแมพ',tradeoff:'Heal ทำดาเมจกับ undead จึงต้องเลือกจุดฟาร์ม ยังมีค่ายา MP และอุปกรณ์ INT ไม่ได้ถูกเพียงเพราะประหยัดยา HP'},
- {id:'hunter',name:'Hunter',thai:'นักธนู',family:'Bowman',source:'hunter',guide:'hunter',art:'hunter',summary:'ชอบยิงจากระยะไกล แล้วคุมกลุ่มมอนด้วย Arrow Bomb',strength:'Arrow Bomb กวาดกลุ่มมอนพร้อมโอกาสสตัน มี Soul Arrow ลดภาระลูกธนู เหมาะกับพื้นที่เปิดที่รักษาระยะได้',tradeoff:'ต้องรักษาระยะ มอนชิดตัวอาจกลายเป็นการฟาดด้วยธนู ไม่มีสกิลเคลื่อนที่แบบ Teleport / Haste และ Arrow Bomb ต้องคุมค่ายา MP'},
- {id:'crossbowman',name:'Crossbowman',thai:'นักหน้าไม้',family:'Bowman',source:'crossbowman',guide:'crossbowman',art:'crossbowman',summary:'ชอบเล็งจังหวะยิงแรง ๆ และหามุมให้มอนเรียงเป็นแนวเดียวกัน',strength:'Iron Arrow ยิงทะลุมอนที่เรียงเป็นแนวตรง เหมาะกับแมพแนวนอน มี Soul Arrow ลดภาระลูกธนู',tradeoff:'ต้องเลือกแมพและรักษาระยะ มอนชิดตัวทำให้ฟาดด้วยอาวุธ และไม่มีสกิลเคลื่อนที่แบบ Teleport / Haste ในขั้นสอง'},
- {id:'assassin',name:'Assassin',thai:'โจรปาดาว',family:'Thief',source:'assassin',guide:'assassin',art:'assassin',summary:'ชอบกระโดด ปาดาว แล้วขยับหาตำแหน่งโจมตีใหม่อยู่เรื่อย ๆ',strength:'ตีระยะไกล กระโดดปาดาวได้ มีการหลบและ Haste ช่วยความคล่องตัวของปาร์ตี้ การรักษาระยะช่วยลดการโดนตี',tradeoff:'ดาวและอุปกรณ์อาจใช้งบมาก โดยเฉพาะช่วงเริ่มต้น มอนชิดตัวทำให้ตีด้วยกรงเล็บ และยังไม่มีท่ากวาดมอนเป็นกลุ่มในขั้นสอง'},
- {id:'bandit',name:'Bandit',thai:'โจรมีด',family:'Thief',source:'bandit',guide:'bandit',art:'bandit',summary:'ชอบเข้าประชิดแล้วแทงต่อเนื่องหลายฮิต มากกว่ายืนยิงจากระยะไกล',strength:'Savage Blow โจมตีหลายฮิตใส่เป้าหมายเดียว มีโล่ การหลบ และ Haste; Nimble Recovery ช่วยฟื้น HP/MP เมื่อหลบสำเร็จตามเงื่อนไข',tradeoff:'ยังต้องเข้าใกล้มอนจึงมีภาระค่ายา Savage Blow ต้องสะสม SP; แผนหลักในไกด์ได้ 6 ฮิตที่ Lv.41 หากเต็ม Mastery ก่อนจะได้ช้าลง'}
+ {id:'fighter',name:'Fighter',thai:'นักรบสายดาบ / ขวาน',family:'Warrior',source:'fighter',guide:'fighter',summary:'ชอบเข้าประชิด ใช้ท่าโจมตีตรงไปตรงมา แล้วเสริมแรงด้วย Rage',strength:'ตีเป้าเดี่ยวแรงสุดในสายนักรบ Rage เพิ่มพลังโจมตีให้ทั้งปาร์ตี้ และถ้าใช้อาวุธมือเดียว สกรอล 60% ถูก ตีบวกอาวุธได้เร็ว',tradeoff:'ยังใช้ Power Strike / Slash Blast เป็นหลัก เดินค่อนข้างช้า และการเข้าประชิดกับใช้ Rush เพิ่มภาระค่ายาได้ อุปกรณ์มีแนวโน้มใช้งบน้อยกว่าสายที่นิยมสูง'},
+ {id:'page',name:'Page',thai:'นักรบสายดาบ / กระบอง',family:'Warrior',source:'page',guide:'page',summary:'เข้าประชิดเหมือนนักรบ แต่ชอบมีเครื่องมือกดดันมอนด้วย Threaten',strength:'เป็นอาชีพที่เห็นน้อยในเซิร์ฟ สายกระบองสกรอลถูกมากจนตีบวกครบได้แม้ไม่เติมเงิน และ Threaten ช่วยลดความสามารถของศัตรู',tradeoff:'เดินค่อนข้างช้า ต้องรับการชนและค่ายา Threaten ไม่ได้ช่วยทุกจุดฟาร์มเท่ากัน และยังไม่มีเวทธาตุของ White Knight ในขั้นสอง'},
+ {id:'spearman',name:'Spearman',thai:'นักรบสายหอก / ทวน',family:'Warrior',source:'spearman',guide:'spearman',summary:'ชอบอาวุธด้ามยาว เข้าประชิดแต่มีระยะตีมากกว่านักรบสายอื่น',strength:'หอกและทวนมีระยะเอื้อมยาวที่สุดในกลุ่ม Warrior, Final Attack ช่วยฟื้น HP ระหว่างฟาร์ม และขั้นสามได้ชุดสกิล Dragon Knight',tradeoff:'สกรอลหอก/ทวนแพงที่สุดในสายนักรบ ยังใช้ท่าโจมตีขั้นแรกเป็นหลัก และต้องคุมค่ายาเมื่อเข้าประชิด'},
+ {id:'il',name:'I/L Wizard',thai:'เมจน้ำแข็ง / สายฟ้า',family:'Magician',source:'i-l-wizard',guide:'mage',art:'mage',summary:'ชอบวาร์ปไปตามแมพ แช่แข็งมอน และใช้สายฟ้าโจมตีเป็นกลุ่ม',strength:'Teleport คล่องตัว ตีแรงขึ้นกับ Fire Boar และ Red Drake ที่ดรอปของดี มี Cold Beam แช่แข็ง และ Meditation ช่วยปาร์ตี้สายเวท',tradeoff:'มอนในแมพตอนนี้บาง คนส่วนใหญ่จึงอัป Cold Beam ก่อน Thunder Bolt ต้องดูแล MP และอุปกรณ์ INT ใช้งบมากเพราะเมจคนเล่นเยอะ'},
+ {id:'fp',name:'F/P Wizard',thai:'เมจไฟ / พิษ',family:'Magician',source:'f-p-wizard',guide:'fp',art:'mage',summary:'ชอบใช้ Fire Arrow ตีเป้าเดี่ยว และเลือกมอนที่แพ้ธาตุให้คุ้ม',strength:'Fire Arrow เป็นท่าหลักสำหรับเป้าเดี่ยว ฟาร์ม Cold Eye ที่ดรอปของแรร์ได้ดี ดาเมจต่อเนื่องฆ่ามอนได้เอง มี Teleport และ Meditation',tradeoff:'Poison Breath มีภาระ MP จึงไม่ควรสมมติว่าคุ้มสำหรับกวาดมอนทุกช่วง ต้องเลือกมอนตามธาตุและวางงบอุปกรณ์'},
+ {id:'cleric',name:'Cleric',thai:'เมจสายฮีล',family:'Magician',source:'cleric',guide:'cleric',art:'cleric',summary:'สนุกกับการช่วยให้ปาร์ตี้เล่นสบายขึ้น และฟาร์มมอนที่เข้าทางเวทศักดิ์สิทธิ์',strength:'Heal ช่วยลดการซื้อยา HP ให้ตัวเองและคนใกล้ตัว โจมตี undead ได้ มี Bless ช่วยปาร์ตี้และ Teleport สำหรับเดินแมพ',tradeoff:'DPS ต่ำที่สุดในเกม Heal ทำดาเมจกับ undead จึงต้องเลือกจุดฟาร์ม ยังมีค่ายา MP และอุปกรณ์ INT ไม่ได้ถูกเพียงเพราะประหยัดยา HP'},
+ {id:'hunter',name:'Hunter',thai:'นักธนู',family:'Bowman',source:'hunter',guide:'hunter',art:'hunter',summary:'ชอบยิงจากระยะไกล แล้วคุมกลุ่มมอนด้วย Arrow Bomb',strength:'ตีเป้าเดี่ยวแรงที่สุดในสายธนู ระยะยิงไกลที่สุดในเกม เป็นอาชีพที่เห็นน้อย และ Arrow Bomb กวาดกลุ่มมอนพร้อมโอกาสสตัน',tradeoff:'แมพตอนนี้มอนบาง Arrow Bomb จึงยังใช้ไม่เต็มที่ ต้องรักษาระยะ มอนชิดตัวอาจกลายเป็นการฟาดด้วยธนู ไม่มีสกิลเคลื่อนที่แบบ Teleport / Haste และ Arrow Bomb ต้องคุมค่ายา MP'},
+ {id:'crossbowman',name:'Crossbowman',thai:'นักหน้าไม้',family:'Bowman',source:'crossbowman',guide:'crossbowman',art:'crossbowman',summary:'ชอบเล็งจังหวะยิงแรง ๆ และหามุมให้มอนเรียงเป็นแนวเดียวกัน',strength:'ระยะยิงไกลที่สุดในเกม คริแรงตั้งแต่ต้นขั้นสอง Iron Arrow ยิงทะลุมอนที่เรียงเป็นแนวตรง มี Soul Arrow ลดภาระลูกธนู',tradeoff:'ต้องเลือกแมพให้ดีและรักษาระยะ ยิงกลางอากาศไม่ได้ มอนชิดตัวทำให้ฟาดด้วยอาวุธ และไม่มีสกิลเคลื่อนที่แบบ Teleport / Haste ในขั้นสอง'},
+ {id:'assassin',name:'Assassin',thai:'โจรปาดาว',family:'Thief',source:'assassin',guide:'assassin',art:'assassin',summary:'ชอบกระโดด ปาดาว แล้วขยับหาตำแหน่งโจมตีใหม่อยู่เรื่อย ๆ',strength:'อาชีพเดียวที่กระโดดโจมตีกลางอากาศได้ตลอด DPS เป้าเดี่ยวอันดับ 2 ทั้งที่ตีระยะไกล มี Haste และการหลบช่วยลดการโดนตี',tradeoff:'เลี้ยงแพงที่สุดในเกม ทั้งสกรอลกรงเล็บและค่าดาว ถ้าไม่เติมเงินต้องใช้เวลาฟาร์ม meso นาน มอนชิดตัวทำให้ตีด้วยกรงเล็บ และยังไม่มีท่ากวาดมอนเป็นกลุ่มในขั้นสอง'},
+ {id:'bandit',name:'Bandit',thai:'โจรมีด',family:'Thief',source:'bandit',guide:'bandit',art:'bandit',summary:'ชอบเข้าประชิดแล้วแทงต่อเนื่องหลายฮิต มากกว่ายืนยิงจากระยะไกล',strength:'DPS เป้าเดี่ยวอันดับ 1 จาก Savage Blow เริ่มแบบปาดาว (Sindit) แล้วรีเซ็ตมาใช้มีดได้ มีโล่ การหลบ และ Haste; Nimble Recovery ช่วยฟื้น HP/MP เมื่อหลบสำเร็จตามเงื่อนไข',tradeoff:'โจรคนเล่นเยอะ สกรอลและมีดจึงยังแพง ต้องเข้าใกล้มอนจึงมีภาระค่ายา Savage Blow ต้องสะสม SP; แผนหลักในไกด์ได้ 6 ฮิตที่ Lv.41 หากเต็ม Mastery ก่อนจะได้ช้าลง'}
 ];
 export const QUESTIONS = [
  {title:'อยากสู้กับมอนจากระยะไหน?',options:[
@@ -22,7 +24,7 @@ export const QUESTIONS = [
   {text:'ยังไม่ติดเรื่องระยะ ขอเล่นแล้วเพลิน',weights:{}}
  ]},
  {title:'ตอนเล่น อะไรทำให้รู้สึกสนุกที่สุด?',options:[
-  {text:'กวาดมอนหลายตัวในรอบเดียว',reason:'คุณชอบโจมตีมอนเป็นกลุ่ม',weights:{il:4,hunter:4,crossbowman:3,fighter:2,page:2,spearman:2,fp:2}},
+  {text:'กวาดมอนหลายตัวในรอบเดียว',reason:'คุณชอบโจมตีมอนเป็นกลุ่ม',weights:{il:3,hunter:3,crossbowman:3,fighter:2,page:2,spearman:2,fp:2}},
   {text:'จัดการเป้าหมายเดียวให้สะใจ',reason:'คุณชอบเน้นเป้าหมายทีละตัว',weights:{bandit:4,assassin:4,fp:2,fighter:2}},
   {text:'ฮีลเพื่อน ให้ปาร์ตี้ไปต่อได้',reason:'คุณสนุกกับการฮีลและช่วยปาร์ตี้',weights:{cleric:6}},
   {text:'ทำให้การสู้ได้เปรียบด้วยบัฟหรือดีบัฟ',reason:'คุณชอบใช้บัฟหรือดีบัฟช่วยการสู้',weights:{fighter:3,page:3,cleric:3,bandit:1,assassin:1}}
@@ -58,10 +60,11 @@ export const QUESTIONS = [
   {text:'เพิ่มความคล่องตัวให้ปาร์ตี้ด้วย Haste',reason:'คุณอยากช่วยให้ปาร์ตี้วิ่งและกระโดดคล่องขึ้น',weights:{assassin:3,bandit:3}},
   {text:'ช่วยเพื่อนสายเวทด้วย Meditation',reason:'คุณอยากช่วยปาร์ตี้ที่เล่นสายเวท',weights:{il:3,fp:3}},
   {text:'มีระยะเอื้อมและบัฟป้องกันให้ตัวเอง',reason:'คุณชอบอาวุธด้ามยาวและการลดความเสียหายระหว่างฟาร์ม',weights:{spearman:4}},
-  {text:'ไม่ต้องเพิ่ม ขอแนวที่เลือกมาก่อนหน้านี้',weights:{}}
+  {text:'ไม่ต้องเพิ่ม ขอแนวที่เลือกมาก่อนหน้านี้',weights:{}},
+  {text:'ได้เล่นอาชีพที่เห็นไม่บ่อยในเซิร์ฟ',reason:'คุณอยากเล่นอาชีพที่หาเจอยาก',weights:{page:4,hunter:4}}
  ]},
  {title:'อยากใช้งบ meso กับอุปกรณ์แค่ไหน?',hint:'แยกจากค่ายาระหว่างฟาร์ม ราคาของขึ้นกับตลาดและของที่เลือก ไม่ใช่การเติมเงินจริง',options:[
-  {text:'อยากเริ่มประหยัด ค่อย ๆ หาและอัปเกรดของ',reason:'คุณอยากคุมงบอุปกรณ์ช่วงเริ่มต้น',weights:{fighter:3,page:3,spearman:3,bandit:2,hunter:1,crossbowman:1,assassin:-3,il:-2,fp:-2,cleric:-2},caution:'อุปกรณ์หรือดาวที่อยากใช้มีแนวโน้มใช้งบมาก ควรวางแผนของเริ่มต้นก่อน'},
+  {text:'อยากเริ่มประหยัด ค่อย ๆ หาและอัปเกรดของ',reason:'คุณอยากคุมงบอุปกรณ์ช่วงเริ่มต้น',weights:{fighter:4,page:4,spearman:1,hunter:1,crossbowman:1,bandit:-1,assassin:-3,il:-2,fp:-2,cleric:-2},caution:'อุปกรณ์หรือดาวที่อยากใช้มีแนวโน้มใช้งบมาก ควรวางแผนของเริ่มต้นก่อน'},
   {text:'งบกลาง ๆ ยอมอัปเกรดเมื่อเห็นผล',reason:'คุณรับได้กับงบอุปกรณ์ระดับกลาง',weights:{hunter:2,crossbowman:2,bandit:2,fighter:1,page:1,spearman:1}},
   {text:'ยอมเก็บ meso ลงของและดาว เพื่อเล่นสายที่ชอบ',reason:'คุณรับได้กับการลงทุนในอุปกรณ์หรือดาว',weights:{assassin:2,il:1,fp:1,cleric:1}},
   {text:'ยังไม่แน่ใจ ให้แนวเล่นมาก่อน',weights:{}}
@@ -78,7 +81,8 @@ export const QUESTIONS = [
   {text:'ทางยาวแนวนอน มอนเรียงกันเป็นแถว',reason:'คุณชอบแมพที่ยิงทะลุมอนเป็นแนวตรงได้',weights:{crossbowman:4,hunter:1}},
   {text:'มอนเป็นกลุ่ม อยากวาร์ปแล้วกวาดด้วยเวท',reason:'คุณชอบฟาร์มกลุ่มมอนด้วยเวทและ Teleport',weights:{il:4}},
   {text:'เลือกมอนแพ้ธาตุหรือ undead เพื่อใช้สกิลให้คุ้ม',reason:'คุณยอมเลือกมอนให้เข้าทางธาตุหรือเวทศักดิ์สิทธิ์',weights:{fp:3,cleric:3,il:1}},
-  {text:'ปรับตามเควสและเพื่อน ยังไม่มีแมพที่ชอบ',weights:{}}
+  {text:'ปรับตามเควสและเพื่อน ยังไม่มีแมพที่ชอบ',weights:{}},
+  {text:'ฟาร์มมอนที่ดรอปของแรร์ โดยใช้เวทที่ได้เปรียบธาตุ',reason:'คุณชอบฟาร์มลุ้นของแรร์ด้วยเวทที่ได้เปรียบธาตุ',weights:{il:4,fp:3}}
  ]}
 ];
 export function rankClasses(answers){
