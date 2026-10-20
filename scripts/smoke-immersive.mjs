@@ -340,10 +340,16 @@ try {
   }
   const artPage = await browser.newPage();
   await artPage.goto(base + '/index.html', { waitUntil: 'load' });
-  assert.equal(
-    await artPage.$$('#guides .warrior').then(xs => xs.length),
-    0,
-    'Withdrawn Warrior guides must not appear on homepage'
+  // Homepage cards are grouped by class family, Thief first; every Warrior guide is on sale.
+  assert.deepEqual(
+    await artPage.$$eval('#guides .class-group', gs =>
+      gs.map(g => [g.dataset.family, [...g.querySelectorAll('.guide-card')].map(c => c.classList[2])])
+    ),
+    [
+      ['thief', ['bandit', 'sindit', 'assassin']],
+      ['mage', ['mage', 'fp']],
+      ['warrior', ['fighter', 'page', 'spearman']]
+    ]
   );
   await artPage.close();
   console.log(

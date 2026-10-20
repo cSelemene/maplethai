@@ -16,6 +16,12 @@ const allowed = [
   'guide_page',
   'market'
 ];
+// Guides in the product menu are grouped by class family, Thief first.
+const FAMILIES = [
+  ['Thief · สายโจร', ['guide_bandit', 'guide_sindit', 'guide_assassin']],
+  ['Magician · สายเมจ', ['guide_mage', 'guide_fp']],
+  ['Warrior · สายนักรบ', ['guide_fighter', 'guide_page', 'guide_spearman']]
+];
 let products = [],
   settings,
   user,
@@ -228,13 +234,24 @@ async function refresh() {
     } catch {
       wallet = { available_cents: 0, reserved_cents: 0 };
     }
+    const option = p => {
+      const o = document.createElement('option');
+      o.value = p.id;
+      o.textContent = p.name;
+      return o;
+    };
+    const groups = FAMILIES.map(([label, ids]) => {
+      const list = products.filter(p => ids.includes(p.id));
+      if (!list.length) return null;
+      const g = document.createElement('optgroup');
+      g.label = label;
+      g.append(...list.map(option));
+      return g;
+    }).filter(Boolean);
+    const grouped = FAMILIES.flatMap(([, ids]) => ids);
     $('product-select').replaceChildren(
-      ...products.map(p => {
-        const o = document.createElement('option');
-        o.value = p.id;
-        o.textContent = p.name;
-        return o;
-      })
+      ...groups,
+      ...products.filter(p => !grouped.includes(p.id)).map(option)
     );
     if (!products.some(p => p.id === selected)) selected = products[0]?.id;
     if (!selected) throw Error('ยังไม่มีสินค้าเปิดขาย');

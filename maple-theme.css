@@ -85,3 +85,8 @@ header nav a[data-account-link]{display:inline-flex;align-items:center;gap:8px;m
 @media(max-width:700px){.account-grid{grid-template-columns:1fr}.maple-account .panel{padding:24px 18px}.account-section{padding:18px}.profile-name{max-width:145px}}
 
 .maple-account .top>.logo-link{background:none!important;border:0!important;box-shadow:none!important;padding:0;text-shadow:none;filter:none}
+
+/* Homepage guide cards grouped by class family (Thief, Magician, Warrior). */
+.class-groups{display:grid;gap:34px}
+.class-group-title{display:flex;align-items:baseline;gap:10px;margin:0 0 14px;font-size:1.35rem;font-weight:900;color:var(--ink,#3b2412)}
+.class-group-title span{font-size:.95rem;font-weight:700;opacity:.7}
