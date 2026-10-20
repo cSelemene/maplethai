@@ -1,4 +1,4 @@
-import { QUESTIONS, rankClasses } from './class-quiz-data.js?v=3585969393';
+import { QUESTIONS, rankClasses } from './class-quiz-data.js?v=1831f2e21c';
 const root = document.getElementById('class-quiz');
 if (root) {
   const intro = root.querySelector('[data-quiz-intro]'),
