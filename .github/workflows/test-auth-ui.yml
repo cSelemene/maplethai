@@ -26,6 +26,9 @@ jobs:
       - name: Test checkout, slip submission, purchase history and admin approval UI
         run: CHROME_BIN=/usr/bin/google-chrome node scripts/test-payments.mjs
 
+      - name: Test logo home links on all pages and embedded guides
+        run: CHROME_BIN=/usr/bin/google-chrome node scripts/test-logo-home.mjs
+
       - name: Test administrator sales report
         run: CHROME_BIN=/usr/bin/google-chrome node scripts/test-admin-sales.mjs
 
