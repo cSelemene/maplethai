@@ -130,10 +130,11 @@ try {
   {
     const w = await page();
     await w.goto(base + '/checkout.html', { waitUntil: 'networkidle0' });
-    assert.deepEqual(
-      await w.$$eval('#product-select optgroup', gs => gs.map(g => g.label.split(' ')[0])),
-      ['Thief', 'Magician', 'Warrior']
-    );
+    assert.deepEqual(await w.$$eval('#product-select optgroup', gs => gs.map(g => g.label.split(' ')[0])), [
+      'Thief',
+      'Magician',
+      'Warrior'
+    ]);
     await w.close();
   }
   console.log('PASS: Warrior, F/P and Sindit guide links open their own product in checkout');

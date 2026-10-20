@@ -249,7 +249,10 @@ async function refresh() {
       return g;
     }).filter(Boolean);
     const grouped = FAMILIES.flatMap(([, ids]) => ids);
-    $('product-select').replaceChildren(...groups, ...products.filter(p => !grouped.includes(p.id)).map(option));
+    $('product-select').replaceChildren(
+      ...groups,
+      ...products.filter(p => !grouped.includes(p.id)).map(option)
+    );
     if (!products.some(p => p.id === selected)) selected = products[0]?.id;
     if (!selected) throw Error('ยังไม่มีสินค้าเปิดขาย');
     $('page-status').textContent = '';
