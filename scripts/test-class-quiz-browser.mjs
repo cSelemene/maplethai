@@ -62,7 +62,7 @@ try {
   await page.click('.quiz-form button[type="submit"]');
   await page.click('.quiz-form .quiz-secondary');
   assert(await page.$eval('.quiz-option input[value="0"]', e => e.checked));
-  const pageAnswers = [0,2,3,1,3,0,2,0,2];
+  const pageAnswers = [0, 2, 3, 1, 3, 0, 2, 0, 2];
   for (const answer of pageAnswers) {
     await page.click('.quiz-option:has(input[value="' + answer + '"])');
     await page.click('.quiz-form button[type="submit"]');
@@ -92,7 +92,7 @@ try {
   );
   await page.click('[data-quiz-results] .quiz-secondary');
   assert.equal(await page.$('.quiz-option input:checked'), null);
-  const assassinAnswers = [1,0,0,0,1,2,1,1,0];
+  const assassinAnswers = [1, 0, 0, 0, 1, 2, 1, 1, 0];
   for (const answer of assassinAnswers) {
     assert(
       await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 2),

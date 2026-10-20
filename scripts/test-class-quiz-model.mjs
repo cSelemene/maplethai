@@ -20,116 +20,16 @@ assert.throws(() => rankClasses([0]));
 assert.throws(() => rankClasses([0, 0, 0, 0, 0, 999]));
 assert.throws(() => rankClasses(Array(9).fill(null)));
 const profiles = {
-  "fighter": [
-    0,
-    2,
-    2,
-    1,
-    3,
-    0,
-    2,
-    0,
-    1
-  ],
-  "page": [
-    0,
-    2,
-    3,
-    1,
-    3,
-    0,
-    2,
-    0,
-    2
-  ],
-  "spearman": [
-    0,
-    2,
-    0,
-    1,
-    3,
-    1,
-    0,
-    0,
-    1
-  ],
-  "il": [
-    1,
-    0,
-    3,
-    3,
-    2,
-    2,
-    1,
-    2,
-    0
-  ],
-  "fp": [
-    1,
-    0,
-    0,
-    2,
-    2,
-    2,
-    3,
-    2,
-    3
-  ],
-  "cleric": [
-    2,
-    0,
-    1,
-    3,
-    2,
-    2,
-    0,
-    2,
-    3
-  ],
-  "hunter": [
-    1,
-    1,
-    3,
-    0,
-    1,
-    1,
-    3,
-    1,
-    2
-  ],
-  "crossbowman": [
-    1,
-    1,
-    0,
-    1,
-    1,
-    1,
-    1,
-    1,
-    3
-  ],
-  "assassin": [
-    1,
-    0,
-    0,
-    0,
-    1,
-    2,
-    1,
-    1,
-    0
-  ],
-  "bandit": [
-    0,
-    0,
-    0,
-    0,
-    0,
-    1,
-    2,
-    0,
-    0
-  ]
+  fighter: [0, 2, 2, 1, 3, 0, 2, 0, 1],
+  page: [0, 2, 3, 1, 3, 0, 2, 0, 2],
+  spearman: [0, 2, 0, 1, 3, 1, 0, 0, 1],
+  il: [1, 0, 3, 3, 2, 2, 1, 2, 0],
+  fp: [1, 0, 0, 2, 2, 2, 3, 2, 3],
+  cleric: [2, 0, 1, 3, 2, 2, 0, 2, 3],
+  hunter: [1, 1, 3, 0, 1, 1, 3, 1, 2],
+  crossbowman: [1, 1, 0, 1, 1, 1, 1, 1, 3],
+  assassin: [1, 0, 0, 0, 1, 2, 1, 1, 0],
+  bandit: [0, 0, 0, 0, 0, 1, 2, 0, 0]
 };
 for (const [id, answers] of Object.entries(profiles)) {
   const ranked = rankClasses(answers);
