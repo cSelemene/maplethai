@@ -7,6 +7,10 @@ const browser = await puppeteer.launch({
   args: ['--no-sandbox']
 });
 const base = 'http://127.0.0.1:8765';
+// Use the production reader policy so this test catches sandbox navigation failures.
+const readerPolicy = readFileSync('premium-guide.html','utf8').match(/<iframe[^>]*id="viewer"[^>]*sandbox="([^"]+)"/)[1];
+assert(readerPolicy.split(' ').includes('allow-top-navigation-by-user-activation'));
+assert(!readerPolicy.split(' ').includes('allow-top-navigation'));
 const pages = readdirSync('.').filter(
   f => f.endsWith('.html') && /<img\b[^>]*class="maple-logo"/.test(readFileSync(f, 'utf8'))
 );
@@ -35,24 +39,24 @@ try {
     await Promise.all([page.waitForNavigation({ waitUntil: 'domcontentloaded' }), logo.click()]);
     assert.equal(new URL(page.url()).pathname, '/index.html', file + ' click failed');
   }
-  // Exercise the shared guide header inside the same kind of iframe used by the reader.
-  await page.goto(base + '/index.html', { waitUntil: 'domcontentloaded' });
-  await page.evaluate(() => {
-    document.body.innerHTML = '<iframe id="test-guide"></iframe>';
-    document.getElementById('test-guide').srcdoc =
-      '<html><head><base href="' +
-      location.origin +
-      '/"></head><body class="maple-guide"><header><div class="bar-inner"></div></header><script src="./guide-layout.js"><\/script></body></html>';
-  });
-  const iframe = await page.$('#test-guide');
-  const frame = await iframe.contentFrame();
-  await frame.waitForSelector('.guide-home-logo');
-  assert.equal(await frame.$eval('.guide-home-logo', e => e.target), '_top');
-  await Promise.all([
-    page.waitForNavigation({ waitUntil: 'domcontentloaded' }),
-    frame.click('.guide-home-logo')
-  ]);
-  assert.equal(new URL(page.url()).pathname, '/index.html');
+  // Match the paid reader: sandboxed Blob document, real layout script, and a user click.
+  for(const width of [1250,375]) {
+    await page.setViewport({width,height:850});
+    await page.goto(base+'/index.html',{waitUntil:'domcontentloaded'});
+    await page.evaluate(policy=>{
+      document.body.innerHTML='<iframe id="test-guide" style="width:100%;height:400px"></iframe>';
+      const viewer=document.getElementById('test-guide');
+      viewer.setAttribute('sandbox',policy);
+      const doc='<html><head><base href="'+location.origin+'/"></head><body class="maple-guide"><header><div class="bar-inner"></div></header><script src="./guide-layout.js"></scr'+'ipt></body></html>';
+      viewer.src=URL.createObjectURL(new Blob([doc],{type:'text/html'}));
+    },readerPolicy);
+    const iframe=await page.$('#test-guide');
+    const frame=await iframe.contentFrame();
+    await frame.waitForSelector('.guide-home-logo');
+    assert.equal(await frame.$eval('.guide-home-logo',e=>e.target),'_top');
+    await Promise.all([page.waitForNavigation({waitUntil:'domcontentloaded'}),frame.click('.guide-home-logo')]);
+    assert.equal(new URL(page.url()).pathname,'/index.html');
+  }
   console.log(
     'PASS: ' +
       pages.length +
