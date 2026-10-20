@@ -2,7 +2,7 @@ name: MapleThai email and Google auth UI
 on:
   push:
     branches: ['feature/**', main]
-    paths: ['marketplace.html','marketplace.js','marketplace.css','market-items.js','assets/market/**','auth.html','auth.js','checkout.html','checkout.js','payment-common.js','payment-ui.css','admin-payments.html','admin-payments.js','account-payments.js','account-credit.js','payment-qr.js','vendor/qrcode-generator.js','*-access.js','supabase-client.js','member-home.js','market-watch.js','market-watch-selection.js','market-watch.css','account-market-quota.js','friend-promotion.css','admin.html','premium-guide.html','premium-guide.js','guide-progress.js','my-guides.html','my-guides.js','my-guides.css','scripts/test-*.mjs','supabase/functions/**','.github/workflows/test-auth-ui.yml']
+    paths: ['marketplace.html','marketplace.js','marketplace.css','market-items.js','assets/market/**','auth.html','auth.js','checkout.html','checkout.js','payment-common.js','payment-ui.css','admin-payments.html','admin-payments.js','account-payments.js','account-credit.js','payment-qr.js','vendor/qrcode-generator.js','*-access.js','supabase-client.js','member-home.js','market-watch.js','market-watch-selection.js','market-watch.css','account-market-quota.js','friend-promotion.css','admin.html','admin-sales.html','admin-sales.js','admin-sales.css','premium-guide.html','premium-guide.js','guide-progress.js','my-guides.html','my-guides.js','my-guides.css','scripts/test-*.mjs','supabase/functions/**','.github/workflows/test-auth-ui.yml']
   pull_request:
     branches: [main]
   workflow_dispatch:
@@ -25,6 +25,9 @@ jobs:
 
       - name: Test checkout, slip submission, purchase history and admin approval UI
         run: CHROME_BIN=/usr/bin/google-chrome node scripts/test-payments.mjs
+
+      - name: Test administrator sales report
+        run: CHROME_BIN=/usr/bin/google-chrome node scripts/test-admin-sales.mjs
 
       - name: Test automatic slip validation and fraud checks
         run: node scripts/test-auto-verification.mjs

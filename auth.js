@@ -14,6 +14,7 @@ const knownFiles = new Set([
   'my-guides.html',
   'premium-guide.html',
   'admin.html',
+  'admin-sales.html',
   'auth.html',
   'checkout.html',
   'admin-payments.html',
