@@ -14,15 +14,17 @@ export const GUIDES = {
   page: 'Page',
   spearman: 'Spearman'
 };
-// Sindit is a bonus guide: anyone who owns the Bandit guide can read it.
+// Sindit is sold on its own (guide_sindit) and stays free for anyone who owns the Bandit guide.
 export function guideProduct(id) {
-  return id === 'sindit' ? 'guide_bandit' : 'guide_' + id;
+  return 'guide_' + id;
 }
 export function hasGuide(account, id) {
   return Boolean(
     account?.is_admin ||
     account?.entitlements?.some(
-      e => e.product === guideProduct(id) && (!e.expires_at || new Date(e.expires_at).getTime() > Date.now())
+      e =>
+        (e.product === guideProduct(id) || (id === 'sindit' && e.product === 'guide_bandit')) &&
+        (!e.expires_at || new Date(e.expires_at).getTime() > Date.now())
     )
   );
 }

@@ -1,5 +1,5 @@
-import { supabase, GUIDES, hasGuide, readAccount } from './supabase-client.js?v=2b187ad0f8';
-import { readProgress } from './guide-progress.js?v=606cb326ad';
+import { supabase, GUIDES, hasGuide, readAccount } from './supabase-client.js?v=0922a5286a';
+import { readProgress } from './guide-progress.js?v=3ad50a48b2';
 const PUBLISHED_GUIDES = {
   bandit: true,
   sindit: true,
@@ -12,7 +12,7 @@ const PUBLISHED_GUIDES = {
 };
 const $ = id => document.getElementById(id);
 let generation = 0;
-import { guideCard as card } from './guide-library.js?v=49f9872ff0';
+import { guideCard as card } from './guide-library.js?v=c4ba832e29';
 async function refresh() {
   const ticket = ++generation;
   $('library-owned').replaceChildren();
