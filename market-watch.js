@@ -82,7 +82,7 @@ async function load() {
       supabase
         .from('listings')
         .select(
-          'id,user_id,kind,item_name,item_id,item_stats,qty,price,price_unit,atk,slots,status,created_at,expires_at'
+          'id,user_id,discord_user,kind,item_name,item_id,item_stats,qty,price,price_unit,atk,slots,status,created_at,expires_at'
         )
         .eq('status', 'open')
         .eq('price_unit', 'meso')

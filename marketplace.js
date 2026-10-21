@@ -132,7 +132,7 @@ async function load() {
     let q = supabase
       .from('listings')
       .select(
-        'id,user_id,kind,item_name,category,qty,price,price_unit,atk,slots,item_id,item_stats,status,created_at,expires_at'
+        'id,user_id,kind,item_name,category,discord_user,discord_url,qty,price,price_unit,atk,slots,item_id,item_stats,status,created_at,expires_at'
       );
     if (highlightedListing && !mine) q = q.eq('id', highlightedListing);
     if (mine) q = q.eq('user_id', user.id);
@@ -189,8 +189,9 @@ function renderRow(row) {
       open ? (row.kind === 'sell' ? 'ขาย' : 'รับซื้อ') : row.status === 'done' ? 'ปิดแล้ว' : 'หมดอายุ',
       'post-kind ' + (!open ? 'done' : row.kind)
     ),
-    el('span', date(row.created_at))
+    el('span', row.discord_user && open ? timeLeft(row.expires_at) : date(row.created_at))
   );
+  if (row.discord_user) meta.append(el('span', 'จาก Discord', 'discord-badge'));
   card.append(meta);
   const item =
     items.find(i => i.id === row.item_id) ||
@@ -256,10 +257,13 @@ function renderRow(row) {
   checkPrice.onclick = () => navigator.clipboard?.writeText(item?.name || row.item_name).catch(() => {});
   priceCell.append(checkPrice);
   card.append(chips);
-  const contact = el('button', own ? 'ดูช่องทางติดต่อของฉัน' : 'ดูช่องทางติดต่อ');
+  const contact = el(
+    'button',
+    row.discord_user ? 'ติดต่อทาง Discord' : own ? 'ดูช่องทางติดต่อของฉัน' : 'ดูช่องทางติดต่อ'
+  );
   contact.type = 'button';
   contact.disabled = !open && !own;
-  contact.onclick = () => showContact(row);
+  contact.onclick = () => (row.discord_user ? showDiscordContact(row) : showContact(row));
   card.append(contact);
   if (own || account?.is_admin) {
     const actions = el('div', undefined, 'owner-actions');
@@ -392,6 +396,35 @@ async function showContact(row) {
     openingContact = false;
   }
 }
+const discordLink = /^https:\/\/(ptb\.|canary\.)?discord(app)?\.com\/channels\/\d+\/\d+\/\d+$/;
+function timeLeft(expires) {
+  const hours = Math.ceil((new Date(expires) - Date.now()) / 3600000);
+  return hours <= 1 ? 'ปิดในไม่ถึง 1 ชม.' : 'ปิดใน ' + hours + ' ชม.';
+}
+// Listings posted for Discord players: the username is public and free to view, no quota or login.
+function showDiscordContact(row) {
+  $('contact-title').textContent = row.item_name;
+  const list = el('div', undefined, 'contact-list');
+  list.append(contactButton('discord', row.discord_user));
+  if (discordLink.test(row.discord_url || '')) {
+    const a = el('a', 'ดูข้อความต้นฉบับใน Discord ↗', 'discord-source');
+    a.href = row.discord_url;
+    a.target = '_blank';
+    a.rel = 'noopener noreferrer';
+    list.append(a);
+  }
+  $('contact-content').replaceChildren(
+    el('p', 'ประกาศนี้ลงแทนผู้เล่นจาก Discord ทักผู้เล่นทาง Discord ได้โดยตรง', 'muted'),
+    list
+  );
+  $('contact-dialog').showModal();
+}
+function setDiscordMode(on) {
+  $('for-discord').checked = on;
+  $('discord-fields').hidden = !on;
+  $('contact-fieldset').hidden = on;
+}
+$('for-discord').onchange = () => setDiscordMode($('for-discord').checked);
 async function openForm(row = null) {
   if (!user) {
     login();
@@ -405,6 +438,12 @@ async function openForm(row = null) {
   $('form-status').textContent = '';
   $('form-title').textContent = row ? 'แก้ไขประกาศ' : 'ลงประกาศ';
   $('save-post').textContent = row ? 'บันทึกการแก้ไข' : 'เผยแพร่ประกาศ';
+  // Admins can post for Discord players; an existing listing keeps its kind.
+  $('discord-mode').hidden = !account?.is_admin || !!(row && !row.discord_user);
+  $('for-discord').disabled = !!row;
+  setDiscordMode(!!row?.discord_user);
+  $('discord-user').value = row?.discord_user || '';
+  $('discord-url').value = row?.discord_url || '';
   if (row) {
     for (const [id, key] of Object.entries({
       'item-name': 'item_name',
@@ -421,14 +460,15 @@ async function openForm(row = null) {
         null,
       row
     );
-    try {
-      const c = await rpc('listing_contact', { p_id: row.id });
-      if (ticket !== authGeneration) return;
-      for (const key of Object.keys(channels)) $(key).value = c[key] || '';
-    } catch (e) {
-      message(e.message, true);
-      return;
-    }
+    if (!row.discord_user)
+      try {
+        const c = await rpc('listing_contact', { p_id: row.id });
+        if (ticket !== authGeneration) return;
+        for (const key of Object.keys(channels)) $(key).value = c[key] || '';
+      } catch (e) {
+        message(e.message, true);
+        return;
+      }
   }
   if (ticket === authGeneration) $('post-dialog').showModal();
 }
@@ -440,12 +480,18 @@ $('post-form').onsubmit = async e => {
     $('item-name').focus();
     return;
   }
+  const forDiscord = $('for-discord').checked && !$('discord-mode').hidden;
   const contacts = {};
   for (const key of Object.keys(channels)) {
     const value = $(key).value.trim();
     if (value) contacts[key] = value;
   }
-  if (!Object.keys(contacts).length) {
+  if (forDiscord && !$('discord-user').value.trim()) {
+    $('form-status').textContent = 'ใส่ Discord username ของผู้เล่น';
+    $('discord-user').focus();
+    return;
+  }
+  if (!forDiscord && !Object.keys(contacts).length) {
     $('form-status').textContent = 'กรอกช่องทางติดต่ออย่างน้อย 1 ช่องทาง';
     $('discord').focus();
     return;
@@ -471,7 +517,12 @@ $('post-form').onsubmit = async e => {
   $('save-post').disabled = true;
   $('form-status').textContent = 'กำลังบันทึก…';
   try {
-    await rpc('marketplace_save', { p_id: editing, p_data: data });
+    if (forDiscord) {
+      delete data.contacts;
+      data.discord_user = $('discord-user').value.trim();
+      data.discord_url = $('discord-url').value.trim();
+      await rpc('marketplace_save_discord', { p_id: editing, p_data: data });
+    } else await rpc('marketplace_save', { p_id: editing, p_data: data });
     $('post-dialog').close();
     $('post-form').reset();
     mine = true;
@@ -479,7 +530,11 @@ $('post-form').onsubmit = async e => {
     $('search-form').reset();
     updateTabs();
     await load();
-    message('บันทึกประกาศแล้ว ผู้ใช้เปิดดูช่องทางติดต่อได้ตามโควตาฟรีหรือสิทธิ์สมาชิกตลาด');
+    message(
+      forDiscord
+        ? 'บันทึกประกาศจาก Discord แล้ว ประกาศจะปิดเองเมื่อครบ 36 ชั่วโมง'
+        : 'บันทึกประกาศแล้ว ผู้ใช้เปิดดูช่องทางติดต่อได้ตามโควตาฟรีหรือสิทธิ์สมาชิกตลาด'
+    );
   } catch (error) {
     $('form-status').textContent = error.message || 'บันทึกไม่สำเร็จ';
   } finally {

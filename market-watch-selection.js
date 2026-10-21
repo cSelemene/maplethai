@@ -23,7 +23,9 @@ export function selectWatchlist(rows, { now = Date.now(), limit = 6 } = {}) {
     if (!groups.has(key)) groups.set(key, { rows: [], people: new Set() });
     const group = groups.get(key);
     group.rows.push(row);
-    if (row.user_id) group.people.add(row.user_id);
+    // Admin-posted Discord listings share one user_id; count the Discord player instead.
+    const person = row.discord_user ? 'discord:' + row.discord_user : row.user_id;
+    if (person) group.people.add(person);
   }
   const ranked = [...groups.values()]
     .map(g => {

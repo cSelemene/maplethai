@@ -42,6 +42,11 @@ assert.equal(
 );
 const repeated = [row(10, { item_id: 88, user_id: 'same' }), row(11, { item_id: 88, user_id: 'same' })];
 assert.equal(selectWatchlist(repeated, { now })[0].people, 1);
+const forDiscord = [
+  row(20, { item_id: 77, user_id: 'admin', discord_user: 'a' }),
+  row(21, { item_id: 77, user_id: 'admin', discord_user: 'b' })
+];
+assert.equal(selectWatchlist(forDiscord, { now })[0].people, 2);
 const twoKinds = selectWatchlist([row(1, { item_id: 88 }), row(2, { item_id: 88, kind: 'buy' })], { now });
 assert.equal(twoKinds.length, 2);
 console.log(
