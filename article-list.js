@@ -1,4 +1,4 @@
-import { ARTICLES, articleUrl, thaiDate } from './articles.js?v=4a80183b49';
+import { ARTICLES, articleUrl, thaiDate } from './articles.js?v=833fef8b5c';
 
 // Homepage uses a compact horizontal rail; the article index keeps its grid.
 function card(article, featured) {

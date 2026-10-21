@@ -3,6 +3,17 @@
 // articles/<slug>.html, put its cover in assets/articles/, then add one entry here.
 export const ARTICLES = [
   {
+    slug: 'grand-launch-new-maps',
+    title: 'อัปเดต Grand Launch: Excavation Site แมพใหม่ฝั่ง Perion และบอส Stumpy',
+    excerpt:
+      'สรุปมอนใหม่ 8 ชนิด Lv.19–73 บอส Stumpy และ QUEST ของพื้นที่ใหม่ พร้อมผลกระทบต่อ Cleric สายเวท และของดรอปที่ควรจับตา',
+    category: 'อัปเดตเกม',
+    date: '2026-10-21',
+    minutes: 8,
+    cover: './assets/articles/grand-launch-new-maps-cover.webp?v=0bbd4d243e',
+    coverAlt: 'มอนสเตอร์ 8 ชนิดของ Excavation Site ยืนเรียงกัน โดยมี Stumpy อยู่ด้านหลัง'
+  },
+  {
     slug: 'rich-drops',
     title: '10 มอนสเตอร์ดรอปของแพง พร้อมแมพฟาร์ม Lv.10–50',
     excerpt:
