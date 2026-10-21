@@ -181,5 +181,5 @@
 .reader .drop-price small .meso-amount{font-weight:inherit}
 
 /* Inline entity mentions reuse the existing article item/monster icon paths and MeowDB URLs. */
-.reader a.entity-ref{display:inline-flex;align-items:center;gap:.2em;vertical-align:baseline;white-space:nowrap;text-decoration:underline;text-underline-offset:2px}
+.reader a.entity-ref{display:inline;white-space:normal;overflow-wrap:break-word;text-decoration:underline;text-underline-offset:2px}
 .reader a.entity-ref img{display:inline-block;width:1.2em;height:1.2em;min-width:1.2em;max-width:1.2em;max-height:1.2em;object-fit:contain;image-rendering:pixelated;vertical-align:-.2em;margin:0}
