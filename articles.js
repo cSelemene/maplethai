@@ -10,7 +10,7 @@ export const ARTICLES = [
     category: 'อัปเดตเกม',
     date: '2026-10-21',
     minutes: 8,
-    cover: './assets/articles/grand-launch-new-maps-cover.webp?v=3ba67817ba',
+    cover: './assets/articles/grand-launch-new-maps-cover.webp?v=0bbd4d243e',
     coverAlt: 'มอนสเตอร์ 8 ชนิดของ Excavation Site ยืนเรียงกัน โดยมี Stumpy อยู่ด้านหลัง'
   },
   {
