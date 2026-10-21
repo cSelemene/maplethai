@@ -228,7 +228,9 @@ function renderRow(row) {
     row.price
   );
   price.append(el('strong', amount, 'price-amount'));
-  card.append(price);
+  const priceCell = el('div', undefined, 'price-cell');
+  priceCell.append(price);
+  card.append(priceCell);
   const info = [String(row.qty)];
   const stats = row.item_stats || {};
   const quantity = el('p', info.join(' · '), 'item-info');
@@ -236,7 +238,10 @@ function renderRow(row) {
   card.append(quantity);
   const chips = el('div', undefined, 'stat-chips');
   for (const [key, value] of Object.entries(stats)) {
-    if (STAT_LABELS[key]) chips.append(el('span', STAT_LABELS[key] + ' ' + formatStatDiff(value)));
+    if (STAT_LABELS[key])
+      chips.append(
+        el('span', STAT_LABELS[key] + ' ' + formatStatDiff(value), value > 0 ? 'up' : value < 0 ? 'down' : '')
+      );
   }
   // Listings saved before item_stats existed only kept a total ATK.
   if (!Object.keys(stats).length && row.atk != null && (!item || itemCategory(item) === 'weapon'))
@@ -251,7 +256,7 @@ function renderRow(row) {
   checkPrice.rel = 'noopener noreferrer';
   checkPrice.title = 'ค้นหา ' + (item?.name || row.item_name) + ' ใน Meso Watch';
   checkPrice.onclick = () => navigator.clipboard?.writeText(item?.name || row.item_name).catch(() => {});
-  chips.append(checkPrice);
+  priceCell.append(checkPrice);
   card.append(chips, description);
   const contact = el('button', own ? 'ดูช่องทางติดต่อของฉัน' : 'ดูช่องทางติดต่อ');
   contact.type = 'button';
