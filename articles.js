@@ -4,14 +4,14 @@
 export const ARTICLES = [
   {
     slug: 'grand-launch-new-maps',
-    title: 'อัปเดต Grand Launch: แมพใหม่ Lv.19–73 ฝั่ง Perion กระทบอาชีพไหนบ้าง',
+    title: 'อัปเดต Grand Launch: Excavation Site แมพใหม่ฝั่ง Perion และบอส Stumpy',
     excerpt:
-      'สรุปมอนใหม่ 8 ชนิดจากแพตช์วันเปิดเซิร์ฟ ที่เก็บเลเวลสายผีดิบของ Cleric สกรอลที่ควรจับตา และสิ่งที่ยังต้องตรวจในเกม',
+      'สรุปมอนใหม่ 8 ชนิด Lv.19–73 บอส Stumpy และ QUEST ของพื้นที่ใหม่ พร้อมผลกระทบต่อ Cleric สายเวท และของดรอปที่ควรจับตา',
     category: 'อัปเดตเกม',
     date: '2026-10-21',
-    minutes: 6,
+    minutes: 8,
     cover: './assets/articles/grand-launch-new-maps-cover.webp?v=3ba67817ba',
-    coverAlt: 'ภาพประกอบ Cleric บนพื้นหลังโทนสุสานยามค่ำ'
+    coverAlt: 'มอนสเตอร์ 8 ชนิดของ Excavation Site ยืนเรียงกัน โดยมี Stumpy อยู่ด้านหลัง'
   },
   {
     slug: 'rich-drops',
