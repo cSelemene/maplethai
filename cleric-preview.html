@@ -1,0 +1,224 @@
+<!doctype html><html lang="th"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="Cleric MapleThai interactive guide preview"><title>Cleric Route Lv.1–50 — MapleThai</title><link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Mitr:wght@400;500;600&family=IBM+Plex+Sans+Thai:wght@400;500;600&display=swap" rel="stylesheet"><style>
+:root{--sky:#D7EAF8;--panel:#fff;--panel2:#F2F7FC;--ink:#1B2A44;--muted:#56678A;--frame:#22406F;--maple:#E2711D;--line:#C7D7EA;font-family:"IBM Plex Sans Thai","Mitr",system-ui,sans-serif}
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--sky);color:var(--ink);font:14px/1.68 "IBM Plex Sans Thai","Mitr",system-ui,sans-serif}
+a{color:#28589a}
+.mt-header{background:#24416f;color:#fff;padding:11px max(16px,calc((100% - 1000px)/2));position:sticky;top:0;z-index:10}
+.mt-header b{font:500 14px "Mitr","IBM Plex Sans Thai",sans-serif}
+.mt-nav{display:flex;gap:6px;margin-top:8px;flex-wrap:wrap}
+.mt-nav button{background:transparent;color:#fff;border:1px solid #91a8c7;border-radius:25px;padding:6px 13px;cursor:pointer;font:inherit;font-size:12px}
+.mt-nav button[aria-selected=true]{background:var(--maple);border-color:var(--maple);box-shadow:0 0 0 2px #e2711d55}
+.mt-panel[hidden],.mt-modal[hidden]{display:none!important}
+.mt-container{max-width:1000px;margin:0 auto;padding:12px 16px 0}
+.mt-readable{max-width:650px;margin:0 auto;position:relative;isolation:isolate}
+.mt-card{background:var(--panel);border:1px solid var(--line);border-radius:11px;padding:16px;margin-bottom:12px}
+.mt-label{font-size:12px;color:#53678b}
+h2,h3{font-family:"Mitr","IBM Plex Sans Thai",sans-serif;line-height:1.4}
+.mt-card h2{font-size:19px;font-weight:500;margin:7px 0 10px}
+.mt-card p,.mt-card li{font-size:13px;line-height:1.75}
+.mt-warn{border:1px solid #eb5550;border-radius:8px;background:#fff7f6;padding:13px}
+.mt-warn strong{color:#c7433b}.mt-warn ul{margin-bottom:0}
+.mt-callout{background:#f2f7fc;border-left:3px solid var(--maple);border-radius:5px;padding:10px}
+.mt-three{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px;margin:12px 0}
+.mt-tile{border:1px solid var(--line);background:var(--panel2);border-radius:6px;padding:9px;font-size:11px;line-height:1.6}
+.mt-tile b{color:#d66e1c;display:block}
+.mt-chips{display:flex;gap:6px;flex-wrap:wrap;margin-top:12px}
+.mt-chips span{border:1px solid #b7cce4;border-radius:22px;padding:3px 9px;color:#33537c;font-size:11px}
+.mt-title{font-size:16px;font-weight:500;margin:22px 0 10px}
+.mt-jobs{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+.mt-job{min-height:117px;background:#fff;border:1px solid var(--line);border-radius:7px;padding:10px;font-size:11px;line-height:1.5}
+.mt-job b{display:block}.mt-job small{color:var(--maple)}
+.mt-columns{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.mt-columns .mt-card{margin:0}.mt-columns h3{margin:0;font-size:14px}.mt-columns li{font-size:12px}
+.mt-pro h3{color:#27834b}.mt-con h3{color:#cd4545}
+.mt-note{background:#f0f6fc;border-left:3px solid var(--maple);padding:12px;border-radius:7px;font-size:13px;line-height:1.75}
+.mt-pills{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.mt-pills span{border:1px solid var(--line);border-radius:30px;padding:4px 11px;font-size:12px;color:#3d5776;background:#f6faff}
+.mt-route-step{display:flex;gap:13px;background:white;border:1px solid var(--line);border-radius:12px;padding:15px;margin:10px 0}
+.mt-route-number{flex:none;border-radius:10px;background:#e8f1fa;color:#214875;padding:7px 10px;font-weight:700;align-self:flex-start}
+.mt-route-step h3{font-size:14px;margin:0 0 4px}
+.mt-route-step p{font-size:13px;margin:0}
+.mt-subtitle{font-size:12px;color:#5e7390}
+.mt-table{width:100%;border-collapse:collapse;background:#fff;font-size:12px}
+.mt-table th,.mt-table td{padding:12px;border-bottom:1px solid #d8e4ef;text-align:left}
+.mt-table th{background:#edf4fb}
+.mt-read-fade{position:absolute;inset:auto 0 0;height:min(350px,46%);z-index:2;pointer-events:none;backdrop-filter:blur(9px);-webkit-backdrop-filter:blur(9px);mask-image:linear-gradient(to bottom,transparent 0%,rgba(0,0,0,.15) 25%,rgba(0,0,0,.75) 72%,black 100%);-webkit-mask-image:linear-gradient(to bottom,transparent 0%,rgba(0,0,0,.15) 25%,rgba(0,0,0,.75) 72%,black 100%)}
+.mt-readable::after{content:"";position:absolute;left:0;right:0;bottom:-2px;height:min(320px,43%);background:linear-gradient(to bottom,rgba(215,234,248,0),rgba(215,234,248,.18) 28%,rgba(215,234,248,.68) 65%,#d7eaf8 98%);pointer-events:none;z-index:3}
+.mt-unlock-stage{min-height:calc(100svh - 94px);width:100%;display:flex;align-items:center;justify-content:center;text-align:center;background:var(--sky);padding:32px 20px 80px;position:relative;margin-top:-5px}
+.mt-unlock-content{max-width:580px;margin:auto}
+.mt-lock-symbol{font-size:64px;line-height:1.2;margin-bottom:12px}
+.mt-unlock-stage h2{font-size:clamp(25px,4vw,39px);font-weight:600;margin:5px 0 12px}
+.mt-unlock-stage p{font-size:15px;line-height:1.8;color:#526b89}
+.mt-price{font-size:31px;font-weight:700;color:#cc6413;margin:16px 0}
+.mt-price small{font-size:13px;font-weight:400;color:#61768d}
+.mt-cta{background:var(--maple);color:#fff!important;display:inline-block;text-decoration:none;border-radius:10px;padding:14px 25px;border:0;font:600 15px "IBM Plex Sans Thai",sans-serif;cursor:pointer}
+.mt-under{font-size:12px;color:#657b96;margin-top:13px}
+.mt-modal{position:fixed;inset:0;z-index:1000;background:#10243bcc;display:grid;place-items:center;padding:20px}
+.mt-dialog{position:relative;background:#fff;color:#1d3350;max-width:440px;width:100%;padding:26px;border-radius:16px;text-align:center;box-shadow:0 12px 48px #0005}
+.mt-close{position:absolute;right:12px;top:10px;background:transparent;border:0;font-size:26px;cursor:pointer;color:#62758d}
+.mt-dialog h2{font-size:22px}.mt-dialog p{line-height:1.7}
+.mt-small-back{border:0;background:transparent;margin-top:12px;color:#3e5b7d;cursor:pointer}
+@media(max-width:590px){.mt-three{grid-template-columns:1fr}.mt-jobs{grid-template-columns:repeat(2,1fr)}.mt-columns{grid-template-columns:1fr}.mt-header{position:sticky}.mt-unlock-stage{min-height:calc(100svh - 120px)}}
+
+
+/* Fine-grained scroll reveal: the paywall emerges inside the same reading surface. */
+.mt-panel[hidden],.mt-modal[hidden]{display:none!important}
+.mt-panel:not([data-panel="route"]){overflow:clip}
+.mt-container{padding-bottom:0}
+.mt-readable{position:relative}
+.mt-read-fade{height:350px;bottom:0;backdrop-filter:blur(11px);-webkit-backdrop-filter:blur(11px);mask-image:linear-gradient(to bottom,transparent,rgba(0,0,0,.12) 18%,rgba(0,0,0,.72) 70%,black);-webkit-mask-image:linear-gradient(to bottom,transparent,rgba(0,0,0,.12) 18%,rgba(0,0,0,.72) 70%,black)}
+.mt-readable:after{height:360px}
+.mt-unlock-stage{height:185svh;min-height:930px;position:relative;display:block;width:100%;margin-top:-225px;background:transparent;padding:0;z-index:4}
+.mt-unlock-sticky{position:sticky;top:91px;height:calc(100svh - 91px);min-height:470px;display:grid;place-items:center;isolation:isolate;overflow:hidden}
+.mt-unlock-veil{position:absolute;inset:0;background:#d7eaf8;opacity:0;pointer-events:none}
+.mt-unlock-content{position:relative;z-index:1;max-width:600px;width:min(90%,600px);margin:auto;text-align:center;will-change:transform,opacity;transform:translate3d(0,135px,0) scale(.82);opacity:.18}
+.mt-eyebrow{font-size:11px!important;letter-spacing:.14em;color:#687f9c!important;font-weight:700}
+.mt-unlock-content h2{font-family:"Mitr","IBM Plex Sans Thai",sans-serif;font-weight:500;font-size:clamp(28px,5vw,41px);letter-spacing:-.02em;margin:8px 0 8px}
+.mt-unlock-content .mt-unlock-desc{max-width:480px;margin:0 auto;color:#60748e;font-size:15px;line-height:1.75}
+.mt-unlock-content .mt-price{margin:24px 0 16px}
+.mt-unlock-content .mt-cta{padding:13px 29px;font-weight:600;border-radius:9px;box-shadow:0 6px 20px #a65e181a}
+.mt-unlock-content .mt-under{margin-top:16px}
+.mt-under a{font-size:13px;color:#3b608b;text-decoration:underline;text-underline-offset:3px}
+.mt-cta{font-size:14px;border-radius:9px;box-shadow:none}
+.mt-cta:hover{background:#ca631b}
+.mt-cta:focus-visible,.mt-nav button:focus-visible,.mt-route-side button:focus-visible{outline:3px solid #e17a29;outline-offset:3px}
+.mt-modal-kicker{font-size:11px!important;letter-spacing:.16em;color:#677c95!important;font-weight:700;margin:3px 0}
+.mt-modal-icon{font-size:33px;line-height:1.5}
+.mt-dialog{box-shadow:0 26px 65px #071f4650}
+.mt-dialog h2{font-weight:500}
+.mt-dialog .mt-cta{min-width:185px}
+.mt-payment-note{font-size:11px!important;color:#7c8a9b}
+.mt-small-back{font:inherit;padding:8px 12px;text-decoration:underline;text-underline-offset:3px}
+.mt-nav button{transition:background-color .2s,border-color .2s}
+.mt-nav button[aria-selected=true]{box-shadow:none}
+.mt-route-container{max-width:1080px;padding-top:26px;padding-bottom:80px}
+.mt-route-intro{padding:4px 0 15px}
+.mt-route-intro h2{font-size:24px;font-weight:500;margin:3px 0}
+.mt-route-intro>p:last-child{margin:8px 0 0;color:#5c718b}
+.mt-route-layout{display:grid;grid-template-columns:268px minmax(0,1fr);gap:15px;align-items:start}
+.mt-route-side{position:sticky;top:114px;max-height:calc(100svh - 135px);overflow-y:auto;border:1px solid #c6d8eb;border-radius:11px;background:#fff;padding:10px}
+.mt-route-side-head{display:flex;justify-content:space-between;font-size:12px;color:#62738b;font-weight:700;padding:8px 10px 12px}
+.mt-route-side button{border:0;text-align:left;display:flex;gap:10px;width:100%;padding:10px 9px;border-radius:8px;background:transparent;color:#274466;cursor:pointer;font:inherit;font-size:12px;line-height:1.45}
+.mt-route-side button:hover{background:#edf4fc}
+.mt-route-side button[aria-current=step]{background:#fff0e3;color:#ab4c0b}
+.mt-route-side .mt-route-locked{color:#8e6e58;background:#fcf5ef;margin-top:6px}
+.mt-route-side .mt-route-locked:before{content:"";width:100%;height:1px;background:#e8eef5;position:absolute;top:-5px;left:0}
+.mt-route-side .mt-route-locked{position:relative;margin-top:12px}
+.mt-step-n{font-weight:700;font-size:11px;min-width:20px}
+.mt-route-page{background:#fff;border:1px solid #c6d8eb;border-radius:12px;min-width:0;padding:24px}
+.mt-route-meta{font-size:12px;color:#cb6a1a;font-weight:700}
+.mt-route-head h2{font-size:clamp(19px,3vw,24px);margin:7px 0;font-weight:500}
+.mt-route-head>p{font-size:12px;color:#61758d;margin:6px 0 13px}
+.mt-route-head #route-intro{font-size:13px;line-height:1.8;color:#283c57}
+.mt-acts{list-style:none;padding:0;margin:18px 0}
+.mt-acts>li{position:relative;border-top:1px solid #e3edf6;padding:15px 0 15px 32px;font-size:13px;line-height:1.75}
+.mt-act-checkbox{position:absolute;top:19px;left:2px;width:17px;height:17px;accent-color:#df7525;cursor:pointer}
+.mt-acts>li.done .mt-act-copy{text-decoration:line-through;opacity:.55}
+.mt-act-label{font-size:10px;color:#54769c;letter-spacing:.03em;text-transform:uppercase;font-weight:700}
+.mt-act-copy p{margin:6px 0;color:#64748c}
+.mt-act-copy ul{padding-left:18px;margin:7px 0}
+.mt-route-extras{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:16px}
+.mt-extra{border:1px solid #d8e4f0;border-radius:9px;background:#f6faff;padding:12px;font-size:12px;line-height:1.65}
+.mt-extra b{font-size:11px;color:#335476}
+.mt-route-actions{display:flex;align-items:center;justify-content:space-between;gap:10px;border-top:1px solid #e4edf5;margin-top:22px;padding-top:16px}
+.mt-outline{font:inherit;font-size:12px;padding:10px 16px;background:#edf4fb;color:#345377;border:1px solid #cadbec;border-radius:9px;cursor:pointer}
+.mt-outline:disabled{opacity:.45;cursor:default}
+.mt-route-actions .mt-cta{padding:10px 17px;font-size:12px}
+.mt-route-actions span{font-size:12px;color:#647a96}
+.mt-route-note{font-size:12px;color:#617995;text-align:center;margin:17px}
+@media(max-width:730px){.mt-route-layout{grid-template-columns:1fr}.mt-route-side{position:relative;top:auto;max-height:none}.mt-route-side #route-list{display:flex;overflow-x:auto;gap:5px}.mt-route-side #route-list button{flex:0 0 165px}.mt-route-side .mt-route-locked{margin-top:8px}.mt-route-page{padding:15px}.mt-route-extras{grid-template-columns:1fr}.mt-unlock-sticky{top:88px;height:calc(100svh - 88px)}}
+@media(prefers-reduced-motion:reduce){.mt-unlock-content,.mt-unlock-veil{transition:none!important;will-change:auto}}
+
+</style><link rel="stylesheet" href="./maple-theme.css"><link rel="stylesheet" href="./guide-reading.css"><script src="./guide-layout.js" defer></script></head><body class="maple-guide"><header class="mt-header"><b>🍁 Cleric Route Lv.1–50</b><nav class="mt-nav" aria-label="ไกด์"><button data-tab="intro" aria-selected="true">เริ่มต้น</button><button data-tab="builds" aria-selected="false">Builds</button><button data-tab="route" aria-selected="false">Route หลัก</button><button data-tab="opt" aria-selected="false">ล่าของ & คราฟต์</button><button data-tab="money" aria-selected="false">หาเงิน</button><a href="./index.html" style="color:white;font-size:12px;margin:auto 0 auto auto">กลับหน้าแรก</a></nav></header><section class="mt-panel" data-panel="intro" ><div class="mt-container"><div class="mt-readable"><section id="intro"><article class="mt-card"><span class="mt-label">คู่มือก่อนเริ่ม (อ่านประมาณ 10 นาที)</span><h2>Cleric คืออะไร</h2><p><b>Cleric</b> คือเมจสายศักดิ์สิทธิ์และสายฮีลใน MapleStory Classic World ตัวละครจะเริ่มเป็น Magician ตอนเลเวล 10 และเปลี่ยนเป็น Cleric ตอนเลเวล 30 จุดเด่นของสายนี้คือ<b>ถึกที่สุดในเกม</b> มี Heal ฟื้น HP ตัวเองและเพื่อน และ Holy Arrow ที่แรงขึ้นกับมอนผีดิบ</p><p>ไกด์นี้พาเล่นตั้งแต่สร้างตัวละครจนถึงเลเวล 50 ใช้ไม้เท้าสั้น (wand) ตลอดทาง ไม่ต้องเติมเงิน และเก็บเลเวลด้วย<b>การทำ QUEST เป็นหลัก</b> ช่วงไหนที่ไม่มี QUEST คุ้มๆ ให้ทำ ไกด์จะพาไปยืนตีมอน (grind) ในแมพที่เหมาะกับเมจ ถ้าไม่อยากวิ่ง QUEST เลย ใช้<b>แท็บสายตีมอน</b>แทนได้</p><p class="mt-callout"><b>⚠ ข้อควรรู้ก่อนเริ่ม:</b> ไกด์นี้เน้นให้เลเวลขึ้นเร็วที่สุด แต่ไม่ได้เน้นเก็บเงิน บางช่วงอาจใช้ค่ายามากกว่าเงินที่หาได้ จึงเหมาะกับคนที่เล่นคล่องแล้ว หรือมีเงินพอซื้อยาได้ตลอด ถ้าเล่นไปแล้วยาหมดเร็ว ให้ลดไปตีมอนที่อ่อนกว่า หรือหาเพื่อนมาตีเป็นปาร์ตี้ ดูรายละเอียดเพิ่มได้ในขั้นคำเตือนก่อนออกไปตีมอนยาวตอนเลเวล 15</p><div class="mt-three"><div class="mt-tile"><b>เล่นแบบไหน</b>ยืนห่างจากมอนแล้วยิงเวทใส่ ใช้ Energy Bolt ไปจนถึงเลเวล 41 แล้วเปลี่ยนเป็น Holy Arrow พยายามให้มอนตายใน 1 ถึง 2 ครั้ง ใช้ Heal ฟื้น HP แทนยา และเลือกแมพที่มอนแพ้ศักดิ์สิทธิ์ เช่น Jr. Wraith และ Zombie Lupin</div><div class="mt-tile"><b>ความยาก</b>ง่าย ถึกและฟื้น HP เองได้ จึงตายยาก แต่ดาเมจตีตัวเดียวต่ำที่สุดในเกม เก็บเลเวลช้ากว่าเมจสายอื่น และ Heal เล็งเป้าหมายได้ยากในช่วงแรก</div><div class="mt-tile"><b>เหมาะกับใคร</b>คนที่ชอบเล่นกับเพื่อนและเป็นตัวซัพพอร์ต อยากได้ตัวละครที่ตายยากและประหยัดค่ายา HP และไม่รีบเก็บเลเวลมาก</div></div><p class="mt-callout">การลงสเตตัส (AP) สกิล (SP) ลำดับสกิล Cleric ทั้ง 2 แบบ และชุดที่ควรใส่ในแต่ละช่วงเลเวล อยู่ที่แท็บ <b>Builds →</b></p><div class="mt-chips"><span>เส้นทางอาชีพ</span><span>จุดเด่นและข้อเสีย</span><span>ธาตุของมอน</span><span>วิธีคิดตอนเล่น</span><span>Citizenship</span><span>Life Skill</span><span>route นี้คิดยังไง</span><span>คำศัพท์</span><span>ข้อผิดพลาดที่เจอบ่อย</span></div></article><h3 class="mt-title">เส้นทางอาชีพ</h3><div class="mt-jobs"><div class="mt-job"><small>Lv.1–9</small><b>Beginner</b>ทำ QUEST บน Maple Island แล้วขึ้นเรือไป Victoria Island ช่วงนี้ยังไม่ต้องตัดสินใจอะไรมาก</div><div class="mt-job"><small>Lv.10</small><b>Magician</b>เปลี่ยนอาชีพกับ Grendel the Really Old ที่ Ellinia ได้ wand ฟรี และเริ่มใช้ Energy Bolt</div><div class="mt-job"><small>Lv.30</small><b>Cleric</b>เลือกสายศักดิ์สิทธิ์ ได้ Heal, Holy Arrow, Invincible, Bless และ Teleport ไกด์นี้จบที่เลเวล 50</div><div class="mt-job"><small>Lv.70</small><b>Priest</b>อาชีพขั้นที่ 3 ซึ่งยังไม่เปิดใน Classic และอยู่นอกขอบเขตของไกด์นี้</div></div></section><h3 class="mt-title">Cleric เด่นอะไร และมีข้อเสียอะไร</h3>
+<div class="mt-columns">
+<div class="mt-card mt-pro"><h3>จุดเด่น</h3><ul><li>โจมตีจากระยะไกล ไม่ต้องเข้าไปใกล้มอน จึงโดนตีน้อยและประหยัดยา HP</li><li>ตีได้ทั้งมอนที่อยู่ไกลและมอนที่เดินเข้ามาใกล้ ต่างจากสายธนูหรือโจรดาวที่ต้องรักษาระยะ และยิงได้ต่อเนื่องแทบไม่ต้องหยุด</li></ul></div>
+<div class="mt-card mt-con"><h3>ข้อเสีย</h3><ul><li>ใช้ MP เยอะมาก ค่าใช้จ่ายหลักตลอดเกมคือยา MP เช่น Orange และ Lemon</li><li><b>ดาเมจตีตัวเดียวต่ำที่สุดในเกม</b> ที่เลเวล 70 ตามการเทียบของ MeowDB จึงเก็บเลเวลช้ากว่าเมจสายอื่น อย่าเลือกสายนี้เพราะหวังตีแรง</li></ul></div></div><div class="mt-read-fade" aria-hidden="true"></div></div></div><div class="mt-unlock-stage" data-stage="intro"><div class="mt-unlock-sticky"><div class="mt-unlock-veil" aria-hidden="true"></div><div class="mt-unlock-content"><p class="mt-eyebrow">CLERIC · ฉบับเต็ม</p><h2>อ่านต่อได้ทุกหัวข้อ</h2><p class="mt-unlock-desc">ครบทุกหัวข้อของ Cleric ตั้งแต่เริ่มต้นจนถึง Lv.50</p><div class="mt-price">฿99 <small>ชำระครั้งเดียว</small></div><button type="button" class="mt-cta" data-unlock>ปลดล็อกไกด์</button><p class="mt-under"><a href="./premium-guide.html?guide=cleric">มีสิทธิ์อยู่แล้ว</a></p></div></div></div></section>
+<section class="mt-panel" data-panel="builds" hidden><div class="mt-container"><div class="mt-readable"><article class="mt-card"><span class="mt-label">Builds: Cleric</span><h2>จัดสเตตัสและสกิลอย่างไรให้เล่นต่อได้ยาว ๆ</h2><p>ไกด์ Builds รวบรวมหลักการลง AP และ SP พร้อมแนวทางเลือกอาวุธและชุดตามเลเวล โดยแยกคำอธิบายออกจาก Route หลัก</p><div class="mt-three"><div class="mt-tile"><b>AP</b>สเตตัสหลักของเมจคือ INT ส่วน LUK ลงให้พอใส่ wand</div><div class="mt-tile"><b>SP</b>สกิลขั้นแรกของ Magician และสกิล Cleric อย่าง Heal, Holy Arrow และ Bless</div><div class="mt-tile"><b>อุปกรณ์</b>ดู wand ชุด และวิธีหาของตามช่วงเลเวล</div></div><div class="mt-pills"><span>ลง AP</span><span>ลง SP</span><span>ชุดตามเลเวล</span><span>ป้ายราคา</span></div></article><h3 class="mt-title">หลักการลง AP</h3><div class="mt-card"><p>การวาง AP ที่ถูกต้องสำคัญมาก เพราะwand บางเล่มต้องการค่า LUK ตามที่กำหนด ถ้าลงผิดอาจใส่อาวุธไม่ได้</p><div class="mt-note">เริ่มจากเข้าใจว่าค่าไหนใช้เพิ่มดาเมจ และค่าไหนเป็นเงื่อนไขอุปกรณ์ แล้วจึงวางแผน AP ในแต่ละช่วง</div><p>เนื้อหาแบบเต็มจะมีแผนการลง AP แยกช่วงเลเวล และตารางเทียบสถานะพร้อมรายละเอียดการเลือกอาวุธ...</p></div><div class="mt-read-fade" aria-hidden="true"></div></div></div><div class="mt-unlock-stage" data-stage="builds"><div class="mt-unlock-sticky"><div class="mt-unlock-veil" aria-hidden="true"></div><div class="mt-unlock-content"><p class="mt-eyebrow">CLERIC · ฉบับเต็ม</p><h2>อ่านต่อได้ทุกหัวข้อ</h2><p class="mt-unlock-desc">แผน AP, SP และอุปกรณ์ในแต่ละช่วงเลเวล</p><div class="mt-price">฿99 <small>ชำระครั้งเดียว</small></div><button type="button" class="mt-cta" data-unlock>ปลดล็อกไกด์</button><p class="mt-under"><a href="./premium-guide.html?guide=cleric">มีสิทธิ์อยู่แล้ว</a></p></div></div></div></section>
+<section class="mt-panel" data-panel="route" hidden><div class="mt-container mt-route-container"><div class="mt-route-intro"><p class="mt-eyebrow">CLERIC · ROUTE</p><h2>เส้นทางเก็บเลเวล</h2><p>เดินตามขั้นตอนทีละช่วง เช็กสิ่งที่ทำเสร็จแล้ว และกลับมาอ่านต่อจากขั้นเดิมได้</p></div><div class="mt-route-layout"><aside class="mt-route-side" aria-label="ขั้นตอน Route"><div class="mt-route-side-head">ขั้นตอน <span id="route-count">1 / 12</span></div><div id="route-list"></div><button id="route-locked-step" class="mt-route-locked">🔒 หลัง Lv.10</button></aside><article class="mt-route-page"><div class="mt-route-head"><div class="mt-route-meta" id="route-level"></div><h2 id="route-title"></h2><p id="route-place"></p><div id="route-intro"></div></div><ol id="route-acts" class="mt-acts"></ol><div id="route-extras" class="mt-route-extras"></div><div class="mt-route-actions"><button type="button" id="route-prev" class="mt-outline">ก่อนหน้า</button><span id="route-progress">1 / 12</span><button type="button" id="route-next" class="mt-cta">ขั้นต่อไป</button></div></article></div><p class="mt-route-note">ตัวอย่าง Route ถึง Lv.10 เท่านั้น ขั้นถัดไปจะเปิดให้ผู้มีสิทธิ์เท่านั้น</p></div></section>
+<section class="mt-panel" data-panel="opt" hidden><div class="mt-container"><div class="mt-readable"><article class="mt-card"><span class="mt-label">ล่าของ & คราฟต์ · ไม่บังคับ</span><h2>เล็งของอะไรจากมอน และควรคราฟต์อะไรเอง?</h2><p>แท็บนี้แยกจาก Route หลัก เอาไว้ดูว่าช่วงไหนควรเล็งของอะไร ได้ฟรีจากมอนหรือเควสไหน ควรคราฟต์อะไรเอง และอะไรขายทิ้งได้</p><div class="mt-note"><b>แนวคิดของไกด์:</b> ซื้อหรือคราฟต์แค่อาวุธ ส่วนชุดเกราะพยายามหาจากดรอปและเควส</div><div class="mt-pills"><span>อุปกรณ์ตามเลเวล</span><span>wand</span><span>มอน</span><span>คราฟต์</span><span>ของมีราคา</span></div></article><h3 class="mt-title">แผนอุปกรณ์ตามเลเวล</h3><div class="mt-card"><p>เวลาตัดสินใจจะฟาร์มหรือคราฟต์ของ ให้ดูด้วยว่ามอนเกิดใน Route ที่กำลังจะเดินผ่านหรือไม่</p><div class="mt-three"><div class="mt-tile"><b>ต้องตีอยู่แล้ว</b>ของจากมอนที่อยู่ในเส้นทางหลัก</div><div class="mt-tile"><b>แวะตีได้</b>มอนอยู่ในแมพที่เส้นทางผ่าน</div><div class="mt-tile"><b>ไม่ผ่าน</b>ต้องเดินออกนอกเส้นทางไปหาเอง</div></div></div><div class="mt-read-fade" aria-hidden="true"></div></div></div><div class="mt-unlock-stage" data-stage="opt"><div class="mt-unlock-sticky"><div class="mt-unlock-veil" aria-hidden="true"></div><div class="mt-unlock-content"><p class="mt-eyebrow">CLERIC · ฉบับเต็ม</p><h2>อ่านต่อได้ทุกหัวข้อ</h2><p class="mt-unlock-desc">ตารางของดรอป การคราฟต์ และจุดฟาร์มที่เหมาะกับ Route</p><div class="mt-price">฿99 <small>ชำระครั้งเดียว</small></div><button type="button" class="mt-cta" data-unlock>ปลดล็อกไกด์</button><p class="mt-under"><a href="./premium-guide.html?guide=cleric">มีสิทธิ์อยู่แล้ว</a></p></div></div></div></section>
+<section class="mt-panel" data-panel="money" hidden><div class="mt-container"><div class="mt-readable"><article class="mt-card"><span class="mt-label">หาเงิน · NPC / Free Market</span><h2>หาเงิน: ขายของให้ NPC หรือขายให้ผู้เล่น</h2><p>ระหว่างเดินตาม Route จะได้ของ ETC และของหายากจากมอนมาเรื่อย ๆ ขายได้สองทาง คือขายให้ NPC ที่ราคาตายตัว หรือขายให้ผู้เล่นใน Free Market ซึ่งบางชิ้นได้ราคาสูงกว่า NPC หลายเท่า</p><p class="mt-note"><b>ก่อนขายของทุกครั้ง</b> ตรวจสอบก่อนว่าไอเทมชิ้นนั้นยังต้องใช้กับเควสข้างหน้าหรือไม่</p><div class="mt-pills"><span>ตารางราคาของ</span><span>เช็กราคาสด</span><span>ฟาร์มเงินจากมอน</span></div></article><h3 class="mt-title">ตัวอย่างตารางช่วยตัดสินใจ</h3><div class="mt-card" style="padding:0;overflow:hidden"><table class="mt-table"><thead><tr><th>ประเภท</th><th>ดูข้อมูลอะไร</th></tr></thead><tbody><tr><td>ขายให้ NPC</td><td>ราคาขายประจำร้านและความจำเป็นต่อเควส</td></tr><tr><td>ขายให้ผู้เล่น</td><td>ราคาตลาด จำนวนรายงาน และความหายากของไอเทม</td></tr><tr><td>ควรเก็บไว้</td><td>เควสหรือการคราฟต์ที่จะต้องใช้</td></tr></tbody></table></div><div class="mt-read-fade" aria-hidden="true"></div></div></div><div class="mt-unlock-stage" data-stage="money"><div class="mt-unlock-sticky"><div class="mt-unlock-veil" aria-hidden="true"></div><div class="mt-unlock-content"><p class="mt-eyebrow">CLERIC · ฉบับเต็ม</p><h2>อ่านต่อได้ทุกหัวข้อ</h2><p class="mt-unlock-desc">รายละเอียดราคาของและวิธีหา meso ระหว่างเก็บเลเวล</p><div class="mt-price">฿99 <small>ชำระครั้งเดียว</small></div><button type="button" class="mt-cta" data-unlock>ปลดล็อกไกด์</button><p class="mt-under"><a href="./premium-guide.html?guide=cleric">มีสิทธิ์อยู่แล้ว</a></p></div></div></div></section><div class="mt-modal" id="modal" hidden><div class="mt-dialog" role="dialog" aria-modal="true" aria-labelledby="modal-title"><button id="close" class="mt-close" aria-label="ปิด" type="button">×</button><p class="mt-modal-kicker">CLERIC · Lv.1–50</p><div class="mt-modal-icon" aria-hidden="true">🔒</div><h2 id="modal-title">อ่านต่อในฉบับเต็ม</h2><p>ครบทุกขั้นของ Route พร้อม Builds, ล่าของ และหาเงิน</p><div class="mt-price">฿99 <small>ชำระครั้งเดียว</small></div><a class="mt-cta" href="./premium-guide.html?guide=cleric">ดูสิทธิ์ของฉัน</a><p class="mt-under"><a href="./auth.html">เข้าสู่ระบบหรือสมัครสมาชิก</a></p><p class="mt-payment-note">ระบบชำระเงินยังไม่เปิดใช้งาน</p><button type="button" id="back" class="mt-small-back">กลับไปอ่านตัวอย่าง</button></div></div><script type="module">
+import {FREE_ROUTES} from './free-routes.js';
+const steps=FREE_ROUTES.mage;const tabs=['intro','builds','route','opt','money'];
+const byId=id=>document.getElementById(id);let lastFocus=null,tab='intro',step=0,renderFrame=0;
+const modal=byId('modal');const allowed=['talk','kill','collect','turnin','travel','craft','stop','gear','note'];
+const typeLabels={talk:'คุย / รับเควส',kill:'ตีมอน',collect:'หาของ',turnin:'ส่งเควส',travel:'เดินทาง',craft:'คราฟต์',stop:'หยุด',gear:'อุปกรณ์',note:'หมายเหตุ'};
+let checks={};try{checks=JSON.parse(localStorage.getItem('maplethai-cleric-free-checks-v1')||'{}')||{}}catch{}
+function escape(s){return String(s??'').replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]))}
+function openLock(){lastFocus=document.activeElement;modal.hidden=false;byId('close').focus();document.body.style.overflow='hidden'}
+function closeLock(){modal.hidden=true;document.body.style.overflow='';lastFocus?.focus()}
+function showTab(next){
+ if(!tabs.includes(next))return;tab=next;
+ document.querySelectorAll('[data-tab]').forEach(el=>el.setAttribute('aria-selected',String(el.dataset.tab===tab)));
+ document.querySelectorAll('[data-panel]').forEach(el=>el.hidden=el.dataset.panel!==tab);
+ window.scrollTo({top:0,behavior:'instant'});requestAnimationFrame(updateScroll);
+}
+function renderRoute(){
+ const s=steps[step];
+ byId('route-level').textContent='STEP '+(step+1)+' · Lv.'+s.lv;
+ byId('route-title').textContent=s.title;
+ byId('route-place').textContent='สถานที่: '+(s.where||s.ch||'');
+ byId('route-intro').innerHTML=s.intro||'';
+ const list=byId('route-list');list.replaceChildren();
+ steps.forEach((item,i)=>{
+ const b=document.createElement('button');b.type='button';b.setAttribute('aria-current',i===step?'step':'false');
+ const number=document.createElement('span');number.className='mt-step-n';number.textContent=String(i+1).padStart(2,'0');
+ const label=document.createElement('span');label.textContent='Lv.'+item.lv+' · '+item.title;
+ b.append(number,label);b.addEventListener('click',()=>jump(i));list.append(b);
+ });
+ const acts=byId('route-acts');acts.replaceChildren();
+ (s.act||[]).forEach((act,i)=>{
+ const li=document.createElement('li');const key=step+'-'+i;
+ if(checks[key])li.classList.add('done');
+ const input=document.createElement('input');input.type='checkbox';input.className='mt-act-checkbox';
+ input.checked=!!checks[key];input.setAttribute('aria-label','ทำรายการที่ '+(i+1)+' แล้ว');
+ input.addEventListener('change',()=>{if(input.checked)checks[key]=true;else delete checks[key];li.classList.toggle('done',input.checked);try{localStorage.setItem('maplethai-cleric-free-checks-v1',JSON.stringify(checks))}catch{}});
+ const copy=document.createElement('div');copy.className='mt-act-copy';
+ const type=document.createElement('div');type.className='mt-act-label';type.textContent=typeLabels[allowed.includes(act.t)?act.t:'note'];
+ const text=document.createElement('div');text.innerHTML=act.x||'';copy.append(type,text);
+ if(act.tip){const p=document.createElement('p');p.innerHTML=act.tip;copy.append(p)}
+ if(Array.isArray(act.sub)&&act.sub.length){const ul=document.createElement('ul');act.sub.forEach(t=>{const row=document.createElement('li');row.innerHTML=t;ul.append(row)});copy.append(ul)}
+ li.append(input,copy);acts.append(li);
+ });
+ const extra=byId('route-extras');extra.replaceChildren();
+ [['AP',s.ap],['SP',s.sp],['ควรเก็บ',s.keep],['ไปขั้นต่อไปเมื่อ',s.leave]].forEach(([label,value])=>{
+ if(!value)return;const box=document.createElement('div');box.className='mt-extra';
+ const name=document.createElement('b');name.textContent=label;
+ const body=document.createElement('div');body.innerHTML=value;box.append(name,body);extra.append(box);
+ });
+ byId('route-count').textContent=(step+1)+' / '+steps.length;
+ byId('route-progress').textContent=(step+1)+' / '+steps.length;
+ byId('route-prev').disabled=step===0;
+ byId('route-next').textContent=step===steps.length-1?'อ่านขั้นถัดไป':'ขั้นต่อไป';
+}
+function jump(i){if(i>=steps.length){openLock();return}if(i<0)return;step=i;renderRoute();window.scrollTo({top:byId('route-title').getBoundingClientRect().top+scrollY-(document.querySelector('.mt-header')?.offsetHeight||0)-12,behavior:'instant'})}
+function updateScroll(){
+ renderFrame=0;
+ const stage=document.querySelector('[data-panel="'+tab+'"] .mt-unlock-stage');
+ if(!stage)return;
+ const rect=stage.getBoundingClientRect();
+ const view=window.innerHeight||800;
+ const range=Math.max(1,rect.height-view*.5);
+ const p=Math.max(0,Math.min(1,(view*.65-rect.top)/range));
+ stage.style.setProperty('--reveal',p.toFixed(3));
+ const veil=stage.querySelector('.mt-unlock-veil');
+ const float=stage.querySelector('.mt-unlock-content');
+ veil.style.opacity=(Math.pow(p,1.6)*.99).toFixed(3);
+ float.style.opacity=(.16+.84*Math.pow(p,.8)).toFixed(3);
+ float.style.transform='translate3d(0,'+Math.round((1-p)*140)+'px,0) scale('+(0.81+.19*p).toFixed(3)+')';
+ float.style.pointerEvents=p>.45?'auto':'none';
+}
+function queueUpdate(){if(!renderFrame)renderFrame=requestAnimationFrame(updateScroll)}
+document.querySelectorAll('[data-tab]').forEach(b=>b.addEventListener('click',()=>{showTab(b.dataset.tab)}));
+document.querySelectorAll('[data-unlock]').forEach(b=>b.addEventListener('click',openLock));
+byId('route-next').addEventListener('click',()=>jump(step+1));
+byId('route-prev').addEventListener('click',()=>jump(step-1));
+byId('route-locked-step').addEventListener('click',openLock);
+byId('close').addEventListener('click',closeLock);
+byId('back').addEventListener('click',closeLock);
+modal.addEventListener('click',e=>{if(e.target===modal)closeLock()});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!modal.hidden)closeLock()});
+window.addEventListener('scroll',queueUpdate,{passive:true});
+window.addEventListener('resize',queueUpdate,{passive:true});
+renderRoute();const incoming=decodeURIComponent(location.hash.slice(1));showTab(tabs.includes(incoming)?incoming:'intro');
+</script><script type="module" data-navigation-guide="cleric" src="./navigation-entry.js"></script></body></html>
