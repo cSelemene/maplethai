@@ -7,19 +7,21 @@ const compact = n =>
   new Intl.NumberFormat('en-US', { notation: 'compact', maximumFractionDigits: 1 }).format(n);
 const full = n => new Intl.NumberFormat('en-US').format(n);
 
-const mesoIconUrl = new URL('./assets/market/meso-coin.svg?v=0e1561a5ba', import.meta.url).href;
-
+// Match the meso pill already used in the paid guides (.cx.meso / .ci).
+// The coin is CSS-drawn; do not load the different marketplace SVG here.
 function mesoAmount(amount, tag = 'span') {
   const value = document.createElement(tag);
   value.className = 'meso-amount';
-  const icon = document.createElement('img');
-  icon.src = mesoIconUrl;
-  icon.className = 'meso-icon';
-  icon.alt = 'meso';
-  icon.width = 18;
-  icon.height = 18;
-  value.append(document.createTextNode(compact(amount) + ' '), icon);
+  const coin = document.createElement('span');
+  coin.className = 'ci';
+  coin.setAttribute('aria-hidden', 'true');
+  const number = document.createElement('b');
+  number.textContent = compact(amount);
+  const unit = document.createElement('small');
+  unit.textContent = 'meso';
+  value.append(coin, number, unit);
   value.title = full(amount) + ' meso';
+  value.setAttribute('aria-label', full(amount) + ' meso');
   return value;
 }
 
