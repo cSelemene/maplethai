@@ -132,7 +132,7 @@ async function load() {
     let q = supabase
       .from('listings')
       .select(
-        'id,user_id,kind,item_name,category,description,qty,price,price_unit,atk,slots,item_id,item_stats,status,created_at,expires_at'
+        'id,user_id,kind,item_name,category,qty,price,price_unit,atk,slots,item_id,item_stats,status,created_at,expires_at'
       );
     if (highlightedListing && !mine) q = q.eq('id', highlightedListing);
     if (mine) q = q.eq('user_id', user.id);
@@ -248,8 +248,6 @@ function renderRow(row) {
     chips.append(el('span', 'ATK ' + row.atk));
   if (row.slots !== null && row.slots !== undefined) chips.append(el('span', 'ช่องอัปเกรด ' + row.slots));
   if (!chips.children.length) chips.append(el('small', 'ไม่ระบุ'));
-  const description = el('p', row.description || '', 'description');
-  description.title = row.description || '';
   const checkPrice = el('a', 'เช็คราคา Meso Watch ↗', 'price-check');
   checkPrice.href = 'https://meso.watch/';
   checkPrice.target = '_blank';
@@ -257,7 +255,7 @@ function renderRow(row) {
   checkPrice.title = 'ค้นหา ' + (item?.name || row.item_name) + ' ใน Meso Watch';
   checkPrice.onclick = () => navigator.clipboard?.writeText(item?.name || row.item_name).catch(() => {});
   priceCell.append(checkPrice);
-  card.append(chips, description);
+  card.append(chips);
   const contact = el('button', own ? 'ดูช่องทางติดต่อของฉัน' : 'ดูช่องทางติดต่อ');
   contact.type = 'button';
   contact.disabled = !open && !own;
@@ -290,6 +288,47 @@ function renderRow(row) {
     card.append(actions);
   }
   $('listings').append(card);
+}
+// One big tap target per channel: links open the app, everything else copies to the clipboard.
+function contactButton(key, value) {
+  const url = externalUrl(value, key) || contactLink(value, key),
+    button = el(url ? 'a' : 'button', undefined, 'contact-button ' + key),
+    icon = el('span', undefined, 'contact-icon'),
+    img = el('img'),
+    text = el('span', undefined, 'contact-text'),
+    action = el('small', url ? 'แตะเพื่อเปิด ' + channels[key] : 'แตะเพื่อคัดลอก');
+  img.src = './assets/market/contact/' + key + '.svg';
+  img.alt = '';
+  icon.append(img);
+  text.append(el('strong', channels[key]), el('span', value, 'contact-value'), action);
+  button.append(icon, text);
+  if (url) {
+    button.href = url;
+    button.target = '_blank';
+    button.rel = 'noopener noreferrer';
+  } else {
+    button.type = 'button';
+    button.onclick = async () => {
+      try {
+        await navigator.clipboard.writeText(value);
+        action.textContent =
+          key === 'discord' ? 'คัดลอก username แล้ว · วางในช่องเพิ่มเพื่อนของ Discord' : 'คัดลอกแล้ว';
+      } catch {
+        action.textContent = 'คัดลอกไม่สำเร็จ · เลือกข้อความด้านบนเพื่อคัดลอก';
+      }
+      button.classList.add('copied');
+    };
+  }
+  return button;
+}
+// A bare LINE ID or Facebook username can still be opened as a link.
+function contactLink(value, channel) {
+  const id = value.trim().replace(/^@/, '');
+  if (channel === 'line' && /^[a-z0-9._-]{4,20}$/i.test(id))
+    return 'https://line.me/R/ti/p/~' + encodeURIComponent(id);
+  if (channel === 'facebook' && /^[a-z0-9.]{5,50}$/i.test(id) && !/^\d+$/.test(id))
+    return 'https://www.facebook.com/' + encodeURIComponent(id);
+  return null;
 }
 function externalUrl(value, channel) {
   try {
@@ -329,32 +368,10 @@ async function showContact(row) {
       $('contact-content').append(el('p', 'เจ้าของประกาศยังไม่ได้ระบุช่องทางติดต่อ'));
       return;
     }
-    for (const [key, value] of Object.entries(contacts)) {
-      if (!channels[key] || !value) continue;
-      const box = el('div', undefined, 'contact-row'),
-        actions = el('div', undefined, 'contact-actions'),
-        copy = el('button', 'คัดลอก', 'outline');
-      box.append(el('strong', channels[key]), el('p', value));
-      copy.onclick = async () => {
-        try {
-          await navigator.clipboard.writeText(value);
-          copy.textContent = 'คัดลอกแล้ว';
-        } catch {
-          copy.textContent = 'เลือกข้อความด้านบนเพื่อคัดลอก';
-        }
-      };
-      actions.append(copy);
-      const url = externalUrl(value, key);
-      if (url) {
-        const a = el('a', 'เปิด ' + channels[key]);
-        a.href = url;
-        a.target = '_blank';
-        a.rel = 'noopener noreferrer';
-        actions.append(a);
-      }
-      box.append(actions);
-      $('contact-content').append(box);
-    }
+    const list = el('div', undefined, 'contact-list');
+    for (const [key, value] of Object.entries(contacts))
+      if (channels[key] && value) list.append(contactButton(key, value));
+    $('contact-content').append(list);
   } catch (e) {
     if (ticket === authGeneration) {
       $('contact-content').replaceChildren(
@@ -395,8 +412,7 @@ async function openForm(row = null) {
       category: 'category',
       qty: 'qty',
       price: 'price',
-      slots: 'slots',
-      description: 'description'
+      slots: 'slots'
     }))
       $(id).value = row[key] ?? '';
     selectItem(
@@ -449,7 +465,6 @@ $('post-form').onsubmit = async e => {
     price: $('price').value,
     price_unit: 'meso',
     slots: $('slots').value,
-    description: $('description').value.trim(),
     contacts
   };
   busy = true;

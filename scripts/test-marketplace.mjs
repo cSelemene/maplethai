@@ -70,6 +70,7 @@ async function page(extra = {}, path = '/marketplace.html') {
 try {
   const { p: guest, errors: guestErrors } = await page({ user: null });
   assert.equal(await guest.$('.listing h3 img'), null);
+  assert(!(await guest.$eval('#listings', e => e.textContent)).includes('Clean shield'));
   await guest.click('.listing>button');
   assert((await guest.$eval('#contact-content', e => e.textContent)).includes('เข้าสู่ระบบ'));
   assert(!(await guest.evaluate(() => window.marketTest.calls)).some(c => c.method === 'listing_contact'));
@@ -96,6 +97,7 @@ try {
   await free.click('.item-option');
   assert.equal(await free.$eval('#category', e => e.value), 'armor');
   assert.equal(await free.$('#stat-atk'), null);
+  assert.equal(await free.$('#description'), null);
   assert(await free.$('#stat-def'));
   await free.type('#stat-def', '-2');
   await free.type('#price', '250000');
@@ -108,6 +110,7 @@ try {
   assert.equal(save.args.p_data.item_id, 917);
   assert.equal(save.args.p_data.item_stats.def, -2);
   assert.equal(save.args.p_data.atk, undefined);
+  assert.equal(save.args.p_data.description, undefined);
   assert.equal(save.args.p_data.contacts.discord, 'seller-discord');
   assert.equal(save.args.p_data.price, '250000');
   assert.equal(save.args.p_data.price_unit, 'meso');
@@ -157,7 +160,19 @@ try {
   await member.waitForFunction(() =>
     document.querySelector('#contact-content').textContent.includes('private-discord')
   );
-  assert.equal(await member.$('#contact-content a'), null);
+  // Unsafe Facebook value stays a copy button; a bare LINE ID opens LINE; Discord copies.
+  assert.deepEqual(await member.$$eval('#contact-content a', els => els.map(e => e.href)), [
+    'https://line.me/R/ti/p/~private-line'
+  ]);
+  assert.equal(await member.$eval('.contact-button.facebook', e => e.tagName), 'BUTTON');
+  await member.evaluate(() => {
+    navigator.clipboard.writeText = async text => (window.marketTest.copied = text);
+  });
+  await member.click('.contact-button.discord');
+  await member.waitForFunction(() => window.marketTest.copied === 'private-discord');
+  assert(
+    (await member.$eval('.contact-button.discord', e => e.textContent)).includes('คัดลอก username แล้ว')
+  );
   assert((await member.evaluate(() => window.marketTest.calls)).some(c => c.method === 'listing_contact'));
   assert(await member.$eval('#market-buy', e => e.hidden));
   await member.evaluate(() => {
