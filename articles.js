@@ -10,7 +10,7 @@ export const ARTICLES = [
     category: 'อัปเดตเกม',
     date: '2026-10-21',
     minutes: 6,
-    cover: './assets/articles/grand-launch-new-maps-cover.webp',
+    cover: './assets/articles/grand-launch-new-maps-cover.webp?v=3ba67817ba',
     coverAlt: 'ภาพประกอบ Cleric บนพื้นหลังโทนสุสานยามค่ำ'
   },
   {
