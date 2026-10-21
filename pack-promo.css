@@ -1,0 +1,239 @@
+/* All-guides pack: homepage launch banner and pack card. Matches maple-theme (cream panels, brown frame). */
+.pack-banner {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 22px;
+  align-items: center;
+  margin: 22px 0 8px;
+  padding: 24px 26px;
+  border: 3px solid var(--frame, #78451f);
+  border-radius: 17px;
+  background:
+    radial-gradient(circle at 88% 20%, rgba(255, 255, 255, 0.28), transparent 42%),
+    linear-gradient(120deg, #c9541a 0%, #e78320 48%, #f5a93a 100%);
+  box-shadow: 0 6px 0 #78451f;
+  color: #fff;
+  overflow: hidden;
+}
+.pack-banner::after {
+  content: '🍁';
+  position: absolute;
+  right: -10px;
+  bottom: -26px;
+  font-size: 120px;
+  opacity: 0.16;
+  transform: rotate(18deg);
+  pointer-events: none;
+}
+.pack-banner[hidden],
+.pack-card[hidden] {
+  display: none;
+}
+.pack-kicker {
+  display: inline-block;
+  padding: 3px 12px;
+  border-radius: 999px;
+  background: #fff3d6;
+  color: #8a3d0f;
+  font-size: 0.8rem;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+}
+.pack-banner h2 {
+  margin: 10px 0 6px;
+  font-size: clamp(21px, 2.6vw, 30px);
+  font-weight: 900;
+  line-height: 1.3;
+  color: #fff;
+  text-shadow: 0 2px 0 rgba(120, 69, 31, 0.45);
+}
+.pack-banner p {
+  margin: 6px 0;
+  max-width: 640px;
+  line-height: 1.7;
+  color: #fffaf0;
+}
+.pack-banner .pack-personal {
+  display: inline-block;
+  margin-top: 8px;
+  padding: 6px 12px;
+  border-radius: 10px;
+  background: rgba(67, 43, 25, 0.28);
+  font-weight: 700;
+}
+.pack-banner-price {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  gap: 4px;
+  justify-items: center;
+  min-width: 210px;
+  padding: 16px 18px;
+  border: 2px solid var(--frame, #78451f);
+  border-radius: 14px;
+  background: var(--panel, #fff8e7);
+  color: var(--ink, #432b19);
+  text-align: center;
+}
+.pack-banner-price s {
+  color: var(--muted, #80684b);
+  font-size: 0.9rem;
+}
+.pack-banner-price strong {
+  font-size: 2.2rem;
+  font-weight: 900;
+  line-height: 1.1;
+  color: #c9541a;
+}
+.pack-banner-price > span {
+  font-size: 0.85rem;
+  color: var(--muted, #80684b);
+}
+.pack-banner-price .button {
+  width: 100%;
+  margin-top: 8px;
+  padding: 10px 14px;
+}
+.pack-more {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #8a3d0f;
+  text-decoration: underline;
+}
+
+.pack-card {
+  margin: 18px 0 26px;
+  padding: 22px;
+  border: 3px solid var(--frame, #78451f);
+  border-radius: 17px;
+  background: linear-gradient(135deg, #fff9e9, #ffedbd);
+  box-shadow: 0 5px 0 #78451f;
+  color: var(--ink, #432b19);
+  scroll-margin-top: 16px;
+}
+.pack-card-head {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 18px;
+  align-items: baseline;
+  justify-content: space-between;
+}
+.pack-card h3 {
+  margin: 6px 0 2px;
+  font-size: 1.45rem;
+  font-weight: 900;
+}
+.pack-card-price {
+  display: flex;
+  gap: 10px;
+  align-items: baseline;
+}
+.pack-card-price strong {
+  font-size: 1.9rem;
+  font-weight: 900;
+  color: #c9541a;
+}
+.pack-card-price s {
+  color: var(--muted, #80684b);
+}
+.pack-card-body {
+  display: grid;
+  grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+  gap: 18px;
+  margin-top: 14px;
+}
+.pack-includes {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.pack-includes li {
+  padding: 10px 12px;
+  border: 1px solid var(--line, #dfcca2);
+  border-radius: 10px;
+  background: #fffdf6;
+  line-height: 1.55;
+}
+.pack-includes b {
+  display: block;
+  font-size: 0.85rem;
+  color: #8a3d0f;
+}
+.pack-includes .pack-market {
+  grid-column: 1 / -1;
+  background: #fff3d6;
+}
+.pack-discount {
+  padding: 14px 16px;
+  border: 1px solid var(--line, #dfcca2);
+  border-radius: 12px;
+  background: #fffdf6;
+}
+.pack-discount h4 {
+  margin: 0 0 6px;
+  font-size: 1rem;
+}
+.pack-discount ul {
+  margin: 8px 0;
+  padding: 0;
+  list-style: none;
+}
+.pack-discount li {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 6px 0;
+  border-bottom: 1px dashed var(--line, #dfcca2);
+}
+.pack-discount li:last-child {
+  border-bottom: 0;
+}
+.pack-discount strong {
+  color: #c9541a;
+}
+.pack-card .pack-personal {
+  margin: 12px 0 0;
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: #fff3d6;
+  font-weight: 700;
+}
+.pack-fineprint {
+  margin: 10px 0 0;
+  color: var(--muted, #80684b);
+  font-size: 0.85rem;
+  line-height: 1.7;
+}
+.pack-card-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 14px;
+}
+.pack-card-actions .button {
+  min-width: 200px;
+  padding: 10px 16px;
+}
+@media (max-width: 760px) {
+  .pack-banner {
+    grid-template-columns: 1fr;
+    padding: 20px 18px;
+  }
+  .pack-banner-price {
+    min-width: 0;
+  }
+  .pack-card {
+    padding: 18px 16px;
+  }
+  .pack-card-body,
+  .pack-includes {
+    grid-template-columns: 1fr;
+  }
+  .pack-card-actions .button {
+    width: 100%;
+  }
+}

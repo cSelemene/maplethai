@@ -56,6 +56,9 @@ jobs:
       - name: Test credit balance, remainder QR, cancellation and market redemption
         run: CHROME_BIN=/usr/bin/google-chrome node scripts/test-credit-browser.mjs
 
+      - name: Test all-guides pack banner, prices, free claim, credit and owner view
+        run: CHROME_BIN=/usr/bin/google-chrome node scripts/test-pack-browser.mjs
+
   equipment-guide:
     runs-on: ubuntu-latest
     permissions:
