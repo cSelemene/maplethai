@@ -25,7 +25,7 @@ const fixture = {
 const stub = `
 const s=window.marketTest;const auth={getUser:async()=>({data:{user:s.user},error:null}),onAuthStateChange:fn=>{s.listeners.push(fn)}};
 const from=table=>{const filters=[];const q={select:()=>q,eq:(k,v)=>{filters.push(r=>r[k]===v);return q},gt:(k,v)=>{filters.push(r=>r[k]>v);return q},ilike:(k,v)=>{s.searches.push(v);filters.push(r=>r[k].toLowerCase().includes(v.slice(1,-1).toLowerCase()));return q},order:()=>q,range:()=>q,limit:()=>q,then:(resolve,reject)=>Promise.resolve({data:s.rows.filter(r=>filters.every(f=>f(r))),error:s.failListings?{message:'Network unavailable'}:null}).then(resolve,reject)};return q};
-export const createClient=()=>({auth,from,rpc:async(method,args)=>{s.calls.push({method,args});if(method==='marketplace_contact_quota')return {data:{remaining:(s.remaining??10)+(s.bonus??0),free_remaining:s.remaining??10,bonus_remaining:s.bonus??0,used:10-(s.remaining??10),limit:10}};if(method==='marketplace_price_reference')return {data:s.reference||{seller_count:3,low:20000,high:30000,median:25000}};if(method==='sync_account')return {data:s.account};if(method==='listing_contact'){s.opened||=[];const unlimited=s.account?.is_admin||s.account?.entitlements?.some(e=>e.product==='market'&&new Date(e.expires_at)>new Date());if(args.p_id!==s.rows.find(r=>r.user_id===s.user?.id)?.id&&!unlimited&&!s.opened.includes(args.p_id)){if((s.remaining??10)<=0)return {error:{message:'LOCKED'}};s.remaining=(s.remaining??10)-1;s.opened.push(args.p_id)}return {data:{discord:'private-discord',line:'private-line',facebook:'javascript:alert(1)'}}};if(method==='marketplace_save'){if(args.p_id){Object.assign(s.rows.find(r=>r.id===args.p_id),args.p_data)}else s.rows.unshift({id:2,user_id:s.user.id,...args.p_data,status:'open',created_at:new Date().toISOString(),expires_at:new Date(Date.now()+86400000).toISOString()});return {data:args.p_id||2}};if(method==='marketplace_close'){s.rows.find(r=>r.id===args.p_id).status='done';return {data:null}}return {error:{message:'Unknown RPC'}}}});
+export const createClient=()=>({auth,from,rpc:async(method,args)=>{s.calls.push({method,args});if(method==='marketplace_contact_quota')return {data:{remaining:(s.remaining??10)+(s.bonus??0),free_remaining:s.remaining??10,bonus_remaining:s.bonus??0,used:10-(s.remaining??10),limit:10}};if(method==='marketplace_price_reference')return {data:s.reference||{seller_count:3,low:20000,high:30000,median:25000}};if(method==='sync_account')return {data:s.account};if(method==='listing_contact'){s.opened||=[];const unlimited=s.account?.is_admin||s.account?.entitlements?.some(e=>e.product==='market'&&new Date(e.expires_at)>new Date());if(args.p_id!==s.rows.find(r=>r.user_id===s.user?.id)?.id&&!unlimited&&!s.opened.includes(args.p_id)){if((s.remaining??10)<=0)return {error:{message:'LOCKED'}};s.remaining=(s.remaining??10)-1;s.opened.push(args.p_id)}return {data:{discord:'private-discord',line:'private-line',facebook:'javascript:alert(1)'}}};if(method==='marketplace_save'||method==='marketplace_save_discord'){if(args.p_id){Object.assign(s.rows.find(r=>r.id===args.p_id),args.p_data)}else s.rows.unshift({id:2,user_id:s.user.id,...args.p_data,status:'open',created_at:new Date().toISOString(),expires_at:new Date(Date.now()+86400000).toISOString()});return {data:args.p_id||2}};if(method==='marketplace_close'){s.rows.find(r=>r.id===args.p_id).status='done';return {data:null}}return {error:{message:'Unknown RPC'}}}});
 `;
 async function page(extra = {}, path = '/marketplace.html') {
   const p = await browser.newPage();
@@ -328,6 +328,62 @@ try {
   assert((await bonus.$eval('#membership-description', e => e.textContent)).includes('โบนัสสะสม 20 ครั้ง'));
   assert.deepEqual(bonusErrors, []);
   console.log('PASS: monthly free and promotional bonus displayed separately');
+
+  const { p: member2 } = await page();
+  await member2.click('#new-post');
+  assert(await member2.$eval('#discord-mode', e => e.hidden));
+  const { p: admin, errors: adminErrors } = await page({
+    user: { id: 'admin', email: 'admin@example.invalid' },
+    account: { is_admin: true, entitlements: [] }
+  });
+  await admin.click('#new-post');
+  assert(!(await admin.$eval('#discord-mode', e => e.hidden)));
+  await admin.click('#for-discord');
+  assert(await admin.$eval('#contact-fieldset', e => e.hidden));
+  await admin.type('#item-name', 'Pan Lid');
+  await admin.waitForSelector('.item-option');
+  await admin.click('.item-option');
+  await admin.type('#price', '400000');
+  await admin.type('#discord-user', 'skylight0070');
+  await admin.type('#discord-url', 'https://discord.com/channels/1/2/3');
+  await admin.click('#save-post');
+  await admin.waitForFunction(() =>
+    window.marketTest.calls.some(c => c.method === 'marketplace_save_discord')
+  );
+  const discordSave = await admin.evaluate(() =>
+    window.marketTest.calls.find(c => c.method === 'marketplace_save_discord')
+  );
+  assert.equal(discordSave.args.p_data.discord_user, 'skylight0070');
+  assert.equal(discordSave.args.p_data.discord_url, 'https://discord.com/channels/1/2/3');
+  assert.equal(discordSave.args.p_data.contacts, undefined);
+  assert.deepEqual(adminErrors, []);
+  const { p: discordGuest, errors: discordErrors } = await page({
+    user: null,
+    rows: [
+      {
+        ...fixture,
+        item_id: 917,
+        item_name: 'Pan Lid',
+        discord_user: 'skylight0070',
+        discord_url: 'https://discord.com/channels/1/2/3',
+        expires_at: new Date(Date.now() + 26 * 3600000 - 60000).toISOString()
+      }
+    ]
+  });
+  const discordRow = await discordGuest.$eval('.listing', e => e.textContent);
+  assert(discordRow.includes('จาก Discord') && discordRow.includes('ปิดใน 26 ชม.'));
+  await discordGuest.click('.listing>button');
+  await discordGuest.waitForSelector('.contact-button.discord');
+  assert((await discordGuest.$eval('#contact-content', e => e.textContent)).includes('skylight0070'));
+  assert.equal(
+    await discordGuest.$eval('.discord-source', e => e.href),
+    'https://discord.com/channels/1/2/3'
+  );
+  assert(
+    !(await discordGuest.evaluate(() => window.marketTest.calls)).some(c => c.method === 'listing_contact')
+  );
+  assert.deepEqual(discordErrors, []);
+  console.log('PASS: admin-only Discord posting, public free Discord contact, badge and 36h countdown');
 
   const watchRows = [
     { ...fixture, id: 70, item_id: 917, item_name: 'Pan Lid', item_stats: { def: -1 }, user_id: 'seller-a' },
