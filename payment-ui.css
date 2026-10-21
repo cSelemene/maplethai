@@ -3,3 +3,9 @@
 .receiving-qr{display:block;width:min(100%,300px);height:auto;margin:18px auto 0;border:1px solid var(--line);border-radius:10px}#payment-qr{text-align:center}#qr-amount-note{font-size:.84rem}
 
 .recipient{background:transparent;border:0;padding:0}.receiving-qr{width:min(100%,390px);border:0;border-radius:0;margin:16px auto}#order-detail{font-size:.85rem;color:var(--muted)}
+.pack-quote{margin:12px 0;padding:10px 14px;border:1px solid #dfcca2;border-radius:10px;background:#fffaf0}
+.pack-quote p{display:flex;justify-content:space-between;gap:12px;margin:4px 0}
+.pack-quote p.muted{display:block;font-size:.88rem}
+.pack-quote .total{margin-top:8px;padding-top:8px;border-top:1px dashed #dfcca2;font-size:1.05rem}
+.pack-quote .total strong{color:#c9541a}
+.pack-quote[hidden],#pack-features[hidden],#pack-upsell[hidden]{display:none}

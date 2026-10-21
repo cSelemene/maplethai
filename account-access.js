@@ -16,6 +16,12 @@ async function refresh() {
     }
     const account = await readAccount();
     if (ticket !== generation) return;
+    if (account.entitlements?.some(e => e.product === 'pack_all')) {
+      const row = document.createElement('p');
+      row.dataset.guide = 'pack_all';
+      row.textContent = 'แพ็กทุกอาชีพ + ตลาดถาวร · ใช้งานได้ไม่มีวันหมดอายุ';
+      $('my-guides').append(row);
+    }
     for (const [id, name] of Object.entries(GUIDES)) {
       if (!hasGuide(account, id)) continue;
       const row = document.createElement('p');
