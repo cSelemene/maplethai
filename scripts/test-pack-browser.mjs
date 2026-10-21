@@ -41,7 +41,9 @@ export const createClient=()=>({auth,from:query,functions:{invoke:async()=>({dat
 }});
 `;
 const guides = n =>
-  ['guide_bandit', 'guide_mage', 'guide_hunter', 'guide_page'].slice(0, n).map(product => ({ product, expires_at: null }));
+  ['guide_bandit', 'guide_mage', 'guide_hunter', 'guide_page']
+    .slice(0, n)
+    .map(product => ({ product, expires_at: null }));
 async function open(path, extra = {}) {
   const p = await browser.newPage();
   await p.evaluateOnNewDocument(extra => {
@@ -95,12 +97,16 @@ try {
     await p.$eval('#pack-promo [data-pack-buy]', a => a.getAttribute('href')),
     './checkout.html?product=pack_all'
   );
-  assert.deepEqual(
-    await p.$$eval('[data-pack-tiers] strong', l => l.map(e => e.textContent)),
-    ['฿259', '฿160', '฿61', 'ฟรี']
-  );
+  assert.deepEqual(await p.$$eval('[data-pack-tiers] strong', l => l.map(e => e.textContent)), [
+    '฿259',
+    '฿160',
+    '฿61',
+    'ฟรี'
+  ]);
   // The pack sits above the first class family and the banner right after the hero.
-  assert.ok(await p.$eval('#pack', e => !!(e.compareDocumentPosition(document.querySelector('.class-groups')) & 4)));
+  assert.ok(
+    await p.$eval('#pack', e => !!(e.compareDocumentPosition(document.querySelector('.class-groups')) & 4))
+  );
   assert.ok(await p.$eval('.hero', e => e.nextElementSibling.id === 'pack-promo'));
   await p.close();
 
@@ -112,10 +118,7 @@ try {
   assert.ok(await visible(p, '#login-needed'));
   assert.ok(!(await visible(p, '#gift-options')) && !(await visible(p, '#friend-promotion')));
   assert.match(await text(p, '#pack-quote'), /ราคาเต็ม฿259/);
-  assert.match(
-    await p.$eval('#checkout-login', a => a.href),
-    /next=checkout\.html%3Fproduct%3Dpack_all/
-  );
+  assert.match(await p.$eval('#checkout-login', a => a.href), /next=checkout\.html%3Fproduct%3Dpack_all/);
   await p.close();
 
   // New customer: full price, QR for 259 + satang.
@@ -135,7 +138,10 @@ try {
   ]) {
     p = await open('/index.html', { rows: guides(n) });
     assert.equal(await text(p, '#pack-promo [data-pack-price]'), price);
-    assert.match(await text(p, '#pack [data-pack-personal]'), new RegExp('มีไกด์ ' + n + ' อาชีพ.*฿' + 99 * n));
+    assert.match(
+      await text(p, '#pack [data-pack-personal]'),
+      new RegExp('มีไกด์ ' + n + ' อาชีพ.*฿' + 99 * n)
+    );
     await p.close();
     p = await open('/checkout.html?product=pack_all', { rows: guides(n) });
     const q = await text(p, '#pack-quote');

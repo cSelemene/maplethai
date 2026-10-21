@@ -1,5 +1,5 @@
 import { supabase, readAccount, hasGuide } from './supabase-client.js?v=cb12a9f448';
-import { rpc, myOrders, showHistory, money, STATUS } from './payment-common.js?v=61cdecd50c';
+import { rpc, myOrders, showHistory, money, STATUS } from './payment-common.js?v=965cc4294e';
 import { paymentImage } from './payment-qr.js?v=ad42cece6f';
 let wallet = { available_cents: 0, reserved_cents: 0 },
   qrKey = '',
@@ -205,13 +205,13 @@ function render() {
     (pack
       ? ownsPack()
       : market
-      ? Boolean(
-          account?.is_admin ||
-          account?.entitlements?.some(
-            e => e.product === 'market' && (!e.expires_at || new Date(e.expires_at) > new Date())
+        ? Boolean(
+            account?.is_admin ||
+            account?.entitlements?.some(
+              e => e.product === 'market' && (!e.expires_at || new Date(e.expires_at) > new Date())
+            )
           )
-        )
-      : hasGuide(account, guide));
+        : hasGuide(account, guide));
   $('already-owned').hidden = !owns;
   $('payment-read-guide').hidden = !owns;
   $('checkout-flow').hidden = !user || !!owns;
@@ -243,8 +243,8 @@ function render() {
       : pack && price === 0
         ? 'ส่วนลดครอบคลุมราคาแพ็กทั้งหมด รับแพ็กได้ทันทีโดยไม่ต้องโอนเงินหรือส่งสลิป'
         : settings?.enabled
-      ? 'ชำระผ่าน PromptPay แล้วส่งสลิปเพื่อปลดล็อกสิทธิ์'
-      : 'ยังไม่เปิดรับชำระเงิน ผู้ดูแลกำลังเตรียม QR รับเงิน';
+          ? 'ชำระผ่าน PromptPay แล้วส่งสลิปเพื่อปลดล็อกสิทธิ์'
+          : 'ยังไม่เปิดรับชำระเงิน ผู้ดูแลกำลังเตรียม QR รับเงิน';
   $('credit-balance').textContent =
     'เครดิตคงเหลือ ' +
     money(wallet.available_cents / 100) +
@@ -255,7 +255,7 @@ function render() {
       ? ''
       : wallet.available_cents
         ? 'ระบบจะใช้เครดิตที่มี และสร้าง QR เฉพาะยอดที่เหลือ'
-      : 'หากโอนต่ำกว่ายอดและตรวจเงินเข้าจริงแล้ว เงินจะเก็บเป็นเครดิตสำหรับซื้อครั้งถัดไป';
+        : 'หากโอนต่ำกว่ายอดและตรวจเงินเข้าจริงแล้ว เงินจะเก็บเป็นเครดิตสำหรับซื้อครั้งถัดไป';
   $('fee-note').textContent = order?.processing_fee_cents
     ? 'ทศนิยมช่วยตรวจเช็คยอด ' +
       money(order.processing_fee_cents / 100) +
@@ -286,8 +286,8 @@ function render() {
     : pack
       ? 'หลังชำระสำเร็จ เปิดอ่านไกด์ทุกอาชีพได้ใน “ไกด์ของฉัน” และเปิดดูช่องทางติดต่อในตลาดได้ไม่จำกัด'
       : market
-      ? 'หลังอนุมัติ เปิดดูช่องทางติดต่อในตลาดได้ 30 วัน'
-      : 'หลังอนุมัติ เปิดอ่านฉบับเต็มได้ใน “ไกด์ของฉัน”';
+        ? 'หลังอนุมัติ เปิดดูช่องทางติดต่อในตลาดได้ 30 วัน'
+        : 'หลังอนุมัติ เปิดอ่านฉบับเต็มได้ใน “ไกด์ของฉัน”';
   recipient(order?.recipient);
   showHistory($('order-history'), orders, Object.fromEntries(products.map(p => [p.id, p.name])));
   for (const id of [
@@ -391,11 +391,7 @@ $('product-select').onchange = () => {
   render();
 };
 $('create-order').onclick = () => {
-  const field = gifting()
-    ? $('gift-email')
-    : singleGuide() && referralEmail()
-      ? $('referral-email')
-      : null;
+  const field = gifting() ? $('gift-email') : singleGuide() && referralEmail() ? $('referral-email') : null;
   if (field && (!field.value.trim() || !field.checkValidity())) {
     field.reportValidity();
     say('กรอกอีเมลให้ถูกต้องก่อนชำระเงิน', true);

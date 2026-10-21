@@ -1,6 +1,6 @@
 // Homepage all-guides pack: launch banner + pack card. The price shown is only a preview;
 // checkout recalculates it on the server (create_payment_order -> private.pack_price).
-import { supabase } from './supabase-client.js';
+import { supabase } from './supabase-client.js?v=cb12a9f448';
 const all = sel => [...document.querySelectorAll(sel)];
 const baht = n => '฿' + Number(n).toLocaleString('en-US');
 const set = (sel, text) => all(sel).forEach(n => (n.textContent = text));
