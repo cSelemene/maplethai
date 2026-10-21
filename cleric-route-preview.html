@@ -1,0 +1,827 @@
+<!doctype html><html lang="th"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>Cleric Route | MapleThai</title><link href="https://fonts.googleapis.com/css2?family=Mitr:wght@400;500;600&family=IBM+Plex+Sans+Thai:wght@400;500;600&display=swap" rel="stylesheet"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}
+
+:root{
+  --sky:#D7EAF8; --panel:#FFFFFF; --panel2:#F2F7FC; --ink:#1B2A44; --muted:#56678A;
+  --frame:#22406F; --frameInk:#FFFFFF; --maple:#E2711D; --line:#C7D7EA;
+  --t-travel:#2F6FD0; --t-talk:#B98500; --t-kill:#D1453B; --t-collect:#2E8B4E;
+  --t-turnin:#7A4CC2; --t-craft:#13879A; --t-stop:#6B7280; --t-gear:#A35C1C; --t-note:#56678A;
+  --tagInk:#FFFFFF; --radius-lg:14px; --radius-sm:8px;
+  --display:"Mitr", "IBM Plex Sans Thai", system-ui, sans-serif;
+  --body:"IBM Plex Sans Thai", "Mitr", system-ui, -apple-system, "Segoe UI", sans-serif;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --sky:#0E1930; --panel:#16233C; --panel2:#1B2B48; --ink:#E6EDF8; --muted:#9CACC6;
+    --frame:#2C4E86; --frameInk:#FFFFFF; --maple:#F39439; --line:#2B3D5E;
+    --t-travel:#6FA4F2; --t-talk:#E7B93A; --t-kill:#F07A70; --t-collect:#5CC583;
+    --t-turnin:#B191EA; --t-craft:#4CC3D4; --t-stop:#9CA3AF; --t-gear:#E39A57; --t-note:#9CACC6; --tagInk:#0E1930;
+  }
+}
+:root[data-theme="dark"]{
+  --sky:#0E1930; --panel:#16233C; --panel2:#1B2B48; --ink:#E6EDF8; --muted:#9CACC6;
+  --frame:#2C4E86; --frameInk:#FFFFFF; --maple:#F39439; --line:#2B3D5E;
+  --t-travel:#6FA4F2; --t-talk:#E7B93A; --t-kill:#F07A70; --t-collect:#5CC583;
+  --t-turnin:#B191EA; --t-craft:#4CC3D4; --t-stop:#9CA3AF; --t-gear:#E39A57; --t-note:#9CACC6; --tagInk:#0E1930;
+}
+*,*::before,*::after{box-sizing:inherit}
+html{height:100%;scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;min-height:100%;background:var(--sky);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.6}
+button{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--maple);outline-offset:2px;border-radius:6px}
+
+/* Title bar */
+.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--frame);color:var(--frameInk)}
+.bar-inner{max-width:1180px;margin:0 auto;padding:10px 16px;display:flex;align-items:center;gap:12px}
+.bar h1{font-family:var(--display);font-weight:500;font-size:1.05rem;margin:0;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.bar h1 svg{width:20px;height:20px;vertical-align:-4px;margin-right:6px}
+.bar-btn{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.25);border-radius:999px;padding:5px 12px;font-size:.88rem;cursor:pointer;white-space:nowrap}
+.bar-btn:hover{background:rgba(255,255,255,.22)}
+.only-mobile{display:none}
+
+/* Level ribbon — the one bold element */
+.ribbon{background:var(--frame);padding:0 16px 14px}
+.ribbon-inner{max-width:1180px;margin:0 auto}
+.track{position:relative;height:30px}
+.track-line{position:absolute;left:0;right:0;top:14px;height:4px;border-radius:4px;background:rgba(255,255,255,.18)}
+.track-fill{position:absolute;left:0;top:14px;height:4px;border-radius:4px;background:var(--maple);transition:width .35s ease}
+.track-tick{position:absolute;top:22px;font-size:.7rem;color:rgba(255,255,255,.65);transform:translateX(-50%)}
+.track-leaf{position:absolute;top:2px;width:26px;height:26px;transform:translateX(-50%);transition:left .35s ease;filter:drop-shadow(0 1px 1px rgba(0,0,0,.35))}
+.track-meta{display:flex;justify-content:space-between;color:rgba(255,255,255,.85);font-size:.82rem;margin-top:12px}
+
+/* Layout */
+.wrap{max-width:1180px;margin:0 auto;padding:18px 16px 110px;display:grid;grid-template-columns:290px 1fr;gap:20px;align-items:start}
+.side{position:sticky;top:120px;max-height:calc(100vh - 140px);overflow:auto;background:var(--panel);border:1px solid var(--line);border-radius:var(--radius-lg);padding:10px}
+.chap{font-family:var(--display);font-weight:500;font-size:.85rem;color:var(--muted);padding:12px 8px 4px}
+.tab{display:flex;gap:8px;width:100%;text-align:left;background:none;border:0;border-radius:var(--radius-sm);padding:6px 8px;cursor:pointer;align-items:flex-start;font-size:.9rem;line-height:1.35}
+.tab:hover{background:var(--panel2)}
+.tab[aria-current="step"]{background:var(--frame);color:var(--frameInk)}
+.tab .n{flex:0 0 26px;font-variant-numeric:tabular-nums;color:var(--muted);font-size:.8rem;padding-top:1px}
+.tab[aria-current="step"] .n{color:rgba(255,255,255,.75)}
+.tab .tt{flex:1}
+.tab .ok{flex:0 0 auto;color:var(--t-collect);font-weight:600}
+.tab[aria-current="step"] .ok{color:#BFF0CF}
+
+/* Step card */
+.card{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius-lg);overflow:hidden}
+.card-head{padding:20px 22px 16px;border-bottom:1px solid var(--line)}
+.lvrow{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap}
+.lv{font-family:var(--display);font-weight:600;font-size:2.4rem;line-height:1;color:var(--maple);font-variant-numeric:tabular-nums}
+.stepno{color:var(--muted);font-size:.9rem}
+.card-head h2{font-family:var(--display);font-weight:500;font-size:1.55rem;line-height:1.3;margin:8px 0 10px}
+.where{display:inline-flex;align-items:center;gap:6px;background:var(--panel2);border:1px solid var(--line);border-radius:999px;padding:4px 12px;font-size:.92rem}
+.where svg{width:16px;height:16px;color:var(--t-travel)}
+.intro{margin:12px 0 0;color:var(--muted);max-width:68ch}
+
+.acts{list-style:none;margin:0;padding:8px 14px 6px}
+.act{display:grid;grid-template-columns:30px 1fr;gap:10px;padding:12px 8px;border-bottom:1px dashed var(--line)}
+.act:last-child{border-bottom:0}
+.act input{width:22px;height:22px;margin:3px 0 0;accent-color:var(--t-collect);cursor:pointer}
+.act.done .main{color:var(--muted);text-decoration:line-through;text-decoration-color:var(--muted)}
+.tag{display:inline-block;font-size:.78rem;font-weight:600;border-radius:6px;padding:1px 8px;margin-right:8px;color:var(--tagInk);vertical-align:1px}
+.tag.travel{background:var(--t-travel)} .tag.talk{background:var(--t-talk)} .tag.kill{background:var(--t-kill)}
+.tag.collect{background:var(--t-collect)} .tag.turnin{background:var(--t-turnin)} .tag.craft{background:var(--t-craft)}
+.tag.stop{background:var(--t-stop)} .tag.gear{background:var(--t-gear)} .tag.note{background:var(--t-note)}
+.main{font-weight:500}
+.main b{font-weight:600}
+.facts{margin:6px 0 0;display:grid;grid-template-columns:auto 1fr;gap:2px 10px;font-size:.9rem}
+.facts dt{color:var(--muted)}
+.facts dd{margin:0}
+.sub{margin:6px 0 0;padding-left:18px;font-size:.92rem}
+.sub li{margin:2px 0}
+.tip{margin:6px 0 0;font-size:.9rem;color:var(--muted)}
+
+.extra{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1px;background:var(--line);border-top:1px solid var(--line)}
+.box{background:var(--panel2);padding:14px 18px}
+.box h3{font-family:var(--display);font-weight:500;font-size:.92rem;margin:0 0 4px;color:var(--muted)}
+.box p{margin:0;font-size:.93rem}
+.box.leave p{font-weight:500}
+
+.prow.r9{grid-template-columns:1.4fr 1.6fr .8fr .7fr 1.2fr 1.3fr}
+.tier{display:inline-block;font-size:.75rem;border:1px solid var(--maple);color:var(--maple);border-radius:6px;padding:0 6px}
+@media (max-width:860px){.prow.r9{grid-template-columns:1fr 1fr}.prow.phead.r9{display:none}}
+.mlv{display:inline-block;font-size:.7rem;font-weight:600;line-height:1.3;border-radius:5px;padding:0 5px;margin-left:3px;background:var(--t-kill);color:var(--tagInk);vertical-align:1px;white-space:nowrap}
+.sellnote{margin:0 0 12px;padding:10px 14px;border-radius:10px;border:1px solid var(--maple);background:color-mix(in srgb, var(--maple) 10%, var(--panel));font-size:.92rem}
+/* Bottom nav */
+.nav{position:fixed;left:0;right:0;bottom:0;z-index:20;background:var(--panel);border-top:1px solid var(--line);padding:10px 16px calc(10px + env(safe-area-inset-bottom,0px))}
+.nav-inner{max-width:1180px;margin:0 auto;display:flex;gap:10px;align-items:center}
+.nav .count{flex:1;text-align:center;color:var(--muted);font-size:.9rem}
+.btn{border:0;border-radius:12px;padding:12px 20px;font-family:var(--display);font-weight:500;font-size:1rem;cursor:pointer;min-width:120px}
+.btn.prev{background:var(--panel2);border:1px solid var(--line)}
+.btn.next{background:var(--maple);color:#fff;min-width:160px}
+.btn:disabled{opacity:.4;cursor:default}
+
+/* Drawer / modal */
+.overlay{position:fixed;inset:0;background:rgba(5,12,25,.55);z-index:40;display:none}
+.overlay.open{display:block}
+.drawer{position:fixed;z-index:41;top:0;bottom:0;left:0;width:min(340px,88vw);background:var(--panel);padding:calc(14px + env(safe-area-inset-top,0px)) 10px 20px;overflow:auto;transform:translateX(-102%);transition:transform .25s ease}
+.drawer.open{transform:none}
+.modal{position:fixed;z-index:41;left:50%;top:50%;transform:translate(-50%,-50%);width:min(860px,94vw);max-height:84vh;overflow:auto;background:var(--panel);border-radius:var(--radius-lg);border:1px solid var(--line);padding:18px 20px;display:none}
+.modal.open{display:block}
+.modal h2{font-family:var(--display);font-weight:500;margin:0 0 4px;font-size:1.3rem}
+.modal .close{float:right}
+.tbl{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:.88rem;min-width:620px}
+th,td{text-align:left;padding:7px 8px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-family:var(--display);font-weight:500;color:var(--muted)}
+
+@media (max-width:860px){
+  .wrap{grid-template-columns:1fr;padding-top:12px}
+  .side{display:none}
+  .only-mobile{display:inline-block}
+  .lv{font-size:2rem}
+  .card-head h2{font-size:1.3rem}
+  .btn{min-width:0;padding:12px 14px}
+  .btn.next{min-width:0;flex:0 0 auto}
+  .track-tick:nth-child(even){display:none}
+}
+@media (prefers-reduced-motion: reduce){
+  *{transition:none !important}
+}
+.it{white-space:nowrap}
+.it img{width:24px;height:24px;object-fit:contain;vertical-align:-6px;margin-right:3px}
+#keepTable td:first-child .it img{width:28px;height:28px;vertical-align:-8px;margin-right:6px}
+.credit{margin:10px 0 0;font-size:.78rem;color:var(--muted)}
+.it.npc img{width:22px;height:26px;object-fit:contain;object-position:bottom}
+.it.mob img{width:28px;height:24px}
+.info{padding:14px 22px 16px;border-bottom:1px solid var(--line);background:var(--panel2);display:grid;gap:12px}
+.info > div,.wrap > *,#main{min-width:0}
+.info h3{font-family:var(--display);font-weight:500;font-size:.82rem;color:var(--muted);margin:0 0 6px;letter-spacing:.02em}
+.tiles{display:flex;gap:10px;overflow-x:auto;padding-bottom:4px;scrollbar-width:thin}
+.tile{flex:0 0 auto;background:var(--panel);border:1px solid var(--line);border-radius:var(--radius-sm);padding:8px;display:flex;flex-direction:column;align-items:center;gap:4px;text-align:center;font-size:.8rem;line-height:1.3;text-decoration:none;color:var(--ink);font-family:var(--body)}
+.tile:hover{border-color:var(--maple)}
+.tile .nm{font-weight:500}
+.tile .mt{color:var(--muted);font-size:.72rem}
+.tile.map{width:168px;cursor:zoom-in}
+.tile.map .pic{width:150px;height:112px;display:flex;align-items:center;justify-content:center;background:var(--sky);border-radius:6px;overflow:hidden}
+.tile.map img{max-width:100%;max-height:100%;object-fit:contain}
+.tile.map .nopic{color:var(--muted);font-size:.72rem;padding:6px}
+.tile.npc{width:96px}
+.tile.npc .pic{height:72px;display:flex;align-items:flex-end;justify-content:center}
+.tile.npc img{max-height:72px;max-width:84px;object-fit:contain}
+.tile.mob{width:116px}
+.tile.mob .pic{height:64px;display:flex;align-items:flex-end;justify-content:center}
+.tile.mob img{max-height:64px;max-width:104px;object-fit:contain}
+.lvchip{display:inline-block;background:var(--t-kill);color:var(--tagInk);border-radius:999px;padding:0 7px;font-size:.7rem;font-weight:600}
+.lightbox{position:fixed;inset:0;z-index:60;display:none;align-items:center;justify-content:center;background:rgba(10,18,34,.78);padding:24px;cursor:zoom-out}
+.lightbox.open{display:flex}
+.lightbox figure{margin:0;max-width:min(92vw,720px);text-align:center;color:#fff}
+.lightbox img{width:min(86vw,720px);height:min(75vh,520px);object-fit:contain;background:#BFD8EE;border-radius:10px;padding:8px;image-rendering:auto}
+.lightbox figcaption{margin-top:10px;font-family:var(--display)}
+.lightbox a{color:#FFD7A8}
+@media (max-width:600px){.info{padding:12px 14px}.tile.map{width:140px}.tile.map .pic{width:122px;height:92px}}
+.tabs{max-width:1180px;margin:0 auto;padding:0 16px 8px;display:flex;gap:6px}
+.tabs button{background:transparent;border:1px solid rgba(255,255,255,.25);color:rgba(255,255,255,.85);border-radius:999px;padding:5px 14px;font-size:.9rem;cursor:pointer;font-family:var(--display)}
+.tabs button[aria-selected="true"]{background:var(--maple);border-color:var(--maple);color:#fff}
+#opt{display:none;max-width:1180px;margin:0 auto;padding:18px 16px 60px}
+body[data-tab="opt"] #opt{display:block}
+body[data-tab="opt"] .ribbon, body[data-tab="opt"] .wrap, body[data-tab="opt"] .nav, body[data-tab="opt"] #openDrawer{display:none !important}
+.side{top:162px !important;max-height:calc(100vh - 182px) !important}
+html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 110px)}
+.optbox{margin:4px 14px 14px;border:1.5px dashed var(--line);border-radius:var(--radius-sm);padding:10px 12px;background:var(--panel2)}
+.optbox-h{display:flex;justify-content:space-between;align-items:center;gap:8px;font-family:var(--display);font-weight:500;font-size:.9rem;color:var(--muted);margin-bottom:4px}
+.optbox ul{list-style:none;margin:0;padding:0}
+.optbox li{display:flex;gap:8px;align-items:flex-start;padding:6px 0;font-size:.92rem;border-bottom:1px dotted var(--line)}
+.optbox li:last-child{border-bottom:0}
+.linkbtn{background:none;border:0;color:var(--t-travel);cursor:pointer;font-size:.85rem;padding:2px 4px}
+.ok-tag{flex:0 0 auto;display:inline-block;font-size:.72rem;font-weight:600;border-radius:6px;padding:1px 7px;margin-top:2px;border:1px solid currentColor;white-space:nowrap}
+.ok-tag.rare{color:var(--maple)} .ok-tag.drop{color:var(--t-kill)} .ok-tag.quest{color:var(--t-turnin)} .ok-tag.craft{color:var(--t-craft)} .ok-tag.buy{color:var(--t-gear)} .ok-tag.sell{color:var(--t-stop)}
+.cf{display:inline-block;font-size:.72rem;font-weight:600;background:var(--t-collect);color:var(--tagInk);border-radius:999px;padding:0 6px;margin-left:2px;vertical-align:1px;white-space:nowrap}
+.opt-intro{padding:18px 22px}
+.opt-intro h2,.osec h2{font-family:var(--display);font-weight:500;margin:0 0 8px}
+.osec{margin-top:26px;scroll-margin-top:120px}
+.osec h2{font-size:1.35rem}
+.legend{font-size:.88rem;color:var(--muted)}
+.toc{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.toc a{background:var(--panel2);border:1px solid var(--line);border-radius:999px;padding:4px 12px;font-size:.88rem;color:var(--ink);text-decoration:none}
+.toc a:hover{border-color:var(--maple)}
+.band{margin-bottom:14px}
+.band.pad{padding:14px 18px}
+.band h3,.sub-h{font-family:var(--display);font-weight:500;font-size:1rem;margin:0 0 8px}
+.pad-h{padding:14px 18px 0}
+.band h4{font-family:var(--display);font-weight:500;font-size:.92rem;margin:10px 0 4px;color:var(--muted)}
+.band-h{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;padding:14px 18px 6px}
+.band.pad .band-h{padding:0 0 6px}
+.band-h .lv{font-size:1.5rem}
+.prow{display:grid;grid-template-columns:110px 1.2fr 1fr;gap:10px;padding:9px 18px;border-top:1px solid var(--line);font-size:.92rem;align-items:start}
+.prow.phead{font-family:var(--display);color:var(--muted);font-size:.82rem;border-top:0;padding-top:4px;padding-bottom:4px}
+.prow.w{grid-template-columns:60px 1fr 1.1fr 1.3fr 1fr}
+.prow.c5{grid-template-columns:1fr 1fr .8fr 1.6fr .9fr}
+.prow.c4{grid-template-columns:1fr .8fr 1.5fr 1.6fr}
+.prow.c3{grid-template-columns:1.3fr 1.4fr .8fr}
+.prow.w.buy .pc4{font-weight:600;color:var(--t-gear)}
+.pc0{font-weight:500}
+.onote{font-size:.9rem;color:var(--muted);margin:8px 2px}
+.olist{margin:0;padding-left:18px}
+.olist li{margin:5px 0;font-size:.93rem}
+.mgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:12px}
+.mcard{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius-sm);padding:12px;display:flex;flex-direction:column;gap:6px}
+.mhead{display:flex;gap:10px;align-items:center}
+.mhead img{width:64px;height:56px;object-fit:contain;flex:0 0 auto}
+.mcard .nm{font-weight:600}
+.mrow{display:flex;gap:8px;font-size:.88rem;align-items:flex-start}
+.stepchip{border:1px solid var(--line);background:var(--panel2);border-radius:6px;font-size:.75rem;padding:0 6px;margin:2px 2px 0 0;cursor:pointer;color:var(--ink)}
+.stepchip:hover{border-color:var(--maple)}
+.expgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(105px,1fr));gap:8px}
+.expc{background:var(--panel2);border:1px solid var(--line);border-radius:8px;padding:6px 8px;display:flex;flex-direction:column;font-size:.85rem}
+.timeline{list-style:none;margin:0 0 14px;padding:0 0 0 14px;border-left:3px solid var(--maple)}
+.timeline li{position:relative;margin:0 0 14px;padding-left:12px}
+.timeline li::before{content:"";position:absolute;left:-23px;top:6px;width:13px;height:13px;border-radius:50%;background:var(--maple);border:2px solid var(--panel)}
+.tl-h{display:flex;gap:10px;align-items:baseline;flex-wrap:wrap}
+.tl-h .lv{font-size:1.15rem}
+@media (max-width:760px){
+  .prow,.prow.w,.prow.c5,.prow.c4,.prow.c3{grid-template-columns:1fr;gap:2px;padding:10px 14px}
+  .prow.phead{display:none}
+  .prow .pc0{font-family:var(--display);color:var(--maple)}
+  .prow.w .pc0{color:var(--maple)}
+  .optbox{margin:4px 8px 12px}
+}
+
+.mrow .it,.olist .it,.pc .it{white-space:normal}
+a.dbl{color:inherit;text-decoration:underline dotted;text-decoration-color:var(--muted);text-underline-offset:3px}
+a.dbl:hover{color:var(--maple);text-decoration-color:var(--maple)}
+a.dbl.q{color:var(--t-turnin)}
+.prow.g4{grid-template-columns:90px 1.15fr 1fr 1.15fr}
+.prow.w{grid-template-columns:52px .9fr 1fr 1.1fr 1.2fr .9fr !important}
+.rs{font-size:.8rem;line-height:1.45;border-left:3px solid var(--line);padding:1px 0 1px 7px;margin:0 0 4px}
+.rs.must{border-color:var(--t-collect)} .rs.near{border-color:var(--t-talk)} .rs.no{border-color:var(--t-kill);color:var(--muted)} .rs.na{color:var(--muted)}
+.rs.inl{display:inline-block;border:0;border-radius:6px;padding:0 6px;margin:0;font-weight:600;color:var(--tagInk)}
+.rs.inl.must{background:var(--t-collect)} .rs.inl.near{background:var(--t-talk)} .rs.inl.no{background:var(--t-stop)}
+@media (max-width:760px){.prow.g4,.prow.w{grid-template-columns:1fr !important}}
+#intro{display:none;max-width:1000px;margin:0 auto;padding:18px 16px 60px}
+body[data-tab="intro"] #intro{display:block}
+body[data-tab="intro"] .ribbon, body[data-tab="intro"] .wrap, body[data-tab="intro"] .nav, body[data-tab="intro"] #openDrawer{display:none !important}
+.intro-hero{padding:20px 22px}
+.intro-hero h2{font-family:var(--display);font-weight:500;font-size:1.6rem;margin:2px 0 8px}
+.intro-hero .mt{margin:0}
+.hero-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:14px 0 4px}
+.hero-grid > div{background:var(--panel2);border:1px solid var(--line);border-radius:var(--radius-sm);padding:10px 12px}
+.hero-grid h3{font-family:var(--display);font-weight:500;font-size:.95rem;margin:0 0 4px;color:var(--maple)}
+.hero-grid p{margin:0;font-size:.9rem}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.two .band{margin:0}
+.pro h3{color:var(--t-collect)} .con h3{color:var(--t-kill)}
+.steps{margin:0;padding-left:22px}
+.steps li{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius-sm);padding:10px 12px;margin:0 0 8px;font-size:.93rem}
+.rule{background:var(--panel2);border-left:4px solid var(--maple);padding:8px 12px;border-radius:6px;font-size:.95rem}
+#intro .band.pad .prow{padding-left:0;padding-right:0}
+.legend-tags{display:flex;flex-wrap:wrap;gap:6px;margin:4px 0 8px}
+.legend-tags .tag{margin:0}
+.wgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:8px}
+.wcard{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius-sm);padding:9px 12px;display:flex;flex-direction:column;gap:2px;font-size:.88rem}
+.wcard b{font-family:var(--display);font-weight:500;color:var(--maple)}
+.cta{text-align:center;margin:18px 0 6px}
+.lvl{display:inline-block;font-size:.75rem;font-weight:600;border-radius:6px;padding:0 7px;color:var(--tagInk)}
+.lvl.hi{background:var(--t-kill)} .lvl.mid{background:var(--t-talk)} .lvl.lo{background:var(--t-stop)}
+.bar-btn.big{background:var(--maple);border-color:var(--maple);color:#fff;font-size:1rem;padding:10px 22px}
+@media (max-width:760px){.hero-grid,.two{grid-template-columns:1fr}}
+.navbox{margin:0;border-bottom:1px solid var(--line);padding:12px 22px 14px}
+.navbox summary{cursor:pointer;font-family:var(--display);font-weight:500;font-size:1rem}
+.navbox summary .mt{font-family:var(--body);font-weight:400;font-size:.8rem;color:var(--muted)}
+.navlegend{font-size:.78rem;color:var(--muted);margin:6px 0 4px;display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+.navlist{list-style:none;counter-reset:nv;margin:6px 0 0;padding:0}
+.nv{counter-increment:nv;display:grid;grid-template-columns:1fr auto;gap:10px;align-items:start;padding:8px 0 8px 30px;border-top:1px dotted var(--line);position:relative;font-size:.92rem}
+.nv:first-child{border-top:0}
+.nv::before{content:counter(nv);position:absolute;left:0;top:9px;width:22px;height:22px;border-radius:50%;background:var(--panel2);border:1px solid var(--line);font-size:.75rem;display:flex;align-items:center;justify-content:center;color:var(--muted)}
+.nvk{display:inline-block;font-size:.72rem;font-weight:600;border-radius:6px;padding:0 7px;margin-right:4px;color:var(--tagInk);vertical-align:1px}
+.nvk.cab{background:var(--t-travel)} .nvk.walk{background:var(--t-collect)} .nvk.npc{background:var(--t-talk)} .nvk.txt{background:var(--t-note)}
+.mm{position:relative;display:block;width:min(170px, calc(84px * var(--ar)));height:auto;padding:0;border:1px solid var(--line);border-radius:6px;background:#BFD8EE;cursor:zoom-in;overflow:hidden}
+.mm img{width:100%;height:100%;object-fit:fill;display:block;image-rendering:pixelated}
+.mm.big{width:min(460px,80vw, calc(70vh * var(--ar)));cursor:zoom-out;grid-column:1 / -1;justify-self:start}
+.nv:has(.mm.big){grid-template-columns:1fr}
+.mmdot{position:absolute;width:12px;height:12px;margin:-6px 0 0 -6px;border-radius:50%;border:2px solid #fff;box-shadow:0 0 0 1px rgba(0,0,0,.45)}
+.mm.big .mmdot{width:16px;height:16px;margin:-8px 0 0 -8px}
+.mmdot.st{position:static;display:inline-block;margin:0;width:10px;height:10px}
+.mmdot.in{background:#2F6FD0} .mmdot.out{background:#E2711D} .mmdot.np{background:#D1453B}
+.mm .mmdot.out,.mm .mmdot.np{animation:mmp 1.4s ease-in-out infinite}
+@keyframes mmp{50%{transform:scale(1.35)}}
+@media (prefers-reduced-motion: reduce){.mm .mmdot{animation:none}}
+@media (max-width:600px){.navbox{padding:10px 14px}.mm{width:min(120px, calc(64px * var(--ar)))}}
+.tile.npc{width:132px !important}
+.npclink{display:flex;flex-direction:column;align-items:center;gap:2px;color:inherit;text-decoration:none}
+.npcmap{position:relative;display:block;width:min(134px, calc(80px * var(--ar)));aspect-ratio:var(--ar);padding:0;border:1px solid var(--line);border-radius:6px;background:#BFD8EE;cursor:zoom-in;overflow:hidden}
+.npcmap img{width:100%;height:100%;object-fit:fill;display:block}
+.mmdot.np{background:#22C55E;border-radius:3px;border:2px solid #fff}
+.lbmap{position:relative;width:min(86vw,720px, calc(72vh * var(--ar)));aspect-ratio:var(--ar);margin:0 auto;background:#BFD8EE;border-radius:10px;overflow:hidden}
+.lightbox .lbmap img{width:100%;height:100%;object-fit:fill;display:block;padding:0;background:none;border-radius:0;image-rendering:pixelated;max-height:none}
+.mmdot.big{width:20px;height:20px;margin:-10px 0 0 -10px;animation:mmp 1.4s ease-in-out infinite}
+.scr{color:var(--muted);font-size:.85rem}
+.etcbox{margin:4px 14px 14px;border:1px solid var(--line);border-radius:var(--radius-sm);padding:10px 12px;background:var(--panel2)}
+.etcbox summary{cursor:pointer;font-family:var(--display);font-weight:500;font-size:.95rem}
+.etcbox summary .mt{font-family:var(--body);font-weight:400;font-size:.8rem;color:var(--muted)}
+.enote{font-size:.8rem;color:var(--muted);margin:8px 0 4px;line-height:1.5}
+.elist{list-style:none;margin:0;padding:0}
+.eitem{padding:8px 0;border-bottom:1px dotted var(--line);font-size:.88rem}
+.eitem:last-child{border-bottom:0}
+.eh{display:flex;flex-wrap:wrap;align-items:center;gap:4px 8px;font-weight:600}
+.efrom{font-weight:400;font-size:.78rem;color:var(--muted)}
+.ep{font-weight:400;font-size:.78rem;background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:0 6px;white-space:nowrap}
+.erec{margin:5px 0 0 10px;padding-left:8px;border-left:3px solid var(--t-craft);line-height:1.9}
+.edisc{display:inline-block;font-size:.72rem;font-weight:600;color:var(--t-craft);border:1px solid currentColor;border-radius:6px;padding:0 6px;white-space:nowrap}
+.edisc.sm{margin-left:3px;font-weight:500}
+.x{font-size:.78rem;color:var(--muted);margin-left:1px}
+.ecat{font-size:.72rem;color:var(--muted);margin-left:2px}
+.ejob{font-size:.7rem;color:var(--muted);border:1px dashed var(--line);border-radius:5px;padding:0 4px;white-space:nowrap}
+.ejob.th{color:var(--maple);border-color:currentColor}
+.ev{font-size:.72rem;font-weight:600;border-radius:999px;padding:0 7px;white-space:nowrap}
+.ev.up{background:#DCFCE7;color:#166534}.ev.dn{background:#FEE2E2;color:#991B1B}
+.eu2{font-size:.8rem;color:var(--muted);margin-top:2px}
+.emore,.enone{margin:4px 0 0 10px;font-size:.8rem;color:var(--muted)}
+.etcbox .ev.up{} @media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .ev.up{background:#14532D;color:#BBF7D0}:root:not([data-theme="light"]) .ev.dn{background:#7F1D1D;color:#FECACA}}
+:root[data-theme="dark"] .ev.up{background:#14532D;color:#BBF7D0}:root[data-theme="dark"] .ev.dn{background:#7F1D1D;color:#FECACA}
+.ew{display:inline-block;font-size:.72rem;font-weight:600;border-radius:999px;padding:0 8px;margin-bottom:2px;white-space:nowrap;color:var(--tagInk)}
+.ew.own{background:var(--maple)} .ew.mat{background:var(--t-craft)} .ew.scr{background:var(--t-turnin)} .ew.arw{background:var(--t-collect)} .ew.eq{background:var(--t-gear)}
+.erec.own{border-left-color:var(--maple)} .erec.scr{border-left-color:var(--t-turnin)} .erec.arw{border-left-color:var(--t-collect)} .erec.eq{border-left-color:var(--t-gear)}
+.erec{line-height:1.75}
+.ewarn{margin-top:10px;padding:8px 12px;border-radius:8px;border:1px solid var(--maple);background:color-mix(in srgb, var(--maple) 9%, var(--panel));font-size:.82rem}
+.ewarn ul{margin:4px 0 0;padding-left:18px}.ewarn li{margin:2px 0}
+
+.acts-h{font-family:var(--display);font-weight:500;font-size:1rem;margin:14px 22px 0;color:var(--ink)}
+.acts-h .mt{font-family:var(--body);font-weight:400;font-size:.8rem;color:var(--muted)}
+.navbox{border-top:1px solid var(--line)}
+.navbox > summary{list-style:none;display:flex;align-items:center;gap:8px;padding:10px 14px;margin:2px 0;border:1px solid var(--line);border-radius:10px;background:var(--panel2);color:var(--t-travel);font-weight:500}
+.navbox > summary::-webkit-details-marker{display:none}
+.navbox > summary::after{content:"▾ คลิกเพื่อแสดง";margin-left:auto;font-family:var(--body);font-size:.8rem;color:var(--muted)}
+.navbox[open] > summary::after{content:"▴ ซ่อน"}
+.navbox > summary:hover{border-color:var(--t-travel)}
+
+/* เควสเสริม: แยกชั้นจาก route หลัก */
+.tab:not(.sq) .tt{font-weight:500}
+.tab.sq{padding:3px 8px 3px 30px;font-size:.8rem;color:var(--muted);line-height:1.3}
+.tab.sq .n{flex:0 0 14px;font-size:.75rem}
+.tab.sq[aria-current="step"]{background:var(--panel2);color:var(--ink);outline:1.5px dashed var(--t-turnin);outline-offset:-2px}
+.sqtag{display:inline-block;font-size:.66rem;font-weight:600;color:var(--t-turnin);border:1px dashed currentColor;border-radius:5px;padding:0 4px;margin-right:4px;vertical-align:1px}
+.sqbox{margin:6px 14px 14px;border:1.5px dashed var(--t-turnin);border-radius:var(--radius-sm);padding:8px 12px;background:color-mix(in srgb, var(--t-turnin) 5%, var(--panel))}
+.sqbox h3{font-family:var(--display);font-weight:500;font-size:.9rem;margin:0 0 4px;color:var(--t-turnin)}
+.sqbox h3 .mt{font-family:var(--body);font-weight:400;font-size:.78rem;color:var(--muted)}
+.sqrow{display:flex;align-items:center;gap:8px;width:100%;text-align:left;background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:7px 10px;margin:4px 0;cursor:pointer;font-size:.88rem;color:var(--ink)}
+.sqrow:hover{border-color:var(--t-turnin)}
+.sqrow .go{margin-left:auto;color:var(--t-turnin);font-size:.8rem;white-space:nowrap}
+.sqrow .ok{color:var(--t-collect);font-weight:600}
+.card.sqcard{border:1.5px dashed var(--t-turnin)}
+.sqhead{display:inline-block;font-size:.78rem;font-weight:600;color:#fff;background:var(--t-turnin);border-radius:6px;padding:1px 8px}
+.sqback{margin:0 22px 14px;background:none;border:1px solid var(--line);border-radius:8px;padding:6px 12px;cursor:pointer;color:var(--t-travel);font-size:.88rem}
+/* ป้าย EXP / meso */
+.cx{display:inline-flex;align-items:center;gap:4px;box-sizing:border-box;height:1.5em;padding:0 7px 0 2px;margin:0 2px;border:1px solid;border-radius:999px;font-size:.86em;line-height:1;white-space:nowrap;vertical-align:-.2em;transition:transform .15s ease, box-shadow .15s ease;cursor:default}
+.cx b{font-weight:700;font-variant-numeric:tabular-nums}
+.cx small{font-size:.8em;font-weight:600;opacity:.8;margin-left:-1px}
+.cx:hover{transform:translateY(-1px);box-shadow:0 2px 6px rgba(0,0,0,.15)}
+.cx .ci{flex:0 0 auto;width:1.15em;height:1.15em;border-radius:50%;position:relative;font-size:inherit}
+.cx.exp{background:#EEF9E3;color:#2D6A0E;border-color:#A6D97A}
+.cx.exp .ci{background:radial-gradient(circle at 35% 30%,#D8FFB0 0 15%,#7FD13B 45%,#3E9A12 85%);box-shadow:inset 0 0 0 1px rgba(45,106,14,.55)}
+.cx.exp .ci::after{content:"";position:absolute;inset:22%;background:#fff;clip-path:polygon(50% 0,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%)}
+.cx.meso{background:#FFF6D6;color:#7A5200;border-color:#F0C94A}
+.cx.meso .ci{background:radial-gradient(circle at 35% 30%,#FFF7C2 0 15%,#FFD23F 45%,#E09A00 80%,#A86A00);box-shadow:inset 0 0 0 1px rgba(122,82,0,.55)}
+.cx.meso .ci::after{content:"";position:absolute;inset:26%;border-radius:50%;border:1.5px solid rgba(122,82,0,.5)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .cx.exp{background:#1D3A12;color:#C6F2A2;border-color:#4C8A2A}:root:not([data-theme="light"]) .cx.meso{background:#3A2E08;color:#FFE08A;border-color:#9C7A1C}}
+:root[data-theme="dark"] .cx.exp{background:#1D3A12;color:#C6F2A2;border-color:#4C8A2A}
+:root[data-theme="dark"] .cx.meso{background:#3A2E08;color:#FFE08A;border-color:#9C7A1C}
+@media (prefers-reduced-motion: reduce){.cx{transition:none}.cx:hover{transform:none}}
+
+.hardwarn{margin:12px 0 14px;padding:12px 16px;border-radius:10px;border:1.5px solid var(--t-kill);background:color-mix(in srgb, var(--t-kill) 8%, var(--panel))}
+.hardwarn h3{font-family:var(--display);font-weight:500;font-size:1.05rem;margin:0 0 6px;color:var(--t-kill)}
+.hardwarn p{margin:0 0 6px}
+.hardwarn ul{margin:0;padding-left:20px}
+.hardwarn li{margin:4px 0}
+
+.missbox{margin:0 14px 12px;padding:9px 12px;border-radius:8px;border:1px solid var(--t-kill);border-left-width:4px;background:color-mix(in srgb, var(--t-kill) 6%, var(--panel));font-size:.9rem}
+.missbox b{color:var(--t-kill)}
+
+#money{display:none;max-width:1180px;margin:0 auto;padding:18px 16px 60px}
+body[data-tab="money"] #money{display:block}
+body[data-tab="money"] .ribbon, body[data-tab="money"] .wrap, body[data-tab="money"] .nav, body[data-tab="money"] #openDrawer{display:none !important}
+.prow.mk{grid-template-columns:1.6fr .9fr 1.1fr 1.2fr 1fr}
+.mkinfo{font-size:.82rem;color:var(--muted);line-height:1.5}
+.mkv{display:inline-block;font-size:.76rem;font-weight:600;border-radius:999px;padding:1px 9px;white-space:nowrap;color:var(--tagInk)}
+.mkv.fm{background:var(--t-collect)} .mkv.npc{background:var(--t-stop)} .mkv.few{background:var(--t-talk)} .mkv.keep{background:var(--t-kill)} .mkv.rare{background:var(--maple)} .mkv.nodata{background:var(--t-travel)}
+.mkbar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:16px 0 10px}
+.mkbar input{flex:1 1 240px;min-width:0;padding:8px 12px;border:1px solid var(--line);border-radius:10px;background:var(--panel);color:var(--ink);font:inherit}
+.mkchips{display:flex;flex-wrap:wrap;gap:6px}
+.mkchip{background:var(--panel);border:1px solid var(--line);border-radius:999px;padding:4px 12px;font-size:.85rem;cursor:pointer;color:var(--ink)}
+.mkchip[aria-pressed="true"]{background:var(--frame);border-color:var(--frame);color:#fff}
+@media (max-width:760px){.prow.mk{grid-template-columns:1fr;gap:2px;padding:10px 14px}}
+
+.mkfrom{font-size:.8rem;font-weight:400;color:var(--muted);font-family:var(--body);margin-top:2px}
+.mkl{display:none;color:var(--muted);font-size:.85rem}
+@media (max-width:760px){.mkl{display:inline}.prow.mk .pc0{color:inherit}}
+.prow.fm{grid-template-columns:1.5fr 1.1fr 1.5fr 1fr}
+.fmtags{display:flex;flex-wrap:wrap;gap:4px;margin-top:4px}
+.fmtag{display:inline-block;font-size:.74rem;font-weight:600;border-radius:999px;padding:1px 9px;color:var(--tagInk);white-space:nowrap}
+.fmtag.rare{background:var(--maple)} .fmtag.eq{background:var(--t-collect)}
+.fmwhere{margin-top:6px;font-size:.82rem;line-height:1.9}
+@media (max-width:760px){.prow.fm{grid-template-columns:1fr;gap:4px;padding:10px 14px}.prow.fm .pc0{color:inherit}}
+.tabs{overflow-x:auto;scrollbar-width:none}.tabs button{white-space:nowrap;flex:0 0 auto}
+
+/* MesoWatch guide */
+.mwhead{display:flex;flex-wrap:wrap;gap:12px 18px;align-items:center}
+.mwhead p{flex:1 1 420px;min-width:0;margin:0;max-width:72ch}
+.mwbtn{flex:0 0 auto;display:inline-block;background:var(--maple);color:#fff;text-decoration:none;font-family:var(--display);font-weight:500;border-radius:999px;padding:8px 18px}
+.mwbtn:hover{filter:brightness(1.08)}
+.mwcmp{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px}
+.mwcmp > div{min-width:0;background:var(--panel2);border:1px solid var(--line);border-radius:var(--radius-sm);padding:10px 14px}
+.mwcmp h3{font-family:var(--display);font-weight:500;font-size:.95rem;margin:0 0 4px;color:var(--maple)}
+.mwshot{margin:0 0 14px}
+.mwscroll{overflow-x:auto;border:1px solid var(--line);border-radius:var(--radius-sm);background:var(--panel)}
+.mwscroll img{display:block;width:100%;min-width:760px;height:auto}
+.mwshot figcaption{font-size:.82rem;color:var(--muted);margin-top:6px}
+.mwsteps{list-style:none;margin:0;padding:0;display:grid;gap:10px}
+.mwsteps li{display:grid;grid-template-columns:30px 1fr;gap:10px;align-items:start;font-size:.93rem}
+.mwsteps li > div{min-width:0}
+.mwn{width:28px;height:28px;border-radius:50%;background:#22406F;color:#fff;border:2px solid #fff;box-shadow:0 0 0 1px var(--line);display:flex;align-items:center;justify-content:center;font-weight:600;font-size:.85rem;font-variant-numeric:tabular-nums}
+@media (max-width:760px){.mwcmp{grid-template-columns:1fr}}
+
+/* ---------- Builds tab ---------- */
+:root{
+  --eq-frame:#F4F7FB; --eq-edge:#9AAAC2; --eq-cell:#D6E3F1; --eq-cellb:#BCCDE2; --eq-lbl:#8597B0; --eq-blank:#E6EDF5; --eq-title:#3A4E72;
+  --tt-bg:rgba(16,24,44,.95); --tt-edge:#7E97C4; --tt-ink:#FFFFFF; --tt-dim:#7D8BA8; --tt-no:#FF7A7A; --tt-on:#FFD36B; --tt-guide:#C9D7F0;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){ --eq-frame:#16233C; --eq-edge:#3A5584; --eq-cell:#22375C; --eq-cellb:#2E466F; --eq-lbl:#6F86AD; --eq-blank:#1B2B48; --eq-title:#C8D6EE; }
+}
+:root[data-theme="dark"]{ --eq-frame:#16233C; --eq-edge:#3A5584; --eq-cell:#22375C; --eq-cellb:#2E466F; --eq-lbl:#6F86AD; --eq-blank:#1B2B48; --eq-title:#C8D6EE; }
+#builds{display:none;max-width:1180px;margin:0 auto;padding:18px 16px 60px}
+body[data-tab="builds"] #builds{display:block}
+body[data-tab="builds"] .ribbon, body[data-tab="builds"] .wrap, body[data-tab="builds"] .nav, body[data-tab="builds"] #openDrawer{display:none !important}
+#builds .num{font-variant-numeric:tabular-nums;white-space:nowrap}
+.apflow{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:12px}
+.apstep{background:var(--panel2);border:1px solid var(--line);border-radius:var(--radius-sm);padding:10px 12px;min-width:0}
+.apstep .lv{font-size:1.2rem;display:block}
+.apstep p{margin:4px 0 0;font-size:.92rem}
+@media (max-width:760px){.apflow{grid-template-columns:1fr}}
+.btbl{overflow-x:auto}
+.btbl table{min-width:720px}
+.btbl td{font-size:.86rem}
+.bname{display:inline-flex;align-items:center;gap:6px;background:none;border:0;padding:0;cursor:help;font-weight:600;color:var(--ink);text-align:left;text-decoration:underline dotted var(--muted);text-underline-offset:3px}
+.bname img{width:28px;height:28px;object-fit:contain;flex:0 0 auto}
+.bnote{font-size:.78rem;color:var(--muted);margin-top:2px}
+.bno{color:var(--t-kill);font-weight:600}
+.bst{display:inline-block;font-size:.74rem;font-weight:600;border-radius:999px;padding:1px 9px;white-space:nowrap;color:var(--tagInk)}
+.bst.green{background:var(--t-collect)} .bst.amber{background:var(--t-talk)} .bst.red{background:var(--t-kill)} .bst.gray{background:var(--t-stop)}
+.bchips{display:flex;flex-wrap:wrap;gap:6px;margin:4px 0 10px}
+.gk{display:inline-block;font-size:.7rem;font-weight:600;border-radius:5px;padding:0 6px;border:1px solid currentColor;white-space:nowrap;vertical-align:1px}
+.gk.start{color:var(--t-travel)} .gk.buy{color:var(--t-gear)} .gk.drop{color:var(--t-kill)} .gk.quest{color:var(--t-turnin)} .gk.craft{color:var(--t-craft)} .gk.none{color:var(--t-stop)}
+/* SP timeline */
+.spwrap{overflow-x:auto}
+.spgrid{min-width:640px;display:grid;gap:6px}
+.spr{display:grid;grid-template-columns:190px 1fr;gap:10px;align-items:center}
+.spn{min-width:0;line-height:1.25}
+.spn b{display:block;font-size:.9rem}
+.spn small{color:var(--muted);font-size:.74rem}
+.spt{position:relative;height:26px;background:var(--panel2);border:1px solid var(--line);border-radius:6px}
+.spt.axis{background:none;border:0;height:30px}
+.tk{position:absolute;bottom:0;transform:translateX(-50%);font-size:.72rem;color:var(--muted);font-variant-numeric:tabular-nums}
+.spj{position:absolute;top:-4px;bottom:-4px;width:0;border-left:2px dashed var(--maple);opacity:.6}
+.spjl{position:absolute;top:0;transform:translateX(-50%);font-size:.72rem;font-weight:600;color:var(--maple);white-space:nowrap}
+.spb{position:absolute;top:3px;bottom:3px;border-radius:4px;background:var(--frame);display:flex;align-items:center;justify-content:center;min-width:6px}
+.spb em{font-style:normal;font-size:.7rem;font-weight:600;color:#fff;font-variant-numeric:tabular-nums}
+/* level bracket bar */
+.bbar{display:flex;gap:6px;overflow-x:auto;padding-bottom:6px;margin-bottom:12px;scrollbar-width:thin}
+.bbtn{flex:0 0 auto;display:flex;flex-direction:column;align-items:center;gap:0;background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:6px 12px;cursor:pointer;color:var(--ink);line-height:1.25}
+.bbtn b{font-family:var(--display);font-weight:500;font-size:.95rem;font-variant-numeric:tabular-nums}
+.bbtn small{font-size:.7rem;color:var(--muted)}
+.bbtn[aria-selected="true"]{background:var(--frame);border-color:var(--frame);color:#fff}
+.bbtn[aria-selected="true"] small{color:rgba(255,255,255,.75)}
+.gwrap{display:grid;grid-template-columns:auto 1fr;gap:18px;align-items:start}
+@media (max-width:860px){.gwrap{grid-template-columns:1fr;justify-items:center}.gside{justify-self:stretch}}
+/* equipment window */
+.eqwin{width:300px;max-width:100%;background:var(--eq-frame);border:2px solid var(--eq-edge);border-radius:10px;padding:8px 10px 10px;box-shadow:0 2px 0 var(--eq-edge)}
+.eqtitle{display:flex;justify-content:space-between;align-items:center;font-family:var(--display);font-weight:600;font-size:.82rem;letter-spacing:.06em;color:var(--eq-title);padding:0 2px 6px}
+.eqlv{font-size:.78rem;letter-spacing:0;background:var(--maple);color:#fff;border-radius:999px;padding:0 8px}
+.eqtabs{display:flex;gap:3px;border-bottom:3px solid #C8323C;margin-bottom:8px}
+.eqtabs span{font-size:.72rem;font-weight:600;padding:2px 10px;border-radius:6px 6px 0 0;background:var(--eq-cellb);color:var(--eq-lbl)}
+.eqtabs span.on{background:#E2627A;color:#fff}
+.eqgrid{display:grid;grid-template-columns:repeat(5,1fr);gap:3px}
+.eqc{aspect-ratio:1;max-width:100%;border-radius:3px;display:flex;align-items:center;justify-content:center;position:relative;padding:0;min-width:0}
+.eqc.blank{background:var(--eq-blank)}
+.eqc.empty{background:var(--eq-cell);border:1px solid var(--eq-cellb)}
+.eqc.empty span{font-size:.5rem;font-weight:700;letter-spacing:.02em;color:var(--eq-lbl);text-align:center;line-height:1.1}
+.eqc.it-slot{background:var(--eq-cell);border:1px solid var(--eq-cellb);cursor:help}
+.eqc.it-slot:hover,.eqc.it-slot:focus-visible{border-color:var(--maple);background:color-mix(in srgb, var(--maple) 14%, var(--eq-cell))}
+.eqc.it-slot img{width:78%;height:78%;object-fit:contain;image-rendering:pixelated}
+.eqc.opt{border-style:dashed;border-color:var(--eq-lbl)}
+.eqnew{position:absolute;top:2px;right:2px;width:8px;height:8px;border-radius:50%;background:var(--maple);box-shadow:0 0 0 1.5px #fff}
+.equp{position:absolute;bottom:1px;right:2px;font-style:normal;font-size:.55rem;color:var(--t-collect);line-height:1}
+.eqopt{display:inline-block;width:12px;height:12px;border:1.5px dashed var(--eq-lbl);border-radius:3px}
+.eqnew.st,.equp.st,.eqopt.st{position:static;display:inline-block;vertical-align:-1px;margin-right:4px}
+.eqleg{display:flex;flex-wrap:wrap;gap:4px 12px;margin-top:8px;font-size:.72rem;color:var(--eq-lbl)}
+/* bracket detail */
+.gside{min-width:0;background:var(--panel);border:1px solid var(--line);border-radius:var(--radius-lg);padding:14px 18px}
+.gs-h{display:flex;align-items:baseline;gap:10px}
+.gs-h .lv{font-size:1.6rem}
+.gs-job{font-family:var(--display);color:var(--muted)}
+.gs-head{font-family:var(--display);font-weight:500;font-size:1.08rem;margin:4px 0 0}
+.gtot{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:8px 0 6px}
+.gtot > div{background:var(--panel2);border:1px solid var(--line);border-radius:8px;padding:6px 10px;min-width:0}
+.gtot span{display:block;font-size:.74rem;color:var(--muted)}
+.gtot b{font-size:.86rem;font-variant-numeric:tabular-nums}
+@media (max-width:520px){.gtot{grid-template-columns:1fr}}
+.glist{list-style:none;margin:6px 0 0;padding:0}
+.gr{display:grid;grid-template-columns:44px 1fr;gap:10px;padding:8px 0;border-top:1px dotted var(--line)}
+.gr-ic{width:44px;height:44px;border:1px solid var(--line);border-radius:8px;background:var(--panel2);display:flex;align-items:center;justify-content:center;cursor:help;padding:0}
+.gr.new .gr-ic{border-color:var(--maple);box-shadow:0 0 0 1px var(--maple)}
+.gr-ic img{width:32px;height:32px;object-fit:contain;image-rendering:pixelated}
+.gr-tx{min-width:0;font-size:.88rem}
+.gr-h{display:flex;flex-wrap:wrap;align-items:center;gap:4px 8px}
+.gr-slot{font-size:.74rem;color:var(--muted);min-width:3.4em}
+.gr-m{font-size:.8rem;color:var(--muted);margin-top:2px}
+.gr-note{font-size:.8rem;margin-top:2px}
+.gr-alt{display:flex;flex-wrap:wrap;align-items:center;gap:4px 6px;font-size:.78rem;color:var(--muted);margin-top:4px}
+.galt{display:inline-flex;align-items:center;gap:4px;background:var(--panel2);border:1px solid var(--line);border-radius:999px;padding:1px 9px 1px 3px;font-size:.78rem;color:var(--ink);cursor:help}
+.galt img{width:20px;height:20px;object-fit:contain}
+.gchip{font-size:.7rem;font-weight:600;border-radius:999px;padding:0 8px;white-space:nowrap}
+.gchip.new{background:var(--maple);color:#fff} .gchip.keep{background:var(--panel2);color:var(--muted);border:1px solid var(--line)} .gchip.opt{border:1px dashed var(--muted);color:var(--muted)}
+/* in-game style tooltip */
+.gtip{position:fixed;z-index:80;width:272px;max-width:calc(100vw - 16px);background:var(--tt-bg);color:var(--tt-ink);border:1px solid var(--tt-edge);border-radius:6px;padding:10px 12px;font:12px/1.45 var(--body);box-shadow:0 6px 18px rgba(0,0,0,.35);pointer-events:none}
+.gtip .tt-name{font-weight:700;font-size:14px;text-align:center}
+.gtip .tt-sub{text-align:center;color:var(--tt-on);font-size:11px}
+.gtip .tt-top{display:grid;grid-template-columns:76px 1fr;gap:10px;margin-top:8px}
+.gtip .tt-ic{width:76px;height:76px;background:rgba(255,255,255,.92);border-radius:6px;display:flex;align-items:center;justify-content:center}
+.gtip .tt-ic img{width:48px;height:48px;object-fit:contain;image-rendering:pixelated}
+.gtip .tt-req{font-size:11px;letter-spacing:.02em}
+.gtip .tt-req .no{color:var(--tt-no)}
+.gtip .tt-jobs{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0 6px;font-size:10px;font-weight:700;color:var(--tt-dim)}
+.gtip .tt-jobs .on{color:var(--tt-on)}
+.gtip .tt-stats{border-top:1px dotted var(--tt-edge);padding-top:6px;font-size:11px;letter-spacing:.02em}
+.gtip .gold{color:var(--tt-on)}
+.gtip .tt-guide{border-top:1px dotted var(--tt-edge);margin-top:6px;padding-top:6px;color:var(--tt-guide);display:grid;gap:3px}
+.gtip .tt-guide b{color:var(--tt-ink)}
+.gtip .tt-use{color:var(--tt-on)}
+.gtip .tt-lv{font-size:10.5px;color:var(--tt-dim)}
+/* intro job path */
+.jpath{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;list-style:none;margin:0;padding:0;counter-reset:jp}
+.jpath li{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius-sm);padding:10px 12px;min-width:0;position:relative}
+.jpath li.here{border-color:var(--maple)}
+.jpath li.later{opacity:.75;border-style:dashed}
+.jpath .jl{font-family:var(--display);color:var(--maple);font-size:.85rem}
+.jpath h3{font-family:var(--display);font-weight:500;font-size:1.05rem;margin:0 0 4px}
+.jpath p{margin:0;font-size:.88rem}
+@media (max-width:760px){.jpath{grid-template-columns:1fr 1fr}}
+@media (max-width:460px){.jpath{grid-template-columns:1fr}}
+.btbl table.aptbl{min-width:900px}
+#btable .btbl table{min-width:980px}
+.bprice{min-width:150px}
+.bp{font-size:.8rem;line-height:1.45;margin-top:2px}
+.bpl{display:inline-block;font-size:.7rem;font-weight:600;color:var(--t-gear);margin-right:5px}
+.bpl.fm{color:var(--t-collect)}
+.bp small{color:var(--muted)}
+.gr-price{margin-top:2px}
+.gr.alt{margin-left:30px;grid-template-columns:36px 1fr;border-top:1px dashed var(--line);padding:6px 0}
+.gr.alt .gr-ic{width:36px;height:36px;border-style:dashed}
+.gr.alt .gr-ic img{width:26px;height:26px}
+.gchip.alt{border:1px solid var(--t-talk);color:var(--t-talk)}
+tr.altrow td{background:color-mix(in srgb, var(--t-talk) 6%, transparent)}
+.lgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:10px}
+.lgrid > div{background:var(--panel2);border:1px solid var(--line);border-radius:var(--radius-sm);padding:8px 12px;min-width:0}
+.lgrid p{margin:4px 0 0;font-size:.86rem}
+.gtip .tt-k .gk{border-color:currentColor}
+.gtip .tt-k .gk.start{color:#8FB8FF}.gtip .tt-k .gk.buy{color:#F2B27A}.gtip .tt-k .gk.drop{color:#FF9A92}.gtip .tt-k .gk.quest{color:#C9A8FF}.gtip .tt-k .gk.craft{color:#7FDCE8}.gtip .tt-k .gk.none{color:#B9C0CC}
+.gtip .bp small{color:var(--tt-guide)}
+.gtip .bpl{color:#F2B27A}.gtip .bpl.fm{color:#8FE3A8}
+@media (max-width:520px){.gr.alt{margin-left:12px}}
+.gtip .tt-guide .cx b{color:inherit}
+.bnr{display:flex;align-items:center;flex-wrap:wrap;gap:4px 8px}.bnr .bst{line-height:1.5}
+
+.mt-locked-step{color:var(--maple)!important}.mt-loot-mini .tile{width:auto;padding:12px}.mt-lock-overlay[hidden]{display:none!important}.mt-lock-overlay{position:fixed;inset:0;background:#071a32bb;z-index:9999;display:grid;place-items:center;padding:20px}.mt-lock-dialog{max-width:430px;width:100%;position:relative;padding:28px;text-align:center;background:var(--panel);border-radius:16px;color:var(--ink);box-shadow:0 20px 60px #0005}.mt-lock-dialog p{line-height:1.75}.mt-kicker{letter-spacing:.12em;font-size:11px;color:var(--muted)}.mt-lock-dialog h2{font-family:var(--display);font-size:23px;font-weight:500}.mt-price{font-size:29px;font-weight:700;color:var(--maple)}.mt-price small{font-size:13px;font-weight:400;color:var(--muted)}.mt-purchase{display:inline-block;margin:12px 0;background:var(--maple);color:#fff;border-radius:9px;padding:12px 22px;text-decoration:none}.mt-x{position:absolute;right:10px;top:8px;font-size:28px;border:0;background:none;color:var(--muted);cursor:pointer}.mt-small{font-size:12px}.mt-back{padding:8px;font:inherit;background:none;border:0;color:var(--muted);text-decoration:underline;cursor:pointer}</style><link rel="stylesheet" href="./maple-theme.css"><link rel="stylesheet" href="./guide-reading.css"><script src="./guide-layout.js" defer></script></head><body class="maple-guide" data-tab="route"><header class="bar">
+  <div class="bar-inner">
+    <button class="bar-btn only-mobile" id="openDrawer" aria-label="เปิดรายการขั้นตอนทั้งหมด">ทุกขั้นตอน</button>
+    <h1><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="#F39439" d="M12 2l1.7 4.1 3.3-1.6-.7 4 4.2-.5-2.6 3.3 3.1 2.2-4.3.9.9 3.9-3.7-1.9L12 22l-1.9-5.6-3.7 1.9.9-3.9-4.3-.9 3.1-2.2-2.6-3.3 4.2.5-.7-4 3.3 1.6z"/></svg>Cleric Route Lv.1–50</h1>
+    <button class="bar-btn" id="openKeep">ของห้ามขาย</button>
+  </div>
+  <div class="tabs" role="tablist" aria-label="เลือกหน้า">
+    <button type="button" role="tab" data-tab="intro" aria-selected="false">เริ่มต้น</button>
+    <button type="button" role="tab" data-tab="builds" aria-selected="false">Builds</button>
+    <button type="button" role="tab" data-tab="route" aria-selected="true">Route หลัก</button>
+    <button type="button" role="tab" data-tab="opt" aria-selected="false">ล่าของ & คราฟต์</button>
+    <button type="button" role="tab" data-tab="money" aria-selected="false">หาเงิน</button>
+  </div>
+</header>
+<div class="ribbon">
+  <div class="ribbon-inner">
+    <div class="track" id="track" aria-hidden="true">
+      <div class="track-line"></div>
+      <div class="track-fill" id="fill"></div>
+      <svg class="track-leaf" id="leaf" viewBox="0 0 24 24"><path fill="#F39439" stroke="#fff" stroke-width="1" d="M12 2l1.7 4.1 3.3-1.6-.7 4 4.2-.5-2.6 3.3 3.1 2.2-4.3.9.9 3.9-3.7-1.9L12 22l-1.9-5.6-3.7 1.9.9-3.9-4.3-.9 3.1-2.2-2.6-3.3 4.2.5-.7-4 3.3 1.6z"/></svg>
+    </div>
+    <div class="track-meta"><span id="chapName"></span><span id="doneCount"></span></div>
+  </div>
+</div>
+
+<div class="wrap">
+  <nav class="side" id="side" aria-label="ขั้นตอนทั้งหมด"></nav>
+  <main id="main" tabindex="-1"></main>
+</div>
+
+<div id="intro" aria-label="คู่มือเริ่มต้น"></div>
+<div id="builds" aria-label="Builds"></div>
+<div id="opt" aria-label="ล่าของและคราฟต์"></div>
+<div id="money" aria-label="หาเงิน"></div>
+
+<div class="nav">
+  <div class="nav-inner">
+    <button class="btn prev" id="prev">ย้อนกลับ</button>
+    <div class="count" id="count"></div>
+    <button class="btn next" id="next">ขั้นต่อไป</button>
+  </div>
+</div>
+
+<div class="overlay" id="overlay"></div>
+<aside class="drawer" id="drawer" aria-label="ขั้นตอนทั้งหมด"></aside>
+<section class="modal" id="keepModal" role="dialog" aria-modal="true" aria-labelledby="keepTitle">
+  <button class="bar-btn close" id="closeKeep" style="background:var(--panel2);border-color:var(--line);color:var(--ink)">ปิด</button>
+  <h2 id="keepTitle">ของห้ามขาย</h2>
+  <p style="margin:0 0 10px;color:var(--muted);font-size:.92rem">เช็กตารางนี้ก่อนขาย ETC ทุกครั้ง เรียงตามช่วงที่เริ่มเก็บ</p>
+  <div class="tbl"><table id="keepTable"></table></div>
+  <p class="credit">ไอคอนไอเทม รูป NPC มอนสเตอร์ และภาพแมพจาก <a href="https://meowdb.com/msclassic" target="_blank" rel="noopener">NiaMeowDB</a> · ภาพจากเกม © Nexon</p>
+</section>
+
+<div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="ภาพแมพ"><figure id="lbBody"></figure></div>
+
+<div id="premiumLock" class="mt-lock-overlay" hidden><div class="mt-lock-dialog" role="dialog" aria-modal="true" aria-labelledby="premiumTitle"><button id="premiumClose" class="mt-x" aria-label="ปิด">×</button><p class="mt-kicker">CLERIC · LV.1–50</p><h2 id="premiumTitle">อ่านต่อในฉบับเต็ม</h2><p>Route ทุกขั้น พร้อม Builds ล่าของ และหาเงิน</p><div class="mt-price">฿99 <small>ชำระครั้งเดียว</small></div><a class="mt-purchase" href="./checkout.html?product=guide_cleric">ซื้อ / ปลดล็อกไกด์</a><p class="mt-small">โอนเงินและส่งสลิป · ปลดล็อกหลังผู้ดูแลอนุมัติ</p><a href="./auth.html">เข้าสู่ระบบหรือสมัครสมาชิก</a><p><button id="premiumBack" class="mt-back">กลับไปอ่านช่วงฟรี</button></p></div></div><script>const S=[{"ap":"ลง <b>INT<\/b> ทั้งหมด","ch":"Maple Island","lv":"1–8","sp":"ลง Three Snails, Recovery และ Nimble Feet สกิลละ 3 แต้ม จะลงสกิลไหนก่อนก็ได้","act":[{"t":"talk","x":"ตั้งแต่เลเวล 1 ทำ QUEST แนะนำตัวตามลูกศรไปทีละคน","sub":["Heena (ยืมกระจก Sera)","Roger's Apple","Nina / Sen","Maria แล้วส่งจดหมายให้ Lucas"],"tip":"ได้ EXP น้อย แต่ทำได้เร็วและช่วยสอนปุ่มพื้นฐาน เช่น การกินของ การใช้ potion และการเปิดกระเป๋า"},{"t":"kill","x":"ทำ QUEST Todd's How-to-Hunt แล้วต่อด้วย Sam's Suggestion (ล่า Snail 10 ตัว)"},{"t":"kill","x":"เมื่อถึงเลเวล 3 ทำ Mai's Training แล้วต่อด้วย Mai's Final Training","sub":["Mai's Training: ล่า Blue Snail 10 ตัว, Shroom 10 ตัว และ Red Snail 5 ตัว","Mai's Final Training: ล่า Orange Mushroom 1 ตัว"],"tip":"ระหว่างนี้ให้รับ QUEST ของ Biggs (ขั้น 2) ไปด้วย เพราะใช้ Blue Snail Shell และ Orange Mushroom Cap จากมอนกลุ่มเดียวกัน"},{"t":"talk","x":"เมื่อถึงเลเวล 5 คุยกับ <b>Rain<\/b> เพื่อทำ Rain's Maple Quiz 1–7 ซึ่งเป็นการตอบคำถาม ไม่ต้องตีมอน ได้รวม 490 EXP และ Orange ×10","tip":"Orange คือ potion ฟื้น MP ให้เก็บไว้ใช้ตอนเป็นเมจ ช่วงเดียวกันนี้ให้ทำ QUEST ของ Pio (ขั้น 3) ที่ Amherst ด้วย"},{"t":"kill","x":"ตีมอนบนเกาะต่อไปจนถึงเลเวล 8 โดย Orange Mushroom และ Red Snail ให้ EXP ดีที่สุด","tip":"ใน Classic การตีด้วยอาวุธช่วงเลเวล 1–10 แรงกว่าเกมเก่า จึงไม่จำเป็นต้องลง STR เลย"}],"keep":"Orange (potion ฟื้น MP)","miss":"QUEST บนเกาะทำย้อนหลังไม่ได้ เพราะออกจากเกาะแล้วกลับมาไม่ได้ ถ้าข้ามจะเสีย EXP จาก QUEST และ Orange ×10 จาก Rain ซึ่งเป็น potion MP สำหรับช่วงแรกของเมจ ส่วน potion MP ชดเชยได้ด้วย Lemon จาก QUEST ของ Mrs. Ming Ming ใน <button type='button' class='stepchip' data-go='19'>ขั้น 20<\/button>","next":"ขึ้นเรือไป Victoria Island","intro":"บน Maple Island มี QUEST ให้ทำไม่กี่ตัว เก็บให้ครบก่อนขึ้นเรือ เพราะ<b>เมื่อออกจากเกาะแล้วจะกลับมาอีกไม่ได้<\/b> ส่วนขั้น 2 และ 3 (Biggs และ Pio) ให้ทำไปพร้อมกับขั้นนี้เมื่อเลเวลถึง","leave":"ทำ QUEST บนเกาะครบ (รวม Biggs และ Pio ถ้าอยากได้เก้าอี้) และถึง Lv.8","title":"ทำ tutorial บน Maple Island","where":"Maple Island (เริ่มเกม)"},{"ap":"INT ทุกแต้ม","ch":"Maple Island","lv":"3+","sp":"—","act":[{"t":"talk","x":"คุยกับ <b>Biggs<\/b> เพื่อรับ QUEST <b>Biggs's Collection of Items<\/b>"},{"t":"collect","x":"Blue Snail Shell ×10","map":"Maple Island tutorial maps","from":"Blue Snail"},{"t":"collect","x":"Orange Mushroom Cap ×1","map":"Maple Island tutorial maps","from":"Orange Mushroom"},{"t":"turnin","x":"กลับไปส่ง QUEST กับ <b>Biggs<\/b> จะได้ Fruit Knife หรือ Razor (โอกาส 50/50) และ 70 EXP"},{"t":"gear","x":"ถืออาวุธที่ได้ตีมอนได้ทันที (ATK 23) ใช้ไปจนถึง Lv.10 แล้วเปลี่ยนเป็น Beginner's Wooden Wand ที่เกมให้ตอนเปลี่ยนอาชีพเป็น Magician"}],"keep":"Blue Snail Shell และ Orange Mushroom Cap จนกว่าจะส่ง QUEST","next":"ทำ tutorial ต่อ","intro":"ทำ QUEST นี้แล้วจะได้อาวุธฟรี ใช้ตีมอนได้จนถึงตอนเปลี่ยนอาชีพ พอเปลี่ยนอาวุธแล้ว ยังขายให้ NPC ได้ประมาณ 750 meso","leave":"ส่ง QUEST แล้ว","title":"QUEST Biggs's Collection of Items","where":"Maple Island — NPC Biggs"},{"ap":"INT ทุกแต้ม","ch":"Maple Island","lv":"5+","sp":"—","act":[{"t":"talk","x":"คุยกับ <b>Pio<\/b> เพื่อรับ QUEST Pio's Collecting Recycled Goods"},{"t":"collect","x":"Rusty Screw ×2 และ Old Wooden Board ×2","map":"แถว Amherst","from":"ตีกล่องไม้"},{"t":"turnin","x":"นำของไปส่ง <b>Pio<\/b> จะได้ The Green Relaxer, 100 EXP และ 150 mesos"},{"t":"note","x":"ถ้าไม่ได้สะสมเก้าอี้ ข้าม QUEST นี้ได้ เพราะเก้าอี้ที่ซื้อจากร้านใช้งานได้เหมือนกัน","tip":"เก้าอี้ทดแทนคือ Sky-blue Wooden Chair ขายที่ร้านของ Mina ใน Lith Harbor ราคา 1,000 meso"}],"keep":"—","miss":"The Green Relaxer ได้จาก QUEST นี้ที่เดียว เทรดไม่ได้ และกลับมาที่เกาะไม่ได้อีก ถ้าข้ามไปก็ใช้ Sky-blue Wooden Chair จากร้านของ Mina ที่ Lith Harbor แทนได้ ซึ่งใช้งานเหมือนกัน","next":"ทำ tutorial ต่อจนถึง Lv.8","intro":"ทำ QUEST นี้แล้วจะได้เก้าอี้ <b>The Green Relaxer<\/b> เมื่อนั่งจะฟื้น HP +30 ทุก 10 วินาที <b>เก้าอี้นี้เทรดไม่ได้ และหาได้จาก QUEST นี้เท่านั้น<\/b>","leave":"ทำเสร็จแล้ว หรือตัดสินใจข้าม","title":"Pio's Collecting Recycled Goods (ไม่บังคับ)","where":"Amherst — NPC Pio"},{"ap":"INT ทุกแต้ม","ch":"Maple Island","lv":"8","sp":"—","act":[{"t":"stop","x":"เช็กให้ครบก่อนขึ้นเรือ","sub":["ส่ง QUEST ของ Biggs แล้ว","ส่ง QUEST ของ Pio แล้ว (ถ้าอยากได้เก้าอี้)","ถึง Lv.8 แล้ว"],"tip":"ออกจากเกาะได้ตั้งแต่เลเวล 7 แต่เมื่อออกไปแล้วจะกลับมาไม่ได้อีก"},{"t":"travel","x":"ขึ้นเรือที่ <b>Southperry<\/b> เพื่อเดินทางไป <b>Lith Harbor<\/b>"}],"keep":"—","next":"Lith Harbor","leave":"ถึง Lith Harbor","title":"ขึ้นเรือไป Victoria Island","where":"Southperry"},{"ap":"INT ทุกแต้ม","ch":"Lv.8–10 Victoria","lv":"8","sp":"—","act":[{"t":"talk","x":"คุยกับ <b>Olaf<\/b> เพื่อรับ <b>Olaf's First Training<\/b> (ล่า Stump ×8 และ Slime ×8)"},{"t":"talk","x":"คุยกับ <b>Teo<\/b> เพื่อรับ <b>Teo's Weird Hobby<\/b> (ล่า Slime ×10 และเก็บ Slime Bubble ×1)"},{"t":"talk","x":"คุยกับ <b>Phil<\/b> เพื่อรับ <b>Phil's Call<\/b> QUEST นี้เก็บไว้ส่งตอนเลเวล 10"},{"t":"gear","x":"ถ้ามีเงิน ซื้อ <b>Stolen Fence<\/b> (โล่ Lv.5, WDEF 40, Guard ~7.4%) ราคา 2,000 meso ที่ร้านอาวุธของ <b>Silver<\/b> (Lith Harbor Weapon Shop)","tip":"ลำดับการซื้อของคือโล่ก่อน ตามด้วย White Bandana (หมวก Lv.10 ราคา 1,200 meso) ที่ร้านเกราะของ <b>Natasha<\/b> (Lith Harbor Armor Shop) แล้วจึงเป็น Blue Basic Boots ที่เพิ่มความเร็ว ถ้าเงินไม่พอให้ข้ามไปก่อนได้ เพราะ Pan Lid ดรอปจาก Green Mushroom ซึ่ง route จะพาไปตีตอนเลเวล 13 ส่วนวิธีเดินไปร้านดูได้ในกล่องวิธีเดินด้านบน"},{"t":"travel","x":"คุยกับ <b>Phil<\/b> เพื่อซื้อตั๋วเดินทางไป <b>Ellinia<\/b> ราคา 150 meso"}],"keep":"—","next":"Ellinia แล้วไป The Tree That Grew","intro":"รับ QUEST ทั้งสามอันให้ครบก่อนออกจากเมือง ถ้ามีเงินเหลือ ซื้อ<b>โล่<\/b>ติดตัวไว้ก่อน เพราะโอกาส Guard ช่วยเมจได้ตลอดเกม","leave":"รับ QUEST ครบทั้ง 3 QUEST","title":"รับ 3 QUEST และซื้อโล่ที่ Lith Harbor","where":"Lith Harbor"},{"ap":"INT ทุกแต้ม","ch":"Lv.8–10 Victoria","lv":"8–10","sp":"—","act":[{"t":"travel","x":"เดินจาก Ellinia ไปที่ <b>The Tree That Grew II<\/b> ซึ่งมี Slime และ Stump เยอะ หรือ <b>The Tree That Grew I<\/b> ซึ่งมี Slime และ Dark Stump","tip":"เส้นทางคือจาก Ellinia ไป <b>The Field Up North of Ellinia<\/b> แล้วเข้า <b>The Tree That Grew I<\/b> จากนั้นใช้ portal ด้านบนไปที่ <b>The Tree That Grew II<\/b>"},{"t":"kill","x":"ล่า Stump ×8 และ Slime ×18 (Olaf ใช้ 8 ตัว และ Teo ใช้ 10 ตัว)","map":"The Tree That Grew II"},{"t":"collect","x":"เก็บ Slime Bubble ×4 หรือเก็บ <b>14<\/b> ชิ้นถ้าจะทำ QUEST ของ Mrs. Ming Ming ตอนเลเวล 15","map":"The Tree That Grew II / I","tip":"Ming Ming ใช้ 10 ชิ้นและให้ Lemon ×20 ซึ่งเป็น potion MP ที่เมจใช้เยอะมาก","from":"Slime"},{"t":"collect","x":"Squishy Liquid ×22","map":"The Tree That Grew II / I","tip":"Icarus ใช้ 12 ชิ้น และ Maya ใช้ 30 ชิ้นตอนเลเวล 25 ส่วนที่ขาดค่อยมาเก็บเพิ่มทีหลังได้","from":"Slime"},{"t":"collect","x":"Tree Branch ×42","map":"The Tree That Grew II","tip":"Vicious ใช้ 20 ชิ้น Blackbull ใช้ 10 ชิ้น และ Icarus ใช้ 12 ชิ้น","from":"Stump"},{"t":"collect","x":"Leaf ×30","map":"The Tree That Grew I","tip":"Francois ใช้ 20 ชิ้น และ Blackbull ใช้ 10 ชิ้น","from":"Dark Stump"},{"t":"collect","x":"Bronze Ore ×5","map":"The Tree That Grew II","tip":"ดรอปไม่บ่อย ได้เท่าไหร่ให้เก็บไว้ ที่เหลือเก็บเพิ่มได้ตอนตีเห็ดให้ Bruce ใน <button type='button' class='stepchip' data-go='11'>ขั้น 12<\/button> หรือที่ Perion Street Corner ใน <button type='button' class='stepchip' data-go='13'>ขั้น 14<\/button>","from":"Stump (สำรอง: Snail, Orange Mushroom, Horny Mushroom)"},{"t":"note","x":"ระหว่างตี Slime ให้ลุ้นของเมจไปด้วย ได้แก่ <b>White Bandana<\/b> (หมวก Lv.10) และ <b>Lemona<\/b> (ถุงมือเมจ Lv.15, INT+1)","tip":"ใน Classic ยังไม่มีผู้เล่นยืนยันว่า Lemona ดรอปจาก Slime แต่คราฟต์เองได้ด้วย Tailoring Lv.3"}],"opt":[{"k":"drop","x":"Slime ดรอป White Bandana (หมวก Lv.10) <span class='cf' title='ผู้เล่นยืนยันดรอปใน Classic 3 คน'>ยืนยัน 3 คน<\/span> ใส่ได้ทุกอาชีพและใช้ได้ยาวถึงเลเวล 25"},{"k":"drop","x":"Slime ดรอป Lemona (ถุงมือเมจ) ⚠ ข้อมูลดรอปนี้เป็นของ MapleSEA เวอร์ชันเก่า และยังไม่มีผู้เล่นยืนยันใน Classic"},{"k":"craft","x":"เก็บ Iron Ore (จาก Dark Stump) และ Bronze Ore (จาก Stump) ไว้ เพื่อใช้หลอม ingot ตอนเปิด Life Skill"}],"keep":"Slime Bubble, Squishy Liquid, Tree Branch, Leaf และ Bronze Ore","miss":"ของที่เก็บในขั้นนี้ใช้ส่ง QUEST ต่ออีกหลายตัว ได้แก่ Tree Branch และ Leaf สำหรับ Vicious, Francois และ Blackbull ใน <button type='button' class='stepchip' data-go='13'>ขั้น 14<\/button> <button type='button' class='stepchip' data-go='16'>ขั้น 17<\/button> <button type='button' class='stepchip' data-go='17'>ขั้น 18<\/button> และ Tree Branch กับ Squishy Liquid สำหรับ Icarus ใน <button type='button' class='stepchip' data-go='14'>ขั้น 15<\/button> ถ้าข้ามจะต้องย้อนกลับมาฟาร์มที่ The Tree That Grew ก่อนส่ง QUEST เหล่านั้น","next":"นั่ง Taxi ไป Lith Harbor","intro":"ของที่เก็บแถว Ellinia ในขั้นนี้จะได้ใช้ส่ง QUEST ต่อเนื่องถึง Lv.25 เก็บให้ครบก่อนออกจากแมพ จะได้ไม่ต้องย้อนมาฟาร์มซ้ำ","leave":"ถึง Lv.10 และ QUEST ของ Olaf กับ Teo ครบ","title":"ตี Slime / Stump และเก็บของสำรองไว้ล่วงหน้า","where":"Ellinia → The Tree That Grew II / I"},{"ap":"INT ทุกแต้ม","ch":"Lv.10 Taxi tour","lv":"10","sp":"—","act":[{"t":"travel","x":"นั่ง Taxi จาก Ellinia ไป <b>Lith Harbor<\/b>"},{"t":"turnin","x":"ส่ง QUEST <b>Olaf's First Training<\/b>, <b>Teo's Weird Hobby<\/b> และ <b>Phil's Call<\/b>"},{"t":"stop","x":"ไม่ต้องรับ QUEST ต่อ คือ Olaf's Second Training และ Teo's Even Weirder Hobby"}],"keep":"Tree Branch, Leaf และ Squishy Liquid","next":"นั่ง Taxi ไป Henesys","intro":"<b>ยังไม่ต้องเปลี่ยนอาชีพ<\/b> เพราะ Beginner ได้ส่วนลดค่า Taxi 90% ให้ใช้ส่วนลดนี้เดินทางรอบเกาะเพื่อรับ QUEST เปิด Life Skill ให้ครบก่อน แล้วไปจบที่ Ellinia เพื่อเปลี่ยนอาชีพเป็น Magician","leave":"ส่งครบทั้ง 3 QUEST","title":"ส่ง QUEST ที่ Lith Harbor","where":"Lith Harbor"},{"ap":"INT ทุกแต้ม","ch":"Lv.10 Taxi tour","lv":"10","sp":"—","act":[{"t":"travel","x":"นั่ง Taxi จาก Lith Harbor ไป <b>Henesys<\/b>"},{"t":"talk","x":"คุยกับ <b>Maple Administrator<\/b> ที่ฝั่งซ้ายสุดของ Henesys เพื่อรับ <b>[Event] Gift for the New Journey<\/b> ฟรี (Lv.8+)","tip":"ผู้ที่ซื้อ Founder's Pack ก็รับของได้ที่ NPC นี้ ตั้งแต่เลเวล 10 ขึ้นไปยังมี QUEST [Event] Gathering Leaves (รายวัน) และ [Event] Growing Leaf ให้ทำ แต่ไม่บังคับ"},{"t":"talk","x":"คุยกับ <b>Vicious<\/b> เพื่อรับ <b>Vicious in Need of an Apprentice<\/b>","sub":["ล่า Stump ×30 แต่<b>ยังไม่ต้องไปตีตอนนี้<\/b> ให้ตีรวมทีเดียวที่ Perion Street Corner ใน <button type='button' class='stepchip' data-go='13'>ขั้น 14<\/button>","ส่ง Tree Branch ×20 ซึ่งเก็บไว้แล้ว","กลับมาส่ง QUEST กับ Vicious ที่ Henesys ใน <button type='button' class='stepchip' data-go='16'>ขั้น 17<\/button>"]}],"keep":"Tree Branch","miss":"ถ้าไม่รับ QUEST นี้ Woodcrafting จะไม่เปิด และจะทำ Processed Wood สำหรับ Icarus's Hang Glider ใน <button type='button' class='stepchip' data-go='35'>ขั้น 36<\/button> ไม่ได้ ถ้าข้ามไปแล้ว ต้องกลับมารับกับ Vicious ที่ Henesys และตี Stump ให้ครบอีกรอบ","next":"นั่ง Taxi ไป Perion","intro":"QUEST เปิด Life Skill เป็นบททดสอบที่ต้องล่ามอนและส่งของ ตอนนี้ให้รับไว้ก่อนเท่านั้น","leave":"รับ QUEST แล้ว","title":"Henesys — รับ QUEST Woodcrafting","where":"Henesys Market — NPC Vicious"},{"ap":"INT ทุกแต้ม","ch":"Lv.10 Taxi tour","lv":"10","sp":"—","act":[{"t":"travel","x":"นั่ง Taxi จาก Henesys ไป <b>Perion<\/b>"},{"t":"talk","x":"คุยกับ <b>Silas Irons<\/b> เพื่อรับ <b>Silas Irons in Need of an Apprentice<\/b>","sub":["ล่า Stump ×20 และ Dark Stump ×20 โดยตีรวมที่ Perion Street Corner ใน <button type='button' class='stepchip' data-go='13'>ขั้น 14<\/button>","ส่ง Bronze Ore ×5","Smithing ใช้หลอม ore ให้เป็น ingot ซึ่งเป็นวัตถุดิบของสายคราฟต์อื่น"]},{"t":"note","x":"ถ้าจะคราฟต์ของเอง (เช่น Screw สำหรับ Fairy Wand) ให้คุยกับ <b>Mr. Thunder<\/b> ที่อยู่ข้าง Silas เพื่อเรียน Weaponcrafting โดยรับ QUEST ได้หลังส่ง QUEST ของ Silas แล้ว และต้องส่ง Bronze Ingot ×1 กับ Iron Ingot ×1","tip":"Cromi (Lv.50) ยังคราฟต์ไม่ได้ตอนนี้ เพราะสูตรต้อง Arc Forge Lv.10 แต่เลเวลคราฟต์เปิดถึง Lv.8 ถ้าไม่คราฟต์อะไรเอง ข้ามส่วนนี้ได้"}],"keep":"Bronze Ore","miss":"ถ้าไม่เปิด Smithing จะเรียน Weaponcrafting กับ Mr. Thunder ไม่ได้ และทำ Screw เองไม่ได้ ทางเลือกคือซื้อ Screw หรืออาวุธสำเร็จจากตลาด","next":"นั่ง Taxi ไป Kerning City","leave":"รับ QUEST แล้ว","title":"Perion — รับ QUEST Smithing","where":"Perion — NPC Silas Irons"},{"ap":"INT ทุกแต้ม","ch":"Lv.10 Taxi tour","lv":"10","sp":"—","act":[{"t":"travel","x":"นั่ง Taxi จาก Perion ไป <b>Kerning City<\/b>"},{"t":"talk","x":"คุยกับ <b>JM From tha Streetz<\/b> เพื่อรับ <b>JM From tha Streetz Looking for a Partner<\/b>","sub":["ล่า Pig ×30 โดยตีหลังเปลี่ยนอาชีพแล้วที่ The Rain-Forest East of Henesys ใน <button type='button' class='stepchip' data-go='11'>ขั้น 12<\/button>","ส่ง Leather ×5 ซึ่งดรอปจาก Pig ระหว่างตี QUEST นี้","กลับมาส่ง QUEST กับ JM ที่ Kerning ใน <button type='button' class='stepchip' data-go='14'>ขั้น 15<\/button>"]},{"t":"talk","x":"(ไม่บังคับ) คุยกับ <b>Nella<\/b> เพื่อรับ <b>Don Hwang's Request<\/b> ไว้ก่อน","sub":["ล่า Orange Mushroom ×20 และ Ribbon Pig ×20 แล้วส่ง Orange Mushroom Cap ×10 และ Pig's Ribbon ×10","ได้ 188 EXP, Lemon ×15 (potion MP ที่เมจใช้บ่อย) และ Return Scroll to Kerning City ×2"],"tip":"Orange Mushroom ที่ตีให้ Bruce และ Ribbon Pig ในแมพหมูจะนับให้ QUEST นี้ไปพร้อมกันใน <button type='button' class='stepchip' data-go='11'>ขั้น 12<\/button>"}],"keep":"—","next":"นั่ง Taxi ไป Ellinia","intro":"แวะ Kerning ก่อน แล้วค่อยไป Ellinia เป็นเมืองสุดท้าย เพราะพอเปลี่ยนอาชีพแล้วจะไม่ได้ส่วนลดค่า Taxi ของ Beginner อีก","leave":"รับ QUEST แล้ว","title":"Kerning City — รับ QUEST Leatherworking","where":"Kerning City — NPC JM From tha Streetz"},{"ap":"ลง INT ทั้งหมด เมื่อถึงเลเวล 10 ควรมี INT 57","ch":"Lv.10 Taxi tour","lv":"10","sp":"ลง Energy Bolt 1 แต้ม","act":[{"t":"travel","x":"นั่ง Taxi จาก Kerning ไป <b>Ellinia<\/b> ซึ่งเป็นจุดจบของ Taxi tour"},{"t":"talk","x":"คุยกับ <b>Francois<\/b> เพื่อรับ <b>Francois in Need of an Apprentice<\/b>","sub":["ล่า Dark Stump ×30 โดยตีรวมที่ Perion Street Corner ใน <button type='button' class='stepchip' data-go='13'>ขั้น 14<\/button>","ส่ง Leaf ×20 ซึ่งเก็บไว้แล้ว","กลับมาส่ง QUEST กับ Francois ที่ Ellinia ใน <button type='button' class='stepchip' data-go='17'>ขั้น 18<\/button>"],"tip":"<b>Tailoring คือสายคราฟต์หลักของเมจ<\/b> ใช้ทำ Lemona (Tailoring Lv.3) รวมถึงถุงมือ รองเท้า และผ้าคลุมเมจในช่วงเลเวล 25–50"},{"t":"travel","x":"เข้า <b>Magic Library<\/b> ซึ่งอยู่ใน Ellinia"},{"t":"talk","x":"คุยกับ <b>Grendel the Really Old<\/b> เพื่อเปลี่ยนอาชีพเป็น <b>Magician<\/b>"},{"t":"gear","x":"สวม <b>Beginner's Wooden Wand<\/b> (M.ATK 26) ที่ได้ตอนเปลี่ยนอาชีพ <b>เมจในไกด์นี้ใช้ wand ไม่ใช้ staff<\/b>","tip":"เหตุผลที่เลือก wand คือช่วงเลเวล 10–30 wand แรงกว่า staff ระดับเดียวกัน 3 M.ATK และต้องการ LUK น้อยกว่า (wand ต้องการ LUK ประมาณเลเวลลบ 10 ส่วน staff ประมาณเลเวลลบ 5) ข้อดีของ staff มีแค่ crit damage ซึ่งเมจมีค่า crit น้อยที่สุดในเกม จึงยังไม่คุ้ม"},{"t":"note","x":"ตั้งคีย์ลัดให้ <b>Energy Bolt<\/b> ซึ่งเป็นท่าตีหลักไปจนถึงเลเวล 30"}],"opt":[{"k":"sell","x":"Fruit Knife หรือ Razor จาก QUEST ของ Biggs เลิกใช้แล้ว ขายให้ NPC ได้ประมาณ 750 meso"}],"keep":"Leaf และ Bronze Ore","miss":"ขั้นนี้ข้ามไม่ได้ เพราะเป็นการเปลี่ยนอาชีพเป็น Magician ซึ่งทำให้ได้ Beginner's Wooden Wand และ Energy Bolt ส่วน QUEST ของ Francois เป็นทางเปิด Tailoring ซึ่งเป็นสายคราฟต์หลักของเมจ ถ้าไม่รับตอนนี้ จะส่ง QUEST ใน <button type='button' class='stepchip' data-go='17'>ขั้น 18<\/button> ไม่ได้และคราฟต์ Lemona เองไม่ได้","next":"นั่ง Taxi ไป Henesys","intro":"ใน Classic เมจเปลี่ยนอาชีพที่<b>เลเวล 10<\/b> ไม่ใช่เลเวล 8 แบบเกมเก่า และ<b>ไม่ต้องมีสเตตัสขั้นต่ำ<\/b>","leave":"เปลี่ยนอาชีพเป็น Magician แล้ว","title":"Ellinia — รับ QUEST Tailoring และเปลี่ยนอาชีพเป็น Magician","where":"Ellinia → Magic Library — NPC Grendel the Really Old"}];
+const NAV={"0":[{"k":"txt","t":"เกาะนี้มีลูกศรบอกทาง QUEST อยู่แล้ว เดินตามได้เลย · เมืองหลักของเกาะคือ <b>Amherst<\/b> ส่วนท่าเรือคือ <b>Southperry<\/b>"},{"a":[13,75.7],"b":[2.2,80.6],"k":"walk","m":"000000060","t":"<b>Southperry<\/b>: ไปทาง <b>ซ้ายสุดล่าง<\/b> ของแมพ (เดินไปทางซ้าย จากจุดที่เข้ามา) → เข้าวงวาร์ป กด ↑ → <b>A Split Road<\/b>"},{"b":[65.3,32.4],"k":"npc","m":"000000050","t":"<b>Mai<\/b> อยู่ใน <b>A Split Road<\/b> ขวาบน"},{"a":[11.2,60.1],"b":[95.2,49.7],"k":"walk","m":"000000050","t":"<b>A Split Road<\/b>: ไปทาง <b>ขวาสุดกลาง<\/b> ของแมพ (เดินไปทางขวา จากจุดที่เข้ามา) → เข้าวงวาร์ป กด ↑ → <b>The Field West of Amherst<\/b>"},{"a":[2.2,82],"b":[97.2,90.8],"k":"walk","m":"000001000","t":"<b>The Field West of Amherst<\/b>: ไปทาง <b>ขวาสุดล่างสุด<\/b> ของแมพ (เดินไปทางขวา จากจุดที่เข้ามา) → เข้าวงวาร์ป กด ↑ → <b>Amherst<\/b>"},{"b":[13.4,81.9],"k":"npc","m":"000001010","t":"<b>Rain<\/b> อยู่ใน <b>Amherst<\/b> ซ้ายล่าง"},{"b":[59.6,70.5],"k":"npc","m":"000001010","t":"<b>Lucas<\/b> อยู่ใน <b>Amherst<\/b> กลางด้านล่าง"}],"1":[{"b":[33.9,59],"k":"npc","m":"000000060","t":"<b>Biggs<\/b> อยู่ใน <b>Southperry<\/b> ซ้ายกลาง"},{"k":"txt","t":"Blue Snail / Orange Mushroom มีตามแมพระหว่าง Amherst กับ Southperry (เช่น A Split Road, The Field West of Amherst)"}],"2":[{"a":[13,75.7],"b":[2.2,80.6],"k":"walk","m":"000000060","t":"<b>Southperry<\/b>: ไปทาง <b>ซ้ายสุดล่าง<\/b> ของแมพ (เดินไปทางซ้าย จากจุดที่เข้ามา) → เข้าวงวาร์ป กด ↑ → <b>A Split Road<\/b>"},{"a":[95.4,82.2],"b":[95.2,49.7],"k":"walk","m":"000000050","t":"<b>A Split Road<\/b>: ไปทาง <b>ขวาสุดกลาง<\/b> ของแมพ (ปีนเชือก/บันไดขึ้นไป จากจุดที่เข้ามา) → เข้าวงวาร์ป กด ↑ → <b>The Field West of Amherst<\/b>"},{"a":[2.2,82],"b":[97.2,90.8],"k":"walk","m":"000001000","t":"<b>The Field West of Amherst<\/b>: ไปทาง <b>ขวาสุดล่างสุด<\/b> ของแมพ (เดินไปทางขวา จากจุดที่เข้ามา) → เข้าวงวาร์ป กด ↑ → <b>Amherst<\/b>"},{"b":[25.6,81.9],"k":"npc","m":"000001010","t":"<b>Pio<\/b> อยู่ใน <b>Amherst<\/b> ซ้ายล่าง"},{"k":"txt","t":"กล่องไม้อยู่ในแมพ Amherst และแมพข้างเคียง ตีกล่องแล้วเก็บของที่หล่น"},{"k":"txt","t":"ถ้าข้าม QUEST นี้ เก้าอี้ทดแทนซื้อได้ทีหลังที่ <b>Mina<\/b> ในห้อง <b>Lith Harbor Department Store<\/b> — Sky-blue Wooden Chair 1,000 meso"}],"3":[{"a":[18.3,67.6],"b":[2.7,82.1],"k":"walk","m":"000001010","t":"<b>Amherst<\/b>: ไปทาง <b>ซ้ายสุดล่าง<\/b> ของแมพ (เดินไปทางซ้าย จากจุดที่เข้ามา) → เข้าวงวาร์ป กด ↑ → <b>The Field West of Amherst<\/b>"},{"a":[97.2,90.8],"b":[2.2,82],"k":"walk","m":"000001000","t":"<b>The Field West of Amherst<\/b>: ไปทาง <b>ซ้ายสุดล่าง<\/b> ของแมพ (เดินไปทางซ้าย จากจุดที่เข้ามา) → เข้าวงวาร์ป กด ↑ → <b>A Split Road<\/b>"},{"a":[95.2,49.7],"b":[95.4,82.2],"k":"walk","m":"000000050","t":"<b>A Split Road<\/b>: ไปทาง <b>ขวาสุดล่าง<\/b> ของแมพ (ลงไปชั้นล่าง จากจุดที่เข้ามา) → เข้าวงวาร์ป กด ↑ → <b>Southperry<\/b>"},{"b":[82,67.1],"k":"npc","m":"000000060","t":"<b>Shanks<\/b> อยู่ใน <b>Southperry<\/b> ขวาล่าง"},{"k":"txt","t":"คุย <b>Shanks<\/b> → ตกลงขึ้นเรือ → ถึง <b>Lith Harbor<\/b> ทันที"}],"4":[{"b":[78.9,79.8],"k":"npc","m":"010000000","t":"<b>Olaf<\/b> อยู่ใน <b>Lith Harbor<\/b> ขวาล่าง"},{"b":[65.1,84.1],"k":"npc","m":"010000000","t":"<b>Teo<\/b> อยู่ใน <b>Lith Harbor<\/b> ขวาล่าง"},{"b":[24,75.4],"k":"npc","m":"010000000","t":"<b>Phil<\/b> อยู่ใน <b>Lith Harbor<\/b> ซ้ายล่าง"},{"b":[61.5,47.6],"k":"npc","m":"010000000","t":"<b>Silver<\/b> (ร้านโล่) อยู่ในห้อง <b>Lith Harbor Weapon Shop<\/b> — ประตูร้านอยู่กลางแมพของ Lith Harbor ยืนหน้าประตูแล้วกด ↑"},{"k":"txt","t":"ร้านเกราะ (White Bandana): เข้าประตู <b>Lith Harbor Armor Shop<\/b> อีกบานใน Lith Harbor แล้วคุย <b>Natasha<\/b> · ประตูร้านในเมืองไม่มีแสงเหมือนวงวาร์ป ดูชื่อร้านบนป้ายเหนือประตู"},{"k":"txt","t":"ซื้อตั๋วไป Ellinia กับ <b>Phil<\/b> ตัวเดียวกับที่ให้ QUEST"}],"5":[{"a":[14.7,91.1],"b":[4.5,34.1],"k":"walk","m":"010002000","t":"<b>Ellinia<\/b>: ไปทาง <b>ซ้ายสุดบน<\/b> ของแมพ (เดินไปทางซ้าย แล้วปีนเชือก/บันไดขึ้นไป จากจุดที่เข้ามา) → เข้าวงวาร์ป กด ↑ → <b>The Field Up North of Ellinia<\/b> · ทางลัด: จุดวาร์ปลับกลางด้านล่างสุด กด ↑ แล้ววาร์ปไปใกล้ทางออกนี้"},{"a":[91.2,84.3],"b":[9,62.5],"k":"walk","m":"010002050","t":"<b>The Field Up North of Ellinia<\/b>: ไปทาง <b>ซ้ายสุดล่าง<\/b> ของแมพ (เดินไปทางซ้าย แล้วปีนเชือก/บันไดขึ้นไป จากจุดที่เข้ามา) → เข้าวงวาร์ป กด ↑ → <b>The Tree That Grew I<\/b>"},{"a":[93,86.7],"b":[23.5,23.7],"k":"walk","m":"010002060","t":"<b>The Tree That Grew I<\/b>: ไปทาง <b>ซ้ายบน<\/b> ของแมพ (เดินไปทางซ้าย แล้วปีนเชือก/บันไดขึ้นไป จากจุดที่เข้ามา) → เข้าประตู (ไม่มีวงแสง) กด ↑ → <b>The Tree That Grew II<\/b>"},{"k":"txt","t":"The Tree That Grew I คือแมพที่ผ่านก่อนเข้า II — ถ้า II คนเยอะ ตีใน I ได้เลย"}],"6":[{"b":[48.5,88.4],"k":"cab","m":"010002000","t":"<b>Ellinia<\/b>: คุย <b>Regular Cab<\/b> (กลางด้านล่างสุด ของเมือง) → เลือก <b>Lith Harbor<\/b>"},{"b":[78.9,79.8],"k":"npc","m":"010000000","t":"<b>Olaf<\/b> อยู่ใน <b>Lith Harbor<\/b> ขวาล่าง"},{"b":[65.1,84.1],"k":"npc","m":"010000000","t":"<b>Teo<\/b> อยู่ใน <b>Lith Harbor<\/b> ขวาล่าง"},{"b":[24,75.4],"k":"npc","m":"010000000","t":"<b>Phil<\/b> อยู่ใน <b>Lith Harbor<\/b> ซ้ายล่าง"}],"7":[{"b":[24,75.4],"k":"cab","m":"010000000","t":"<b>Lith Harbor<\/b>: คุย <b>Phil<\/b> (ซ้ายล่าง ของเมือง) → เลือก <b>Henesys<\/b>"},{"b":[7.5,53],"k":"npc","m":"010001000","t":"<b>Maple Administrator<\/b> อยู่ใน <b>Henesys<\/b> ซ้ายสุดกลาง"},{"a":[9.9,62.4],"b":[52.1,74],"k":"walk","m":"010001000","t":"<b>Henesys<\/b>: ไปทาง <b>กลางด้านล่าง<\/b> ของแมพ (เดินไปทางขวา จากจุดที่เข้ามา) → เข้าวงวาร์ป กด ↑ → <b>Henesys Market<\/b>"},{"b":[34.5,50.9],"k":"npc","m":"010001040","t":"<b>Vicious<\/b> อยู่ใน <b>Henesys Market<\/b> ซ้ายกลาง"}],"8":[{"b":[10.1,68.8],"k":"cab","m":"010001000","t":"<b>Henesys<\/b>: คุย <b>Regular Cab<\/b> (ซ้ายสุดล่าง ของเมือง) → เลือก <b>Perion<\/b>"},{"b":[31.5,47.9],"k":"npc","m":"010004000","t":"<b>Silas Irons<\/b> อยู่ใน <b>Perion<\/b> ซ้ายกลาง"}],"9":[{"b":[31,89.9],"k":"cab","m":"010004000","t":"<b>Perion<\/b>: คุย <b>Regular Cab<\/b> (ซ้ายล่างสุด ของเมือง) → เลือก <b>Kerning City<\/b>"},{"b":[37,67.2],"k":"npc","m":"010003000","t":"<b>JM From tha Streetz<\/b> อยู่ใน <b>Kerning City<\/b> ซ้ายล่าง"}],"10":[{"b":[82.9,75.4],"k":"cab","m":"010003000","t":"<b>Kerning City<\/b>: คุย <b>Regular Cab<\/b> (ขวาล่าง ของเมือง) → เลือก <b>Ellinia<\/b>"},{"k":"txt","t":"<b>Grendel the Really Old<\/b> อยู่ในห้อง <b>Magic Library<\/b> — ประตูอยู่ในเมือง Ellinia (ยืนหน้าประตูแล้วกด ↑)"},{"b":[54,48],"k":"npc","m":"010002000","t":"<b>Francois<\/b> อยู่ใน <b>Ellinia<\/b> กลางแมพ"}]};
+const ICON={"Leaf":"./assets/route/5437b6177bcb835f.png","Razor":"./assets/route/83dc7e681bb2d4a2.png","Screw":"./assets/route/8dfaf11f9d8e9f32.png","Leather":"./assets/route/db4c418f6bab6145.png","Pan Lid":"./assets/route/08a980cbbdcab305.png","Iron Ore":"./assets/route/041d8abab4ce3c25.png","Bronze Ore":"./assets/route/53d639c5899deb01.png","Iron Ingot":"./assets/route/7411a727b0b03ffa.png","Fruit Knife":"./assets/route/d934a8d3bc13cb85.png","Rusty Screw":"./assets/route/8c6e8df3b670a9b0.png","Snail Shell":"./assets/route/2a378fb8b219a414.png","Tree Branch":"./assets/route/95d18a1028e9aba2.png","Bronze Ingot":"./assets/route/096c2618ac1b62c5.png","Pig's Ribbon":"./assets/route/03e6058a7622ada9.png","Slime Bubble":"./assets/route/527ac094ca3a1eac.png","White Bandana":"./assets/route/6a3faefb48bf4f34.png","Processed Wood":"./assets/route/187287b97c9af151.png","Squishy Liquid":"./assets/route/b9b02074ee740238.png","Blue Snail Shell":"./assets/route/75fb3dc73a1752ac.png","Old Wooden Board":"./assets/route/cf9b9094cc0c3c09.png","The Green Relaxer":"./assets/route/36529dec5f09270c.png","Orange Mushroom Cap":"./assets/route/ad3d56e5392926df.png"};
+const MOB={"Pig":{"a":"./assets/route/4a66a2c12f375d03.webp","i":"./assets/route/133b5d8e63a03b3b.gif","u":"https://meowdb.com/msclassic/monsters/8","hp":"128","lv":"7","exp":"13"},"Slime":{"a":"./assets/route/fc69b9cd404cd08b.webp","i":"./assets/route/fe82e2bac7f1c3d1.gif","u":"https://meowdb.com/msclassic/monsters/7","hp":"115","lv":"6","exp":"12"},"Snail":{"a":"./assets/route/e509075379440e7c.webp","i":"./assets/route/32f87c20f202ab1f.gif","u":"https://meowdb.com/msclassic/monsters/2","hp":"45","lv":"1","exp":"2"},"Stump":{"a":"./assets/route/7f735a1ba429f7d8.webp","i":"./assets/route/5aa2ba762ddaffdf.gif","u":"https://meowdb.com/msclassic/monsters/6","hp":"133","lv":"5","exp":"10"},"Shroom":{"a":"./assets/route/c701dce78961e3f7.webp","i":"./assets/route/89e052697351fbbf.png","u":"https://meowdb.com/msclassic/monsters/4","hp":"62","lv":"3","exp":"6"},"Blue Snail":{"a":"./assets/route/76222059f59be690.webp","i":"./assets/route/593c8c7b17c6e956.gif","u":"https://meowdb.com/msclassic/monsters/3","hp":"51","lv":"2","exp":"4"},"Dark Stump":{"a":"./assets/route/583ffe6a274d8d41.webp","i":"./assets/route/6cd3f814d7ba2b35.gif","u":"https://meowdb.com/msclassic/monsters/11","hp":"236","lv":"11","exp":"21"},"Ribbon Pig":{"a":"./assets/route/bfc46043218ba115.webp","i":"./assets/route/d9c8076797c9a9bf.png","u":"https://meowdb.com/msclassic/monsters/10","hp":"172","lv":"10","exp":"19"},"Green Mushroom":{"a":"./assets/route/14b51c659a60d662.webp","i":"./assets/route/77516de3855d5ab1.gif","u":"https://meowdb.com/msclassic/monsters/13","hp":"233","lv":"14","exp":"26"},"Horny Mushroom":{"a":"./assets/route/e77a46bab92ac250.webp","i":"./assets/route/b0e7a2be9b3a71ea.gif","u":"https://meowdb.com/msclassic/monsters/19","hp":"403","lv":"22","exp":"41"},"Orange Mushroom":{"a":"./assets/route/859636850f53a7e3.webp","i":"./assets/route/1a52f35e0e7cb7de.gif","u":"https://meowdb.com/msclassic/monsters/9","hp":"142","lv":"8","exp":"15"}};
+const NPC={"Pio":{"i":"./assets/route/811dcbb556ee0f7c.png","s":"Rainbow Street","u":"https://meowdb.com/msclassic/npcs/18"},"Teo":{"i":"./assets/route/7b91655a81acc278.webp","s":"Victoria Road","u":"https://meowdb.com/msclassic/npcs/102"},"Maya":{"i":"./assets/route/32b4929ad1ede477.webp","s":"Victoria Road","u":"https://meowdb.com/msclassic/npcs/207"},"Olaf":{"i":"./assets/route/1865955f0913e4a0.png","s":"Victoria Road","u":"https://meowdb.com/msclassic/npcs/107"},"Phil":{"i":"./assets/route/f752a643ebaaf1ce.png","s":"Victoria Road","u":"https://meowdb.com/msclassic/npcs/101"},"Biggs":{"i":"./assets/route/d90017318f327528.webp","s":"Maple Road","u":"https://meowdb.com/msclassic/npcs/12"},"Bruce":{"i":"./assets/route/e1c271179393657c.webp","s":"Victoria Road","u":"https://meowdb.com/msclassic/npcs/206"},"Nella":{"i":"./assets/route/392bcb525fbd7e6f.webp","s":"Victoria Road","u":"https://meowdb.com/msclassic/npcs/406"},"Icarus":{"i":"./assets/route/e675e410e6c3a1d9.png","s":"Victoria Road","u":"https://meowdb.com/msclassic/npcs/407"},"Silver":{"i":"./assets/route/b131372dc69ca186.webp","s":"Victoria Road","u":"https://meowdb.com/msclassic/npcs/110"},"Vicious":{"i":"./assets/route/39c977b4dec52603.webp","s":"Victoria Road","u":"https://meowdb.com/msclassic/npcs/208"},"Francois":{"i":"./assets/route/e6f51ed1ab53932e.png","s":"Victoria Road","u":"https://meowdb.com/msclassic/npcs/303"},"Blackbull":{"i":"./assets/route/cb02397220ee7091.webp","s":"Victoria Road","u":"https://meowdb.com/msclassic/npcs/501"},"Mr. Thunder":{"i":"./assets/route/0d65893c9dd3b1d9.webp","s":"Victoria Road","u":"https://meowdb.com/msclassic/npcs/503"},"Silas Irons":{"i":"./assets/route/b2975885c2c40625.webp","s":"Victoria Road","u":"https://meowdb.com/msclassic/npcs/504"},"JM From tha Streetz":{"i":"./assets/route/ef0ac22e290b5b48.webp","s":"Victoria Road","u":"https://meowdb.com/msclassic/npcs/401"},"Maple Administrator":{"i":"./assets/route/5bb98f7e77ad391a.png","s":"Victoria Road","u":"https://meowdb.com/msclassic/npcs/900002"}};
+const MAP={"Perion":{"i":"./assets/route/f3c58ce1e8bebfa2.png","r":"Victoria Island","s":"Victoria Road · Town · 9 NPCs","u":"https://meowdb.com/msclassic/maps/010004000"},"Amherst":{"i":"./assets/route/6aa0d6827dcaacea.png","r":"Maple Island","s":"Rainbow Street · Town · 3 NPCs","u":"https://meowdb.com/msclassic/maps/000001010"},"Ellinia":{"i":"./assets/route/bfbee0f2a4927660.png","r":"Victoria Island","s":"Victoria Road · Town · 12 NPCs","u":"https://meowdb.com/msclassic/maps/010002000"},"Henesys":{"i":"./assets/route/7568193b30f3eb37.png","r":"Victoria Island","s":"Victoria Road · Town · 10 NPCs","u":"https://meowdb.com/msclassic/maps/010001000"},"Southperry":{"i":"./assets/route/dffab2d0577f38b3.png","r":"Maple Island","s":"Maple Road · Town · 4 NPCs","u":"https://meowdb.com/msclassic/maps/000000060"},"Lith Harbor":{"i":"./assets/route/c52a8240483b884a.png","r":"Victoria Island","s":"Victoria Road · Town · 12 NPCs","u":"https://meowdb.com/msclassic/maps/010000000"},"Kerning City":{"i":"./assets/route/833e4ced8f815840.png","r":"Victoria Island","s":"Victoria Road · Town · 14 NPCs","u":"https://meowdb.com/msclassic/maps/010003000"},"Henesys Market":{"i":"./assets/route/349232b62d479f8a.png","r":"Victoria Island","s":"Victoria Road · Town · 4 NPCs","u":"https://meowdb.com/msclassic/maps/010001040"},"Perion Street Corner":{"i":"./assets/route/03c7ac786aceaa8b.png","r":"Victoria Island","s":"Victoria Road · 40 mobs","u":"https://meowdb.com/msclassic/maps/010004040"},"The Tree That Grew I":{"i":"./assets/route/1f53b7ab725185a6.png","r":"Victoria Island","s":"Victoria Road · 40 mobs","u":"https://meowdb.com/msclassic/maps/010002060"},"The Tree That Grew II":{"i":"./assets/route/a1be0e451c4824d8.png","r":"Victoria Island","s":"Victoria Road · 70 mobs","u":"https://meowdb.com/msclassic/maps/010002061"},"The Rain-Forest East of Henesys":{"i":"./assets/route/3edb0bbef977ef05.png","r":"Victoria Island","s":"Victoria Road · 9 mobs","u":"https://meowdb.com/msclassic/maps/010001070"}};
+const MAP_ALIAS={"Pig Beach":"The Pig Beach","Thief Hideout":"Thieves' Hideout","Line 1 (Area 2)":"Line 1 <Area 2>","Line 1 (Area 4)":"Line 1 <Area 4>","Line 2 (Area 1)":"Line 2 <Area 1>","Line 2 (Area 3)":"Line 2 <Area 3>","Forest of Wisdom":"The Forest of Wisdom","Thief job test map":"Thief's Construction Site","Land of Wild Boar II":"The Land of Wild Boar II","Henesys Hunting Ground":"Henesys Hunting Ground I","Northern Top Construction Site":"Northern Top of Construction Site"};
+const ALIAS={"Refined Diamond":"Diamond"};
+const ITEM_URL={"Leaf":"https://meowdb.com/msclassic/item-db/358","Razor":"https://meowdb.com/msclassic/item-db/558","Screw":"https://meowdb.com/msclassic/item-db/305","Leather":"https://meowdb.com/msclassic/item-db/396","Pan Lid":"https://meowdb.com/msclassic/item-db/917","Iron Ore":"https://meowdb.com/msclassic/item-db/414","Bronze Ore":"https://meowdb.com/msclassic/item-db/413","Iron Ingot":"https://meowdb.com/msclassic/item-db/421","Fruit Knife":"https://meowdb.com/msclassic/item-db/559","Rusty Screw":"https://meowdb.com/msclassic/item-db/441","Snail Shell":"https://meowdb.com/msclassic/item-db/348","Tree Branch":"https://meowdb.com/msclassic/item-db/352","Bronze Ingot":"https://meowdb.com/msclassic/item-db/420","Pig's Ribbon":"https://meowdb.com/msclassic/item-db/357","Slime Bubble":"https://meowdb.com/msclassic/item-db/354","White Bandana":"https://meowdb.com/msclassic/item-db/719","Processed Wood":"https://meowdb.com/msclassic/item-db/306","Squishy Liquid":"https://meowdb.com/msclassic/item-db/353","Blue Snail Shell":"https://meowdb.com/msclassic/item-db/349","Old Wooden Board":"https://meowdb.com/msclassic/item-db/442","The Green Relaxer":"https://meowdb.com/msclassic/item-db/522","Orange Mushroom Cap":"https://meowdb.com/msclassic/item-db/356"};
+const QUEST_URL={"Phil's Call":"https://meowdb.com/msclassic/quest-tracker/10001","Teo's Weird Hobby":"https://meowdb.com/msclassic/quest-tracker/10010","Don Hwang's Request":"https://meowdb.com/msclassic/quest-tracker/10303","Icarus's Hang Glider":"https://meowdb.com/msclassic/quest-tracker/10317","[Event] Growing Leaf":"https://meowdb.com/msclassic/quest-tracker/500009","Olaf's First Training":"https://meowdb.com/msclassic/quest-tracker/10000","Olaf's Second Training":"https://meowdb.com/msclassic/quest-tracker/10009","Teo's Even Weirder Hobby":"https://meowdb.com/msclassic/quest-tracker/10011","[Event] Gathering Leaves":"https://meowdb.com/msclassic/quest-tracker/500005","Biggs's Collection of Items":"https://meowdb.com/msclassic/quest-tracker/1011","Pio's Collecting Recycled Goods":"https://meowdb.com/msclassic/quest-tracker/1012","Vicious in Need of an Apprentice":"https://meowdb.com/msclassic/quest-tracker/80017","[Event] Gift for the New Journey":"https://meowdb.com/msclassic/quest-tracker/500006","Francois in Need of an Apprentice":"https://meowdb.com/msclassic/quest-tracker/80014","Silas Irons in Need of an Apprentice":"https://meowdb.com/msclassic/quest-tracker/80008","JM From tha Streetz Looking for a Partner":"https://meowdb.com/msclassic/quest-tracker/80020"};
+const MINI={"000000050":{"h":68,"u":"./assets/route/ba90828384aab3a0.webp","w":239},"000000060":{"h":138,"u":"./assets/route/eb0d849243d0e72b.webp","w":295},"000001000":{"h":128,"u":"./assets/route/d089fc4fe78fba2f.webp","w":245},"000001010":{"h":65,"u":"./assets/route/b0832a5ed189579a.webp","w":228},"010000000":{"h":126,"u":"./assets/route/7583f17e70779337.webp","w":390},"010001000":{"h":74,"u":"./assets/route/9d3fecec2f8bb206.webp","w":431},"010001001":{"h":59,"u":"./assets/route/edb51db512fd9864.webp","w":87},"010001040":{"h":58,"u":"./assets/route/563dac9ec364dd6c.webp","w":357},"010002000":{"h":318,"u":"./assets/route/409d269aedfddb7a.webp","w":171},"010002050":{"h":131,"u":"./assets/route/ecf917c63c255472.webp","w":117},"010002060":{"h":119,"u":"./assets/route/662e9390f8d53888.webp","w":113},"010003000":{"h":132,"u":"./assets/route/a79240c7b9e6f2f7.webp","w":323},"010004000":{"h":192,"u":"./assets/route/e9d8e058646311bd.webp","w":204}};
+const NPCLOC={"Pio":{"m":"000001010","p":[25.6,81.9],"t":"Amherst · ซ้ายล่าง"},"Teo":{"m":"010000000","p":[65.1,84.1],"t":"Lith Harbor · ขวาล่าง"},"Maya":{"m":"010001001","p":[39.2,54.9],"t":"Henesys Townstreet · กลางแมพ"},"Olaf":{"m":"010000000","p":[78.9,79.8],"t":"Lith Harbor · ขวาล่าง"},"Phil":{"m":"010000000","p":[24,75.4],"t":"Lith Harbor · ซ้ายล่าง"},"Biggs":{"m":"000000060","p":[33.9,59],"t":"Southperry · ซ้ายกลาง"},"Bruce":{"m":"010001000","p":[69.2,83.3],"t":"Henesys · ขวาล่าง"},"Nella":{"m":"010003000","p":[49.6,65.5],"t":"Kerning City · กลางด้านล่าง"},"Icarus":{"m":"010003000","p":[58.3,17.1],"t":"Kerning City · กลางด้านบน"},"Silver":{"m":"010000000","p":[61.5,47.6],"t":"อยู่ในห้อง Lith Harbor Weapon Shop — ประตูทางเข้าอยู่กลางแมพของ Lith Harbor"},"Vicious":{"m":"010001040","p":[34.5,50.9],"t":"Henesys Market · ซ้ายกลาง"},"Francois":{"m":"010002000","p":[54,48],"t":"Ellinia · กลางแมพ"},"Blackbull":{"m":"010004000","p":[59.9,91.7],"t":"Perion · กลางด้านล่างสุด"},"Mr. Thunder":{"m":"010004000","p":[48.2,47.8],"t":"Perion · กลางแมพ"},"Silas Irons":{"m":"010004000","p":[31.5,47.9],"t":"Perion · ซ้ายกลาง"},"JM From tha Streetz":{"m":"010003000","p":[37,67.2],"t":"Kerning City · ซ้ายล่าง"},"Maple Administrator":{"m":"010001000","p":[7.5,53],"t":"Henesys · ซ้ายสุดกลาง"}};
+const KEEP=[["Blue Snail Shell","10","Blue Snail","Maple Island","Lv.3–8","Biggs"],["Orange Mushroom Cap","1 → 10 (20)","Orange Mushroom","Maple Island / Henesys Hunting Ground","Lv.3–11","Biggs, Bruce (+ Nella)"],["Bronze Ore","5","Stump (สำรอง: Snail, Orange Mushroom)","The Tree That Grew II, Perion Street Corner","Lv.8–11","Silas Irons"],["Slime Bubble","4 (14 ถ้าทำ Ming Ming)","Slime","The Tree That Grew II / I","Lv.8–10","Teo + Mrs. Ming Ming"],["Squishy Liquid","22 → 30+","Slime","The Tree That Grew II / Slime Tree","Lv.8–10, เติมก่อน Lv.25","I'm Bored 2 (12), Maya (30)"],["Tree Branch","42 (100+ ถ้าทำ Processed Wood ทาง A)","Stump","The Tree That Grew II","Lv.8–11","Vicious 20, Blackbull 10, I'm Bored 2 12"],["Leaf","30 → 60","Dark Stump","The Tree That Grew I / II","Lv.8–11, เติมก่อน Lv.25","Francois 20, Blackbull 10, Maya 30"],["Leather","5","Pig","The Rain-Forest East of Henesys","Lv.10–11","JM"],["Pig's Ribbon","10–30","Ribbon Pig","The Rain-Forest East of Henesys","Lv.10–15","Nella 10 + Ming Ming 20"]];
+const reEsc = n => n.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+const mkRe = names => new RegExp("(?<![A-Za-z])(" + names.sort((a,b)=>b.length-a.length).map(reEsc).join("|") + ")(?![A-Za-z])", "g");
+
+const WORD_RE = mkRe(Object.keys(ICON).concat(Object.keys(ALIAS), Object.keys(MOB), Object.keys(QUEST_URL)));
+const MAP_RE = mkRe(Object.keys(MAP).concat(Object.keys(MAP_ALIAS)));
+const NPC_B_RE = new RegExp("<b>(" + Object.keys(NPC).sort((a,b)=>b.length-a.length).map(reEsc).join("|") + ")</b>", "g");
+const attr = s => String(s).replace(/&/g,"&amp;").replace(/"/g, "&quot;").replace(/</g,"&lt;");
+const lk = (u, inner, cls) => u ? `<a class="dbl ${cls||""}" href="${u}" target="_blank" rel="noopener">${inner}</a>` : inner;
+const ico = h => h == null ? h : String(h)
+  .replace(NPC_B_RE, (m, n) => lk(NPC[n].u, `<b class="it npc"><img src="${NPC[n].i}" alt="" title="NPC: ${attr(n)}">${n}</b>`))
+  .split(/(<[^>]*>|The Pig Beach|Pale Maple Leaf|Reddened Maple Leaf)/).map(p => (p.startsWith("<") || /^(The Pig Beach|Pale Maple Leaf|Reddened Maple Leaf)$/.test(p)) ? p : p.replace(WORD_RE, n => {
+    if (MOB[n]) return lk(MOB[n].u, `<span class="it mob"><img src="${MOB[n].i}" alt="" title="${attr(n)} · Lv ${MOB[n].lv}">${n}</span>`) + (MOB[n].lv ? `<span class="mlv" title="เลเวลมอน">Lv ${MOB[n].lv}</span>` : "");
+    if (ICON[ALIAS[n]||n]) return lk(ITEM_URL[n], `<span class="it"><img src="${ICON[ALIAS[n]||n]}" alt="" title="${attr(n)}">${n}</span>`);
+    return lk(QUEST_URL[n], n, "q");
+  })).join("");
+const itemIco = n => { const k = ALIAS[n] || n; return ICON[k] ? lk(ITEM_URL[n], `<span class="it"><img src="${ICON[k]}" alt="" title="${attr(n)}">${esc(n)}</span>`) : lk(ITEM_URL[n], esc(n)); };
+const plain = h => String(h||"").replace(/<[^>]*>/g, " ");
+
+function stepInfo(s){
+  const npcs = new Set(), mobs = new Set(), maps = new Set();
+  const texts = [s.intro, s.keep, ...s.act.flatMap(a => [a.x, a.tip, a.from, ...(a.sub||[])])];
+  texts.forEach(t => {
+    if (!t) return;
+    for (const m of String(t).matchAll(NPC_B_RE)) npcs.add(m[1]);
+    for (const m of plain(t).matchAll(WORD_RE)) if (MOB[m[1]]) mobs.add(m[1]);
+  });
+  const w = String(s.where).match(/NPC (.+)$/); if (w && NPC[w[1].trim()]) npcs.add(w[1].trim());
+  [s.where, ...s.act.map(a => a.map)].forEach(t => { if (t) for (const m of String(t).matchAll(MAP_RE)) maps.add(MAP_ALIAS[m[1]] || m[1]); });
+  return {npcs:[...npcs], mobs:[...mobs], maps:[...maps]};
+}
+function infoHTML(s){
+  const {npcs, mobs, maps} = stepInfo(s);
+  if (!npcs.length && !mobs.length && !maps.length) return "";
+  const grp = (title, tiles) => tiles.length ? `<div><h3>${title}</h3><div class="tiles">${tiles.join("")}</div></div>` : "";
+  return `<section class="info" aria-label="ภาพประกอบขั้นนี้">
+    ${grp("แมพ (แตะเพื่อขยาย)", maps.map(n => { const m = MAP[n]; return `<button type="button" class="tile map" data-map="${attr(n)}"><span class="pic">${m.i?`<img src="${m.i}" alt="ภาพแมพ ${attr(n)}">`:`<span class="nopic">ไม่มีภาพแมพ</span>`}</span><span class="nm">${esc(n)}</span><span class="mt">${esc(m.s || m.r)}</span></button>`; }))}
+    ${grp("NPC (แตะแผนที่เพื่อดูตำแหน่ง)", npcs.map(n => `<div class="tile npc"><a class="npclink" href="${NPC[n].u}" target="_blank" rel="noopener"><span class="pic"><img src="${NPC[n].i}" alt=""></span><span class="nm">${esc(n)}</span></a>${npcMapThumb(n)}<span class="mt">${esc((NPCLOC[n]||{}).t||NPC[n].s)}</span></div>`))}
+    ${grp("มอนสเตอร์", mobs.map(n => { const m = MOB[n]; return `<a class="tile mob" href="${m.u}" target="_blank" rel="noopener"><span class="pic"><img src="${m.a||m.i}" alt=""></span><span class="nm">${esc(n)} <span class="lvchip">Lv ${m.lv}</span></span><span class="mt">HP ${m.hp} · EXP ${m.exp}</span></a>`; }))}
+  </section>`;
+}
+function openMap(n){
+  const m=MAP[n];if(!m)return;
+  const id=m.u.split("/").pop(),mini=MINI[id];
+  const names=stepInfo(S[state.i]).npcs.filter(name=>NPCLOC[name]?.m===id);
+  const markers=names.map(name=>{const p=NPCLOC[name].p;return `<span class="mmdot np big" style="left:${p[0]}%;top:${p[1]}%" title="${attr(name)}" aria-label="${attr(name)}"></span>`;}).join("");
+  const picture=mini?`<div class="lbmap" style="--ar:${mini.w/mini.h}"><img src="${mini.u}" alt="ภาพแมพ ${attr(n)}">${markers}</div>`:(m.i?`<img src="${m.i}" alt="ภาพแมพ ${attr(n)}">`:"");
+  $("lbBody").innerHTML=picture+`<figcaption>${esc(n)}${names.length?" · ตำแหน่ง "+names.map(esc).join(", "):""}<br><a href="${m.u}" target="_blank" rel="noopener">ดูข้อมูลแมพบน NiaMeowDB</a></figcaption>`;
+  $("lightbox").classList.add("open");
+}
+
+
+const NAVK = {cab:"Taxi", walk:"เดิน", npc:"หา NPC", txt:"หมายเหตุ"};
+function mmHTML(o){
+  const m = MINI[o.m]; if (!m || !o.b) return "";
+  const dot = (p,c,l) => p ? `<span class="mmdot ${c}" style="left:${p[0]}%;top:${p[1]}%" title="${l}"></span>` : "";
+  return `<button type="button" class="mm" aria-label="ขยายแผนที่" style="--ar:${(m.w/m.h).toFixed(3)};aspect-ratio:${m.w}/${m.h}"><img src="${m.u}" alt="" loading="lazy">${dot(o.a,"in","จุดที่เข้ามา")}${dot(o.b,o.k==="npc"?"np":"out",o.k==="npc"?"NPC":"ทางออก")}</button>`;
+}
+function navHTML(i){
+  const L = NAV[i]; if (!L || !L.length) return "";
+  return `<details class="navbox"><summary>🧭 เส้นทางเดินของขั้นนี้ <span class="mt">(${L.length} จุด แตะแผนที่เพื่อขยาย)</span></summary>
+    <p class="navlegend"><span class="mmdot in st"></span> จุดที่เข้ามา <span class="mmdot out st"></span> ทางออกที่ต้องไป <span class="mmdot np st"></span> ตำแหน่ง NPC</p>
+    <ol class="navlist">${L.map(o=>`<li class="nv ${o.k}"><div class="nvt"><span class="nvk ${o.k}">${NAVK[o.k]}</span> ${ico(o.t)}</div>${mmHTML(o)}</li>`).join("")}</ol></details>`;
+}
+
+
+function npcMapThumb(n){
+  const L = NPCLOC[n], m = L && L.m && MINI[L.m]; if (!m) return "";
+  return `<button type="button" class="npcmap" data-npc="${attr(n)}" style="--ar:${(m.w/m.h).toFixed(3)}" aria-label="ดูตำแหน่ง ${attr(n)} บนแผนที่"><img src="${m.u}" alt=""><span class="mmdot np" style="left:${L.p[0]}%;top:${L.p[1]}%"></span></button>`;
+}
+function openNpcMap(n){
+  const L = NPCLOC[n], m = L && MINI[L.m]; if (!m) return;
+  $("lbBody").innerHTML = `<div class="lbmap" style="--ar:${(m.w/m.h).toFixed(3)}"><img src="${m.u}" alt="แผนที่"><span class="mmdot np big" style="left:${L.p[0]}%;top:${L.p[1]}%"></span></div><figcaption><b>${esc(n)}</b> — ${esc(L.t)}${NPC[n]?`<br><a href="${NPC[n].u}" target="_blank" rel="noopener">ดูบน NiaMeowDB ↗</a>`:""}</figcaption>`;
+  $("lightbox").classList.add("open");
+}
+
+
+const OPTK = {rare:"ของมีราคา", drop:"เล็งดรอป", quest:"รางวัลเควส", craft:"คราฟต์", buy:"ซื้อ (อาวุธ)", sell:"ขายได้"};
+function optHTML(s){
+  if (!s.opt || !s.opt.length) return "";
+  return `<section class="optbox" aria-label="ทางเลือก: ของและคราฟต์">
+    <div class="optbox-h"><span>ทางเลือก: ของน่าเก็บ & คราฟต์ <span class="mt">(ไม่ทำก็เดิน route ต่อได้)</span></span><button type="button" class="linkbtn" data-tab="opt">ดูแผนเต็ม</button></div>
+    <ul>${s.opt.map(o=>`<li><span class="ok-tag ${o.k}">${OPTK[o.k]}</span><span>${ico(o.x)}</span></li>`).join("")}</ul>
+  </section>`;
+}
+
+
+/* แยกบรรทัดหลักที่มีรายการคั่นด้วย " · " ให้เป็นหัวข้อ + bullet */
+function splitX(x){
+  const s = String(x), segs = []; let depth = 0, tag = false, last = 0;
+  for (let i = 0; i < s.length; i++){
+    const c = s[i];
+    if (c === "<") tag = true; else if (c === ">") tag = false;
+    else if (!tag && c === "(") depth++; else if (!tag && c === ")") depth = Math.max(0, depth-1);
+    else if (!tag && depth === 0 && c === "·"){ segs.push(s.slice(last, i).trim()); last = i+1; }
+  }
+  if (!segs.length) return {head: s, items: []};
+  segs.push(s.slice(last).trim());
+  const pre = segs[0], rest = segs.slice(1);
+  const topIdx = (str, needle, fromEnd) => { let d = 0, t = false, found = -1;
+    for (let i = 0; i < str.length; i++){ const c = str[i];
+      if (c === "<") t = true; else if (c === ">") t = false;
+      else if (!t && c === "(") d++; else if (!t && c === ")") d = Math.max(0, d-1);
+      if (!t && d === 0 && str.startsWith(needle, i)){ found = i; if (!fromEnd) break; } }
+    return found; };
+  const colonLike = seg => { const p = seg.replace(/<[^>]+>/g, ""); const c = p.indexOf(": "); return c > 0 && c < 22; };
+  let cut = -1, len = 0;
+  const d = topIdx(pre, " — ", true);
+  if (d > 0){ cut = d; len = 3; }
+  else if (!rest.some(colonLike)){ const c = topIdx(pre, ": ", false); if (c > 0 && pre.slice(0, c).replace(/<[^>]+>/g, "").trim().length >= 9){ cut = c; len = 2; } }
+  if (cut > 0) return {head: pre.slice(0, cut + (len === 2 ? 1 : 0)).trim(), items: [pre.slice(cut + len).trim(), ...rest]};
+  return {head: pre, items: rest};
+}
+
+function actHTML(a, i, j){
+  const k = i+"-"+j, done = !!state.done[k];
+  const L = splitX(a.x), subs = [...L.items, ...(a.sub||[])];
+  let facts = "";
+  if (a.from) facts += `<dt>ดรอปจาก</dt><dd>${ico(a.from)}</dd>`;
+  if (a.map) facts += `<dt>แมพ</dt><dd>${a.map}</dd>`;
+  return `<li class="act ${done?"done":""}">
+    <input type="checkbox" id="c${k}" data-k="${k}" ${done?"checked":""} aria-label="ทำเสร็จแล้ว">
+    <div>
+      <label for="c${k}" class="main"><span class="tag ${a.t}">${TAG[a.t]}</span>${ico(L.head)}</label>
+      ${facts?`<dl class="facts">${facts}</dl>`:""}
+      ${subs.length?`<ul class="sub">${subs.map(x=>`<li>${ico(x)}</li>`).join("")}</ul>`:""}
+      ${a.tip?`<p class="tip">${ico(a.tip)}</p>`:""}
+    </div>
+  </li>`;
+}
+
+
+const TAG={travel:"เดินทาง",talk:"คุย / รับเควส",kill:"ตีมอน",collect:"หาของ",turnin:"ส่งเควส",craft:"คราฟต์",stop:"หยุด",gear:"อุปกรณ์",note:"หมายเหตุ"};
+const KEY="mt-cleric-classic-free-route-v1";const $=id=>document.getElementById(id);
+const esc=v=>String(v??'').replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
+const lvNum=v=>parseInt(String(v).match(/\d+/)?.[0]||'1',10);
+let state={i:0,done:{},sq:null};try{const v=JSON.parse(localStorage.getItem(KEY)||'null');if(v){state.i=Math.max(0,Math.min(S.length-1,Number(v.i)||0));state.done=v.done||{}}}catch{}
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify({i:state.i,done:state.done}))}catch{}};
+const stepDone=i=>S[i].act.every((_,j)=>state.done[i+'-'+j]);
+const sqOf=()=>[],sqById=()=>null,sqDone=()=>false,sqBoxHTML=()=>'',sqCardHTML=()=>'',openSq=()=>{};
+function showLock(){$('premiumLock').hidden=false;$('premiumClose').focus()}
+function closeLock(){$('premiumLock').hidden=true;$('next').focus()}
+function sideHTML(){let h='',last='';S.forEach((v,i)=>{if(v.ch!==last){h+='<div class="chap">'+esc(v.ch)+'</div>';last=v.ch}h+='<button class="tab" data-i="'+i+'" '+(i===state.i?'aria-current="step"':'')+'><span class="n">'+(i+1)+'</span><span class="tt">Lv.'+esc(v.lv)+' '+esc(v.title)+'</span>'+(stepDone(i)?'<span class="ok">✓</span>':'')+'</button>'});return h+'<button class="tab mt-locked-step" data-premium><span class="n">🔒</span><span class="tt">ขั้นต่อไป</span></button>'}
+function etcHTML(s){const rows=(s.act||[]).filter(a=>a.from||a.map);if(!rows.length)return '';return '<section class="info mt-loot-mini"><h3>แหล่งดรอปที่กล่าวถึงในขั้นนี้</h3><div class="tiles">'+rows.map(a=>'<div class="tile"><span class="nm">'+ico(a.from||'')+'</span><span class="mt">'+esc(a.map||'')+'</span></div>').join('')+'</div></section>'}
+function render(){
+const i=state.i,s=S[i];$('side').innerHTML=sideHTML();$('drawer').innerHTML=sideHTML();
+$('main').innerHTML=`<article class="card"><div class="card-head"><div class="lvrow"><span class="lv">Lv.${esc(s.lv)}</span><span class="stepno">ขั้นที่ ${i+1} จาก ${S.length}</span></div><h2>${esc(s.title)}</h2><span class="where"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a7 7 0 0 0-7 7c0 5.2 7 13 7 13s7-7.8 7-13a7 7 0 0 1 0 5z"/></svg>${esc(s.where||'')}</span>${s.intro?'<p class="intro">'+ico(s.intro)+'</p>':''}</div><h3 class="acts-h">สิ่งที่ต้องทำในขั้นนี้ <span class="mt">(ทำตามลำดับจากบนลงล่าง)</span></h3><ol class="acts">${s.act.map((a,j)=>actHTML(a,i,j)).join('')}</ol>${s.miss?'<div class="missbox"><b>ถ้าข้ามหรือพลาดขั้นนี้:</b> '+ico(s.miss)+'</div>':''}${navHTML(i)}${infoHTML(s)}${optHTML(s)}<div class="extra"><div class="box"><h3>AP</h3><p>${s.ap||'—'}</p></div><div class="box"><h3>SP</h3><p>${s.sp||'—'}</p></div><div class="box"><h3>ห้ามขาย</h3><p>${ico(s.keep||'—')}</p></div><div class="box leave"><h3>ไปขั้นต่อไปเมื่อ</h3><p>${s.leave||'—'}</p></div></div>${etcHTML(s)}</article>`;
+$('prev').disabled=i===0;$('next').disabled=false;$('next').textContent='ขั้นต่อไป';
+$('count').textContent=i===S.length-1?'ขั้นต่อไปต้องปลดล็อก':s.next?'ต่อไป: '+S[i+1].title:'';
+const pct=(lvNum(s.lv)-1)/49*100;$('fill').style.width=pct+'%';$('leaf').style.left=pct+'%';$('chapName').textContent=s.ch;$('doneCount').textContent='เสร็จแล้ว '+S.filter((_,k)=>stepDone(k)).length+' / '+S.length+' ขั้น';$('side').querySelector('[aria-current="step"]')?.scrollIntoView({block:'nearest'});
+}
+function go(n){if(n>=S.length){showLock();return}if(n<0)return;state.i=n;save();render();closeAll();window.scrollTo({top:0,behavior:'instant'})}
+function closeAll(){$('drawer').classList.remove('open');$('keepModal').classList.remove('open');$('overlay').classList.remove('open')}
+function keepTable(){$('keepTable').innerHTML='<thead><tr><th>ของ</th><th>จำนวน</th><th>ดรอปจาก</th><th>แมพ</th><th>เก็บช่วง</th><th>ใช้กับ</th></tr></thead><tbody>'+KEEP.map(r=>'<tr>'+r.map((v,i)=>'<td>'+(i===0||i===2?ico(esc(v)):esc(v))+'</td>').join('')+'</tr>').join('')+'</tbody>'}
+document.addEventListener('click',e=>{
+const mapb=e.target.closest('.mm');if(mapb){mapb.classList.toggle('big');return}
+const npc=e.target.closest('.npcmap');if(npc){openNpcMap(npc.dataset.npc);return}
+const tab=e.target.closest('button[data-tab]');if(tab){if(tab.dataset.tab!=='route')location.href='./cleric-preview.html#'+tab.dataset.tab;return}
+const step=e.target.closest('[data-go]');if(step){go(+step.dataset.go);return}
+const bigmap=e.target.closest('.tile.map');if(bigmap){openMap(bigmap.dataset.map);return}
+if(e.target.closest('[data-premium]')){showLock();return}
+const nav=e.target.closest('.tab[data-i]');if(nav){go(+nav.dataset.i);return}
+if(e.target.closest('#lightbox')&&!e.target.closest('a')){$('lightbox').classList.remove('open');return}
+});
+document.addEventListener('change',e=>{const k=e.target?.dataset?.k;if(!k)return;if(e.target.checked)state.done[k]=true;else delete state.done[k];save();render()});
+$('prev').onclick=()=>go(state.i-1);$('next').onclick=()=>go(state.i+1);
+$('openDrawer').onclick=()=>{$('drawer').classList.add('open');$('overlay').classList.add('open')};
+$('openKeep').onclick=()=>{$('keepModal').classList.add('open');$('overlay').classList.add('open');$('closeKeep').focus()};
+$('closeKeep').onclick=closeAll;$('overlay').onclick=closeAll;
+$('premiumClose').onclick=closeLock;$('premiumBack').onclick=closeLock;
+$('premiumLock').addEventListener('click',e=>{if(e.target.id==='premiumLock')closeLock()});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){$('lightbox').classList.remove('open');if(!$('premiumLock').hidden)closeLock();closeAll()}if(e.target.matches('input,textarea'))return;if(e.key==='ArrowRight')go(state.i+1);if(e.key==='ArrowLeft')go(state.i-1)});
+[1,10,20,30,40,50].forEach(v=>{const tick=document.createElement('span');tick.className='track-tick';tick.style.left=((v-1)/49*100)+'%';tick.textContent='Lv.'+v;$('track').append(tick)});
+keepTable();render();
+</script><script type="module" src="./navigation-entry.js"></script></body></html>
