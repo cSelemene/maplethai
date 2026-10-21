@@ -132,7 +132,7 @@ async function load() {
     let q = supabase
       .from('listings')
       .select(
-        'id,user_id,kind,item_name,category,discord_user,discord_url,qty,price,price_unit,atk,slots,item_id,item_stats,status,created_at,expires_at'
+        'id,user_id,kind,item_name,category,discord_user,discord_url,qty,price,price_max,price_unit,atk,slots,item_id,item_stats,status,created_at,expires_at'
       );
     if (highlightedListing && !mine) q = q.eq('id', highlightedListing);
     if (mine) q = q.eq('user_id', user.id);
@@ -222,12 +222,12 @@ function renderRow(row) {
   coin.alt = 'Meso';
   coin.title = 'Meso';
   price.append(coin);
-  const fullPrice = new Intl.NumberFormat('en-US').format(row.price) + ' Meso';
+  // price_max (Discord listings only) turns the price into a low–high range.
+  const full = n => new Intl.NumberFormat('en-US').format(n),
+    fullPrice = full(row.price) + (row.price_max ? ' – ' + full(row.price_max) : '') + ' Meso';
   price.title = fullPrice;
   price.setAttribute('aria-label', fullPrice);
-  const amount = new Intl.NumberFormat('en-US', { notation: 'compact', maximumFractionDigits: 2 }).format(
-    row.price
-  );
+  const amount = compactPrice(row.price) + (row.price_max ? '–' + compactPrice(row.price_max) : '');
   price.append(el('strong', amount, 'price-amount'));
   const priceCell = el('div', undefined, 'price-cell');
   priceCell.append(price);
@@ -444,6 +444,7 @@ async function openForm(row = null) {
   setDiscordMode(!!row?.discord_user);
   $('discord-user').value = row?.discord_user || '';
   $('discord-url').value = row?.discord_url || '';
+  $('price-max').value = row?.price_max || '';
   if (row) {
     for (const [id, key] of Object.entries({
       'item-name': 'item_name',
@@ -521,6 +522,7 @@ $('post-form').onsubmit = async e => {
       delete data.contacts;
       data.discord_user = $('discord-user').value.trim();
       data.discord_url = $('discord-url').value.trim();
+      data.price_max = $('price-max').value.trim();
       await rpc('marketplace_save_discord', { p_id: editing, p_data: data });
     } else await rpc('marketplace_save', { p_id: editing, p_data: data });
     $('post-dialog').close();

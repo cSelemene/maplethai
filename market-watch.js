@@ -9,6 +9,8 @@ const el = (tag, text, cls) => {
   if (cls) node.className = cls;
   return node;
 };
+const compact = n =>
+  new Intl.NumberFormat('en-US', { notation: 'compact', maximumFractionDigits: 2 }).format(n);
 const fullPrice = n => new Intl.NumberFormat('en-US').format(n) + ' Meso';
 function card({ row, people }, items) {
   const item =
@@ -44,14 +46,14 @@ function card({ row, people }, items) {
   coin.height = 16;
   price.append(
     coin,
-    el(
-      'strong',
-      new Intl.NumberFormat('en-US', { notation: 'compact', maximumFractionDigits: 2 }).format(row.price)
-    ),
+    el('strong', compact(row.price) + (row.price_max ? '–' + compact(row.price_max) : '')),
     el('span', 'Meso')
   );
-  price.title = fullPrice(row.price);
-  price.setAttribute('aria-label', fullPrice(row.price));
+  const label = row.price_max
+    ? new Intl.NumberFormat('en-US').format(row.price) + ' – ' + fullPrice(row.price_max)
+    : fullPrice(row.price);
+  price.title = label;
+  price.setAttribute('aria-label', label);
   link.append(price);
   const details = el('p', undefined, 'market-watch-details'),
     stats = Object.entries(row.item_stats || {})
@@ -82,7 +84,7 @@ async function load() {
       supabase
         .from('listings')
         .select(
-          'id,user_id,discord_user,kind,item_name,item_id,item_stats,qty,price,price_unit,atk,slots,status,created_at,expires_at'
+          'id,user_id,discord_user,kind,item_name,item_id,item_stats,qty,price,price_max,price_unit,atk,slots,status,created_at,expires_at'
         )
         .eq('status', 'open')
         .eq('price_unit', 'meso')
