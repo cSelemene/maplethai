@@ -3,6 +3,17 @@
 // articles/<slug>.html, put its cover in assets/articles/, then add one entry here.
 export const ARTICLES = [
   {
+    slug: 'grand-launch-new-maps',
+    title: 'อัปเดต Grand Launch: แมพใหม่ Lv.19–73 ฝั่ง Perion กระทบอาชีพไหนบ้าง',
+    excerpt:
+      'สรุปมอนใหม่ 8 ชนิดจากแพตช์วันเปิดเซิร์ฟ ที่เก็บเลเวลสายผีดิบของ Cleric สกรอลที่ควรจับตา และสิ่งที่ยังต้องตรวจในเกม',
+    category: 'อัปเดตเกม',
+    date: '2026-10-21',
+    minutes: 6,
+    cover: './assets/articles/grand-launch-new-maps-cover.webp',
+    coverAlt: 'ภาพประกอบ Cleric บนพื้นหลังโทนสุสานยามค่ำ'
+  },
+  {
     slug: 'rich-drops',
     title: '10 มอนสเตอร์ดรอปของแพง พร้อมแมพฟาร์ม Lv.10–50',
     excerpt:
