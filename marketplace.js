@@ -6,7 +6,7 @@ import {
   itemFields,
   itemUrl,
   findItems
-} from './market-items.js?v=6fdbbaa1f1';
+} from './market-items.js?v=0bc363de63';
 import { supabase, readAccount } from './supabase-client.js?v=cb12a9f448';
 const $ = id => document.getElementById(id),
   categories = {
