@@ -7,7 +7,7 @@ const compact = n =>
   new Intl.NumberFormat('en-US', { notation: 'compact', maximumFractionDigits: 1 }).format(n);
 const full = n => new Intl.NumberFormat('en-US').format(n);
 
-const mesoIconUrl = new URL('./assets/market/meso-coin.svg', import.meta.url).href;
+const mesoIconUrl = new URL('./assets/market/meso-coin.svg?v=0e1561a5ba', import.meta.url).href;
 
 function mesoAmount(amount, tag = 'span') {
   const value = document.createElement(tag);
