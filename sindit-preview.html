@@ -209,7 +209,7 @@ function updateScroll(){
  float.style.pointerEvents=p>.45?'auto':'none';
 }
 function queueUpdate(){if(!renderFrame)renderFrame=requestAnimationFrame(updateScroll)}
-document.querySelectorAll('[data-tab]').forEach(b=>b.addEventListener('click',()=>{showTab(b.dataset.tab)}));
+document.querySelectorAll('[data-tab]').forEach(b=>b.addEventListener('click',()=>{if(b.dataset.tab==='route'){location.href='./sindit-route-preview.html';return}showTab(b.dataset.tab)}));
 document.querySelectorAll('[data-unlock]').forEach(b=>b.addEventListener('click',openLock));
 byId('route-next').addEventListener('click',()=>jump(step+1));
 byId('route-prev').addEventListener('click',()=>jump(step-1));
@@ -220,5 +220,5 @@ modal.addEventListener('click',e=>{if(e.target===modal)closeLock()});
 document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!modal.hidden)closeLock()});
 window.addEventListener('scroll',queueUpdate,{passive:true});
 window.addEventListener('resize',queueUpdate,{passive:true});
-renderRoute();const incoming=decodeURIComponent(location.hash.slice(1));showTab(tabs.includes(incoming)?incoming:'intro');
+renderRoute();const incoming=decodeURIComponent(location.hash.slice(1));if(incoming==='route'){location.replace('./sindit-route-preview.html')}else showTab(['intro','builds','opt','money'].includes(incoming)?incoming:'intro');
 </script><script type="module" data-navigation-guide="sindit" src="./navigation-entry.js?v=bf26ae2b68"></script></body></html>
