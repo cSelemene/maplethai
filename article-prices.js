@@ -7,6 +7,22 @@ const compact = n =>
   new Intl.NumberFormat('en-US', { notation: 'compact', maximumFractionDigits: 1 }).format(n);
 const full = n => new Intl.NumberFormat('en-US').format(n);
 
+const mesoIconUrl = new URL('./assets/market/meso-coin.svg', import.meta.url).href;
+
+function mesoAmount(amount, tag = 'span') {
+  const value = document.createElement(tag);
+  value.className = 'meso-amount';
+  const icon = document.createElement('img');
+  icon.src = mesoIconUrl;
+  icon.className = 'meso-icon';
+  icon.alt = 'meso';
+  icon.width = 18;
+  icon.height = 18;
+  value.append(document.createTextNode(compact(amount) + ' '), icon);
+  value.title = full(amount) + ' meso';
+  return value;
+}
+
 function render(node, price) {
   node.replaceChildren();
   if (!price || (!price.usual && !price.cheapestSell)) {
@@ -16,20 +32,18 @@ function render(node, price) {
   }
   const label = document.createElement('span');
   label.textContent = node.dataset.priceLabel ?? 'ล่าสุด ';
-  const main = document.createElement('b');
-  main.textContent = compact(price.usual || price.cheapestSell);
-  main.title = full(price.usual || price.cheapestSell) + ' meso';
+  const main = mesoAmount(price.usual || price.cheapestSell, 'b');
   node.append(label, main);
-  const extra = [];
-  // A cheapest offer far below the usual price is usually a joke or mistyped listing.
-  if (price.usual && price.cheapestSell && price.cheapestSell >= price.usual * 0.2)
-    extra.push('ขายถูกสุด ' + compact(price.cheapestSell));
-  if (price.finishedTrades) extra.push('ซื้อขายจริง ' + price.finishedTrades + ' ครั้ง');
-  if (extra.length) {
-    const small = document.createElement('small');
-    small.textContent = extra.join(' · ');
-    node.append(small);
+  const small = document.createElement('small');
+  // Ignore offers far below the usual price, which may be mistyped listings.
+  if (price.usual && price.cheapestSell && price.cheapestSell >= price.usual * 0.2) {
+    small.append('ขายถูกสุด ', mesoAmount(price.cheapestSell));
   }
+  if (price.finishedTrades) {
+    if (small.childNodes.length) small.append(' · ');
+    small.append('ซื้อขายจริง ' + price.finishedTrades + ' ครั้ง');
+  }
+  if (small.childNodes.length) node.append(small);
 }
 
 async function run() {
