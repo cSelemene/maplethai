@@ -332,6 +332,7 @@ try {
   const { p: member2 } = await page();
   await member2.click('#new-post');
   assert(await member2.$eval('#discord-mode', e => e.hidden));
+  await member2.close();
   const { p: admin, errors: adminErrors } = await page({
     user: { id: 'admin', email: 'admin@example.invalid' },
     account: { is_admin: true, entitlements: [] }
@@ -357,6 +358,7 @@ try {
   assert.equal(discordSave.args.p_data.discord_url, 'https://discord.com/channels/1/2/3');
   assert.equal(discordSave.args.p_data.contacts, undefined);
   assert.deepEqual(adminErrors, []);
+  await admin.close();
   const { p: discordGuest, errors: discordErrors } = await page({
     user: null,
     rows: [
@@ -385,6 +387,7 @@ try {
   assert.equal(await offerPage.$eval('.price-amount', e => e.textContent), 'เสนอราคา');
   assert.equal(await offerPage.$eval('.listing>button', e => e.textContent), 'เสนอราคาทาง Discord');
   assert.equal(await offerPage.$('.price .meso-icon'), null);
+  await offerPage.close();
   await discordGuest.click('.listing>button');
   await discordGuest.waitForSelector('.contact-button.discord');
   assert((await discordGuest.$eval('#contact-content', e => e.textContent)).includes('skylight0070'));
@@ -396,6 +399,7 @@ try {
     !(await discordGuest.evaluate(() => window.marketTest.calls)).some(c => c.method === 'listing_contact')
   );
   assert.deepEqual(discordErrors, []);
+  await discordGuest.close();
   console.log(
     'PASS: admin-only Discord posting, public free Discord contact, badge, price range, make-an-offer and 36h countdown'
   );
