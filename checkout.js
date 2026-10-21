@@ -1,5 +1,5 @@
 import { supabase, readAccount, hasGuide } from './supabase-client.js?v=cb12a9f448';
-import { rpc, myOrders, showHistory, money, STATUS } from './payment-common.js?v=61cdecd50c';
+import { rpc, myOrders, showHistory, money, STATUS } from './payment-common.js?v=965cc4294e';
 import { paymentImage } from './payment-qr.js?v=ad42cece6f';
 let wallet = { available_cents: 0, reserved_cents: 0 },
   qrKey = '',
@@ -17,10 +17,13 @@ const allowed = [
   'guide_spearman',
   'guide_fighter',
   'guide_page',
-  'market'
+  'market',
+  'pack_all'
 ];
+const PACK = 'pack_all';
 // Guides in the product menu are grouped by class family, Thief first.
 const FAMILIES = [
+  ['แพ็กสุดคุ้ม', [PACK]],
   ['Thief · สายโจร', ['guide_bandit', 'guide_sindit', 'guide_assassin']],
   ['Magician · สายเมจ', ['guide_mage', 'guide_fp', 'guide_cleric']],
   ['Warrior · สายนักรบ', ['guide_fighter', 'guide_page', 'guide_spearman']],
@@ -35,7 +38,8 @@ let products = [],
   autoVerify = false,
   loading = false,
   working = false,
-  previewUrl;
+  previewUrl,
+  quote = null;
 let selected = new URLSearchParams(location.search).get('product') || 'guide_bandit';
 if (!allowed.includes(selected)) selected = 'guide_bandit';
 const initialGift = new URLSearchParams(location.search).get('gift');
@@ -43,7 +47,48 @@ if (initialGift) {
   $('gift-toggle').checked = true;
   $('gift-email').value = initialGift;
 }
-const gifting = () => selected !== 'market' && $('gift-toggle').checked;
+// Gifts and referrals exist for single guides only (payments constraints exclude market and the pack).
+const singleGuide = () => selected !== 'market' && selected !== PACK;
+const gifting = () => singleGuide() && $('gift-toggle').checked;
+const baht = n => '฿' + Number(n).toLocaleString('en-US');
+// Display price only: the server recalculates the pack price when the order is created.
+const priceOf = product =>
+  product.id === PACK && quote?.active ? (user ? quote.price : quote.base) : product.price;
+const ownsPack = () =>
+  Boolean(
+    quote?.owns_pack ||
+    account?.entitlements?.some(
+      e => e.product === PACK && (!e.expires_at || new Date(e.expires_at) > new Date())
+    )
+  );
+function packDetails() {
+  const box = $('pack-quote');
+  box.replaceChildren();
+  if (!quote?.active) return;
+  const line = (label, value, cls) => {
+    const row = document.createElement('p');
+    if (cls) row.className = cls;
+    const a = document.createElement('span');
+    a.textContent = label;
+    const b = document.createElement('strong');
+    b.textContent = value;
+    row.append(a, b);
+    box.append(row);
+  };
+  line('ราคาเต็ม', baht(quote.base));
+  if (!user) {
+    const p = document.createElement('p');
+    p.className = 'muted';
+    p.textContent = 'เข้าสู่ระบบเพื่อคำนวณส่วนลดจากไกด์ที่บัญชีมีอยู่ (ลด ฿99 ต่อไกด์)';
+    box.append(p);
+    return;
+  }
+  line(
+    'ส่วนลดลูกค้าเดิม' + (quote.owned_guides ? ` (ไกด์ ${quote.owned_guides} อาชีพ × ฿99)` : ''),
+    quote.discount ? '−' + baht(quote.discount) : '฿0'
+  );
+  line('ยอดที่ต้องชำระ', quote.price ? baht(quote.price) : 'ฟรี', 'total');
+}
 const giftEmail = () => $('gift-email').value.trim().toLowerCase();
 const referralEmail = () => $('referral-email').value.trim().toLowerCase();
 function say(text, error = false) {
@@ -100,43 +145,73 @@ function render() {
   if (!product) return;
   $('product-select').value = selected;
   $('product-name').textContent = product.name;
-  $('product-price').textContent = money(product.price);
+  const pack = selected === PACK;
+  const price = priceOf(product);
+  $('product-price').textContent = price ? money(price) : 'ฟรี';
   const market = selected === 'market';
   const guide = selected.slice(6);
-  $('checkout-heading').textContent = market ? 'สมัครสมาชิกตลาด' : 'ปลดล็อกไกด์ฉบับเต็ม';
-  $('product-heading').textContent = market ? 'สมาชิกตลาด' : 'ไกด์ที่เลือก';
-  $('product-label').textContent = market ? 'แพ็กเกจ' : 'อาชีพ';
-  $('product-duration').textContent = market ? 'ใช้งาน 30 วัน' : 'ซื้อครั้งเดียว';
-  $('guide-features').hidden = market;
+  $('checkout-heading').textContent = pack
+    ? 'ซื้อแพ็กทุกอาชีพ'
+    : market
+      ? 'สมัครสมาชิกตลาด'
+      : 'ปลดล็อกไกด์ฉบับเต็ม';
+  $('product-heading').textContent = pack ? 'แพ็กที่เลือก' : market ? 'สมาชิกตลาด' : 'ไกด์ที่เลือก';
+  $('product-label').textContent = pack ? 'สินค้า' : market ? 'แพ็กเกจ' : 'อาชีพ';
+  $('product-duration').textContent = pack
+    ? 'ซื้อครั้งเดียว · ตลาดถาวร'
+    : market
+      ? 'ใช้งาน 30 วัน'
+      : 'ซื้อครั้งเดียว';
+  $('guide-features').hidden = market || pack;
   $('market-features').hidden = !market;
+  $('pack-features').hidden = !pack;
+  $('pack-quote').hidden = !pack;
+  if (pack) packDetails();
+  $('pack-upsell').hidden = !singleGuide() || !quote?.active || ownsPack() || gifting();
+  $('pack-upsell-price').textContent = quote?.active ? baht(user ? quote.price : quote.base) : '';
   $('product-note').textContent = market
     ? 'หลังอนุมัติ เปิดดูช่องทางติดต่อในตลาดได้ 30 วัน'
     : 'หลังอนุมัติ เปิดอ่านฉบับเต็มได้ใน “ไกด์ของฉัน”';
-  $('free-preview').hidden = market;
-  $('owned-message').textContent = market ? 'บัญชีนี้มีสิทธิ์สมาชิกตลาดแล้ว' : 'บัญชีนี้มีสิทธิ์อ่านไกด์แล้ว';
-  $('read-guide').textContent = market ? 'เปิดตลาดซื้อขาย' : 'เปิดไกด์ฉบับเต็ม';
-  $('payment-read-guide').textContent = market ? 'เปิดตลาดซื้อขาย' : 'อ่านไกด์ฉบับเต็ม';
+  $('free-preview').hidden = market || pack;
+  $('owned-message').textContent = pack
+    ? 'บัญชีนี้มีแพ็กทุกอาชีพแล้ว เปิดอ่านไกด์ได้ทุกอาชีพและใช้ตลาดได้ไม่จำกัด'
+    : market
+      ? 'บัญชีนี้มีสิทธิ์สมาชิกตลาดแล้ว'
+      : 'บัญชีนี้มีสิทธิ์อ่านไกด์แล้ว';
+  $('read-guide').textContent = pack ? 'เปิดไกด์ของฉัน' : market ? 'เปิดตลาดซื้อขาย' : 'เปิดไกด์ฉบับเต็ม';
+  $('payment-read-guide').textContent = pack
+    ? 'เปิดไกด์ของฉัน'
+    : market
+      ? 'เปิดตลาดซื้อขาย'
+      : 'อ่านไกด์ฉบับเต็ม';
   $('free-preview').href =
     guide === 'bandit' ? './bandit-artifact-preview-v3.html' : './guide-preview.html?guide=' + guide;
-  $('read-guide').href = market ? './marketplace.html' : './premium-guide.html?guide=' + guide;
-  $('payment-read-guide').href = market ? './marketplace.html' : './premium-guide.html?guide=' + guide;
+  const readHref = pack
+    ? './my-guides.html'
+    : market
+      ? './marketplace.html'
+      : './premium-guide.html?guide=' + guide;
+  $('read-guide').href = readHref;
+  $('payment-read-guide').href = readHref;
   $('checkout-login').href = './auth.html?next=' + encodeURIComponent('checkout.html?product=' + selected);
   $('login-needed').hidden = !!user;
-  $('gift-options').hidden = !user || market;
+  $('gift-options').hidden = !user || !singleGuide();
   $('gift-fields').hidden = !gifting();
-  $('friend-promotion').hidden = market;
-  $('referral-fields').hidden = !user || market || gifting();
+  $('friend-promotion').hidden = !singleGuide();
+  $('referral-fields').hidden = !user || !singleGuide() || gifting();
   const owns =
     !gifting() &&
     user &&
-    (market
-      ? Boolean(
-          account?.is_admin ||
-          account?.entitlements?.some(
-            e => e.product === 'market' && (!e.expires_at || new Date(e.expires_at) > new Date())
+    (pack
+      ? ownsPack()
+      : market
+        ? Boolean(
+            account?.is_admin ||
+            account?.entitlements?.some(
+              e => e.product === 'market' && (!e.expires_at || new Date(e.expires_at) > new Date())
+            )
           )
-        )
-      : hasGuide(account, guide));
+        : hasGuide(account, guide));
   $('already-owned').hidden = !owns;
   $('payment-read-guide').hidden = !owns;
   $('checkout-flow').hidden = !user || !!owns;
@@ -151,6 +226,10 @@ function render() {
       (p.gift_email || '') === (gifting() ? giftEmail() : '') &&
       ['awaiting_slip', 'pending'].includes(p.status)
   );
+  // An unpaid pack QR made before the account's guides changed is re-priced by the server on the next order.
+  const stalePack =
+    pack && order?.status === 'awaiting_slip' && user && quote?.active && order.amount !== quote.price;
+  if (stalePack) order = undefined;
   if (order && !gifting()) $('referral-email').value = order.referral_email || '';
   $('referral-email').disabled = working || !!order;
   $('create-order').hidden = !user || !!owns || !!order || !settings?.enabled;
@@ -159,46 +238,56 @@ function render() {
   $('retry-verification').hidden = order?.status !== 'pending' || !autoVerify;
   $('availability').textContent = order
     ? 'ยอดโอนเพิ่ม ' + money((order.amount_due_cents ?? order.amount * 100) / 100)
-    : settings?.enabled
-      ? 'ชำระผ่าน PromptPay แล้วส่งสลิปเพื่อปลดล็อกสิทธิ์'
-      : 'ยังไม่เปิดรับชำระเงิน ผู้ดูแลกำลังเตรียม QR รับเงิน';
+    : stalePack
+      ? 'ราคาแพ็กเปลี่ยนตามไกด์ในบัญชี กดปุ่มด้านล่างเพื่อสร้างรายการใหม่ในราคา ' + baht(quote.price)
+      : pack && price === 0
+        ? 'ส่วนลดครอบคลุมราคาแพ็กทั้งหมด รับแพ็กได้ทันทีโดยไม่ต้องโอนเงินหรือส่งสลิป'
+        : settings?.enabled
+          ? 'ชำระผ่าน PromptPay แล้วส่งสลิปเพื่อปลดล็อกสิทธิ์'
+          : 'ยังไม่เปิดรับชำระเงิน ผู้ดูแลกำลังเตรียม QR รับเงิน';
   $('credit-balance').textContent =
     'เครดิตคงเหลือ ' +
     money(wallet.available_cents / 100) +
     (wallet.reserved_cents ? ' · กันไว้ในรายการที่ยังไม่เสร็จ ' + money(wallet.reserved_cents / 100) : '');
   $('credit-note').textContent = order?.credit_applied_cents
     ? 'ใช้เครดิต ' + money(order.credit_applied_cents / 100) + ' จากราคา ' + money(order.amount)
-    : wallet.available_cents
-      ? 'ระบบจะใช้เครดิตที่มี และสร้าง QR เฉพาะยอดที่เหลือ'
-      : 'หากโอนต่ำกว่ายอดและตรวจเงินเข้าจริงแล้ว เงินจะเก็บเป็นเครดิตสำหรับซื้อครั้งถัดไป';
+    : price === 0
+      ? ''
+      : wallet.available_cents
+        ? 'ระบบจะใช้เครดิตที่มี และสร้าง QR เฉพาะยอดที่เหลือ'
+        : 'หากโอนต่ำกว่ายอดและตรวจเงินเข้าจริงแล้ว เงินจะเก็บเป็นเครดิตสำหรับซื้อครั้งถัดไป';
   $('fee-note').textContent = order?.processing_fee_cents
     ? 'ทศนิยมช่วยตรวจเช็คยอด ' +
       money(order.processing_fee_cents / 100) +
       ' เพื่อให้ตรวจเช็คยอดโอนได้ง่ายขึ้น · รวมก่อนหักเครดิต ' +
       money(order.amount + order.processing_fee_cents / 100)
-    : order
+    : order || price === 0
       ? ''
-      : wallet.available_cents >= product.price * 100
+      : wallet.available_cents >= price * 100
         ? 'ชำระด้วยเครดิตครบราคา ไม่ต้องเพิ่มทศนิยม'
         : 'ระบบเพิ่มทศนิยม 0.11–0.49 บาท เพื่อช่วยตรวจเช็คและแยกแยะยอดโอน ยอดชำระทั้งหมดจะแสดงก่อนโอน';
   if (
     wallet.available_cents % 100 &&
     (!order || order.processing_fee_cents) &&
-    wallet.available_cents < product.price * 100
+    wallet.available_cents < price * 100
   )
     $('credit-note').textContent += ' · ใช้เครดิตจำนวนเต็มบาท เศษสตางค์เก็บสะสมในบัญชี';
   $('create-order').textContent =
-    wallet.available_cents >= product.price * 100
-      ? 'ชำระด้วยเครดิตและปลดล็อก'
-      : 'ใช้เครดิต / ดู QR เพื่อชำระเงิน';
+    price === 0
+      ? 'รับแพ็กทุกอาชีพฟรี'
+      : wallet.available_cents >= price * 100
+        ? 'ชำระด้วยเครดิตและปลดล็อก'
+        : 'ใช้เครดิต / ดู QR เพื่อชำระเงิน';
   $('order-detail').textContent = order ? `${STATUS[order.status]}` : '';
   $('gift-toggle').disabled = working || !!order;
   $('gift-email').disabled = working || !!order;
   $('product-note').textContent = gifting()
     ? 'หลังชำระสำเร็จ เพื่อนจะเห็นไกด์ในบัญชีที่ยืนยันอีเมลนี้'
-    : market
-      ? 'หลังอนุมัติ เปิดดูช่องทางติดต่อในตลาดได้ 30 วัน'
-      : 'หลังอนุมัติ เปิดอ่านฉบับเต็มได้ใน “ไกด์ของฉัน”';
+    : pack
+      ? 'หลังชำระสำเร็จ เปิดอ่านไกด์ทุกอาชีพได้ใน “ไกด์ของฉัน” และเปิดดูช่องทางติดต่อในตลาดได้ไม่จำกัด'
+      : market
+        ? 'หลังอนุมัติ เปิดดูช่องทางติดต่อในตลาดได้ 30 วัน'
+        : 'หลังอนุมัติ เปิดอ่านฉบับเต็มได้ใน “ไกด์ของฉัน”';
   recipient(order?.recipient);
   showHistory($('order-history'), orders, Object.fromEntries(products.map(p => [p.id, p.name])));
   for (const id of [
@@ -232,6 +321,11 @@ async function refresh() {
     settings = user ? await rpc('payment_settings') : null;
     autoVerify = user ? await rpc('auto_verification_status') : false;
     account = user ? await readAccount() : null;
+    quote = null;
+    if (products.some(p => p.id === PACK))
+      try {
+        quote = await rpc('pack_quote');
+      } catch {}
     orders = user ? await myOrders() : [];
     try {
       wallet = user ? await rpc('credit_summary') : { available_cents: 0, reserved_cents: 0 };
@@ -297,18 +391,14 @@ $('product-select').onchange = () => {
   render();
 };
 $('create-order').onclick = () => {
-  const field = gifting()
-    ? $('gift-email')
-    : selected !== 'market' && referralEmail()
-      ? $('referral-email')
-      : null;
+  const field = gifting() ? $('gift-email') : singleGuide() && referralEmail() ? $('referral-email') : null;
   if (field && (!field.value.trim() || !field.checkValidity())) {
     field.reportValidity();
     say('กรอกอีเมลให้ถูกต้องก่อนชำระเงิน', true);
     return;
   }
   action(async () => {
-    const referred = !gifting() && selected !== 'market' && !!referralEmail();
+    const referred = !gifting() && singleGuide() && !!referralEmail();
     const method = gifting()
       ? 'create_gift_payment_order'
       : referred
@@ -323,7 +413,9 @@ $('create-order').onclick = () => {
       created?.status === 'ok'
         ? gifting()
           ? 'ชำระสำเร็จ ส่งไกด์ให้ ' + giftEmail() + ' แล้ว'
-          : 'ชำระด้วยเครดิตสำเร็จ ปลดล็อกสิทธิ์แล้ว'
+          : created.product === PACK && Number(created.amount) === 0
+            ? 'รับแพ็กทุกอาชีพสำเร็จ ปลดล็อกไกด์ทุกอาชีพและตลาดถาวรแล้ว'
+            : 'ชำระด้วยเครดิตสำเร็จ ปลดล็อกสิทธิ์แล้ว'
         : 'สแกน QR หรือบันทึกภาพเพื่อเปิดในแอปธนาคาร'
     );
   });
