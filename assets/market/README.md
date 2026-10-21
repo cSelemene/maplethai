@@ -6,4 +6,4 @@ Icons: reuse the original guide's locally stored NiaMeowDB/game images where ava
 
 Meso icon: original guide asset i/81.png. Game artwork © Nexon.
 
-Stat fields are chosen by equipment subtype. Historical v62 values are not copied into Classic stat defaults. Pan Lid's 44 DEF hint and 7 upgrade slots were verified against https://meowdb.com/msclassic/item-db/917 on 2026-10-11. Sellers enter their actual item stats.
+Stat fields are chosen by equipment subtype. Historical v62 values are not copied into Classic stat defaults. Pan Lid's 44 DEF hint and 7 upgrade slots were verified against https://meowdb.com/msclassic/item-db/917 on 2026-10-11. Sellers enter each stat as the difference from the standard value (+2, 0, -1), not the total.

@@ -1,4 +1,12 @@
-import { STAT_LABELS, itemCategory, itemFields, itemUrl, findItems } from './market-items.js?v=6fdbbaa1f1';
+import {
+  STAT_LABELS,
+  formatStatDiff,
+  parseStatDiff,
+  itemCategory,
+  itemFields,
+  itemUrl,
+  findItems
+} from './market-items.js?v=6fdbbaa1f1';
 import { supabase, readAccount } from './supabase-client.js?v=cb12a9f448';
 const $ = id => document.getElementById(id),
   categories = {
@@ -223,15 +231,16 @@ function renderRow(row) {
   card.append(price);
   const info = [String(row.qty)];
   const stats = row.item_stats || {};
-  if (!Object.keys(stats).length && row.atk !== null && (!item || itemCategory(item) === 'weapon'))
-    stats.atk = row.atk;
   const quantity = el('p', info.join(' · '), 'item-info');
   quantity.setAttribute('aria-label', 'จำนวน ' + row.qty);
   card.append(quantity);
   const chips = el('div', undefined, 'stat-chips');
   for (const [key, value] of Object.entries(stats)) {
-    if (STAT_LABELS[key]) chips.append(el('span', STAT_LABELS[key] + ' ' + value));
+    if (STAT_LABELS[key]) chips.append(el('span', STAT_LABELS[key] + ' ' + formatStatDiff(value)));
   }
+  // Listings saved before item_stats existed only kept a total ATK.
+  if (!Object.keys(stats).length && row.atk != null && (!item || itemCategory(item) === 'weapon'))
+    chips.append(el('span', 'ATK ' + row.atk));
   if (row.slots !== null && row.slots !== undefined) chips.append(el('span', 'ช่องอัปเกรด ' + row.slots));
   if (!chips.children.length) chips.append(el('small', 'ไม่ระบุ'));
   const description = el('p', row.description || '', 'description');
@@ -420,10 +429,10 @@ $('post-form').onsubmit = async e => {
     $('discord').focus();
     return;
   }
-  const stats = {};
-  for (const key of itemFields(selectedItem)) {
-    const input = $('stat-' + key);
-    if (input?.value !== '') stats[key] = Number(input.value);
+  const stats = readStats(selectedItem);
+  if (!stats) {
+    $('form-status').textContent = 'กรอกสเตตัสเป็นค่าแปรผัน เช่น +2, 0 หรือ -1';
+    return;
   }
   const data = {
     item_id: selectedItem.id,
@@ -434,7 +443,6 @@ $('post-form').onsubmit = async e => {
     qty: $('qty').value,
     price: $('price').value,
     price_unit: 'meso',
-    atk: stats.atk ?? '',
     slots: $('slots').value,
     description: $('description').value.trim(),
     contacts
@@ -623,14 +631,13 @@ function selectItem(item, row = null) {
       label = el('label', STAT_LABELS[key]),
       input = el('input');
     input.id = 'stat-' + key;
-    input.type = 'number';
-    input.min = '0';
-    input.max = '999';
-    if (['hp', 'mp'].includes(key)) input.max = '99999';
+    input.type = 'text';
+    input.autocomplete = 'off';
+    input.maxLength = 4;
+    input.pattern = '[+\\-]?[0-9]{1,3}';
     label.htmlFor = input.id;
-    input.value =
-      row?.item_stats?.[key] ?? (key === 'atk' && itemCategory(item) === 'weapon' ? (row?.atk ?? '') : '');
-    input.placeholder = item.id === 917 && key === 'def' ? 'ค่าปกติ 44 · ใส่ค่าของชิ้นนี้' : 'ไม่ระบุ';
+    input.value = row?.item_stats?.[key] != null ? formatStatDiff(row.item_stats[key]) : '';
+    input.placeholder = 'เช่น +2 หรือ -1';
     box.append(label, input);
     $(index === 0 ? 'primary-stat' : 'secondary-stats').append(box);
   }
@@ -792,6 +799,18 @@ function clearPriceReference() {
   $('use-reference-price').hidden = true;
   $('copy-reference-name').textContent = 'คัดลอกชื่อไอเทม';
 }
+// Stat inputs take the difference from the standard value; null when any entry is invalid.
+function readStats(item) {
+  const stats = {};
+  for (const key of itemFields(item)) {
+    const input = $('stat-' + key);
+    if (!input || input.value.trim() === '') continue;
+    const value = parseStatDiff(key, input.value);
+    if (value === null) return null;
+    stats[key] = value;
+  }
+  return stats;
+}
 async function refreshPriceReference() {
   const item = selectedItem;
   if (!item) return;
@@ -800,10 +819,10 @@ async function refreshPriceReference() {
   $('price-reference').hidden = false;
   $('use-reference-price').hidden = true;
   $('price-reference-status').textContent = 'กำลังเช็คราคาเสนอขาย…';
-  const stats = {};
-  for (const key of itemFields(item)) {
-    const input = $('stat-' + key);
-    if (input?.value !== '') stats[key] = Number(input.value);
+  const stats = readStats(item);
+  if (!stats) {
+    $('price-reference-status').textContent = 'กรอกสเตตัสเป็นค่าแปรผัน เช่น +2, 0 หรือ -1';
+    return;
   }
   try {
     const ref = await rpc('marketplace_price_reference', {

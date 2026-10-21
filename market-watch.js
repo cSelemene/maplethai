@@ -1,5 +1,5 @@
 import { supabase } from './supabase-client.js?v=cb12a9f448';
-import { STAT_LABELS } from './market-items.js?v=6fdbbaa1f1';
+import { STAT_LABELS, formatStatDiff } from './market-items.js?v=6fdbbaa1f1';
 import { selectWatchlist } from './market-watch-selection.js?v=1a006e7eda';
 const container = document.getElementById('market-watch-items'),
   status = document.getElementById('market-watch-status');
@@ -24,7 +24,7 @@ function card({ row, people }, items) {
   link.append(meta);
   const heading = el('div', undefined, 'market-watch-item'),
     picture = el('span', undefined, 'market-watch-picture');
-  if (item?.icon && /^(?:\.\/assets\/market\/|assets\/market\/|https:\/\/)/.test(item.icon)) {
+  if (item?.icon && /^(?:\.\/)?(?:i|assets\/market)\/[\w.-]+$|^https:\/\//.test(item.icon)) {
     const img = el('img');
     img.src = item.icon;
     img.alt = '';
@@ -57,7 +57,7 @@ function card({ row, people }, items) {
     stats = Object.entries(row.item_stats || {})
       .filter(([key]) => STAT_LABELS[key])
       .slice(0, 2)
-      .map(([key, value]) => STAT_LABELS[key] + ' ' + value);
+      .map(([key, value]) => STAT_LABELS[key] + ' ' + formatStatDiff(value));
   if (!stats.length && row.atk != null) stats.push('ATK ' + row.atk);
   if (row.slots != null) stats.push('ช่องอัปเกรด ' + row.slots);
   details.textContent = 'จำนวน ' + row.qty + (stats.length ? ' · ' + stats.join(' · ') : '');

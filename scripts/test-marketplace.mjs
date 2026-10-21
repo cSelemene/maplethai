@@ -97,7 +97,7 @@ try {
   assert.equal(await free.$eval('#category', e => e.value), 'armor');
   assert.equal(await free.$('#stat-atk'), null);
   assert(await free.$('#stat-def'));
-  await free.type('#stat-def', '42');
+  await free.type('#stat-def', '-2');
   await free.type('#price', '250000');
   await free.type('#discord', 'seller-discord');
   await free.click('#save-post');
@@ -106,7 +106,8 @@ try {
   const save = await free.evaluate(() => window.marketTest.calls.find(c => c.method === 'marketplace_save'));
   assert.equal(save.args.p_id, null);
   assert.equal(save.args.p_data.item_id, 917);
-  assert.equal(save.args.p_data.item_stats.def, 42);
+  assert.equal(save.args.p_data.item_stats.def, -2);
+  assert.equal(save.args.p_data.atk, undefined);
   assert.equal(save.args.p_data.contacts.discord, 'seller-discord');
   assert.equal(save.args.p_data.price, '250000');
   assert.equal(save.args.p_data.price_unit, 'meso');
@@ -115,7 +116,7 @@ try {
   await free.click('.owner-actions button');
   await free.waitForFunction(() => document.querySelector('#post-dialog').open);
   assert.equal(await free.$eval('#discord', e => e.value), 'private-discord');
-  assert.equal(await free.$eval('#stat-def', e => e.value), '42');
+  assert.equal(await free.$eval('#stat-def', e => e.value), '-2');
   await free.click('#close-form');
   free.on('dialog', d => d.accept());
   await free.click('.owner-actions button:last-child');
@@ -124,7 +125,7 @@ try {
   console.log('PASS: free posting with private contacts, owner editing and closure');
   const { p: member, errors: memberErrors } = await page({
     rows: [
-      { ...fixture, item_id: 917, item_name: 'Pan Lid', item_stats: { def: 42 }, atk: null },
+      { ...fixture, item_id: 917, item_name: 'Pan Lid', item_stats: { def: 2 }, atk: null },
       ...[
         [2, 20000, 'meso'],
         [3, 1250000, 'meso'],
@@ -151,7 +152,7 @@ try {
   assert.equal(await member.$eval('.price', e => e.title), '85,000 Meso');
   assert.equal(await member.$eval('.price', e => e.getAttribute('aria-label')), '85,000 Meso');
   assert(Number(await member.$eval('.price-amount', e => getComputedStyle(e).fontWeight)) >= 700);
-  assert((await member.$eval('.stat-chips', e => e.textContent)).includes('DEF 42'));
+  assert((await member.$eval('.stat-chips', e => e.textContent)).includes('DEF +2'));
   await member.click('.listing>button');
   await member.waitForFunction(() =>
     document.querySelector('#contact-content').textContent.includes('private-discord')
@@ -314,8 +315,8 @@ try {
   console.log('PASS: monthly free and promotional bonus displayed separately');
 
   const watchRows = [
-    { ...fixture, id: 70, item_name: 'Pan Lid', user_id: 'seller-a' },
-    { ...fixture, id: 71, item_name: 'Pan Lid', user_id: 'seller-b' },
+    { ...fixture, id: 70, item_id: 917, item_name: 'Pan Lid', item_stats: { def: -1 }, user_id: 'seller-a' },
+    { ...fixture, id: 71, item_id: 917, item_name: 'Pan Lid', item_stats: { def: -1 }, user_id: 'seller-b' },
     { ...fixture, id: 72, kind: 'buy', item_name: 'Steely Throwing-Knives' },
     { ...fixture, id: 73, status: 'done' },
     { ...fixture, id: 74, price_unit: 'thb' }
@@ -326,6 +327,8 @@ try {
   assert.equal(await homeWatch.$$eval('.market-watch-card', e => e.length), 2);
   assert((await homeWatch.$eval('#market-watch-items', e => e.textContent)).includes('ประกาศรับซื้อ'));
   assert((await homeWatch.$eval('#market-watch-items', e => e.textContent)).includes('มีหลายคนลงประกาศ'));
+  assert((await homeWatch.$eval('#market-watch-items', e => e.textContent)).includes('DEF -1'));
+  assert((await homeWatch.$eval('.market-watch-picture img', e => e.src)).endsWith('/i/18.png'));
   assert.equal(
     await homeWatch.$eval('.market-watch-price', e => e.getAttribute('aria-label')),
     '85,000 Meso'
