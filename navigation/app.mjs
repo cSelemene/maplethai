@@ -15,7 +15,7 @@ import {
   curatedText,
   bindMapZoom
 } from './guide-renderer.mjs?v=19ff6dabb9';
-import { route, search, recommendations, arrival, suggestions } from './route.mjs?v=7b83e8485c';
+import { route, search, recommendations, arrival, suggestions } from './route.mjs?v=0dd62ffc9a';
 const el = id => document.getElementById(id),
   esc = s =>
     String(s ?? '').replace(
@@ -62,6 +62,8 @@ function show(dest, mode = 'walk') {
       let text;
       if (step.kind === 'scroll')
         text = `<b>${esc(m.name)}</b>: ใช้ <b>Return Scroll to ${esc(to.name)}</b> 1 ใบ → <b>${esc(to.name)}</b>`;
+      else if (step.kind === 'npc')
+        text = `<b>${esc(m.name)}</b>: เดินไปหา <b>${esc(step.npc.name || step.npc.displayName)}</b> ${direction(m, step.npc)} (จุดสีเขียว) → คุยแล้วเลือกเดินทางไป <b>${esc(to.name)}</b>`;
       else
         text =
           curatedText(m, step.portal, to) ||
@@ -69,10 +71,10 @@ function show(dest, mode = 'walk') {
       text += `<div class="row-note">${entry.point ? 'จุดสีฟ้า: ' + direction(m, entry.point) + ' · อ้างอิงวาร์ปย้อนกลับ ยังไม่ยืนยันจุดปรากฏจริง' : i === 0 ? 'เริ่มจากตำแหน่งที่คุณอยู่ตอนนี้' : 'ยังไม่ทราบจุดที่ตัวละครปรากฏหลังเดินทาง'}</div>`;
       rows.push({
         m,
-        k: step.kind === 'scroll' ? 'scroll' : 'walk',
+        k: step.kind === 'scroll' ? 'scroll' : step.kind === 'npc' ? 'npc' : 'walk',
         t: text,
         a: percent(m, entry.point),
-        b: percent(m, step.portal),
+        b: percent(m, step.kind === 'npc' ? step.npc : step.portal),
         uncertain: !entry.confirmed
       });
     });
@@ -92,7 +94,7 @@ function show(dest, mode = 'walk') {
     });
     html +=
       navHTML(rows) +
-      `<div class="route-summary">${mode === 'scroll' ? 'ใช้ Scroll 1 ใบ • จ่ายเพิ่ม 0 mesos ถ้ามีไอเท็มอยู่แล้ว' : 'เดินผ่านวาร์ป ' + steps.length + ' จุด • ค่าเดินทางผ่านวาร์ป 0 mesos'}<p class="small-note">วงสีฟ้าเส้นประเป็นจุดเข้าโดยประมาณ จุดออกสีส้มและ NPC สีเขียวมาจากพิกัดในข้อมูลแผนที่</p></div>`;
+      `<div class="route-summary">${mode === 'scroll' ? 'ใช้ Scroll 1 ใบ • จ่ายเพิ่ม 0 mesos ถ้ามีไอเท็มอยู่แล้ว' : 'เดินผ่านวาร์ป ' + steps.filter(s => s.kind === 'portal').length + ' จุด' + (steps.some(s => s.kind === 'npc') ? ' • คุย NPC เดินทาง ' + steps.filter(s => s.kind === 'npc').length + ' ครั้ง (NPC อาจเก็บค่าโดยสาร)' : ' • ค่าเดินทางผ่านวาร์ป 0 mesos')}<p class="small-note">วงสีฟ้าเส้นประเป็นจุดเข้าโดยประมาณ จุดออกสีส้มและ NPC สีเขียวมาจากพิกัดในข้อมูลแผนที่</p></div>`;
   } else
     html +=
       '<div class="route-summary">ข้อมูลวาร์ปชุดนี้ยังไม่มีเส้นทางที่เชื่อมถึงกัน ต้องตรวจบริการ Taxi/เรือหรือเงื่อนไขพิเศษ</div>';

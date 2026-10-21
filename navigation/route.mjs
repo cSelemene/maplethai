@@ -1,3 +1,11 @@
+// Trips made by talking to an NPC instead of walking through a portal. The map data
+// only has portals, so without these Florina Beach (Lorang, Clang) cannot be reached.
+export const npcTrips = [
+  { from: '010000000', to: '010007000', npc: 'Pason' },
+  { from: '010007000', to: '010000000', npc: 'Pison' },
+  // Leaving Maple Island is one way: Shanks in Southperry sails to Lith Harbor.
+  { from: '000000060', to: '010000000', npc: 'Shanks' }
+];
 export function route(maps, start, end, scrollTown = null) {
   const byId = new Map(maps.map(m => [m.id, m]));
   if (!byId.has(start) || !byId.has(end)) return null;
@@ -10,6 +18,11 @@ export function route(maps, start, end, scrollTown = null) {
     const edges = (map.portals || [])
       .filter(p => byId.has(p.toMapId) && p.toMapId !== map.id)
       .map(p => ({ from: map.id, to: p.toMapId, kind: 'portal', portal: p }));
+    for (const trip of npcTrips)
+      if (trip.from === map.id && byId.has(trip.to)) {
+        const npc = (map.npcs || []).find(n => (n.name || n.displayName) === trip.npc);
+        if (npc) edges.push({ from: map.id, to: trip.to, kind: 'npc', npc });
+      }
     // Scroll rules are experimental and opt-in. Maps with unknown/nonzero restrictions are excluded.
     if (
       scrollTown &&
