@@ -14,6 +14,17 @@ export const STAT_LABELS = {
   speed: 'Speed',
   jump: 'Jump'
 };
+// item_stats hold each stat's difference from the item's standard value (+2, +0, -1), not the total.
+export const STAT_DIFF_MAX = { hp: 999, mp: 999 };
+export const formatStatDiff = value => (Number(value) >= 0 ? '+' : '') + Number(value);
+export function parseStatDiff(key, text) {
+  const value = String(text)
+    .trim()
+    .replace(/^[\u2212\u2013]/, '-');
+  if (!/^[+-]?\d{1,3}$/.test(value)) return null;
+  const number = Number(value);
+  return Math.abs(number) <= (STAT_DIFF_MAX[key] || 99) ? number : null;
+}
 const weapons = new Set([
   'Bow',
   'Crossbow',

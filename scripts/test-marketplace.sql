@@ -6,11 +6,13 @@ DO $$
 DECLARE u uuid:=gen_random_uuid(); v uuid:=gen_random_uuid(); post_id bigint; d jsonb; c jsonb; failed boolean; ord jsonb;
 BEGIN
  INSERT INTO auth.users(id,email,is_anonymous) VALUES(u,'market-seller-test@example.invalid',false),(v,'market-viewer-test@example.invalid',false);
- d:='{"kind":"sell","item_name":"MARKETTEST Pan Lid","category":"armor","qty":"1","price":"15000","price_unit":"meso","atk":"","slots":"7","description":"Test shield","contacts":{"discord":"private-test-seller","line":"private-line"}}';
+ d:='{"kind":"sell","item_id":917,"item_name":"Pan Lid","category":"armor","qty":"1","price":"15000","price_unit":"meso","atk":"","slots":"7","description":"Discord: leaked-contact","contacts":{"discord":"private-test-seller","line":"private-line"}}';
  INSERT INTO market_test VALUES(u,v,null,d);
  PERFORM set_config('request.jwt.claim.sub',u::text,true);
  post_id:=public.marketplace_save(null,d);UPDATE market_test SET lid=post_id;
- IF EXISTS(SELECT 1 FROM public.entitlements WHERE user_id=u) THEN RAISE EXCEPTION 'Fixture unexpectedly owns products'; END IF;
+ IF EXISTS(SELECT 1 FROM public.entitlements WHERE user_id=u) THEN RAISE EXCEPTION 'Fixture unexpectedly owns products'; END IF; IF (SELECT description FROM public.listings WHERE id=post_id)<>'' THEN RAISE EXCEPTION 'Free-text description published'; END IF;
+ failed:=false; BEGIN PERFORM public.marketplace_save(null,(d-'item_id')||'{"item_name":"Call me on Discord leaked-contact"}'); EXCEPTION WHEN OTHERS THEN failed:=true; END;
+ IF NOT failed THEN RAISE EXCEPTION 'Free-text item name accepted'; END IF;
  c:=public.listing_contact(post_id);
  IF c->>'discord'<>'private-test-seller' THEN RAISE EXCEPTION 'Owner contact access failed'; END IF;
  PERFORM public.marketplace_save(post_id,jsonb_set(d,'{price}','"16000"'));
@@ -72,5 +74,5 @@ DO $$ DECLARE failed boolean;BEGIN
  failed:=false;BEGIN PERFORM public.listing_contact((SELECT lid FROM market_test));EXCEPTION WHEN OTHERS THEN failed:=true;END;
  IF NOT failed THEN RAISE EXCEPTION 'Paid viewer accessed closed listing'; END IF;
 END $$;
-SELECT 'PASS: free posting, owner edits, public search, paid contacts, expired access blocked, contact isolation, ownership, authenticated and anon API roles, closure, market checkout pricing and no premature entitlement' result;
+SELECT 'PASS: free posting, no free-text description or item name, owner edits, public search, paid contacts, expired access blocked, contact isolation, ownership, authenticated and anon API roles, closure, market checkout pricing and no premature entitlement' result;
 ROLLBACK;
