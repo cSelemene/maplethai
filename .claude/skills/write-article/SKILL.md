@@ -51,9 +51,10 @@ Any article that names a price needs all of:
 - a live price: `<span class="live" data-price-item="<exact key>">กำลังโหลดราคาล่าสุด…</span>`
   plus `<script type="module" src="../article-prices.js"></script>` before `</body>`;
 - the `price-legend` line with `<span data-price-updated>` under the table;
-- a link to `../marketplace.html?q=<item name, URL-encoded>`;
-- a "ตอนเขียน" reference price (CLAUDE.md rule). Note: the owner's polished `rich-drops`
-  shows live prices only, so confirm with the owner how to show it before inventing markup.
+- a link to `../marketplace.html?q=<item name, URL-encoded>`.
+
+Tables and item rows show the live price only (as in `rich-drops`). A price typed into the
+text does not update, so tag it with the date: "ราว 2M (ตอนเขียน ต.ค. 2569)".
 
 Exact keys: the item `name` in `assets/market/items.json` (same names as
 `public.market_prices` `data.prices`). The same row gives `id` for the MeowDB link
