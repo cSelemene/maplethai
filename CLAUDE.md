@@ -36,6 +36,8 @@ products + guide_files rows (migration); id lists in DB functions and constraint
 
 - Use the `write-article` skill (`.claude/skills/write-article/`): steps, page template, price rules and item lookups.
 - Write directly to the reader; never mention "the video". Back claims with real data (native charts with a source line).
+- Editorial priority: sound like a real, knowledgeable MapleStory player, not a generated marketing article. Prefer short, concrete directions; preserve precise EXP, counts, drops and route order. Use the in-game English label `QUEST` and do not translate proper item, monster, NPC, map or skill names.
+- When mentioning item or monster names in free article prose, reuse the same icon source and MeowDB URL already used in its drop row or header; `<a class="entity-ref">` is styled in `articles.css`. Check image paths or embedded data URIs, not just the link labels. Never create a competing icon loader or substitute an unverified item name. Skill icons/links must be verified against the appropriate database record before use.
 
 ## Code and CI
 

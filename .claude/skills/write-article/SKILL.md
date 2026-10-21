@@ -33,8 +33,8 @@ single component if the template lacks it (see "Other components").
 
 ## Content rules
 
-- Thai style from CLAUDE.md: neutral, professional, "ผู้เล่น", full sentences, no hype words.
-  Skill, item, monster and map names stay in English.
+- Thai style from CLAUDE.md: natural and direct, like an experienced player explaining a route to another player. Keep complete facts but remove formulaic AI-style filler and unnecessary formal phrasing; no hype words.
+  Keep exact in-game English names for skills, items, monsters, NPCs, maps and QUEST. Never invent Thai translations (for example, Pan Lid must not become "โล่ทอง").
 - Write to the reader. Never mention "the video" or that the content came from one.
 - Back claims with real data: native charts (`.figure` + `.crow`) with a `figure-source`
   line. Screenshots only from the owner's vetted creators, and only as a fallback.
