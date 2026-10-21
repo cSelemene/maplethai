@@ -34,10 +34,8 @@ products + guide_files rows (migration); id lists in DB functions and constraint
 
 ## Free articles
 
-- Registry `articles.js` (newest first), pages `articles/<slug>.html` (copy an existing one, links use `../`), covers in `assets/articles/` (cover .webp + 1200x630 og .jpg). Point the static fallback card in `index.html` `[data-articles]` at the newest article.
-- Write directly to the reader; never mention "the video". Illustrate with real data (native charts with a source line); screenshots from the owner's vetted creators only as a fallback. Article insights may also feed the class quiz and guides.
-- Any item price needs the "prices change" warning box, a "ตอนเขียน" reference price, a live price via `article-prices.js` (`[data-price-item="<exact market_prices key>"]`) and a link to `marketplace.html?q=<item>`.
-- Don't use the CSS class `.bar` (taken by `maple-theme.css`); charts use `.crow`.
+- Use the `write-article` skill (`.claude/skills/write-article/`): steps, page template, price rules and item lookups.
+- Write directly to the reader; never mention "the video". Back claims with real data (native charts with a source line).
 
 ## Code and CI
 
