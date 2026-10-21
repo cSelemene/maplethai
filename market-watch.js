@@ -1,6 +1,6 @@
 import { supabase } from './supabase-client.js?v=cb12a9f448';
 import { STAT_LABELS, formatStatDiff } from './market-items.js?v=0bc363de63';
-import { selectWatchlist } from './market-watch-selection.js?v=1a006e7eda';
+import { selectWatchlist } from './market-watch-selection.js?v=9245a9629b';
 const container = document.getElementById('market-watch-items'),
   status = document.getElementById('market-watch-status');
 const el = (tag, text, cls) => {
