@@ -146,7 +146,7 @@ async function load() {
       .replace(/ilbis/gi, 'Ilbi');
     if (term) q = q.ilike('item_name', '%' + term.replace(/[\\%_]/g, '\\$&') + '%');
     const sort = $('sort').value;
-    if (sort !== 'new') q = q.order('price', { ascending: sort === 'low' });
+    if (sort !== 'new') q = q.order('price', { ascending: sort === 'low', nullsFirst: false });
     q = q
       .order('created_at', { ascending: false })
       .order('id', { ascending: false })
@@ -217,18 +217,26 @@ function renderRow(row) {
     );
   card.append(heading);
   const price = el('p', undefined, 'price');
-  const coin = el('img', undefined, 'meso-icon');
-  coin.src = './assets/market/meso-coin.svg?v=0e1561a5ba';
-  coin.alt = 'Meso';
-  coin.title = 'Meso';
-  price.append(coin);
-  // price_max (Discord listings only) turns the price into a low–high range.
-  const full = n => new Intl.NumberFormat('en-US').format(n),
-    fullPrice = full(row.price) + (row.price_max ? ' – ' + full(row.price_max) : '') + ' Meso';
-  price.title = fullPrice;
-  price.setAttribute('aria-label', fullPrice);
-  const amount = compactPrice(row.price) + (row.price_max ? '–' + compactPrice(row.price_max) : '');
-  price.append(el('strong', amount, 'price-amount'));
+  const offer = row.price == null;
+  if (offer) {
+    // No price: the other side makes an offer through the poster's contact.
+    price.classList.add('offer');
+    price.title = 'ยังไม่ตั้งราคา ติดต่อผู้ลงประกาศเพื่อเสนอราคา';
+    price.append(el('strong', 'เสนอราคา', 'price-amount'));
+  } else {
+    const coin = el('img', undefined, 'meso-icon');
+    coin.src = './assets/market/meso-coin.svg?v=0e1561a5ba';
+    coin.alt = 'Meso';
+    coin.title = 'Meso';
+    price.append(coin);
+    // price_max (Discord listings only) turns the price into a low–high range.
+    const full = n => new Intl.NumberFormat('en-US').format(n),
+      fullPrice = full(row.price) + (row.price_max ? ' – ' + full(row.price_max) : '') + ' Meso';
+    price.title = fullPrice;
+    price.setAttribute('aria-label', fullPrice);
+    const amount = compactPrice(row.price) + (row.price_max ? '–' + compactPrice(row.price_max) : '');
+    price.append(el('strong', amount, 'price-amount'));
+  }
   const priceCell = el('div', undefined, 'price-cell');
   priceCell.append(price);
   card.append(priceCell);
@@ -259,7 +267,15 @@ function renderRow(row) {
   card.append(chips);
   const contact = el(
     'button',
-    row.discord_user ? 'ติดต่อทาง Discord' : own ? 'ดูช่องทางติดต่อของฉัน' : 'ดูช่องทางติดต่อ'
+    own
+      ? 'ดูช่องทางติดต่อของฉัน'
+      : offer
+        ? row.discord_user
+          ? 'เสนอราคาทาง Discord'
+          : 'เสนอราคา'
+        : row.discord_user
+          ? 'ติดต่อทาง Discord'
+          : 'ดูช่องทางติดต่อ'
   );
   contact.type = 'button';
   contact.disabled = !open && !own;

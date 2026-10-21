@@ -376,6 +376,15 @@ try {
   assert(discordRow.includes('จาก Discord') && discordRow.includes('ปิดใน 26 ชม.'));
   assert.equal(await discordGuest.$eval('.price-amount', e => e.textContent), '174K–200K');
   assert.equal(await discordGuest.$eval('.price', e => e.title), '174,000 – 200,000 Meso');
+  const { p: offerPage } = await page({
+    user: null,
+    rows: [
+      { ...fixture, item_id: 573, item_name: 'Bazlud', kind: 'buy', price: null, discord_user: 'peach98' }
+    ]
+  });
+  assert.equal(await offerPage.$eval('.price-amount', e => e.textContent), 'เสนอราคา');
+  assert.equal(await offerPage.$eval('.listing>button', e => e.textContent), 'เสนอราคาทาง Discord');
+  assert.equal(await offerPage.$('.price .meso-icon'), null);
   await discordGuest.click('.listing>button');
   await discordGuest.waitForSelector('.contact-button.discord');
   assert((await discordGuest.$eval('#contact-content', e => e.textContent)).includes('skylight0070'));
@@ -388,7 +397,7 @@ try {
   );
   assert.deepEqual(discordErrors, []);
   console.log(
-    'PASS: admin-only Discord posting, public free Discord contact, badge, price range and 36h countdown'
+    'PASS: admin-only Discord posting, public free Discord contact, badge, price range, make-an-offer and 36h countdown'
   );
 
   const watchRows = [

@@ -5,8 +5,8 @@ export function selectWatchlist(rows, { now = Date.now(), limit = 6 } = {}) {
       r.price_unit === 'meso' &&
       ['buy', 'sell'].includes(r.kind) &&
       new Date(r.expires_at).getTime() > now &&
-      Number.isFinite(Number(r.price)) &&
-      Number(r.price) > 0
+      // A blank price means "make an offer".
+      (r.price == null || (Number.isFinite(Number(r.price)) && Number(r.price) > 0))
   );
   const groups = new Map();
   for (const row of active) {

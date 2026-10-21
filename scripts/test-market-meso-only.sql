@@ -13,6 +13,10 @@ BEGIN PERFORM public.marketplace_save(null,d||'{"price_unit":"thb"}'::jsonb); EX
 IF NOT rejected THEN RAISE EXCEPTION 'Baht API post accepted'; END IF;
 l:=public.marketplace_save(null,d);
 IF NOT EXISTS(SELECT 1 FROM public.listings WHERE id=l AND price_unit='meso') THEN RAISE EXCEPTION 'Meso posting failed'; END IF;
+l:=public.marketplace_save(null,d||'{"price":""}');
+IF NOT EXISTS(SELECT 1 FROM public.listings WHERE id=l AND price IS NULL) THEN RAISE EXCEPTION 'Make-an-offer listing not saved without price'; END IF;
+PERFORM public.marketplace_save(l,d||'{"price":"12000"}');
+IF (SELECT price FROM public.listings WHERE id=l)<>12000 THEN RAISE EXCEPTION 'Offer listing could not get a price later'; END IF;
 IF EXISTS(SELECT 1 FROM public.listings WHERE id=(SELECT legacy FROM meso_test)) THEN RAISE EXCEPTION 'Owner can see legacy baht listing'; END IF;
 END $$;
 RESET ROLE;
@@ -23,5 +27,5 @@ DO $$ DECLARE rejected boolean:=false; BEGIN
 BEGIN INSERT INTO public.listings(user_id,kind,item_name,category,qty,price,price_unit,status) VALUES((SELECT uid FROM meso_test),'sell','Rejected baht','armor',1,50,'thb','open'); EXCEPTION WHEN check_violation THEN rejected:=true; END;
 IF NOT rejected THEN RAISE EXCEPTION 'Table accepts open baht listing'; END IF;
 END $$;
-SELECT 'PASS: Meso accepted, baht API rejected, table constraint enforced, historical baht hidden for owner and public' result;
+SELECT 'PASS: Meso accepted, blank price saved as make-an-offer, baht API rejected, table constraint enforced, historical baht hidden for owner and public' result;
 ROLLBACK;

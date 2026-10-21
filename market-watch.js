@@ -39,21 +39,26 @@ function card({ row, people }, items) {
   heading.append(picture, el('h4', item?.name || row.item_name));
   link.append(heading);
   const price = el('p', undefined, 'market-watch-price');
-  const coin = el('img');
-  coin.src = './assets/market/meso-coin.svg?v=0e1561a5ba';
-  coin.alt = '';
-  coin.width = 16;
-  coin.height = 16;
-  price.append(
-    coin,
-    el('strong', compact(row.price) + (row.price_max ? '–' + compact(row.price_max) : '')),
-    el('span', 'Meso')
-  );
-  const label = row.price_max
-    ? new Intl.NumberFormat('en-US').format(row.price) + ' – ' + fullPrice(row.price_max)
-    : fullPrice(row.price);
-  price.title = label;
-  price.setAttribute('aria-label', label);
+  if (row.price == null) {
+    price.classList.add('offer');
+    price.append(el('strong', 'เสนอราคา'));
+  } else {
+    const coin = el('img');
+    coin.src = './assets/market/meso-coin.svg?v=0e1561a5ba';
+    coin.alt = '';
+    coin.width = 16;
+    coin.height = 16;
+    price.append(
+      coin,
+      el('strong', compact(row.price) + (row.price_max ? '–' + compact(row.price_max) : '')),
+      el('span', 'Meso')
+    );
+    const label = row.price_max
+      ? new Intl.NumberFormat('en-US').format(row.price) + ' – ' + fullPrice(row.price_max)
+      : fullPrice(row.price);
+    price.title = label;
+    price.setAttribute('aria-label', label);
+  }
   link.append(price);
   const details = el('p', undefined, 'market-watch-details'),
     stats = Object.entries(row.item_stats || {})
