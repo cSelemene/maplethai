@@ -174,3 +174,8 @@
 .article-controls button:focus-visible,.article-carousel:focus-visible{outline:3px solid #b45f17;outline-offset:2px}
 @media(max-width:600px){.article-carousel .article-card{flex-basis:88%;height:290px}.article-carousel .article-cover{height:116px;min-height:116px}.article-carousel .article-card h3{font-size:1rem}.article-controls button{width:44px;height:44px}}
 @media(prefers-reduced-motion:reduce){.article-carousel .article-card,.article-carousel .article-cover img{transition:none}}
+
+/* Shared MapleThai meso asset, sized for article text and price rows. */
+.reader .meso-amount{display:inline-flex;align-items:center;gap:.2em;white-space:nowrap;vertical-align:baseline}
+.reader img.meso-icon{display:inline-block;width:1.15em;height:1.15em;min-width:1.15em;max-width:none;max-height:none;object-fit:contain;vertical-align:-.15em;margin:0}
+.reader .drop-price small .meso-amount{font-weight:inherit}
