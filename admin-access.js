@@ -1,4 +1,4 @@
-import { translate } from './i18n.js?v=d0d7b3c813';
+import { translate } from './i18n.js?v=b18919a20f';
 import { supabase, readAccount } from './supabase-client.js?v=cb12a9f448';
 const $ = id => document.getElementById(id);
 let saving = false,
@@ -52,7 +52,13 @@ $('grant-form').onsubmit = async event => {
   if (
     $('access-action').value === 'suspend' &&
     !window.confirm(
-      translate('ระงับสิทธิ์ ' + $('product').selectedOptions[0].textContent + ' ของ ' + $('customer-email').value + '?')
+      translate(
+        'ระงับสิทธิ์ ' +
+          $('product').selectedOptions[0].textContent +
+          ' ของ ' +
+          $('customer-email').value +
+          '?'
+      )
     )
   )
     return;

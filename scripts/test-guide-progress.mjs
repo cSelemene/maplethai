@@ -56,16 +56,27 @@ async function reader(extra, guide = 'bandit') {
 }
 try {
   {
-    const translatedFixture = fixture.replace('</head>', '<script>window.__MAPLE_TRANSLATIONS__={"ข้อความเฉพาะสมาชิก":"Member-only test text"};</script></head>').replace('<body>', '<body><p id="private-locale">ข้อความเฉพาะสมาชิก</p>');
+    const translatedFixture = fixture
+      .replace(
+        '</head>',
+        '<script>window.__MAPLE_TRANSLATIONS__={"ข้อความเฉพาะสมาชิก":"Member-only test text"};</script></head>'
+      )
+      .replace('<body>', '<body><p id="private-locale">ข้อความเฉพาะสมาชิก</p>');
     const { p, f } = await reader({ fixture: translatedFixture });
     await p.waitForSelector('.language-toggle');
     await p.click('.language-toggle');
-    await f.waitForFunction(() => document.querySelector('#private-locale').textContent === 'Member-only test text');
+    await f.waitForFunction(
+      () => document.querySelector('#private-locale').textContent === 'Member-only test text'
+    );
     assert.equal(await f.$$eval('.language-toggle', nodes => nodes.length), 0);
     await p.click('.language-toggle');
-    await f.waitForFunction(() => document.querySelector('#private-locale').textContent === 'ข้อความเฉพาะสมาชิก');
+    await f.waitForFunction(
+      () => document.querySelector('#private-locale').textContent === 'ข้อความเฉพาะสมาชิก'
+    );
     await p.close();
-    console.log('PASS: authenticated guide dictionary, parent language sync, Thai restoration, single toggle');
+    console.log(
+      'PASS: authenticated guide dictionary, parent language sync, Thai restoration, single toggle'
+    );
   }
   const cloud = {
     guide: 'bandit',

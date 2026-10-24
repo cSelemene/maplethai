@@ -168,7 +168,12 @@ if (!Object.hasOwn(GUIDES, id)) {
               new URL('./navigation-entry.js?v=bf26ae2b68', location.href).href +
               '"></script></body>'
           );
-          doc = doc.replace('</body>', '<script type="module" src="' + new URL('./i18n.js?v=d0d7b3c813', location.href).href + '"></script></body>');
+          doc = doc.replace(
+            '</body>',
+            '<script type="module" src="' +
+              new URL('./i18n.js?v=b18919a20f', location.href).href +
+              '"></script></body>'
+          );
           const attached = attachProgress(doc, { userId: user.id, guide: id, initial, token });
           doc = attached.html;
           $('progress-bar').hidden = false;
