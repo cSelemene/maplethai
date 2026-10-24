@@ -223,7 +223,7 @@ export async function setLanguage(next, persist = true) {
 function start() {
   const link = document.createElement('link');
   link.rel = 'stylesheet';
-  link.href = new URL('./i18n.css?v=ffa735c86e', import.meta.url).href;
+  link.href = new URL('./i18n.css?v=5bb948a894', import.meta.url).href;
   document.head.append(link);
   // Embedded guides use the outer page's control to avoid duplicate buttons.
   if (window === window.top) {
