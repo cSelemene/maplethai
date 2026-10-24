@@ -1,4 +1,4 @@
-import { translate } from './i18n.js?v=bcebcd8865';
+import { translate } from './i18n.js?v=9fed356559';
 import {
   STAT_LABELS,
   formatStatDiff,
@@ -133,7 +133,7 @@ async function load() {
     let q = supabase
       .from('listings')
       .select(
-        'id,user_id,kind,item_name,category,discord_user,discord_url,qty,price,price_unit,atk,slots,item_id,item_stats,status,created_at,expires_at'
+        'id,user_id,kind,item_name,category,discord_user,discord_url,qty,price,price_max,price_unit,atk,slots,item_id,item_stats,status,created_at,expires_at'
       );
     if (highlightedListing && !mine) q = q.eq('id', highlightedListing);
     if (mine) q = q.eq('user_id', user.id);
@@ -147,7 +147,7 @@ async function load() {
       .replace(/ilbis/gi, 'Ilbi');
     if (term) q = q.ilike('item_name', '%' + term.replace(/[\\%_]/g, '\\$&') + '%');
     const sort = $('sort').value;
-    if (sort !== 'new') q = q.order('price', { ascending: sort === 'low' });
+    if (sort !== 'new') q = q.order('price', { ascending: sort === 'low', nullsFirst: false });
     q = q
       .order('created_at', { ascending: false })
       .order('id', { ascending: false })
@@ -218,18 +218,26 @@ function renderRow(row) {
     );
   card.append(heading);
   const price = el('p', undefined, 'price');
-  const coin = el('img', undefined, 'meso-icon');
-  coin.src = './assets/market/meso-coin.svg?v=0e1561a5ba';
-  coin.alt = 'Meso';
-  coin.title = 'Meso';
-  price.append(coin);
-  const fullPrice = new Intl.NumberFormat('en-US').format(row.price) + ' Meso';
-  price.title = fullPrice;
-  price.setAttribute('aria-label', fullPrice);
-  const amount = new Intl.NumberFormat('en-US', { notation: 'compact', maximumFractionDigits: 2 }).format(
-    row.price
-  );
-  price.append(el('strong', amount, 'price-amount'));
+  const offer = row.price == null;
+  if (offer) {
+    // No price: the other side makes an offer through the poster's contact.
+    price.classList.add('offer');
+    price.title = 'ยังไม่ตั้งราคา ติดต่อผู้ลงประกาศเพื่อเสนอราคา';
+    price.append(el('strong', 'เสนอราคา', 'price-amount'));
+  } else {
+    const coin = el('img', undefined, 'meso-icon');
+    coin.src = './assets/market/meso-coin.svg?v=0e1561a5ba';
+    coin.alt = 'Meso';
+    coin.title = 'Meso';
+    price.append(coin);
+    // price_max (Discord listings only) turns the price into a low–high range.
+    const full = n => new Intl.NumberFormat('en-US').format(n),
+      fullPrice = full(row.price) + (row.price_max ? ' – ' + full(row.price_max) : '') + ' Meso';
+    price.title = fullPrice;
+    price.setAttribute('aria-label', fullPrice);
+    const amount = compactPrice(row.price) + (row.price_max ? '–' + compactPrice(row.price_max) : '');
+    price.append(el('strong', amount, 'price-amount'));
+  }
   const priceCell = el('div', undefined, 'price-cell');
   priceCell.append(price);
   card.append(priceCell);
@@ -260,7 +268,15 @@ function renderRow(row) {
   card.append(chips);
   const contact = el(
     'button',
-    row.discord_user ? 'ติดต่อทาง Discord' : own ? 'ดูช่องทางติดต่อของฉัน' : 'ดูช่องทางติดต่อ'
+    own
+      ? 'ดูช่องทางติดต่อของฉัน'
+      : offer
+        ? row.discord_user
+          ? 'เสนอราคาทาง Discord'
+          : 'เสนอราคา'
+        : row.discord_user
+          ? 'ติดต่อทาง Discord'
+          : 'ดูช่องทางติดต่อ'
   );
   contact.type = 'button';
   contact.disabled = !open && !own;
@@ -445,6 +461,7 @@ async function openForm(row = null) {
   setDiscordMode(!!row?.discord_user);
   $('discord-user').value = row?.discord_user || '';
   $('discord-url').value = row?.discord_url || '';
+  $('price-max').value = row?.price_max || '';
   if (row) {
     for (const [id, key] of Object.entries({
       'item-name': 'item_name',
@@ -522,6 +539,7 @@ $('post-form').onsubmit = async e => {
       delete data.contacts;
       data.discord_user = $('discord-user').value.trim();
       data.discord_url = $('discord-url').value.trim();
+      data.price_max = $('price-max').value.trim();
       await rpc('marketplace_save_discord', { p_id: editing, p_data: data });
     } else await rpc('marketplace_save', { p_id: editing, p_data: data });
     $('post-dialog').close();

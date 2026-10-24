@@ -1,6 +1,6 @@
 import { supabase } from './supabase-client.js?v=cb12a9f448';
 import { STAT_LABELS, formatStatDiff } from './market-items.js?v=0bc363de63';
-import { selectWatchlist } from './market-watch-selection.js?v=9245a9629b';
+import { selectWatchlist } from './market-watch-selection.js?v=ebb8fbfc39';
 const container = document.getElementById('market-watch-items'),
   status = document.getElementById('market-watch-status');
 const el = (tag, text, cls) => {
@@ -9,6 +9,8 @@ const el = (tag, text, cls) => {
   if (cls) node.className = cls;
   return node;
 };
+const compact = n =>
+  new Intl.NumberFormat('en-US', { notation: 'compact', maximumFractionDigits: 2 }).format(n);
 const fullPrice = n => new Intl.NumberFormat('en-US').format(n) + ' Meso';
 function card({ row, people }, items) {
   const item =
@@ -37,21 +39,26 @@ function card({ row, people }, items) {
   heading.append(picture, el('h4', item?.name || row.item_name));
   link.append(heading);
   const price = el('p', undefined, 'market-watch-price');
-  const coin = el('img');
-  coin.src = './assets/market/meso-coin.svg?v=0e1561a5ba';
-  coin.alt = '';
-  coin.width = 16;
-  coin.height = 16;
-  price.append(
-    coin,
-    el(
-      'strong',
-      new Intl.NumberFormat('en-US', { notation: 'compact', maximumFractionDigits: 2 }).format(row.price)
-    ),
-    el('span', 'Meso')
-  );
-  price.title = fullPrice(row.price);
-  price.setAttribute('aria-label', fullPrice(row.price));
+  if (row.price == null) {
+    price.classList.add('offer');
+    price.append(el('strong', 'เสนอราคา'));
+  } else {
+    const coin = el('img');
+    coin.src = './assets/market/meso-coin.svg?v=0e1561a5ba';
+    coin.alt = '';
+    coin.width = 16;
+    coin.height = 16;
+    price.append(
+      coin,
+      el('strong', compact(row.price) + (row.price_max ? '–' + compact(row.price_max) : '')),
+      el('span', 'Meso')
+    );
+    const label = row.price_max
+      ? new Intl.NumberFormat('en-US').format(row.price) + ' – ' + fullPrice(row.price_max)
+      : fullPrice(row.price);
+    price.title = label;
+    price.setAttribute('aria-label', label);
+  }
   link.append(price);
   const details = el('p', undefined, 'market-watch-details'),
     stats = Object.entries(row.item_stats || {})
@@ -82,7 +89,7 @@ async function load() {
       supabase
         .from('listings')
         .select(
-          'id,user_id,discord_user,kind,item_name,item_id,item_stats,qty,price,price_unit,atk,slots,status,created_at,expires_at'
+          'id,user_id,discord_user,kind,item_name,item_id,item_stats,qty,price,price_max,price_unit,atk,slots,status,created_at,expires_at'
         )
         .eq('status', 'open')
         .eq('price_unit', 'meso')

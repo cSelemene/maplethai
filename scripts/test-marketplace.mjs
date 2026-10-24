@@ -332,6 +332,7 @@ try {
   const { p: member2 } = await page();
   await member2.click('#new-post');
   assert(await member2.$eval('#discord-mode', e => e.hidden));
+  await member2.close();
   const { p: admin, errors: adminErrors } = await page({
     user: { id: 'admin', email: 'admin@example.invalid' },
     account: { is_admin: true, entitlements: [] }
@@ -357,6 +358,7 @@ try {
   assert.equal(discordSave.args.p_data.discord_url, 'https://discord.com/channels/1/2/3');
   assert.equal(discordSave.args.p_data.contacts, undefined);
   assert.deepEqual(adminErrors, []);
+  await admin.close();
   const { p: discordGuest, errors: discordErrors } = await page({
     user: null,
     rows: [
@@ -365,6 +367,8 @@ try {
         item_id: 917,
         item_name: 'Pan Lid',
         discord_user: 'skylight0070',
+        price: 174000,
+        price_max: 200000,
         discord_url: 'https://discord.com/channels/1/2/3',
         expires_at: new Date(Date.now() + 26 * 3600000 - 60000).toISOString()
       }
@@ -372,6 +376,18 @@ try {
   });
   const discordRow = await discordGuest.$eval('.listing', e => e.textContent);
   assert(discordRow.includes('จาก Discord') && discordRow.includes('ปิดใน 26 ชม.'));
+  assert.equal(await discordGuest.$eval('.price-amount', e => e.textContent), '174K–200K');
+  assert.equal(await discordGuest.$eval('.price', e => e.title), '174,000 – 200,000 Meso');
+  const { p: offerPage } = await page({
+    user: null,
+    rows: [
+      { ...fixture, item_id: 573, item_name: 'Bazlud', kind: 'buy', price: null, discord_user: 'peach98' }
+    ]
+  });
+  assert.equal(await offerPage.$eval('.price-amount', e => e.textContent), 'เสนอราคา');
+  assert.equal(await offerPage.$eval('.listing>button', e => e.textContent), 'เสนอราคาทาง Discord');
+  assert.equal(await offerPage.$('.price .meso-icon'), null);
+  await offerPage.close();
   await discordGuest.click('.listing>button');
   await discordGuest.waitForSelector('.contact-button.discord');
   assert((await discordGuest.$eval('#contact-content', e => e.textContent)).includes('skylight0070'));
@@ -383,7 +399,10 @@ try {
     !(await discordGuest.evaluate(() => window.marketTest.calls)).some(c => c.method === 'listing_contact')
   );
   assert.deepEqual(discordErrors, []);
-  console.log('PASS: admin-only Discord posting, public free Discord contact, badge and 36h countdown');
+  await discordGuest.close();
+  console.log(
+    'PASS: admin-only Discord posting, public free Discord contact, badge, price range, make-an-offer and 36h countdown'
+  );
 
   const watchRows = [
     { ...fixture, id: 70, item_id: 917, item_name: 'Pan Lid', item_stats: { def: -1 }, user_id: 'seller-a' },
