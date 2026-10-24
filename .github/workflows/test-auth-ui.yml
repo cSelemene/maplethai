@@ -20,6 +20,9 @@ jobs:
       - run: python3 -m http.server 8765 --bind 127.0.0.1 >/tmp/maplethai-web.log 2>&1 &
       - name: Test email, Google OAuth initiation, account recovery, safe redirects and mobile
         run: CHROME_BIN=/usr/bin/google-chrome node scripts/test-auth-ui.mjs
+      - name: Test Thai and English language switching
+        run: CHROME_BIN=/usr/bin/google-chrome node scripts/test-i18n.mjs
+
       - name: Test membership, redemption, guide access and administrator UI
         run: CHROME_BIN=/usr/bin/google-chrome node scripts/test-access.mjs
 

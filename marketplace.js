@@ -1,3 +1,4 @@
+import { translate } from './i18n.js?v=bcebcd8865';
 import {
   STAT_LABELS,
   formatStatDiff,
@@ -277,7 +278,7 @@ function renderRow(row) {
       const close = el('button', 'ปิดประกาศ', 'outline');
       close.type = 'button';
       close.onclick = async () => {
-        if (!confirm('ปิดประกาศ ' + row.item_name + '? ประกาศจะไม่แสดงในตลาดอีก')) return;
+        if (!confirm(translate('ปิดประกาศ ' + row.item_name + '? ประกาศจะไม่แสดงในตลาดอีก'))) return;
         close.disabled = true;
         try {
           await rpc('marketplace_close', { p_id: row.id });

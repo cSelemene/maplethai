@@ -1,3 +1,4 @@
+import { translate } from './i18n.js?v=bcebcd8865';
 import { supabase, readAccount } from './supabase-client.js?v=cb12a9f448';
 import { rpc, money, date, STATUS } from './payment-common.js?v=965cc4294e';
 const $ = id => document.getElementById(id);
@@ -86,7 +87,8 @@ function render() {
           say('กรอกเหตุผลการระงับอย่างน้อย 3 ตัวอักษร', true);
           return;
         }
-        if (!accept && !window.confirm('ระงับสิทธิ์จากรายการ #' + p.id + ' ของ ' + p.email + '?')) return;
+        if (!accept && !window.confirm(translate('ระงับสิทธิ์จากรายการ #' + p.id + ' ของ ' + p.email + '?')))
+          return;
         working = true;
         confirm.disabled = revoke.disabled = true;
         try {
