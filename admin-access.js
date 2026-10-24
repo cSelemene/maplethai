@@ -1,4 +1,4 @@
-import { translate } from './i18n.js?v=bcebcd8865';
+import { translate } from './i18n.js?v=9fed356559';
 import { supabase, readAccount } from './supabase-client.js?v=cb12a9f448';
 const $ = id => document.getElementById(id);
 let saving = false,
