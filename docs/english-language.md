@@ -1,6 +1,6 @@
 # Thai and English
 
-The top-right TH / EN control stores the reader's choice in local storage. It translates rendered text and accessible labels, including later DOM updates, without rewriting form values, links, product identifiers, or amounts. Embedded member guides use the outer page's control.
+The TH / EN control (the last item of the header menu, or top-right on route pages without one) stores the reader's choice in local storage. It translates rendered text and accessible labels, including later DOM updates, without rewriting form values, links, product identifiers, or amounts. Embedded member guides use the outer page's control.
 
 Public dictionaries are under `locales/`. Protected guide dictionaries belong only in `private.guide_translations` and must never be committed to this repository. `get_guide` performs the existing entitlement check before attaching a dictionary. A dictionary is attached only when its source hash matches the current guide HTML.
 

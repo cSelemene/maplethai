@@ -232,8 +232,15 @@ function start() {
     button.className = 'language-toggle';
     button.dataset.i18nIgnore = '';
     const header = document.querySelector('body > header');
-    const host = header?.querySelector('.bar-inner,.nav-inner,.header-inner') || header;
-    if (host) {
+    const bar = header?.querySelector('.bar-inner,.nav-inner,.header-inner');
+    // In a regular header the control joins the menu, so it wraps with the other links
+    // instead of floating over them when the menu is long (English, signed-in links).
+    const nav = !bar && header?.querySelector('nav');
+    const host = bar || header;
+    if (nav) {
+      button.classList.add('language-toggle-inline');
+      nav.append(button);
+    } else if (host) {
       host.classList.add('language-host');
       host.append(button);
     } else {

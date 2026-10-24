@@ -3,6 +3,7 @@
 .language-toggle:hover{background:#edf4fb}
 .language-toggle:focus-visible{outline:3px solid #df751f;outline-offset:3px}
 .language-toggle:disabled{opacity:.6;cursor:wait}
+.language-toggle.language-toggle-inline{position:static;flex:none;align-self:center;margin:4px;border-radius:999px}
 .language-toggle-floating{position:fixed;top:max(12px,env(safe-area-inset-top));right:max(14px,env(safe-area-inset-right));z-index:1000}
 .language-error{position:fixed;right:12px;top:64px;max-width:300px;padding:12px;background:#fff0ee;color:#923d38;border:1px solid #cf4b43;border-radius:8px;z-index:1001;font:14px/1.5 system-ui,sans-serif}
 html[lang=en] body{word-break:normal}

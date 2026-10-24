@@ -25,3 +25,4 @@ body.market-page>footer{max-width:1560px}
 .price.offer .price-amount{font-family:inherit;font-size:.8em;color:#9a5b12;background:#fff1d6;border:1px dashed #d9a35a;border-radius:999px;padding:2px 12px}.market-watch-price.offer strong{color:#9a5b12}
 html[lang="en"] .market-results:not(.list-mode) .item-info::before{content:'Quantity '}
 @media(max-width:1050px){html[lang="en"] .list-mode .item-info::before{content:'Quantity '}}
+.market-intro>button{flex-shrink:0;white-space:nowrap}
