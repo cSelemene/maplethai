@@ -1,4 +1,4 @@
-import { translate } from './i18n.js?v=9fed356559';
+import { translate } from './i18n.js?v=9ff36a4da6';
 import {
   STAT_LABELS,
   formatStatDiff,
