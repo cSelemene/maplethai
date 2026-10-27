@@ -5,9 +5,7 @@ const normalize = value => value.replace(/\s+/g, ' ').trim();
 const excluded = 'script,style,code,pre,textarea,[contenteditable], [translate="no"], [data-i18n-ignore]';
 const attributes = ['title', 'alt', 'placeholder', 'aria-label'];
 let language = 'th';
-try {
-  language = localStorage.getItem(KEY) === 'en' ? 'en' : 'th';
-} catch {}
+// Always start each page in Thai. The language switch only affects the current page.
 let catalog = {};
 let phrases = [];
 let loaded = false;
@@ -202,7 +200,7 @@ async function load() {
   }
   await loading;
 }
-export async function setLanguage(next, persist = true) {
+export async function setLanguage(next, persist = false) {
   if (!['th', 'en'].includes(next)) return;
   if (next === 'en') await load();
   language = next;
@@ -280,9 +278,6 @@ function start() {
       refresh();
     });
 }
-window.addEventListener('storage', event => {
-  if (event.key === KEY) setLanguage(event.newValue === 'en' ? 'en' : 'th', false).catch(() => {});
-});
 window.addEventListener('message', event => {
   if (
     event.origin === location.origin &&
