@@ -216,6 +216,36 @@ try {
   await retryBuyer.waitForFunction(() => window.paymentTest.orders[0].status === 'ok');
   assert.equal(await retryBuyer.evaluate(() => window.paymentTest.uploads.length), 0);
   console.log('PASS: pending customer can recheck existing slip without uploading or paying again');
+  const wrongSlip = await page({
+    orders: [
+      {
+        id: 102,
+        email: 'buyer@example.invalid',
+        product: 'guide_assassin',
+        amount: 99,
+        amount_due_cents: 9944,
+        processing_fee_cents: 44,
+        status: 'pending',
+        created_at: new Date().toISOString()
+      }
+    ]
+  });
+  await wrongSlip.goto(base + '/checkout.html?product=guide_assassin', { waitUntil: 'networkidle0' });
+  assert(await wrongSlip.$eval('#slip-form', e => e.hidden));
+  assert(await wrongSlip.$eval('#replace-slip', e => !e.hidden));
+  await wrongSlip.click('#replace-slip');
+  await wrongSlip.waitForFunction(() => !document.querySelector('#slip-form').hidden);
+  assert(await wrongSlip.$eval('#cancel-order', e => e.hidden));
+  await (await wrongSlip.$('#slip-file')).uploadFile(file);
+  await wrongSlip.click('#confirm-transfer');
+  await wrongSlip.click('#submit-slip');
+  await wrongSlip.waitForFunction(() =>
+    window.paymentTest.calls.some(c => c.method === 'submit_payment_slip' && c.args.p_payment === 102)
+  );
+  await wrongSlip.waitForFunction(() => document.querySelector('#slip-form').hidden);
+  assert((await wrongSlip.evaluate(() => window.paymentTest.uploads))[0].path.startsWith('buyer/102/'));
+  assert(await wrongSlip.$eval('#pending-message', e => !e.hidden));
+  console.log('PASS: pending customer can replace a wrong slip without creating a new order');
   const nonadmin = await page();
   await nonadmin.goto(base + '/admin-payments.html', { waitUntil: 'networkidle0' });
   assert(await nonadmin.$eval('#admin-content', e => e.hidden));

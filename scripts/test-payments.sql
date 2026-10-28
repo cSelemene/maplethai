@@ -28,6 +28,14 @@ BEGIN
  PERFORM set_config('request.jwt.claim.sub',buyer::text,true);
  PERFORM public.submit_payment_slip(pid,path);
  IF private.has_product(buyer,'guide_bandit') THEN RAISE EXCEPTION 'Slip upload prematurely granted entitlement'; END IF;
+ -- A wrong slip can be replaced while the order is pending, but not during a running check.
+ INSERT INTO storage.objects(bucket_id,name,owner_id,metadata) VALUES('slips',buyer::text||'/'||pid||'/second.png',buyer::text,'{"mimetype":"image/png","size":100}');
+ UPDATE public.payments SET verification_lease=gen_random_uuid(),verification_started_at=now(),verification_code='VERIFYING' WHERE id=pid;
+ failed:=false; BEGIN PERFORM public.submit_payment_slip(pid,buyer::text||'/'||pid||'/second.png'); EXCEPTION WHEN OTHERS THEN failed:=true; END;
+ IF NOT failed THEN RAISE EXCEPTION 'Slip replaced during a running check'; END IF;
+ UPDATE public.payments SET verification_lease=NULL,verification_code='VALIDATION_FAILED' WHERE id=pid;
+ PERFORM public.submit_payment_slip(pid,buyer::text||'/'||pid||'/second.png');
+ IF NOT EXISTS(SELECT 1 FROM public.payments WHERE id=pid AND status='pending' AND slip_path=buyer::text||'/'||pid||'/second.png' AND verification_code IS NULL) THEN RAISE EXCEPTION 'Pending order did not accept a replacement slip'; END IF;
  failed:=false; BEGIN PERFORM public.admin_review_payment(pid,true,99,'TEST-REF-001',''); EXCEPTION WHEN OTHERS THEN failed:=true; END;
  IF NOT failed THEN RAISE EXCEPTION 'Buyer approved own payment'; END IF;
  PERFORM set_config('request.jwt.claim.sub',admin::text,true);

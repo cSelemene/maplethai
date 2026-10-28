@@ -36,6 +36,7 @@ let products = [],
   orders = [],
   order,
   autoVerify = false,
+  replacing = false,
   loading = false,
   working = false,
   previewUrl,
@@ -233,9 +234,14 @@ function render() {
   if (order && !gifting()) $('referral-email').value = order.referral_email || '';
   $('referral-email').disabled = working || !!order;
   $('create-order').hidden = !user || !!owns || !!order || !settings?.enabled;
-  $('slip-form').hidden = order?.status !== 'awaiting_slip';
+  if (order?.status !== 'pending') replacing = false;
+  $('slip-form').hidden = !(order?.status === 'awaiting_slip' || (order?.status === 'pending' && replacing));
+  $('cancel-order').hidden = order?.status !== 'awaiting_slip';
   $('pending-message').hidden = order?.status !== 'pending';
   $('retry-verification').hidden = order?.status !== 'pending' || !autoVerify;
+  $('replace-slip').hidden = order?.status !== 'pending';
+  $('replace-slip').textContent = replacing ? 'ยกเลิกการส่งสลิปใหม่' : 'ส่งสลิปใหม่';
+  $('replace-slip-help').hidden = order?.status !== 'pending';
   $('availability').textContent = order
     ? 'ยอดโอนเพิ่ม ' + money((order.amount_due_cents ?? order.amount * 100) / 100)
     : stalePack
@@ -296,7 +302,8 @@ function render() {
     'cancel-order',
     'product-select',
     'refresh-orders',
-    'retry-verification'
+    'retry-verification',
+    'replace-slip'
   ])
     $(id).disabled = working;
 }
@@ -451,6 +458,8 @@ $('slip-form').onsubmit = e => {
     await rpc('submit_payment_slip', { p_payment: id, p_path: path });
     $('slip-file').value = '';
     $('slip-preview').hidden = true;
+    $('confirm-transfer').checked = false;
+    replacing = false;
     if (autoVerify) {
       say('กำลังตรวจสอบการชำระเงิน…');
       try {
@@ -467,6 +476,10 @@ $('slip-form').onsubmit = e => {
         }
         if (!error && data?.status === 'credited') {
           say('ยอดโอนต่ำกว่ายอดชำระ เงินที่ตรวจผ่านเก็บเป็นเครดิตแล้ว เลือกแพ็กที่ต้องการซื้อได้เลย');
+          return;
+        }
+        if (!error && data?.code && !['MANUAL_REVIEW', 'IN_PROGRESS', 'ATTEMPT_LIMIT'].includes(data.code)) {
+          say('ตรวจสลิปอัตโนมัติไม่ผ่าน หากแนบสลิปผิด กด “ส่งสลิปใหม่” เพื่อแนบสลิปที่ถูกต้อง หรือรอผู้ดูแลตรวจสอบ ไม่ต้องโอนซ้ำ');
           return;
         }
       } catch {}
@@ -499,9 +512,18 @@ $('retry-verification').onclick = () =>
           ? 'ตรวจเงินเข้าจริงแล้ว เก็บเป็นเครดิตให้แล้ว'
           : data?.code === 'ATTEMPT_LIMIT'
             ? 'ตรวจครบจำนวนครั้งแล้ว ผู้ดูแลจะช่วยตรวจรายการนี้'
-            : 'ยังตรวจไม่ผ่าน รายการยังคงรอตรวจสอบ ไม่ต้องโอนซ้ำ'
+            : 'ยังตรวจไม่ผ่าน รายการยังคงรอตรวจสอบ ไม่ต้องโอนซ้ำ หากแนบสลิปผิด กด “ส่งสลิปใหม่”'
     );
   });
+
+$('replace-slip').onclick = () => {
+  replacing = !replacing;
+  $('slip-file').value = '';
+  $('confirm-transfer').checked = false;
+  $('slip-preview').hidden = true;
+  say(replacing ? 'เลือกไฟล์สลิปที่ถูกต้อง แล้วกด “ยืนยันการชำระเงิน”' : '');
+  render();
+};
 
 $('gift-toggle').onchange = () => {
   say('');
