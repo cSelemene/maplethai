@@ -171,7 +171,7 @@ async function load() {
   if (loaded) return;
   if (!loading) {
     const paths = [
-      new URL('./locales/en.json?v=4423ef5003', import.meta.url),
+      new URL('./locales/en.json?v=b84d9ba67b', import.meta.url),
       new URL('./locales/en-extra.json?v=09f6698244', import.meta.url),
       new URL('./locales/en-articles.json?v=56d4c65880', import.meta.url),
       new URL('./locales/en-guides.json?v=027a8ad055', import.meta.url),

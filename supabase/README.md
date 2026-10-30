@@ -39,5 +39,5 @@ This only edits the history table; it does not touch tables or data.
 ## Things the baseline makes visible
 
 - `guide_files`, `items`, `market_prices` and `profiles` carry full table grants for `anon`/`authenticated` (Supabase defaults). They are protected by RLS: `guide_files` has no policy at all (only `get_guide` reads it), and the others only allow reading or owner-only access.
-- `private.admins`, `codes`, `grandfather` and `secrets` have RLS off but no grants to `anon`/`authenticated`, so the API cannot reach them.
+- `private.admins`, `codes`, `grandfather`, `free_domains` and `secrets` have RLS off but no grants to `anon`/`authenticated`, so the API cannot reach them.
 - Vault secret `maplethai_easyslip_api_key` must exist for automatic slip checks; its value is set from `admin-payments.html` and is not in this repo.
