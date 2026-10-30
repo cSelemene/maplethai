@@ -44,7 +44,11 @@ try {
   assert.equal(await page.$eval('#untouched', e => e.placeholder), 'อีเมล');
   await page.click('.language-toggle');
   await page.waitForFunction(() => document.documentElement.lang === 'en');
+  // Every page starts in Thai; the switch only affects the current page.
   await page.goto(base + '/auth.html', { waitUntil: 'domcontentloaded' });
+  await page.waitForSelector('.language-toggle');
+  assert.equal(await page.$eval('html', e => e.lang), 'th');
+  await page.click('.language-toggle');
   await page.waitForFunction(
     () =>
       document.documentElement.lang === 'en' &&
@@ -87,7 +91,7 @@ try {
   await page.waitForFunction(() => document.documentElement.lang === 'th');
   assert.equal(errors.length, 0, errors.join('\n'));
   console.log(
-    'PASS: language switching, persistence, dynamic text, restoration, input and link preservation, currency, dates, mobile control, and denied storage'
+    'PASS: language switching, Thai default per page, dynamic text, restoration, input and link preservation, currency, dates, mobile control, and denied storage'
   );
 } finally {
   await browser.close();
