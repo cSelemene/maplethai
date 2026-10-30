@@ -16,10 +16,14 @@ async function refresh() {
     }
     const account = await readAccount();
     if (ticket !== generation) return;
-    if (account.entitlements?.some(e => e.product === 'pack_all')) {
+    const pack = account.entitlements?.find(e => e.product === 'pack_all');
+    if (pack) {
       const row = document.createElement('p');
       row.dataset.guide = 'pack_all';
-      row.textContent = 'แพ็กทุกอาชีพ + ตลาดถาวร · ใช้งานได้ไม่มีวันหมดอายุ';
+      row.textContent =
+        pack.source === 'domain'
+          ? 'แพ็กทุกอาชีพ + ตลาดถาวร · สิทธิ์จากอีเมลสถาบันของคุณ ไม่มีวันหมดอายุ'
+          : 'แพ็กทุกอาชีพ + ตลาดถาวร · ใช้งานได้ไม่มีวันหมดอายุ';
       $('my-guides').append(row);
     }
     for (const [id, name] of Object.entries(GUIDES)) {

@@ -26,6 +26,7 @@ Paid MapleStory Classic World guides (Thai), a player marketplace and PromptPay 
 - 11 guides, 99 THB each: `guide_bandit`, `guide_sindit`, `guide_assassin`, `guide_mage` (I/L), `guide_fp`, `guide_cleric`, `guide_fighter`, `guide_page`, `guide_spearman`, `guide_hunter`, `guide_crossbowman`.
 - Sindit is sold on its own and is also free for Bandit owners.
 - `market`: 50 THB / 30 days.
+- Free by e-mail domain: `private.free_domains` (currently `sasin.edu` → `pack_all`). A confirmed address at a listed domain is granted the product on its first `sync_account()` with source `domain`; add a domain with an `insert` in a new migration.
 - `pack_all` (launch promotion only): 259 THB, unlocks every guide in `private.pack_covers()` + permanent market. 99 THB off per guide already owned (market does not count), 3+ guides = free. Guides added later are not in the pack until the owner decides; ask when adding a guide, then update `pack_covers()`, the pack card in `index.html` and `#pack-features` in `checkout.html`.
 
 ## Adding a new guide (checklist)
