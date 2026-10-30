@@ -171,7 +171,7 @@ if (!Object.hasOwn(GUIDES, id)) {
           doc = doc.replace(
             '</body>',
             '<script type="module" src="' +
-              new URL('./i18n.js?v=9ff36a4da6', location.href).href +
+              new URL('./i18n.js?v=523f6063c8', location.href).href +
               '"></script></body>'
           );
           const attached = attachProgress(doc, { userId: user.id, guide: id, initial, token });
